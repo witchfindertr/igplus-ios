@@ -3,6 +3,9 @@ import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:igplus_ios/app/extensions/media_query_values.dart';
 import 'package:igplus_ios/presentation/resources/colors_manager.dart';
+import 'package:igplus_ios/presentation/views/global/section_title.dart';
+import 'package:igplus_ios/presentation/views/home/line-chart.dart';
+import 'package:igplus_ios/presentation/views/home/stories/stories_list.dart';
 
 class HomePage extends StatelessWidget {
   const HomePage({Key? key}) : super(key: key);
@@ -15,13 +18,9 @@ class HomePage extends StatelessWidget {
         leading: Padding(
           padding: EdgeInsets.all(8.0),
           child: Icon(
-            CupertinoIcons.back,
+            CupertinoIcons.list_dash,
             color: ColorsManager.textColor,
           ),
-        ),
-        middle: Padding(
-          padding: EdgeInsets.all(12.0),
-          child: Text("Tiktube", style: TextStyle(fontSize: 20.0, color: ColorsManager.textColor)),
         ),
         trailing: Icon(CupertinoIcons.refresh, color: ColorsManager.textColor),
       ),
@@ -29,7 +28,10 @@ class HomePage extends StatelessWidget {
         thickness: 12,
         child: ListView(
           children: <Widget>[
-            const ProfileCard(),
+            ProfileCard(),
+            LineChartSample(),
+            StoriesList(),
+            SectionTitle(title: "Important stats", icon: FontAwesomeIcons.chartSimple),
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: [
@@ -111,46 +113,66 @@ class ProfileCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Card(
+      margin: const EdgeInsets.all(8.0),
       color: ColorsManager.cardBack,
-      elevation: 4,
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-        children: <Widget>[
-          Column(
-            children: const [
-              Padding(
-                padding: EdgeInsets.all(8.0),
-                child: Text("322",
-                    style: TextStyle(fontSize: 28, color: ColorsManager.textColor, fontWeight: FontWeight.bold)),
-              ),
-              Text("Followers", style: TextStyle(fontSize: 18, color: ColorsManager.secondarytextColor)),
-            ],
-          ),
-          Container(
-            margin: const EdgeInsets.fromLTRB(40.0, 10.0, 40.0, 10.0),
-            alignment: Alignment.centerLeft,
-            width: 120.0,
-            height: 120.0,
-            decoration: const BoxDecoration(
-              border: Border.fromBorderSide(BorderSide(color: ColorsManager.primaryColor, width: 2)),
-              shape: BoxShape.circle,
-              image: DecorationImage(
-                fit: BoxFit.fill,
-                image: NetworkImage("https://bukovskevrchy.pl/img/64c9c78b19101eadf6e459ddbb0fd69a.jpg"),
-              ),
+      elevation: 1,
+      child: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 16.0),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceAround,
+          children: <Widget>[
+            Column(
+              children: const [
+                Padding(
+                  padding: EdgeInsets.only(bottom: 8.0),
+                  child: Text("322",
+                      style: TextStyle(fontSize: 20, color: ColorsManager.textColor, fontWeight: FontWeight.bold)),
+                ),
+                Text("Followers", style: TextStyle(fontSize: 16, color: ColorsManager.secondarytextColor)),
+              ],
             ),
-          ),
-          Column(
-            children: const [
-              Padding(
-                padding: EdgeInsets.all(8.0),
-                child: Text("24",
-                    style: TextStyle(fontSize: 28, color: ColorsManager.textColor, fontWeight: FontWeight.bold)),
-              ),
-              Text("Following", style: TextStyle(fontSize: 18, color: ColorsManager.secondarytextColor)),
-            ],
-          ),
-        ],
+            Column(
+              children: [
+                Container(
+                  margin: const EdgeInsets.fromLTRB(40.0, 10.0, 40.0, 4.0),
+                  alignment: Alignment.centerLeft,
+                  width: 90.0,
+                  height: 90.0,
+                  decoration: const BoxDecoration(
+                    border: Border.fromBorderSide(BorderSide(color: ColorsManager.primaryColor, width: 2)),
+                    shape: BoxShape.circle,
+                    image: DecorationImage(
+                      fit: BoxFit.fill,
+                      image: NetworkImage("https://bukovskevrchy.pl/img/64c9c78b19101eadf6e459ddbb0fd69a.jpg"),
+                    ),
+                  ),
+                ),
+                Row(
+                  children: const [
+                    Icon(
+                      FontAwesomeIcons.penToSquare,
+                      color: ColorsManager.secondarytextColor,
+                      size: 16.0,
+                    ),
+                    SizedBox(width: 4.0),
+                    Text("Tiktube", style: TextStyle(fontSize: 16, color: ColorsManager.textColor)),
+                  ],
+                ),
+                const SizedBox(height: 10.0),
+              ],
+            ),
+            Column(
+              children: const [
+                Padding(
+                  padding: EdgeInsets.only(bottom: 8.0),
+                  child: Text("24",
+                      style: TextStyle(fontSize: 20, color: ColorsManager.textColor, fontWeight: FontWeight.bold)),
+                ),
+                Text("Following", style: TextStyle(fontSize: 16, color: ColorsManager.secondarytextColor)),
+              ],
+            ),
+          ],
+        ),
       ),
     );
   }
@@ -168,7 +190,7 @@ class InfoCard extends StatelessWidget {
   Widget build(BuildContext context) {
     return Card(
       color: ColorsManager.cardBack,
-      elevation: 2,
+      elevation: 1,
       margin: const EdgeInsets.all(8),
       child: ConstrainedBox(
         constraints: BoxConstraints(minWidth: context.width / 2 - 16, minHeight: context.height / 5),
