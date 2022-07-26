@@ -19,7 +19,10 @@ class HomePage extends StatelessWidget {
             color: ColorsManager.textColor,
           ),
         ),
-        middle: Text("10 Coins"),
+        middle: Padding(
+          padding: EdgeInsets.all(12.0),
+          child: Text("Tiktube", style: TextStyle(fontSize: 20.0, color: ColorsManager.textColor)),
+        ),
         trailing: Icon(CupertinoIcons.refresh, color: ColorsManager.textColor),
       ),
       child: CupertinoScrollbar(
