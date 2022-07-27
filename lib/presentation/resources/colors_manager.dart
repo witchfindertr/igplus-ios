@@ -3,12 +3,12 @@ import 'package:flutter/cupertino.dart';
 class ColorsManager {
   const ColorsManager();
 
-  static const Color primaryColor = Color.fromARGB(255, 96, 225, 152);
+  static const Color primaryColor = Color.fromARGB(255, 106, 245, 166);
   static Brightness brightness = Brightness.dark;
-  static const Color appBack = Color.fromRGBO(47, 44, 81, 1);
+  static const Color appBack = Color.fromARGB(255, 32, 32, 44);
 
   // text color
-  static const Color textColor = Color.fromRGBO(255, 255, 255, 1);
+  static const Color textColor = Color.fromARGB(255, 226, 226, 226);
   static const Color secondarytextColor = Color.fromRGBO(163, 162, 189, 1);
 
   // button color
@@ -16,7 +16,7 @@ class ColorsManager {
   static const Color buttonColor2 = Color.fromRGBO(61, 60, 96, 1);
 
   // card
-  static const Color cardBack = Color.fromRGBO(61, 60, 96, 1);
+  static const Color cardBack = Color.fromARGB(255, 44, 46, 68);
   static const Color cardText = Color.fromRGBO(255, 255, 255, 1);
   static const Color cardIconColor = Color.fromRGBO(255, 255, 255, 1);
 }
