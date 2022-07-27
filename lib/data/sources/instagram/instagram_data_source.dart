@@ -4,6 +4,50 @@
 // import 'package:igreports/data_source/source/headers_datasource.dart';
 // import 'package:igreports/models/ig_headers.dart';
 
+import 'dart:convert';
+
+import 'package:igplus_ios/data/models/account_info_model.dart';
+import 'package:http/http.dart' as http;
+
+import '../../constants.dart';
+import '../../failure.dart';
+
+abstract class InstagramDataSource {
+  Future<AccountInfoModel> getAccountInfoByUsername(String username);
+  Future<AccountInfoModel> getAccountInfoById(String igUserId);
+}
+
+class InstagramDataSourceImp extends InstagramDataSource {
+  final http.Client client;
+
+  InstagramDataSourceImp({required this.client});
+  @override
+  Future<AccountInfoModel> getAccountInfoById(String igUserId) async {
+    final response = await client.get(Uri.parse(
+      InstagramUrls.getAccountInfoById(igUserId),
+    ));
+
+    if (response.statusCode == 200) {
+      return AccountInfoModel.fromJsonById(jsonDecode(response.body));
+    } else {
+      throw const ServerFailure("Failed to get account info by ID");
+    }
+  }
+
+  @override
+  Future<AccountInfoModel> getAccountInfoByUsername(String username) async {
+    final response = await client.get(
+      Uri.parse(InstagramUrls.getAccountInfoByUsername(username)),
+    );
+
+    if (response.statusCode == 200) {
+      return AccountInfoModel.fromJsonByUsername(jsonDecode(response.body));
+    } else {
+      throw const ServerFailure("Failed to get account info by username");
+    }
+  }
+}
+
 // //https://github.com/postaddictme/instagram-php-scraper
 // class InstagramDataSource {
 //   const InstagramDataSource({required this.headersDataSource});
