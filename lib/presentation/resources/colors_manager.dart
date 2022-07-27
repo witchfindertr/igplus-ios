@@ -3,7 +3,7 @@ import 'package:flutter/cupertino.dart';
 class ColorsManager {
   const ColorsManager();
 
-  static const Color primaryColor = Color.fromARGB(255, 100, 208, 147);
+  static const Color primaryColor = Color.fromARGB(255, 106, 245, 166);
   static Brightness brightness = Brightness.dark;
   static const Color appBack = Color.fromARGB(255, 32, 32, 44);
 

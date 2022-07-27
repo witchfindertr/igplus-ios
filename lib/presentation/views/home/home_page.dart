@@ -30,8 +30,6 @@ class HomePage extends StatelessWidget {
           children: <Widget>[
             ProfileCard(),
             LineChartSample(),
-            StoriesList(),
-            SectionTitle(title: "Important stats", icon: FontAwesomeIcons.chartSimple),
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: [
@@ -49,6 +47,8 @@ class HomePage extends StatelessWidget {
                 ),
               ],
             ),
+            StoriesList(),
+            SectionTitle(title: "Important stats", icon: FontAwesomeIcons.chartSimple),
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: [
