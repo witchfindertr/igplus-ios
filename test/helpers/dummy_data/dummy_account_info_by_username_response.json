@@ -1,0 +1,106 @@
+{
+    "data": {
+        "user": {
+            "biography": "Ayman Baghdad, I am 26 university of technologymechanical engineering.",
+            "bio_links": [],
+            "biography_with_entities": {
+                "raw_text": "Ayman Baghdad, I am 26 university of technologymechanical engineering.",
+                "entities": []
+            },
+            "blocked_by_viewer": false,
+            "restricted_by_viewer": false,
+            "country_block": false,
+            "external_url": null,
+            "external_url_linkshimmed": null,
+            "edge_followed_by": {
+                "count": 203
+            },
+            "fbid": "17841454411578263",
+            "followed_by_viewer": false,
+            "edge_follow": {
+                "count": 558
+            },
+            "follows_viewer": false,
+            "full_name": "فولو مردود بسرعة 💚🧡",
+            "group_metadata": null,
+            "has_ar_effects": false,
+            "has_clips": false,
+            "has_guides": false,
+            "has_channel": false,
+            "has_blocked_viewer": false,
+            "highlight_reel_count": 8,
+            "has_requested_viewer": false,
+            "hide_like_and_view_counts": false,
+            "id": "54306109719",
+            "is_business_account": false,
+            "is_eligible_to_view_account_transparency": false,
+            "is_professional_account": true,
+            "is_supervision_enabled": false,
+            "is_guardian_of_viewer": false,
+            "is_supervised_by_viewer": false,
+            "is_supervised_user": false,
+            "is_embeds_disabled": false,
+            "is_joined_recently": true,
+            "guardian_id": null,
+            "business_address_json": null,
+            "business_contact_method": "UNKNOWN",
+            "business_email": null,
+            "business_phone_number": null,
+            "business_category_name": null,
+            "overall_category_name": null,
+            "category_enum": null,
+            "category_name": "Gamer",
+            "is_private": false,
+            "is_verified": false,
+            "edge_mutual_followed_by": {
+                "count": 0,
+                "edges": []
+            },
+            "profile_pic_url": "https://instagram.ffez2-2.fna.fbcdn.net/v/t51.2885-19/295774332_463034745234587_5831000511722660987_n.jpg?stp=dst-jpg_s150x150&_nc_ht=instagram.ffez2-2.fna.fbcdn.net&_nc_cat=111&_nc_ohc=72ZBx_YnFs4AX8TjKDJ&edm=AOQ1c0wBAAAA&ccb=7-5&oh=00_AT-POOw4vL9CPhfkp16QGOqc1ry-AaYTVf18BTdx4Z5bpg&oe=62E66064&_nc_sid=8fd12b",
+            "profile_pic_url_hd": "https://instagram.ffez2-2.fna.fbcdn.net/v/t51.2885-19/295774332_463034745234587_5831000511722660987_n.jpg?stp=dst-jpg_s320x320&_nc_ht=instagram.ffez2-2.fna.fbcdn.net&_nc_cat=111&_nc_ohc=72ZBx_YnFs4AX8TjKDJ&edm=AOQ1c0wBAAAA&ccb=7-5&oh=00_AT9VuKJN5NcXGGWj5yl89u823l5NOA3PC6-x28tIINvVTQ&oe=62E66064&_nc_sid=8fd12b",
+            "requested_by_viewer": false,
+            "should_show_category": true,
+            "should_show_public_contacts": false,
+            "state_controlled_media_country": null,
+            "location_transparency_country": null,
+            "transparency_label": null,
+            "transparency_product": "STATE_CONTROLLED_MEDIA",
+            "username": "ayman_26a",
+            "connected_fb_page": null,
+            "pronouns": [],
+            "edge_felix_video_timeline": {
+                "count": 0,
+                "page_info": {
+                    "has_next_page": false,
+                    "end_cursor": null
+                },
+                "edges": []
+            },
+            "edge_owner_to_timeline_media": {
+                "count": 0,
+                "page_info": {
+                    "has_next_page": false,
+                    "end_cursor": null
+                },
+                "edges": []
+            },
+            "edge_saved_media": {
+                "count": 0,
+                "page_info": {
+                    "has_next_page": false,
+                    "end_cursor": null
+                },
+                "edges": []
+            },
+            "edge_media_collections": {
+                "count": 0,
+                "page_info": {
+                    "has_next_page": false,
+                    "end_cursor": null
+                },
+                "edges": []
+            }
+        }
+    },
+    "status": "ok"
+}
