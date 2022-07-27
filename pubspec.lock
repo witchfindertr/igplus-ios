@@ -233,20 +233,13 @@ packages:
     description: flutter
     source: sdk
     version: "0.0.0"
-  frontend_server_client:
-    dependency: transitive
+  font_awesome_flutter:
+    dependency: "direct main"
     description:
-      name: frontend_server_client
+      name: font_awesome_flutter
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "2.1.3"
-  glob:
-    dependency: transitive
-    description:
-      name: glob
-      url: "https://pub.dartlang.org"
-    source: hosted
-    version: "2.1.0"
+    version: "10.1.0"
   go_router:
     dependency: "direct main"
     description:
@@ -282,13 +275,13 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "4.0.1"
-  io:
-    dependency: transitive
+  intl:
+    dependency: "direct main"
     description:
-      name: io
+      name: intl
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "1.0.3"
+    version: "0.17.0"
   js:
     dependency: transitive
     description:
@@ -338,20 +331,13 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "1.7.0"
-  mime:
-    dependency: transitive
+  mrx_charts:
+    dependency: "direct main"
     description:
-      name: mime
+      name: mrx_charts
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "1.0.2"
-  mockito:
-    dependency: "direct dev"
-    description:
-      name: mockito
-      url: "https://pub.dartlang.org"
-    source: hosted
-    version: "5.2.0"
+    version: "0.1.3"
   nested:
     dependency: transitive
     description:
@@ -448,6 +434,13 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "1.10.0"
+  story:
+    dependency: "direct main"
+    description:
+      name: story
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "0.7.0"
   stream_channel:
     dependency: transitive
     description:

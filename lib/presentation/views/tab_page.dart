@@ -1,4 +1,5 @@
 import 'package:flutter/cupertino.dart';
+import 'package:igplus_ios/presentation/resources/colors_manager.dart';
 import 'package:igplus_ios/presentation/views/engagement/engagement_page.dart';
 import 'package:igplus_ios/presentation/views/home/home_page.dart';
 import 'package:igplus_ios/presentation/views/insghit/insight_page.dart';
@@ -11,6 +12,8 @@ class TabPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return CupertinoTabScaffold(
         tabBar: CupertinoTabBar(
+          inactiveColor: ColorsManager.secondarytextColor,
+          backgroundColor: ColorsManager.appBack,
           currentIndex: 0,
           items: const <BottomNavigationBarItem>[
             BottomNavigationBarItem(icon: Icon(CupertinoIcons.home), label: 'Home'),
