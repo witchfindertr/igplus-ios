@@ -1,10 +1,10 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:igplus_ios/app/extensions/media_query_values.dart';
 import 'package:igplus_ios/presentation/resources/colors_manager.dart';
+import 'package:igplus_ios/presentation/views/global/info_card.dart';
 import 'package:igplus_ios/presentation/views/global/section_title.dart';
-import 'package:igplus_ios/presentation/views/home/line-chart.dart';
+import 'package:igplus_ios/presentation/views/home/stats/line-chart.dart';
 import 'package:igplus_ios/presentation/views/home/stories/stories_list.dart';
 
 class HomePage extends StatelessWidget {
@@ -28,8 +28,8 @@ class HomePage extends StatelessWidget {
         thickness: 12,
         child: ListView(
           children: <Widget>[
-            ProfileCard(),
-            LineChartSample(),
+            const ProfileCard(),
+            const LineChartSample(),
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: [
@@ -47,8 +47,16 @@ class HomePage extends StatelessWidget {
                 ),
               ],
             ),
-            StoriesList(),
-            SectionTitle(title: "Important stats", icon: FontAwesomeIcons.chartSimple),
+            InfoCard(
+              title: "Who Admires You",
+              subTitle: "Find out who's intersted in you",
+              icon: FontAwesomeIcons.solidHeart,
+              count: "53",
+              context: context,
+              style: 1,
+            ),
+            const StoriesList(),
+            const SectionTitle(title: "Important stats", icon: FontAwesomeIcons.chartSimple),
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: [
@@ -113,7 +121,7 @@ class ProfileCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Card(
-      margin: const EdgeInsets.all(8.0),
+      margin: const EdgeInsets.fromLTRB(8.0, 20.0, 8.0, 4.0),
       color: ColorsManager.cardBack,
       elevation: 1,
       child: Padding(
@@ -139,11 +147,11 @@ class ProfileCard extends StatelessWidget {
                   width: 90.0,
                   height: 90.0,
                   decoration: const BoxDecoration(
-                    border: Border.fromBorderSide(BorderSide(color: ColorsManager.primaryColor, width: 2)),
+                    border: Border.fromBorderSide(BorderSide(color: ColorsManager.secondarytextColor, width: 2)),
                     shape: BoxShape.circle,
                     image: DecorationImage(
                       fit: BoxFit.fill,
-                      image: NetworkImage("https://bukovskevrchy.pl/img/64c9c78b19101eadf6e459ddbb0fd69a.jpg"),
+                      image: AssetImage("assets/images/brahim.jpg"),
                     ),
                   ),
                 ),
@@ -171,44 +179,6 @@ class ProfileCard extends StatelessWidget {
                 Text("Following", style: TextStyle(fontSize: 16, color: ColorsManager.secondarytextColor)),
               ],
             ),
-          ],
-        ),
-      ),
-    );
-  }
-}
-
-class InfoCard extends StatelessWidget {
-  final String title;
-  final String count;
-  final IconData icon;
-  final BuildContext context;
-  const InfoCard({Key? key, required this.title, required this.count, required this.icon, required this.context})
-      : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return Card(
-      color: ColorsManager.cardBack,
-      elevation: 1,
-      margin: const EdgeInsets.all(8),
-      child: ConstrainedBox(
-        constraints: BoxConstraints(minWidth: context.width / 2 - 16, minHeight: context.height / 5),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Padding(
-                  padding: const EdgeInsets.fromLTRB(0, 0, 15, 10),
-                  child: Icon(icon, size: 24),
-                ),
-                Text(count,
-                    style: const TextStyle(fontSize: 20, color: ColorsManager.textColor, fontWeight: FontWeight.bold)),
-              ],
-            ),
-            Text(title, style: const TextStyle(fontSize: 14, color: ColorsManager.secondarytextColor)),
           ],
         ),
       ),
