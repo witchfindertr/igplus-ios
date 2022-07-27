@@ -44,8 +44,7 @@ class Story extends StatelessWidget {
                 color: ColorsManager.appBack,
                 shape: BoxShape.circle,
                 image: DecorationImage(
-                  image: NetworkImage(
-                      "https://scontent.cdninstagram.com/v/t51.2885-19/13166827_1075389272506962_890479771_a.jpg?stp=dst-jpg_s150x150&_nc_ht=scontent.cdninstagram.com&_nc_cat=106&_nc_ohc=O0VZaTUGwFgAX8bGrC9&edm=APs17CUBAAAA&ccb=7-5&oh=00_AT8a-V90V1s7gsnvITled9fo9UjYgRa6V7tJwTe6GsBCEA&oe=62E61800&_nc_sid=978cb9"),
+                  image: AssetImage("assets/images/brahim.jpg"),
                 ),
               ),
             ),

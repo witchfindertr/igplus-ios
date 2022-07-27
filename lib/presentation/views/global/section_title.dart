@@ -1,15 +1,14 @@
 import 'package:flutter/material.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:igplus_ios/presentation/resources/colors_manager.dart';
 
 class SectionTitle extends StatelessWidget {
-  SectionTitle({Key? key, required this.title, required this.icon}) : super(key: key);
+  const SectionTitle({Key? key, required this.title, required this.icon}) : super(key: key);
   final String title;
   final IconData icon;
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.fromLTRB(10, 20, 10, 10),
+      padding: const EdgeInsets.fromLTRB(10, 20, 10, 15),
       child: Row(
         children: [
           Icon(
