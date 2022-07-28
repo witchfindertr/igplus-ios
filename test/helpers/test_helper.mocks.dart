@@ -70,6 +70,22 @@ class MockInstagramRepository extends _i1.Mock
           returnValue: Future<_i2.Either<_i8.Failure, List<_i10.Friend>>>.value(
               _FakeEither_0<_i8.Failure, List<_i10.Friend>>())) as _i7
           .Future<_i2.Either<_i8.Failure, List<_i10.Friend>>>);
+  @override
+  _i7.Future<_i2.Either<_i8.Failure, List<_i10.Friend>>> getFollowings(
+          {String? igUserId}) =>
+      (super.noSuchMethod(
+          Invocation.method(#getFollowings, [], {#igUserId: igUserId}),
+          returnValue: Future<_i2.Either<_i8.Failure, List<_i10.Friend>>>.value(
+              _FakeEither_0<_i8.Failure, List<_i10.Friend>>())) as _i7
+          .Future<_i2.Either<_i8.Failure, List<_i10.Friend>>>);
+  @override
+  _i7.Future<_i2.Either<_i8.Failure, List<_i10.Friend>>> getFollowers(
+          {String? igUserId}) =>
+      (super.noSuchMethod(
+          Invocation.method(#getFollowers, [], {#igUserId: igUserId}),
+          returnValue: Future<_i2.Either<_i8.Failure, List<_i10.Friend>>>.value(
+              _FakeEither_0<_i8.Failure, List<_i10.Friend>>())) as _i7
+          .Future<_i2.Either<_i8.Failure, List<_i10.Friend>>>);
 }
 
 /// A class which mocks [InstagramDataSource].

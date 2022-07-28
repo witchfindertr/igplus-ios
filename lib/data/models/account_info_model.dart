@@ -8,7 +8,7 @@ class AccountInfoModel extends Equatable {
   bool isPrivate; //is_private
   String picture; // profile_pic_url
   int followers; //follower_count
-  int following; //following_count
+  int followings; //following_count
   String? contactPhoneNumber; //contact_phone_number
   String? phoneCountryCode; //public_phone_country_code
   String? publicPhoneNumber; //public_phone_number
@@ -20,7 +20,7 @@ class AccountInfoModel extends Equatable {
     required this.isPrivate,
     required this.picture,
     required this.followers,
-    required this.following,
+    required this.followings,
     this.contactPhoneNumber,
     this.phoneCountryCode,
     this.publicPhoneNumber,
@@ -33,7 +33,7 @@ class AccountInfoModel extends Equatable {
     final bool isPrivate = json['user']['is_private'];
     final String picture = Uri.encodeFull(json['user']['profile_pic_url']);
     final int followers = json['user']['follower_count'];
-    final int following = json['user']['following_count'];
+    final int followings = json['user']['following_count'];
     final String? contactPhoneNumber = json['user']['contact_phone_number'];
     final String? phoneCountryCode = json['user']['public_phone_country_code'];
     final String? publicPhoneNumber = json['user']['public_phone_number'];
@@ -45,7 +45,7 @@ class AccountInfoModel extends Equatable {
       isPrivate: isPrivate,
       picture: picture,
       followers: followers,
-      following: following,
+      followings: followings,
       contactPhoneNumber: contactPhoneNumber ?? "",
       publicPhoneNumber: publicPhoneNumber ?? "",
       phoneCountryCode: phoneCountryCode ?? "",
@@ -59,7 +59,7 @@ class AccountInfoModel extends Equatable {
     final bool isPrivate = json['data']['user']['is_private'];
     final String picture = Uri.encodeFull(json['data']['user']['profile_pic_url']);
     final int followers = json['data']['user']['edge_followed_by']['count'];
-    final int following = json['data']['user']['edge_follow']['count'];
+    final int followings = json['data']['user']['edge_follow']['count'];
     final String? contactPhoneNumber = json['data']['user']['business_phone_number'];
     final String? phoneCountryCode = null;
     final String? publicPhoneNumber = null;
@@ -71,7 +71,7 @@ class AccountInfoModel extends Equatable {
       isPrivate: isPrivate,
       picture: picture,
       followers: followers,
-      following: following,
+      followings: followings,
       contactPhoneNumber: contactPhoneNumber ?? "",
       publicPhoneNumber: publicPhoneNumber ?? "",
       phoneCountryCode: phoneCountryCode ?? "",
@@ -86,7 +86,7 @@ class AccountInfoModel extends Equatable {
       isPrivate: isPrivate,
       picture: picture,
       followers: followers,
-      following: following,
+      followings: followings,
       // contactPhoneNumber: contactPhoneNumber,
       // phoneCountryCode: phoneCountryCode,
       // publicPhoneNumber: publicPhoneNumber,
@@ -102,7 +102,7 @@ class AccountInfoModel extends Equatable {
       'isPrivate': isPrivate,
       'picture': picture,
       'followers': followers,
-      'following': following
+      'followings': followings
     };
   }
 
@@ -114,7 +114,7 @@ class AccountInfoModel extends Equatable {
         isPrivate,
         picture,
         followers,
-        following,
+        followings,
         contactPhoneNumber,
         phoneCountryCode,
         publicPhoneNumber,

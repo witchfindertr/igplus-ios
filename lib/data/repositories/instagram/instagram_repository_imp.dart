@@ -41,4 +41,16 @@ class InstagramRepositoryImp extends InstagramRepository {
     // TODO: implement getNewFollowers
     throw UnimplementedError();
   }
+
+  @override
+  Future<Either<Failure, List<Friend>>> getFollowers({required String igUserId}) {
+    // TODO: implement getFollowers
+    throw UnimplementedError();
+  }
+
+  @override
+  Future<Either<Failure, List<Friend>>> getFollowings({required String igUserId}) {
+    // TODO: implement getFollowings
+    throw UnimplementedError();
+  }
 }
