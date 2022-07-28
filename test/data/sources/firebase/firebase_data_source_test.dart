@@ -32,14 +32,14 @@ void main() {
   });
 
   group('get Latest headers from firebase', () {
-    test('should get latest headers from firebase', () {
+    test('should get latest headers from firebase', () async {
       // arrange
       when(mockHttpClient.get(Uri.parse(FirebaseFunctionsUrls.baseUrl))).thenAnswer(
           (_) async => http.Response(readJson('helpers/dummy_data/dummy_latest_headers_response.json'), 200, headers: {
                 HttpHeaders.contentTypeHeader: 'application/json; charset=utf-8',
               }));
       // act
-      final result = firebaseDataSource.getLatestHeaders();
+      final result = await firebaseDataSource.getLatestHeaders();
       // assert
       expect(result, equals(testIgHeadersModel));
     });
