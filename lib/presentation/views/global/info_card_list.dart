@@ -54,7 +54,7 @@ class InfoCardList extends StatelessWidget {
             ),
             const Padding(
               padding: EdgeInsets.symmetric(horizontal: 20),
-              child: Icon(FontAwesomeIcons.arrowRight, color: ColorsManager.secondarytextColor),
+              child: Icon(FontAwesomeIcons.angleRight, color: ColorsManager.secondarytextColor),
             ),
           ],
         ),
