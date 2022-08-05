@@ -1,15 +1,15 @@
 import 'package:igplus_ios/domain/entities/ig_headers.dart';
 
 class IgHeadersModel {
-  String? userAgent; // 'User-Agent'
-  final String? cookie; //Cookie
-  final String? accept; //Accept
+  String userAgent; // 'User-Agent'
+  final String cookie; //Cookie
+  final String accept; //Accept
 
-  final String? acceptEncoding; // Accept-Encoding
-  final String? acceptLanguage; //Accept-Language
-  final String? upgradeInsecureRequests; // Upgrade-Insecure-Requests
-  final String? XIGAppID; //X-IG-App-ID
-  final String? XCSRFToken; // X-CSRFToken
+  final String acceptEncoding; // Accept-Encoding
+  final String acceptLanguage; //Accept-Language
+  final String upgradeInsecureRequests; // Upgrade-Insecure-Requests
+  final String XIGAppID; //X-IG-App-ID
+  final String XCSRFToken; // X-CSRFToken
 
   IgHeadersModel({
     required this.XCSRFToken,

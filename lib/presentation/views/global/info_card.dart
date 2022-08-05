@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:igplus_ios/app/extensions/media_query_values.dart';
 import 'package:igplus_ios/presentation/resources/colors_manager.dart';
 
 class InfoCard extends StatelessWidget {
@@ -20,15 +21,13 @@ class InfoCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    double width = MediaQuery.of(context).size.width;
-    double height = MediaQuery.of(context).size.height;
     if (style == 1) {
       return Card(
         color: ColorsManager.cardBack,
         elevation: 1,
         margin: const EdgeInsets.all(8),
         child: ConstrainedBox(
-          constraints: BoxConstraints(minWidth: width - 16, minHeight: height / 7),
+          constraints: BoxConstraints(minWidth: context.width - 16, minHeight: context.height / 7),
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
@@ -79,7 +78,7 @@ class InfoCard extends StatelessWidget {
         elevation: 1,
         margin: const EdgeInsets.all(8),
         child: ConstrainedBox(
-          constraints: BoxConstraints(minWidth: width / 2 - 16, minHeight: height / 5),
+          constraints: BoxConstraints(minWidth: context.width / 2 - 16, minHeight: context.height / 5),
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [

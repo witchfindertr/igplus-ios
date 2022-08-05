@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:dartz/dartz.dart';
 import 'package:igplus_ios/domain/entities/friend.dart';
+import 'package:igplus_ios/domain/entities/ig_headers.dart';
 
 import '../../failure.dart';
 import '../../models/account_info_model.dart';
@@ -16,13 +17,20 @@ class InstagramRepositoryImp extends InstagramRepository {
 
   InstagramRepositoryImp({required this.instagramDataSource});
   @override
-  Future<Either<Failure, AccountInfo>> getAccountInfo({String? username, String? igUserId}) async {
+  Future<Either<Failure, AccountInfo>> getAccountInfo({
+    String? username,
+    String? igUserId,
+    required IgHeaders igHeaders,
+  }) async {
     try {
+      final Map<String, String> headers = igHeaders.toMap();
       if (username != null) {
-        final AccountInfoModel accountInfoModel = await instagramDataSource.getAccountInfoByUsername(username);
+        final AccountInfoModel accountInfoModel =
+            await instagramDataSource.getAccountInfoByUsername(username: username, headers: headers);
         return Right(accountInfoModel.toEntity());
       } else if (igUserId != null) {
-        final AccountInfoModel accountInfoModel = await instagramDataSource.getAccountInfoById(igUserId);
+        final AccountInfoModel accountInfoModel =
+            await instagramDataSource.getAccountInfoById(igUserId: igUserId, headers: headers);
         return Right(accountInfoModel.toEntity());
       } else {
         return const Left(InvalidParamsFailure("username or igUserId is required"));

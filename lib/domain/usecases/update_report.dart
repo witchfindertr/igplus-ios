@@ -1,9 +1,13 @@
 import 'package:dartz/dartz.dart';
+
 import 'package:igplus_ios/domain/entities/account_info.dart';
 import 'package:igplus_ios/domain/entities/friend.dart';
+import 'package:igplus_ios/domain/entities/ig_headers.dart';
+import 'package:igplus_ios/domain/repositories/firebase/headers_repository.dart';
 
 import '../../data/failure.dart';
 import '../entities/report.dart';
+import '../entities/user.dart';
 import '../repositories/instagram/instagram_repository.dart';
 
 class UpdateReport {
@@ -13,8 +17,9 @@ class UpdateReport {
     required this.instagramRepository,
   });
 
-  Future<Either<Failure, Report>> execute() async {
-    final Either<Failure, AccountInfo> accountInfoEither = await instagramRepository.getAccountInfo();
+  Future<Either<Failure, Report>> execute({required User currentUser}) async {
+    final Either<Failure, AccountInfo> accountInfoEither =
+        await instagramRepository.getAccountInfo(igHeaders: currentUser.igHeaders);
 
     if (accountInfoEither.isLeft()) {
       return Left((accountInfoEither as Left).value);

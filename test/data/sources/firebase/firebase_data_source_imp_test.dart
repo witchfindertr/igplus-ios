@@ -1,5 +1,7 @@
 import 'dart:io';
 
+import 'package:firebase_core/firebase_core.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:igplus_ios/data/constants.dart';
 import 'package:igplus_ios/data/models/ig_headers_model.dart';
@@ -26,7 +28,7 @@ void main() {
     accept: "text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8",
   );
 
-  setUp(() {
+  setUp(() async {
     mockHttpClient = MockHttpClient();
     firebaseDataSource = FirebaseDataSourceImp(client: mockHttpClient);
   });
