@@ -13,8 +13,8 @@ import '../../constants.dart';
 import '../../failure.dart';
 
 abstract class InstagramDataSource {
-  Future<AccountInfoModel> getAccountInfoByUsername(String username);
-  Future<AccountInfoModel> getAccountInfoById(String igUserId);
+  Future<AccountInfoModel> getAccountInfoByUsername({required String username, required Map<String, String> headers});
+  Future<AccountInfoModel> getAccountInfoById({required String igUserId, required Map<String, String> headers});
 }
 
 class InstagramDataSourceImp extends InstagramDataSource {
@@ -22,10 +22,8 @@ class InstagramDataSourceImp extends InstagramDataSource {
 
   InstagramDataSourceImp({required this.client});
   @override
-  Future<AccountInfoModel> getAccountInfoById(String igUserId) async {
-    final response = await client.get(Uri.parse(
-      InstagramUrls.getAccountInfoById(igUserId),
-    ));
+  Future<AccountInfoModel> getAccountInfoById({required String igUserId, required Map<String, String> headers}) async {
+    final response = await client.get(Uri.parse(InstagramUrls.getAccountInfoById(igUserId)), headers: headers);
 
     if (response.statusCode == 200) {
       return AccountInfoModel.fromJsonById(jsonDecode(response.body));
@@ -35,10 +33,9 @@ class InstagramDataSourceImp extends InstagramDataSource {
   }
 
   @override
-  Future<AccountInfoModel> getAccountInfoByUsername(String username) async {
-    final response = await client.get(
-      Uri.parse(InstagramUrls.getAccountInfoByUsername(username)),
-    );
+  Future<AccountInfoModel> getAccountInfoByUsername(
+      {required String username, required Map<String, String> headers}) async {
+    final response = await client.get(Uri.parse(InstagramUrls.getAccountInfoByUsername(username)), headers: headers);
 
     if (response.statusCode == 200) {
       return AccountInfoModel.fromJsonByUsername(jsonDecode(response.body));

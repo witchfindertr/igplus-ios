@@ -4,8 +4,10 @@ import 'dart:developer';
 import 'dart:io';
 
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 import 'package:go_router/go_router.dart';
+import 'package:igplus_ios/presentation/blocs/cubit/instagram_auth_cubit.dart';
 
 import 'package:webview_cookie_manager/webview_cookie_manager.dart';
 import 'package:webview_flutter/webview_flutter.dart';
@@ -65,17 +67,22 @@ class _InstagramLoginPageState extends State<InstagramLoginPage> {
 
           if (sessionidCookies != null && useridCookies != null && mounted) {
             GoRouter.of(context).pop();
-            // context.read<InstagramAuthCubit>()
-            //   ..submiteInstagramAuthHeader(
-            //     cookies: cookies,
-            //     userAgent: userAgent,
-            //     igUserId: useridCookies.value,
-            //     sessionid: sessionidCookies.value,
-            //     csrftoken: csrftokenCookies?.value,
-            //   );
 
-            print(
-                "cookies: $cookies | userAgent: $userAgent | igUserId: ${useridCookies.value} | sessionid: ${sessionidCookies.value}");
+            Map<String, String> headers = {
+              'User-Agent': userAgent.replaceAll('"', '').trim(),
+              'Cookie': 'sessionid=${sessionidCookies.value}',
+              'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8',
+              'Accept-Encoding': 'gzip, deflate, br',
+              'Accept-Language': 'en-US,en;q=0.5',
+              'Upgrade-Insecure-Requests': '1',
+              'X-IG-App-ID': '936619743392459',
+              'X-CSRFToken': csrftokenCookies?.value ?? ""
+            };
+
+            context.read<InstagramAuthCubit>().createOrUpdateInstagramInfo(
+                  headers: headers,
+                  igUserId: useridCookies.value,
+                );
 
             return NavigationDecision.prevent;
           }

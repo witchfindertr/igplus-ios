@@ -5,7 +5,7 @@ import 'package:igplus_ios/presentation/views/login/login_page.dart';
 import 'package:igplus_ios/presentation/views/tab_page.dart';
 
 GoRouter routes() {
-  return GoRouter(initialLocation: '/tabs', debugLogDiagnostics: true, routes: [
+  return GoRouter(initialLocation: '/login', debugLogDiagnostics: true, routes: [
     GoRoute(
         name: 'login',
         path: '/login',

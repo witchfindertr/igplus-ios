@@ -22,6 +22,8 @@ import 'package:dartz/dartz.dart';
 import 'package:igplus_ios/data/failure.dart';
 import 'package:igplus_ios/domain/entities/ig_headers.dart';
 
+import '../../entities/user.dart';
+
 abstract class HeadersRepository {
-  Future<Either<Failure, IgHeaders>> getHeaders();
+  Future<Either<Failure, IgHeaders>> getHeaders({User? currentUser, Map<String, dynamic>? headers});
 }
