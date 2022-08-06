@@ -8,11 +8,11 @@ import '../entities/account_info.dart';
 import '../entities/ig_headers.dart';
 import '../entities/user.dart';
 
-class UpdateUser {
+class UpdateUserUseCase {
   final FirebaseRepository firebaseRepository;
   final InstagramRepository instagramRepository;
 
-  UpdateUser({required this.firebaseRepository, required this.instagramRepository});
+  UpdateUserUseCase({required this.firebaseRepository, required this.instagramRepository});
 
   Future<Either<Failure, Unit>> execute(
       {required User currentUser, required AccountInfo accountInfo, required IgHeaders igHeaders}) async {

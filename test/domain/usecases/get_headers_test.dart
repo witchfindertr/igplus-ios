@@ -1,18 +1,18 @@
 import 'package:dartz/dartz.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:igplus_ios/domain/entities/ig_headers.dart';
-import 'package:igplus_ios/domain/usecases/get_headers.dart';
+import 'package:igplus_ios/domain/usecases/get_headers_use_case.dart';
 import 'package:mockito/mockito.dart';
 
 import '../../helpers/test_helper.mocks.dart';
 
 void main() {
   late MockHeadersRepository headersRepository;
-  late GetHeaders usecase;
+  late GetHeadersUseCase usecase;
 
   setUp(() {
     headersRepository = MockHeadersRepository();
-    usecase = GetHeaders(
+    usecase = GetHeadersUseCase(
       headersRepository: headersRepository,
     );
   });

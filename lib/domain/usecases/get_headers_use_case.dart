@@ -5,10 +5,10 @@ import 'package:igplus_ios/domain/repositories/firebase/headers_repository.dart'
 
 import '../entities/user.dart';
 
-class GetHeaders {
+class GetHeadersUseCase {
   final HeadersRepository headersRepository;
 
-  GetHeaders({required this.headersRepository});
+  GetHeadersUseCase({required this.headersRepository});
   Future<Either<Failure, IgHeaders>> execute({User? currentUser, Map<String, dynamic>? headers}) async {
     return await headersRepository.getHeaders(currentUser: currentUser, headers: headers);
   }

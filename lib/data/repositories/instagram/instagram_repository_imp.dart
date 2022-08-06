@@ -10,6 +10,7 @@ import '../../models/account_info_model.dart';
 import '../../../domain/entities/account_info.dart';
 import '../../../domain/repositories/instagram/instagram_repository.dart';
 
+import '../../models/friend_model.dart';
 import '../../sources/instagram/instagram_data_source.dart';
 
 class InstagramRepositoryImp extends InstagramRepository {
@@ -51,14 +52,42 @@ class InstagramRepositoryImp extends InstagramRepository {
   }
 
   @override
-  Future<Either<Failure, List<Friend>>> getFollowers({required String igUserId}) {
-    // TODO: implement getFollowers
-    throw UnimplementedError();
+  Future<Either<Failure, List<Friend>>> getFollowers({
+    required String igUserId,
+    required IgHeaders igHeaders,
+  }) async {
+    try {
+      final Map<String, String> headers = igHeaders.toMap();
+      final List<FriendModel> friendModels =
+          await instagramDataSource.getFollowers(igUserId: igUserId, headers: headers);
+
+      return Right(friendModels.map((friendModel) => friendModel.toEntity()).toList());
+    } on ServerFailure catch (e) {
+      return Left(ServerFailure(e.message));
+    } on SocketException {
+      return const Left(ConnectionFailure("No internet connection"));
+    } on Exception {
+      return const Left(ServerFailure("Unknown error"));
+    }
   }
 
   @override
-  Future<Either<Failure, List<Friend>>> getFollowings({required String igUserId}) {
-    // TODO: implement getFollowings
-    throw UnimplementedError();
+  Future<Either<Failure, List<Friend>>> getFollowings({
+    required String igUserId,
+    required IgHeaders igHeaders,
+  }) async {
+    try {
+      final Map<String, String> headers = igHeaders.toMap();
+      final List<FriendModel> friendModels =
+          await instagramDataSource.getFollowings(igUserId: igUserId, headers: headers);
+
+      return Right(friendModels.map((friendModel) => friendModel.toEntity()).toList());
+    } on ServerFailure catch (e) {
+      return Left(ServerFailure(e.message));
+    } on SocketException {
+      return const Left(ConnectionFailure("No internet connection"));
+    } on Exception {
+      return const Left(ServerFailure("Unknown error"));
+    }
   }
 }

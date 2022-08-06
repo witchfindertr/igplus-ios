@@ -7,7 +7,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import 'package:go_router/go_router.dart';
-import 'package:igplus_ios/presentation/blocs/cubit/instagram_auth_cubit.dart';
+import 'package:igplus_ios/presentation/blocs/login/cubit/instagram_auth_cubit.dart';
 
 import 'package:webview_cookie_manager/webview_cookie_manager.dart';
 import 'package:webview_flutter/webview_flutter.dart';

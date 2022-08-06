@@ -4,9 +4,9 @@ import 'package:igplus_ios/domain/entities/ig_headers.dart';
 import 'package:igplus_ios/domain/repositories/instagram/instagram_repository.dart';
 import 'package:dartz/dartz.dart';
 
-class GetAccountInfo {
+class GetAccountInfoUseCase {
   final InstagramRepository instagramRepository;
-  GetAccountInfo({required this.instagramRepository});
+  GetAccountInfoUseCase({required this.instagramRepository});
 
   Future<Either<Failure, AccountInfo>> execute(
       {String? username, String? igUserId, required IgHeaders igHeaders}) async {

@@ -4,9 +4,9 @@ import 'package:igplus_ios/domain/repositories/firebase/firebase_repository.dart
 import '../../data/failure.dart';
 import '../entities/user.dart';
 
-class GetUser {
+class GetUserUseCase {
   final FirebaseRepository firebaseRepository;
-  GetUser({required this.firebaseRepository});
+  GetUserUseCase({required this.firebaseRepository});
 
   Future<Either<Failure, User>> execute({String? userId}) async {
     if (userId == null) {

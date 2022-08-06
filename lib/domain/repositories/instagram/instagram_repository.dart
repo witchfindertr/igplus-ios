@@ -12,6 +12,12 @@ abstract class InstagramRepository {
     required IgHeaders igHeaders,
   });
   Future<Either<Failure, List<Friend>>> getNewFollowers();
-  Future<Either<Failure, List<Friend>>> getFollowings({required String igUserId});
-  Future<Either<Failure, List<Friend>>> getFollowers({required String igUserId});
+  Future<Either<Failure, List<Friend>>> getFollowings({
+    required String igUserId,
+    required IgHeaders igHeaders,
+  });
+  Future<Either<Failure, List<Friend>>> getFollowers({
+    required String igUserId,
+    required IgHeaders igHeaders,
+  });
 }

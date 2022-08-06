@@ -1,18 +1,18 @@
 import 'package:dartz/dartz.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:igplus_ios/domain/entities/account_info.dart';
-import 'package:igplus_ios/domain/usecases/get_account_info.dart';
+import 'package:igplus_ios/domain/usecases/get_account_info_use_case.dart';
 import 'package:mockito/mockito.dart';
 
 import '../../helpers/test_helper.mocks.dart';
 
 void main() {
   late MockInstagramRepository instagramRepository;
-  late GetAccountInfo usecase;
+  late GetAccountInfoUseCase usecase;
 
   setUp(() {
     instagramRepository = MockInstagramRepository();
-    usecase = GetAccountInfo(
+    usecase = GetAccountInfoUseCase(
       instagramRepository: instagramRepository,
     );
   });
