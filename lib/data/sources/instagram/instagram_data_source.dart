@@ -11,10 +11,13 @@ import 'package:http/http.dart' as http;
 
 import '../../constants.dart';
 import '../../failure.dart';
+import '../../models/friend_model.dart';
 
 abstract class InstagramDataSource {
   Future<AccountInfoModel> getAccountInfoByUsername({required String username, required Map<String, String> headers});
   Future<AccountInfoModel> getAccountInfoById({required String igUserId, required Map<String, String> headers});
+  Future<List<FriendModel>> getFollowers({required String igUserId, required Map<String, String> headers});
+  Future<List<FriendModel>> getFollowings({required String igUserId, required Map<String, String> headers});
 }
 
 class InstagramDataSourceImp extends InstagramDataSource {
@@ -41,6 +44,30 @@ class InstagramDataSourceImp extends InstagramDataSource {
       return AccountInfoModel.fromJsonByUsername(jsonDecode(response.body));
     } else {
       throw const ServerFailure("Failed to get account info by username");
+    }
+  }
+
+  @override
+  Future<List<FriendModel>> getFollowers({required String igUserId, required Map<String, String> headers}) async {
+    final response = await client.get(Uri.parse(InstagramUrls.getFollowers(igUserId, "")), headers: headers);
+
+    if (response.statusCode == 200) {
+      final result = jsonDecode(response.body)["users"] as List<dynamic>;
+      return result.map((f) => FriendModel.fromJson(f as Map<String, dynamic>)).toList();
+    } else {
+      throw const ServerFailure("Failed to get followers from Instagram");
+    }
+  }
+
+  @override
+  Future<List<FriendModel>> getFollowings({required String igUserId, required Map<String, String> headers}) async {
+    final response = await client.get(Uri.parse(InstagramUrls.getFollowings(igUserId, "")), headers: headers);
+
+    if (response.statusCode == 200) {
+      final result = jsonDecode(response.body)["users"] as List<dynamic>;
+      return result.map((f) => FriendModel.fromJson(f as Map<String, dynamic>)).toList();
+    } else {
+      throw const ServerFailure("Failed to get followers from Instagram");
     }
   }
 }

@@ -1,17 +1,17 @@
 import 'package:dartz/dartz.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:igplus_ios/domain/entities/friend.dart';
-import 'package:igplus_ios/domain/usecases/get_new_followers.dart';
+import 'package:igplus_ios/domain/usecases/get_new_followers_use_case.dart';
 import 'package:mockito/mockito.dart';
 
 import '../../helpers/test_helper.mocks.dart';
 
 void main() {
   late MockInstagramRepository instagramRepository;
-  late GetNewFollowers usecase;
+  late GetNewFollowersUseCase usecase;
   setUp(() {
     instagramRepository = MockInstagramRepository();
-    usecase = GetNewFollowers(
+    usecase = GetNewFollowersUseCase(
       instagramRepository: instagramRepository,
     );
   });

@@ -3,19 +3,21 @@ import 'package:http/http.dart' as http;
 import 'package:igplus_ios/domain/repositories/firebase/firebase_repository.dart';
 import 'package:igplus_ios/domain/repositories/firebase/headers_repository.dart';
 import 'package:igplus_ios/domain/repositories/instagram/instagram_repository.dart';
+import 'package:igplus_ios/domain/usecases/update_report_use_case.dart';
+import 'package:igplus_ios/presentation/blocs/home/cubit/report_cubit.dart';
 import '../data/repositories/firebase/firebase_repository_imp.dart';
 import '../data/repositories/firebase/headers_repository_imp.dart';
 import '../data/repositories/instagram/instagram_repository_imp.dart';
 import '../data/sources/firebase/firebase_data_source.dart';
 import '../domain/usecases/authorize_user.dart';
-import '../domain/usecases/get_headers.dart';
-import '../presentation/blocs/cubit/instagram_auth_cubit.dart';
+import '../domain/usecases/get_headers_use_case.dart';
+import '../presentation/blocs/login/cubit/instagram_auth_cubit.dart';
 
 import '../data/sources/instagram/instagram_data_source.dart';
-import '../domain/usecases/creat_user.dart';
-import '../domain/usecases/get_account_info.dart';
-import '../domain/usecases/get_user.dart';
-import '../domain/usecases/update_user.dart';
+import '../domain/usecases/creat_user_use_case.dart';
+import '../domain/usecases/get_account_info_use_case.dart';
+import '../domain/usecases/get_user_use_case.dart';
+import '../domain/usecases/update_user_use_case.dart';
 
 final sl = GetIt.instance;
 
@@ -30,13 +32,21 @@ Future<void> init() async {
         getUser: sl(),
       ));
 
+  sl.registerFactory(() => ReportCubit(
+        updateReport: sl(),
+        getUser: sl(),
+        getAccountInfo: sl(),
+      ));
+
   // Use cases
-  sl.registerLazySingleton(() => GetAccountInfo(instagramRepository: sl()));
-  sl.registerLazySingleton(() => GetHeaders(headersRepository: sl()));
+  sl.registerLazySingleton(() => GetAccountInfoUseCase(instagramRepository: sl()));
+  sl.registerLazySingleton(() => GetHeadersUseCase(headersRepository: sl()));
   sl.registerLazySingleton(() => AuthorizeUser(firebaseRepository: sl()));
-  sl.registerLazySingleton(() => CreateUser(instagramRepository: sl(), firebaseRepository: sl()));
-  sl.registerLazySingleton(() => UpdateUser(instagramRepository: sl(), firebaseRepository: sl()));
-  sl.registerLazySingleton(() => GetUser(firebaseRepository: sl()));
+  sl.registerLazySingleton(() => CreateUserUseCase(instagramRepository: sl(), firebaseRepository: sl()));
+  sl.registerLazySingleton(() => UpdateUserUseCase(instagramRepository: sl(), firebaseRepository: sl()));
+  sl.registerLazySingleton(() => GetUserUseCase(firebaseRepository: sl()));
+
+  sl.registerLazySingleton(() => UpdateReportUseCase(instagramRepository: sl()));
 
   // Repositories
   sl.registerLazySingleton<FirebaseRepository>(() => FirebaseRepositporyImp(firebaseDataSource: sl()));

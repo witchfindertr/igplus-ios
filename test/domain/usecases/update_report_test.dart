@@ -3,7 +3,7 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:igplus_ios/domain/entities/account_info.dart';
 import 'package:igplus_ios/domain/entities/friend.dart';
 import 'package:igplus_ios/domain/entities/report.dart';
-import 'package:igplus_ios/domain/usecases/update_report.dart';
+import 'package:igplus_ios/domain/usecases/update_report_use_case.dart';
 import 'package:mockito/mockito.dart';
 
 import '../../helpers/test_helper.mocks.dart';
@@ -11,11 +11,11 @@ import '../../helpers/test_helper.mocks.dart';
 void main() {
   late MockInstagramRepository instagramRepository;
 
-  late UpdateReport usecase;
+  late UpdateReportUseCase usecase;
 
   setUp(() {
     instagramRepository = MockInstagramRepository();
-    usecase = UpdateReport(
+    usecase = UpdateReportUseCase(
       instagramRepository: instagramRepository,
     );
   });
@@ -55,7 +55,7 @@ void main() {
 
   setUp(() {
     instagramRepository = MockInstagramRepository();
-    usecase = UpdateReport(
+    usecase = UpdateReportUseCase(
       instagramRepository: instagramRepository,
     );
   });

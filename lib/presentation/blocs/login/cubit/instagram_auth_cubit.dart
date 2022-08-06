@@ -4,24 +4,23 @@ import 'package:equatable/equatable.dart';
 
 import 'package:igplus_ios/domain/entities/account_info.dart';
 import 'package:igplus_ios/domain/entities/ig_headers.dart';
-import 'package:igplus_ios/domain/repositories/firebase/firebase_repository.dart';
 import 'package:igplus_ios/domain/usecases/authorize_user.dart';
-import 'package:igplus_ios/domain/usecases/creat_user.dart';
-import 'package:igplus_ios/domain/usecases/get_account_info.dart';
-import 'package:igplus_ios/domain/usecases/get_headers.dart';
-import 'package:igplus_ios/domain/usecases/get_user.dart';
-import 'package:igplus_ios/domain/usecases/update_user.dart';
+import 'package:igplus_ios/domain/usecases/creat_user_use_case.dart';
+import 'package:igplus_ios/domain/usecases/get_account_info_use_case.dart';
+import 'package:igplus_ios/domain/usecases/get_headers_use_case.dart';
+import 'package:igplus_ios/domain/usecases/get_user_use_case.dart';
+import 'package:igplus_ios/domain/usecases/update_user_use_case.dart';
 
-import '../../../domain/entities/user.dart';
+import '../../../../domain/entities/user.dart';
 
 part 'instagram_auth_state.dart';
 
 class InstagramAuthCubit extends Cubit<InstagramAuthState> {
-  final GetUser getUser;
-  final CreateUser createUser;
-  final UpdateUser updateUser;
-  final GetAccountInfo getAccountInfo;
-  final GetHeaders getHeaders;
+  final GetUserUseCase getUser;
+  final CreateUserUseCase createUser;
+  final UpdateUserUseCase updateUser;
+  final GetAccountInfoUseCase getAccountInfo;
+  final GetHeadersUseCase getHeaders;
   final AuthorizeUser authorizeUser;
   InstagramAuthCubit({
     required this.getUser,

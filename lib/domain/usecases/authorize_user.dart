@@ -12,7 +12,7 @@ class AuthorizeUser {
   Future<Either<Failure, User>> execute() async {
     auth.User? currentUser = auth.FirebaseAuth.instance.currentUser;
 
-    // user is not authentucated
+    // user is not authenticated
     if (currentUser == null) {
       return const Left(ServerFailure("user not authenticated"));
     }

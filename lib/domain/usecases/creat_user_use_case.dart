@@ -8,11 +8,11 @@ import 'package:igplus_ios/domain/repositories/instagram/instagram_repository.da
 import 'package:firebase_auth/firebase_auth.dart' as auth;
 import '../entities/user.dart';
 
-class CreateUser {
+class CreateUserUseCase {
   final InstagramRepository instagramRepository;
   final FirebaseRepository firebaseRepository;
 
-  CreateUser({required this.instagramRepository, required this.firebaseRepository});
+  CreateUserUseCase({required this.instagramRepository, required this.firebaseRepository});
 
   Future<Either<Failure, Unit>> execute({required AccountInfo accountInfo, required IgHeaders igHeaders}) async {
     auth.User? currentUser = auth.FirebaseAuth.instance.currentUser;
