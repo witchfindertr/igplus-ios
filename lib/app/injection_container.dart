@@ -1,3 +1,5 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:get_it/get_it.dart';
 import 'package:http/http.dart' as http;
 import 'package:igplus_ios/domain/repositories/firebase/firebase_repository.dart';
@@ -54,9 +56,15 @@ Future<void> init() async {
   sl.registerLazySingleton<HeadersRepository>(() => HeadersRepositoryImp(firebaseDataSource: sl()));
 
   // Data sources
-  sl.registerLazySingleton<FirebaseDataSource>(() => FirebaseDataSourceImp(client: sl()));
+  sl.registerLazySingleton<FirebaseDataSource>(
+      () => FirebaseDataSourceImp(client: sl(), firebaseAuth: sl(), firebaseFirestore: sl()));
   sl.registerLazySingleton<InstagramDataSource>(() => InstagramDataSourceImp(client: sl()));
 
   // External
-  sl.registerLazySingleton(() => http.Client());
+  final client = http.Client();
+  final firebaseFirestore = FirebaseFirestore.instance;
+  final firebaseAuth = FirebaseAuth.instance;
+  sl.registerLazySingleton(() => client);
+  sl.registerLazySingleton(() => firebaseFirestore);
+  sl.registerLazySingleton(() => firebaseAuth);
 }
