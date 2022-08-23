@@ -2,13 +2,11 @@ import 'dart:convert';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:dartz/dartz.dart';
-import 'package:firebase_auth/firebase_auth.dart' as auth;
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:http/http.dart' as http;
 
 import '../../failure.dart';
 import '../../models/ig_headers_model.dart';
-
-import 'package:http/http.dart' as http;
-
 import '../../models/user_model.dart';
 
 abstract class FirebaseDataSource {
@@ -25,11 +23,18 @@ abstract class FirebaseDataSource {
 
 class FirebaseDataSourceImp extends FirebaseDataSource {
   final http.Client client;
-  final CollectionReference userCollection = FirebaseFirestore.instance.collection('users');
-  final CollectionReference blackListCollection = FirebaseFirestore.instance.collection('blacklist');
-  final auth.FirebaseAuth _auth = auth.FirebaseAuth.instance;
+  // final CollectionReference userCollection = FirebaseFirestore.instance.collection('users');
+  // final CollectionReference blackListCollection = FirebaseFirestore.instance.collection('blacklist');
+  // final auth.FirebaseAuth _auth = auth.FirebaseAuth.instance;
 
-  FirebaseDataSourceImp({required this.client});
+  final FirebaseFirestore firebaseFirestore;
+  final FirebaseAuth firebaseAuth;
+
+  FirebaseDataSourceImp({
+    required this.client,
+    required this.firebaseFirestore,
+    required this.firebaseAuth,
+  });
   @override
   Future<IgHeadersModel> getLatestHeaders() async {
     var uri = Uri.https('us-central1-igplus-452cf.cloudfunctions.net', '/getNewestIgHeader');
@@ -63,8 +68,10 @@ class FirebaseDataSourceImp extends FirebaseDataSource {
 
   @override
   Future<Unit> login() async {
+    final FirebaseAuth auth = FirebaseAuth.instance;
+
     try {
-      await _auth.signInAnonymously();
+      await auth.signInAnonymously();
       return unit;
     } catch (e) {
       throw const ServerFailure("Failed to login to Firebase");
@@ -73,6 +80,8 @@ class FirebaseDataSourceImp extends FirebaseDataSource {
 
   @override
   Future<UserModel> getUser({required String userId}) async {
+    final CollectionReference userCollection = firebaseFirestore.collection('users');
+
     var snap = await userCollection.doc(userId).get();
     if (snap.exists) {
       return UserModel.fromFirestore(snap);
@@ -82,7 +91,7 @@ class FirebaseDataSourceImp extends FirebaseDataSource {
 
   @override
   String getCurrentUserId() {
-    final auth.User? currentUser = _auth.currentUser;
+    final currentUser = firebaseAuth.currentUser;
 
     if (currentUser != null) {
       return currentUser.uid;
@@ -93,6 +102,8 @@ class FirebaseDataSourceImp extends FirebaseDataSource {
 
   @override
   Future<List<String>> getBannedUserIds() async {
+    final CollectionReference blackListCollection = firebaseFirestore.collection('blacklist');
+
     List<String> bannedUserIds = [];
     QuerySnapshot blackListSnap = await blackListCollection.get();
     for (var doc in blackListSnap.docs) {
@@ -103,6 +114,8 @@ class FirebaseDataSourceImp extends FirebaseDataSource {
 
   @override
   Future<Unit> setUser({required String uid, required Map<String, dynamic> userData}) async {
+    final CollectionReference userCollection = firebaseFirestore.collection('users');
+
     await userCollection.doc(uid).set(userData);
 
     return unit;
