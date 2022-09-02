@@ -1,6 +1,5 @@
 import 'package:flutter/cupertino.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:igplus_ios/presentation/resources/colors_manager.dart';
 import 'package:igplus_ios/presentation/views/global/info_card.dart';
 import 'package:igplus_ios/presentation/views/global/info_card_list.dart';
 import 'package:igplus_ios/presentation/views/global/section_title.dart';
