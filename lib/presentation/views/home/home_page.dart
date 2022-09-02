@@ -1,14 +1,30 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+
+import 'package:igplus_ios/presentation/blocs/home/cubit/report_cubit.dart';
 import 'package:igplus_ios/presentation/resources/colors_manager.dart';
 import 'package:igplus_ios/presentation/views/global/info_card.dart';
 import 'package:igplus_ios/presentation/views/global/section_title.dart';
 import 'package:igplus_ios/presentation/views/home/stats/line-chart.dart';
 import 'package:igplus_ios/presentation/views/home/stories/stories_list.dart';
 
-class HomePage extends StatelessWidget {
+class HomePage extends StatefulWidget {
   const HomePage({Key? key}) : super(key: key);
+
+  @override
+  State<HomePage> createState() => _HomePageState();
+}
+
+class _HomePageState extends State<HomePage> {
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+
+    context.read<ReportCubit>().init();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -105,7 +121,13 @@ class HomePage extends StatelessWidget {
 }
 
 class ProfileCard extends StatelessWidget {
-  const ProfileCard({Key? key}) : super(key: key);
+  final int followers;
+  final int followings;
+  const ProfileCard({
+    Key? key,
+    required this.followers,
+    required this.followings,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -119,13 +141,13 @@ class ProfileCard extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.spaceAround,
           children: <Widget>[
             Column(
-              children: const [
+              children: [
                 Padding(
                   padding: EdgeInsets.only(bottom: 8.0),
-                  child: Text("322",
+                  child: Text(followers.toString(),
                       style: TextStyle(fontSize: 20, color: ColorsManager.textColor, fontWeight: FontWeight.bold)),
                 ),
-                Text("Followers", style: TextStyle(fontSize: 16, color: ColorsManager.secondarytextColor)),
+                const Text("Followers", style: TextStyle(fontSize: 16, color: ColorsManager.secondarytextColor)),
               ],
             ),
             Column(
@@ -159,13 +181,13 @@ class ProfileCard extends StatelessWidget {
               ],
             ),
             Column(
-              children: const [
+              children: [
                 Padding(
                   padding: EdgeInsets.only(bottom: 8.0),
-                  child: Text("24",
+                  child: Text(followings.toString(),
                       style: TextStyle(fontSize: 20, color: ColorsManager.textColor, fontWeight: FontWeight.bold)),
                 ),
-                Text("Following", style: TextStyle(fontSize: 16, color: ColorsManager.secondarytextColor)),
+                const Text("Following", style: TextStyle(fontSize: 16, color: ColorsManager.secondarytextColor)),
               ],
             ),
           ],
