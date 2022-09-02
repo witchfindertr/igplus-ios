@@ -7,9 +7,6 @@ class LoginPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return CupertinoPageScaffold(
-      navigationBar: const CupertinoNavigationBar(
-        middle: Text('Login'),
-      ),
       child: Center(
         child: CupertinoButton(
           child: const Text("Login"),
