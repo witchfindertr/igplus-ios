@@ -60,17 +60,6 @@ class EngagementPage extends StatelessWidget {
     ];
 
     return CupertinoPageScaffold(
-      navigationBar: const CupertinoNavigationBar(
-        backgroundColor: ColorsManager.appBack,
-        leading: Padding(
-          padding: EdgeInsets.all(8.0),
-          child: Icon(
-            CupertinoIcons.list_dash,
-            color: ColorsManager.textColor,
-          ),
-        ),
-        trailing: Icon(CupertinoIcons.refresh, color: ColorsManager.textColor),
-      ),
       child: CupertinoScrollbar(
         thickness: 12,
         child: ListView(
