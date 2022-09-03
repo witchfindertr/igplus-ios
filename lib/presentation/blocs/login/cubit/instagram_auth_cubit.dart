@@ -104,4 +104,8 @@ class InstagramAuthCubit extends Cubit<InstagramAuthState> {
       }
     }
   }
+
+  emitInstagramAuthInitialState() {
+    emit(InstagramAuthInitial());
+  }
 }

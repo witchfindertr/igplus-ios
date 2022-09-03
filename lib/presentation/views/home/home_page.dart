@@ -29,17 +29,6 @@ class _HomePageState extends State<HomePage> {
   @override
   Widget build(BuildContext context) {
     return CupertinoPageScaffold(
-      navigationBar: const CupertinoNavigationBar(
-        backgroundColor: ColorsManager.appBack,
-        leading: Padding(
-          padding: EdgeInsets.all(8.0),
-          child: Icon(
-            CupertinoIcons.list_dash,
-            color: ColorsManager.textColor,
-          ),
-        ),
-        trailing: Icon(CupertinoIcons.refresh, color: ColorsManager.textColor),
-      ),
       child: BlocBuilder<ReportCubit, ReportState>(
         builder: (context, state) {
           if (state is ReportInProgress) {

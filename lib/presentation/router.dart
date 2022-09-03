@@ -1,5 +1,4 @@
 import 'package:go_router/go_router.dart';
-import 'package:igplus_ios/presentation/views/home/home_page.dart';
 import 'package:igplus_ios/presentation/views/login/instagram_login_page.dart';
 import 'package:igplus_ios/presentation/views/login/login_page.dart';
 import 'package:igplus_ios/presentation/views/tab_page.dart';
