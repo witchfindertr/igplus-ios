@@ -10,9 +10,9 @@ CupertinoThemeData appTheme() {
     textTheme: CupertinoTextThemeData(
         primaryColor: ColorsManager.textColor,
         textStyle: TextStyle(
-            color: ColorsManager.textColor,
-            fontSize: 14,
-            fontStyle: FontStyle.italic,
-            backgroundColor: CupertinoColors.black)),
+          color: ColorsManager.textColor,
+          fontSize: 14,
+          fontStyle: FontStyle.italic,
+        )),
   );
 }

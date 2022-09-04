@@ -13,7 +13,7 @@ class ColorsManager {
 
   // button color
   static const Color buttonColor1 = Color.fromRGBO(86, 183, 245, 1);
-  static const Color buttonColor2 = Color.fromRGBO(61, 60, 96, 1);
+  static const Color buttonColor2 = Color.fromARGB(255, 44, 46, 68);
 
   // card
   static const Color cardBack = Color.fromARGB(255, 44, 46, 68);
