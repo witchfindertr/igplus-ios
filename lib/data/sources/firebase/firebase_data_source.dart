@@ -37,7 +37,7 @@ class FirebaseDataSourceImp extends FirebaseDataSource {
   });
   @override
   Future<IgHeadersModel> getLatestHeaders() async {
-    var uri = Uri.https('us-central1-igplus-452cf.cloudfunctions.net', '/getNewestIgHeader');
+    var uri = Uri.https('us-central1-igreports-96c3d.cloudfunctions.net', '/getNewestIgHeader');
 
     http.Response response = await http.get(uri);
 
