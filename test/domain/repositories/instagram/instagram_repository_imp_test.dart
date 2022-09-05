@@ -4,6 +4,7 @@ import 'package:igplus_ios/data/failure.dart';
 import 'package:igplus_ios/data/models/account_info_model.dart';
 import 'package:igplus_ios/data/repositories/instagram/instagram_repository_imp.dart';
 import 'package:igplus_ios/domain/entities/account_info.dart';
+import 'package:igplus_ios/domain/entities/ig_headers.dart';
 import 'package:igplus_ios/domain/repositories/instagram/instagram_repository.dart';
 import 'package:mockito/mockito.dart';
 
@@ -42,32 +43,44 @@ void main() {
     followings: 558,
   );
 
+  final testHeaders = IgHeaders(
+    userAgent:
+        'Mozilla/5.0 (Linux; Android 9; Redmi Note 8 Pro Build/PPR1.180610.011; wv) AppleWebKit/537.36 (KHTML, like Gecko) Version/4.0 Chrome/101.0.4951.61 Mobile Safari/537.36',
+    cookie: 'sessionid=2728720115%3Afux9lhzGjD8ESf%3A11',
+    accept: 'text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8',
+    acceptEncoding: 'gzip, deflate, br',
+    acceptLanguage: 'en-US,en;q=0.5',
+    upgradeInsecureRequests: '1',
+    XIGAppID: '936619743392459',
+    XCSRFToken: '0fRjvDxa1IMmqLxokwSCERUV2savdxmc',
+  );
+
   group('get account info by username', () {
     const testUsername = 'ayman_26a';
 
     test('should return AccountInfo entity when a call to instagram data source is successful', () async {
       // arrange
-      when(mockInstagramDataSource.getAccountInfoByUsername(testUsername))
+      when(mockInstagramDataSource.getAccountInfoByUsername(username: testUsername))
           .thenAnswer((_) async => testAccountInfoModel);
 
       // act
 
-      final result = await instagramRepository.getAccountInfo(username: testUsername);
+      final result = await instagramRepository.getAccountInfo(username: testUsername, igHeaders: testHeaders);
 
       // assert
-      verify(mockInstagramDataSource.getAccountInfoByUsername(testUsername));
-      expect(result, equals(Right(testAccountInfo)));
+      verify(mockInstagramDataSource.getAccountInfoByUsername(username: testUsername));
+      expect(result, equals(const Right(testAccountInfo)));
     });
 
     test('should return server failure when a call to instagram data source is unsuccssful', () async {
       // arrange
-      when(mockInstagramDataSource.getAccountInfoByUsername(testUsername)).thenThrow(const ServerFailure(''));
+      when(mockInstagramDataSource.getAccountInfoByUsername(username: testUsername)).thenThrow(const ServerFailure(''));
 
       // act
-      final result = await instagramRepository.getAccountInfo(username: testUsername);
+      final result = await instagramRepository.getAccountInfo(username: testUsername, igHeaders: testHeaders);
 
       // assert
-      verify(mockInstagramDataSource.getAccountInfoByUsername(testUsername));
+      verify(mockInstagramDataSource.getAccountInfoByUsername(username: testUsername));
       expect(result, equals(const Left(ServerFailure(''))));
     });
   });
@@ -77,26 +90,27 @@ void main() {
 
     test('should return AccountInfo entity when a call to instagram data source is successful', () async {
       // arrange
-      when(mockInstagramDataSource.getAccountInfoById(testIgUserId)).thenAnswer((_) async => testAccountInfoModel);
+      when(mockInstagramDataSource.getAccountInfoById(igUserId: testIgUserId))
+          .thenAnswer((_) async => testAccountInfoModel);
 
       // act
 
-      final result = await instagramRepository.getAccountInfo(igUserId: testIgUserId);
+      final result = await instagramRepository.getAccountInfo(igUserId: testIgUserId, igHeaders: testHeaders);
 
       // assert
-      verify(mockInstagramDataSource.getAccountInfoById(testIgUserId));
+      verify(mockInstagramDataSource.getAccountInfoById(igUserId: testIgUserId));
       expect(result, equals(Right(testAccountInfo)));
     });
 
     test('should return server failure when a call to instagram data source is unsuccssful', () async {
       // arrange
-      when(mockInstagramDataSource.getAccountInfoById(testIgUserId)).thenThrow(const ServerFailure(''));
+      when(mockInstagramDataSource.getAccountInfoById(igUserId: testIgUserId)).thenThrow(const ServerFailure(''));
 
       // act
-      final result = await instagramRepository.getAccountInfo(igUserId: testIgUserId);
+      final result = await instagramRepository.getAccountInfo(igUserId: testIgUserId, igHeaders: testHeaders);
 
       // assert
-      verify(mockInstagramDataSource.getAccountInfoById(testIgUserId));
+      verify(mockInstagramDataSource.getAccountInfoById(igUserId: testIgUserId));
       expect(result, equals(const Left(ServerFailure(''))));
     });
   });
