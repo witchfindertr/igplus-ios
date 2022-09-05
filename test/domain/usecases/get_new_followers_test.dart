@@ -1,6 +1,7 @@
 import 'package:dartz/dartz.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:igplus_ios/domain/entities/friend.dart';
+import 'package:igplus_ios/domain/entities/ig_headers.dart';
 import 'package:igplus_ios/domain/usecases/get_new_followers_use_case.dart';
 import 'package:mockito/mockito.dart';
 
@@ -17,7 +18,7 @@ void main() {
   });
 
   final List<Friend> testFriendList = [
-    Friend(igUserId: 3222, username: "username", isPrivate: true, picture: "picture"),
+    Friend(igUserId: 3222, username: "username", picture: "picture"),
   ];
 
   test('should return a List of new friends', () async {

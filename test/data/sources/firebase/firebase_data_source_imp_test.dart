@@ -15,6 +15,8 @@ import 'package:http/http.dart' as http;
 void main() {
   late MockHttpClient mockHttpClient;
   late FirebaseDataSource firebaseDataSource;
+  late MockFirebaseAuth mockFirebaseAuth;
+  late MockFirebaseFirestore mockFirebaseFirestore;
 
   final IgHeadersModel testIgHeadersModel = IgHeadersModel(
     XCSRFToken: "RMVRbj5XKGXhY2iQ0ynNNxpwbRFi2b3J",
@@ -30,7 +32,13 @@ void main() {
 
   setUp(() async {
     mockHttpClient = MockHttpClient();
-    firebaseDataSource = FirebaseDataSourceImp(client: mockHttpClient);
+    mockFirebaseAuth = MockFirebaseAuth();
+    mockFirebaseFirestore = MockFirebaseFirestore();
+    firebaseDataSource = FirebaseDataSourceImp(
+      client: mockHttpClient,
+      firebaseAuth: mockFirebaseAuth,
+      firebaseFirestore: mockFirebaseFirestore,
+    );
   });
 
   group('get Latest headers from firebase', () {

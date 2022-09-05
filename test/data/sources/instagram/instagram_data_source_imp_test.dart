@@ -6,6 +6,7 @@ import 'package:igplus_ios/data/constants.dart';
 import 'package:igplus_ios/data/failure.dart';
 import 'package:igplus_ios/data/models/account_info_model.dart';
 import 'package:igplus_ios/data/sources/instagram/instagram_data_source.dart';
+import 'package:igplus_ios/domain/entities/ig_headers.dart';
 import 'package:mockito/mockito.dart';
 
 import '../../../helpers/json_reader.dart';
@@ -20,6 +21,18 @@ void main() {
     mockHttpClient = MockHttpClient();
     dataSource = InstagramDataSourceImp(client: mockHttpClient);
   });
+
+  final testHeaders = IgHeaders(
+    userAgent:
+        'Mozilla/5.0 (Linux; Android 9; Redmi Note 8 Pro Build/PPR1.180610.011; wv) AppleWebKit/537.36 (KHTML, like Gecko) Version/4.0 Chrome/101.0.4951.61 Mobile Safari/537.36',
+    cookie: 'sessionid=2728720115%3Afux9lhzGjD8ESf%3A11',
+    accept: 'text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8',
+    acceptEncoding: 'gzip, deflate, br',
+    acceptLanguage: 'en-US,en;q=0.5',
+    upgradeInsecureRequests: '1',
+    XIGAppID: '936619743392459',
+    XCSRFToken: '0fRjvDxa1IMmqLxokwSCERUV2savdxmc',
+  );
 
   group('get account info by username', () {
     const testUsername = 'ayman_26a';
@@ -38,7 +51,7 @@ void main() {
 
         // act
 
-        final result = await dataSource.getAccountInfoByUsername(testUsername);
+        final result = await dataSource.getAccountInfoByUsername(username: testUsername, headers: testHeaders.toMap());
 
         // assert
 
@@ -54,7 +67,7 @@ void main() {
                 404,
               ));
       // act
-      final call = dataSource.getAccountInfoByUsername(testUsername);
+      final call = dataSource.getAccountInfoByUsername(username: testUsername, headers: testHeaders.toMap());
       // assert
       expect(call, throwsA(isA<ServerFailure>()));
     });
@@ -76,7 +89,7 @@ void main() {
 
         // act
 
-        final result = await dataSource.getAccountInfoById(testIgUserId);
+        final result = await dataSource.getAccountInfoById(igUserId: testIgUserId, headers: testHeaders.toMap());
 
         // assert
 
@@ -92,7 +105,7 @@ void main() {
                 404,
               ));
       // act
-      final call = dataSource.getAccountInfoById(testIgUserId);
+      final call = dataSource.getAccountInfoById(igUserId: testIgUserId, headers: testHeaders.toMap());
       // assert
       expect(call, throwsA(isA<ServerFailure>()));
     });
