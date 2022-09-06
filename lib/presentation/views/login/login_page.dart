@@ -54,7 +54,7 @@ class _LoginPageState extends State<LoginPage> {
               }
               if (state is InstagramAuthInitial) {
                 return Column(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
                     Padding(
@@ -62,7 +62,7 @@ class _LoginPageState extends State<LoginPage> {
                       child: Center(
                         child: Image.asset(
                           "assets/images/LoginITopImg.png",
-                          fit: BoxFit.cover,
+                          fit: BoxFit.fitWidth,
                         ),
                       ),
                     ),
@@ -70,7 +70,7 @@ class _LoginPageState extends State<LoginPage> {
                     const Padding(
                       padding: EdgeInsets.symmetric(horizontal: 20.0),
                       child: Text(
-                        "Instant Analysis of your Instagram Freind",
+                        "Instant Analysis of your Instagram Freinds",
                         style: TextStyle(
                           color: Colors.white,
                           fontSize: 28,
