@@ -19,5 +19,6 @@ abstract class InstagramRepository {
   Future<Either<Failure, List<Friend>>> getFollowers({
     required String igUserId,
     required IgHeaders igHeaders,
+    String? maxIdString,
   });
 }

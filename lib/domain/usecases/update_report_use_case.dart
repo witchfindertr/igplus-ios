@@ -4,6 +4,8 @@ import 'package:igplus_ios/domain/entities/account_info.dart';
 import 'package:igplus_ios/domain/entities/friend.dart';
 import 'package:igplus_ios/domain/entities/ig_headers.dart';
 import 'package:igplus_ios/domain/repositories/firebase/headers_repository.dart';
+import 'package:igplus_ios/domain/repositories/local/local_repository.dart';
+import 'package:intl/intl.dart';
 
 import '../../data/failure.dart';
 import '../entities/report.dart';
@@ -12,29 +14,41 @@ import '../repositories/instagram/instagram_repository.dart';
 
 class UpdateReportUseCase {
   final InstagramRepository instagramRepository;
+  final LocalRepository localRepository;
 
   UpdateReportUseCase({
     required this.instagramRepository,
+    required this.localRepository,
   });
 
   Future<Either<Failure, Report>> execute({required User currentUser, required AccountInfo accountInfo}) async {
+    // get old data from local
+    // get Cached followers list from local
+    final failureOrFollowersListFromLocal = await localRepository.getCachedFollowersList();
+    // get Cached followings list from local
+    final failureOrFollowingsListFromLocal = await localRepository.getCachedFollowingsList();
+
+    // get followings list from instagram ----->
     final Either<Failure, List<Friend>> followingsEither =
         await instagramRepository.getFollowings(igUserId: accountInfo.igUserId, igHeaders: currentUser.igHeaders);
     if (followingsEither.isLeft()) {
       return Left((followingsEither as Left).value);
     }
-
-    // get followings Friends
     final List<Friend> followings = (followingsEither as Right).value;
 
+    // save followings to local
+    await localRepository.cacheFollowings(friendsList: followings);
+
+    // get followers list from instagram ----->
     final Either<Failure, List<Friend>> followersEither =
         await instagramRepository.getFollowers(igUserId: accountInfo.igUserId, igHeaders: currentUser.igHeaders);
     if (followersEither.isLeft()) {
       return Left((followersEither as Left).value);
     }
-
-    // get followers Friends
     final List<Friend> followers = (followersEither as Right).value;
+
+    // save followers to local
+    await localRepository.cacheFollowers(friendsList: followers);
 
     // list of friends that are not in the followers list
     final List<Friend> notFollowingMeBack = followings.where((friend) => !followers.contains(friend)).toList();
@@ -44,6 +58,15 @@ class UpdateReportUseCase {
 
     // list of friends that are in both lists
     final List<Friend> mutualFollowing = followers.where((friend) => followings.contains(friend)).toList();
+
+    // initialize chart data
+    String today =
+        DateFormat('M/d/yy').format(DateTime.fromMillisecondsSinceEpoch(DateTime.now().millisecondsSinceEpoch));
+    final followersChartData = [ChartData(date: today, value: accountInfo.followers)];
+    final followingsChartData = [ChartData(date: today, value: accountInfo.followings)];
+    final newFollowersChartData = [ChartData(date: today, value: 0)];
+    final lostFollowersChartData = [ChartData(date: today, value: 0)];
+
     final Report report = Report(
       followers: accountInfo.followers,
       followings: accountInfo.followings,
@@ -54,7 +77,15 @@ class UpdateReportUseCase {
       notFollowingMeBack: notFollowingMeBack.length,
       iamNotFollowingBack: iamNotFollowingBack.length,
       mutualFollowing: mutualFollowing.length,
+      followersChartData: followersChartData,
+      followingsChartData: followingsChartData,
+      newFollowersChartData: newFollowersChartData,
+      lostFollowersChartData: lostFollowersChartData,
     );
+
+    // save report to local
+    await localRepository.cacheReport(report: report);
+
     return Right(report);
   }
 }

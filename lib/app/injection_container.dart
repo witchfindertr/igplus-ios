@@ -2,9 +2,14 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:get_it/get_it.dart';
 import 'package:http/http.dart' as http;
+import 'package:igplus_ios/data/repositories/local/local_repository_imp.dart';
+import 'package:igplus_ios/data/sources/local/local_datasource.dart';
 import 'package:igplus_ios/domain/repositories/firebase/firebase_repository.dart';
 import 'package:igplus_ios/domain/repositories/firebase/headers_repository.dart';
 import 'package:igplus_ios/domain/repositories/instagram/instagram_repository.dart';
+import 'package:igplus_ios/domain/repositories/local/local_repository.dart';
+import 'package:igplus_ios/domain/usecases/get_friends_from_local_use_case.dart';
+import 'package:igplus_ios/domain/usecases/get_report_from_local_use_case.dart';
 import 'package:igplus_ios/domain/usecases/update_report_use_case.dart';
 import 'package:igplus_ios/presentation/blocs/home/cubit/report_cubit.dart';
 import '../data/repositories/firebase/firebase_repository_imp.dart';
@@ -38,6 +43,8 @@ Future<void> init() async {
         updateReport: sl(),
         getUser: sl(),
         getAccountInfo: sl(),
+        getDataFromLocal: sl(),
+        getReportFromLocal: sl(),
       ));
 
   // Use cases
@@ -47,18 +54,22 @@ Future<void> init() async {
   sl.registerLazySingleton(() => CreateUserUseCase(instagramRepository: sl(), firebaseRepository: sl()));
   sl.registerLazySingleton(() => UpdateUserUseCase(instagramRepository: sl(), firebaseRepository: sl()));
   sl.registerLazySingleton(() => GetUserUseCase(firebaseRepository: sl()));
+  sl.registerLazySingleton(() => GetFriendsFromLocalUseCase(localRepository: sl()));
+  sl.registerLazySingleton(() => UpdateReportUseCase(instagramRepository: sl(), localRepository: sl()));
 
-  sl.registerLazySingleton(() => UpdateReportUseCase(instagramRepository: sl()));
+  sl.registerLazySingleton(() => GetReportFromLocalUseCase(localRepository: sl()));
 
   // Repositories
   sl.registerLazySingleton<FirebaseRepository>(() => FirebaseRepositporyImp(firebaseDataSource: sl()));
   sl.registerLazySingleton<InstagramRepository>(() => InstagramRepositoryImp(instagramDataSource: sl()));
+  sl.registerLazySingleton<LocalRepository>(() => LocalRepositoryImpl(localDataSource: sl()));
   sl.registerLazySingleton<HeadersRepository>(() => HeadersRepositoryImp(firebaseDataSource: sl()));
 
   // Data sources
   sl.registerLazySingleton<FirebaseDataSource>(
       () => FirebaseDataSourceImp(client: sl(), firebaseAuth: sl(), firebaseFirestore: sl()));
   sl.registerLazySingleton<InstagramDataSource>(() => InstagramDataSourceImp(client: sl()));
+  sl.registerLazySingleton<LocalDataSource>(() => LocalDataSourceImp(client: sl()));
 
   // External
   final client = http.Client();

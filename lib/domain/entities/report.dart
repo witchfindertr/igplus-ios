@@ -1,15 +1,34 @@
 import 'package:equatable/equatable.dart';
+import 'package:hive_flutter/adapters.dart';
 
+part 'report.g.dart';
+
+@HiveType(typeId: 2)
 class Report extends Equatable {
+  static const String boxKey = "reportBoxKey";
+
+  @HiveField(0)
   final int followers;
+  @HiveField(1)
   final int followings;
   // int photo;
   // int video;
   // int totalLikes;
   // int totalComments;
+  @HiveField(2)
   final int notFollowingMeBack;
+  @HiveField(3)
   final int iamNotFollowingBack;
+  @HiveField(4)
   final int mutualFollowing;
+  @HiveField(5)
+  final List<ChartData> followersChartData;
+  @HiveField(6)
+  final List<ChartData> followingsChartData;
+  @HiveField(7)
+  final List<ChartData> newFollowersChartData;
+  @HiveField(8)
+  final List<ChartData> lostFollowersChartData;
 
   const Report({
     required this.followers,
@@ -21,6 +40,10 @@ class Report extends Equatable {
     required this.notFollowingMeBack,
     required this.iamNotFollowingBack,
     required this.mutualFollowing,
+    required this.followersChartData,
+    required this.followingsChartData,
+    required this.newFollowersChartData,
+    required this.lostFollowersChartData,
   });
 
   @override
@@ -35,4 +58,17 @@ class Report extends Equatable {
         notFollowingMeBack,
         iamNotFollowingBack,
       ];
+}
+
+@HiveType(typeId: 3)
+class ChartData {
+  @HiveField(0)
+  final String date;
+  @HiveField(1)
+  final int value;
+
+  ChartData({
+    required this.date,
+    required this.value,
+  });
 }

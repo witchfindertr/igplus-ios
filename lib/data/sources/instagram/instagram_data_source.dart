@@ -16,7 +16,8 @@ import '../../models/friend_model.dart';
 abstract class InstagramDataSource {
   Future<AccountInfoModel> getAccountInfoByUsername({required String username, required Map<String, String> headers});
   Future<AccountInfoModel> getAccountInfoById({required String igUserId, required Map<String, String> headers});
-  Future<List<FriendModel>> getFollowers({required String igUserId, required Map<String, String> headers});
+  Future<List<FriendModel>> getFollowers(
+      {required String igUserId, required Map<String, String> headers, String? maxIdString});
   Future<List<FriendModel>> getFollowings({required String igUserId, required Map<String, String> headers});
 }
 
@@ -48,24 +49,92 @@ class InstagramDataSourceImp extends InstagramDataSource {
   }
 
   @override
-  Future<List<FriendModel>> getFollowers({required String igUserId, required Map<String, String> headers}) async {
-    final response = await client.get(Uri.parse(InstagramUrls.getFollowers(igUserId, "")), headers: headers);
+  Future<List<FriendModel>> getFollowers(
+      {required String igUserId, required Map<String, String> headers, String? maxIdString}) async {
+    List<dynamic>? friendsList = [];
+    String? nextMaxId = "";
+    int nbrRequests = 1;
+    const int requestsLimit = 2;
+
+    final response =
+        await client.get(Uri.parse(InstagramUrls.getFollowers(igUserId, maxIdString ?? "")), headers: headers);
 
     if (response.statusCode == 200) {
-      final result = jsonDecode(response.body)["users"] as List<dynamic>;
-      return result.map((f) => FriendModel.fromJson(f as Map<String, dynamic>)).toList();
+      final body = jsonDecode(response.body);
+      nextMaxId = body['next_max_id'];
+      friendsList = body["users"] as List<dynamic>;
+
+      while (nextMaxId != null && nbrRequests < requestsLimit) {
+        nbrRequests++;
+        String maxIdString = "";
+        if (nextMaxId != "") {
+          await Future.delayed(const Duration(seconds: 3));
+          maxIdString = "&max_id=$nextMaxId";
+          nextMaxId = null;
+
+          final response =
+              await client.get(Uri.parse(InstagramUrls.getFollowers(igUserId, maxIdString)), headers: headers);
+
+          final rs = jsonDecode(response.body);
+
+          if (rs['users'] != null) {
+            nextMaxId = rs['next_max_id'];
+            rs['users'].forEach((user) {
+              friendsList?.add(user);
+            });
+          }
+        } else {
+          break;
+        }
+      }
+
+      return friendsList.map((f) => FriendModel.fromJson(f as Map<String, dynamic>)).toList();
     } else {
       throw const ServerFailure("Failed to get followers from Instagram");
     }
   }
 
   @override
-  Future<List<FriendModel>> getFollowings({required String igUserId, required Map<String, String> headers}) async {
-    final response = await client.get(Uri.parse(InstagramUrls.getFollowings(igUserId, "")), headers: headers);
+  Future<List<FriendModel>> getFollowings(
+      {required String igUserId, required Map<String, String> headers, String? maxIdString}) async {
+    List<dynamic>? friendsList = [];
+    String? nextMaxId = "";
+    int nbrRequests = 1;
+    const int requestsLimit = 2;
+
+    final response =
+        await client.get(Uri.parse(InstagramUrls.getFollowings(igUserId, maxIdString ?? "")), headers: headers);
 
     if (response.statusCode == 200) {
-      final result = jsonDecode(response.body)["users"] as List<dynamic>;
-      return result.map((f) => FriendModel.fromJson(f as Map<String, dynamic>)).toList();
+      final body = jsonDecode(response.body);
+      nextMaxId = body['next_max_id'];
+      friendsList = body["users"] as List<dynamic>;
+
+      while (nextMaxId != null && nbrRequests < requestsLimit) {
+        nbrRequests++;
+        String maxIdString = "";
+        if (nextMaxId != "") {
+          await Future.delayed(const Duration(seconds: 3));
+          maxIdString = "&max_id=$nextMaxId";
+          nextMaxId = null;
+
+          final response =
+              await client.get(Uri.parse(InstagramUrls.getFollowings(igUserId, maxIdString)), headers: headers);
+
+          final rs = jsonDecode(response.body);
+
+          if (rs['users'] != null) {
+            nextMaxId = rs['next_max_id'];
+            rs['users'].forEach((user) {
+              friendsList?.add(user);
+            });
+          }
+        } else {
+          break;
+        }
+      }
+
+      return friendsList.map((f) => FriendModel.fromJson(f as Map<String, dynamic>)).toList();
     } else {
       throw const ServerFailure("Failed to get followers from Instagram");
     }
