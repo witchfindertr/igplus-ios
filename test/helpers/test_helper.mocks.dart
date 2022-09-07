@@ -187,13 +187,14 @@ class MockInstagramRepository extends _i1.Mock
           as _i11.Future<_i2.Either<_i12.Failure, List<_i15.Friend>>>);
   @override
   _i11.Future<_i2.Either<_i12.Failure, List<_i15.Friend>>> getFollowers(
-          {String? igUserId, _i14.IgHeaders? igHeaders}) =>
-      (super.noSuchMethod(
-              Invocation.method(
-                  #getFollowers, [], {#igUserId: igUserId, #igHeaders: igHeaders}),
-              returnValue: _i11.Future<_i2.Either<_i12.Failure, List<_i15.Friend>>>.value(
-                  _FakeEither_0<_i12.Failure, List<_i15.Friend>>(
-                      this, Invocation.method(#getFollowers, [], {#igUserId: igUserId, #igHeaders: igHeaders}))))
+          {String? igUserId, _i14.IgHeaders? igHeaders, String? maxIdString}) =>
+      (super.noSuchMethod(Invocation.method(#getFollowers, [], {#igUserId: igUserId, #igHeaders: igHeaders, #maxIdString: maxIdString}),
+              returnValue:
+                  _i11.Future<_i2.Either<_i12.Failure, List<_i15.Friend>>>.value(
+                      _FakeEither_0<_i12.Failure, List<_i15.Friend>>(
+                          this,
+                          Invocation.method(
+                              #getFollowers, [], {#igUserId: igUserId, #igHeaders: igHeaders, #maxIdString: maxIdString}))))
           as _i11.Future<_i2.Either<_i12.Failure, List<_i15.Friend>>>);
 }
 
@@ -232,10 +233,15 @@ class MockInstagramDataSource extends _i1.Mock
                       })))) as _i11.Future<_i3.AccountInfoModel>);
   @override
   _i11.Future<List<_i17.FriendModel>> getFollowers(
-          {String? igUserId, Map<String, String>? headers}) =>
+          {String? igUserId,
+          Map<String, String>? headers,
+          String? maxIdString}) =>
       (super.noSuchMethod(
-          Invocation.method(
-              #getFollowers, [], {#igUserId: igUserId, #headers: headers}),
+          Invocation.method(#getFollowers, [], {
+            #igUserId: igUserId,
+            #headers: headers,
+            #maxIdString: maxIdString
+          }),
           returnValue: _i11.Future<List<_i17.FriendModel>>.value(
               <_i17.FriendModel>[])) as _i11.Future<List<_i17.FriendModel>>);
   @override
