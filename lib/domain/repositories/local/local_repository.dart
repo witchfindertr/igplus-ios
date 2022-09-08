@@ -8,11 +8,7 @@ abstract class LocalRepository {
   Either<Failure, Report?> getCachedReport();
   Future<void> cacheReport({required Report report});
 
-  // followers
-  Either<Failure, List<Friend>?> getCachedFollowersList();
-  Future<void> cacheFollowers({required List<Friend> friendsList});
-
-  // followings
-  Either<Failure, List<Friend>?> getCachedFollowingsList();
-  Future<void> cacheFollowings({required List<Friend> friendsList});
+  // friends
+  Either<Failure, List<Friend>?> getCachedFriendsList({required String boxKey});
+  Future<void> cacheFriendsList({required List<Friend> friendsList, required String boxKey});
 }

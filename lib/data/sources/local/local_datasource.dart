@@ -4,12 +4,10 @@ import 'package:http/http.dart' as http;
 import 'package:igplus_ios/domain/entities/report.dart';
 
 abstract class LocalDataSource {
-  List<Friend>? getCachedFollowersList();
-  Future<void> cacheFollowers({required List<Friend> friendsList});
-  List<Friend>? getCachedFollowingsList();
-  Future<void> cacheFollowings({required List<Friend> friendsList});
   Report? getCachedReport();
   Future<void> cacheReport({required Report report});
+  List<Friend>? getCachedFriendsList({required String boxKey});
+  Future<void> cacheFriendsList({required List<Friend> friendsList, required String boxKey});
 }
 
 class LocalDataSourceImp extends LocalDataSource {
@@ -45,56 +43,30 @@ class LocalDataSourceImp extends LocalDataSource {
   }
 
   // ----------------------->
-  // followers ------------------>
+  // Friends ------------------>
   // ----------------------->
+
   @override
-  List<Friend>? getCachedFollowersList() {
-    Box<Friend> followersBox = Hive.box<Friend>(Friend.followersBoxKey);
-    print(followersBox.get(0));
-    if (followersBox.isEmpty) {
+  List<Friend>? getCachedFriendsList({required String boxKey}) {
+    Box<Friend> friendBox = Hive.box<Friend>(boxKey);
+
+    print(friendBox.get(0));
+    if (friendBox.isEmpty) {
       return null;
     } else {
       final List<Friend> friendsList =
-          List.generate(followersBox.length, (index) => followersBox.getAt(index)).whereType<Friend>().toList();
+          List.generate(friendBox.length, (index) => friendBox.getAt(index)).whereType<Friend>().toList();
       return friendsList;
     }
   }
 
   @override
-  Future<void> cacheFollowers({required List<Friend> friendsList}) async {
-    Box<Friend> friendsBox = Hive.box<Friend>(Friend.followersBoxKey);
+  Future<void> cacheFriendsList({required List<Friend> friendsList, required String boxKey}) async {
+    Box<Friend> friendBox = Hive.box<Friend>(boxKey);
 
     final friendsMap = {for (var e in friendsList) e.username: e};
     try {
-      await friendsBox.putAll(friendsMap);
-    } catch (e) {
-      print(e);
-    }
-  }
-
-  // ----------------------->
-  // followings ------------------>
-  // ----------------------->
-  @override
-  List<Friend>? getCachedFollowingsList() {
-    Box<Friend> followersBox = Hive.box<Friend>(Friend.followersBoxKey);
-    print(followersBox.get(0));
-    if (followersBox.isEmpty) {
-      return null;
-    } else {
-      final List<Friend> friendsList =
-          List.generate(followersBox.length, (index) => followersBox.getAt(index)).whereType<Friend>().toList();
-      return friendsList;
-    }
-  }
-
-  @override
-  Future<void> cacheFollowings({required List<Friend> friendsList}) async {
-    Box<Friend> friendsBox = Hive.box<Friend>(Friend.followersBoxKey);
-
-    final friendsMap = {for (var e in friendsList) e.username: e};
-    try {
-      await friendsBox.putAll(friendsMap);
+      await friendBox.putAll(friendsMap);
     } catch (e) {
       print(e);
     }

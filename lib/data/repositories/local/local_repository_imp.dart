@@ -33,36 +33,19 @@ class LocalRepositoryImpl implements LocalRepository {
     }
   }
 
-  // followers
+  // Friends
   @override
-  Future<void> cacheFollowers({required List<Friend> friendsList}) async {
-    await localDataSource.cacheFollowers(
+  Future<void> cacheFriendsList({required List<Friend> friendsList, required String boxKey}) async {
+    await localDataSource.cacheFriendsList(
       friendsList: friendsList,
+      boxKey: boxKey,
     );
   }
 
   @override
-  Either<Failure, List<Friend>?> getCachedFollowersList() {
+  Either<Failure, List<Friend>?> getCachedFriendsList({required String boxKey}) {
     try {
-      final List<Friend>? cachedFriendsList = localDataSource.getCachedFollowersList();
-      return Right(cachedFriendsList);
-    } catch (e) {
-      return const Left(InvalidParamsFailure("getCachedFriendsList catch"));
-    }
-  }
-
-  // followings
-  @override
-  Future<void> cacheFollowings({required List<Friend> friendsList}) async {
-    await localDataSource.cacheFollowings(
-      friendsList: friendsList,
-    );
-  }
-
-  @override
-  Either<Failure, List<Friend>?> getCachedFollowingsList() {
-    try {
-      final List<Friend>? cachedFriendsList = localDataSource.getCachedFollowingsList();
+      final List<Friend>? cachedFriendsList = localDataSource.getCachedFriendsList(boxKey: Friend.followersBoxKey);
       return Right(cachedFriendsList);
     } catch (e) {
       return const Left(InvalidParamsFailure("getCachedFriendsList catch"));
