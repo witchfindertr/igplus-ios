@@ -23,15 +23,30 @@ class UpdateReportUseCase {
 
   Future<Either<Failure, Report>> execute({required User currentUser, required AccountInfo accountInfo}) async {
     // get old data from local ------------->
+    final List<Friend>? cachedFollowers;
+    final List<Friend>? cachedFollowings;
+    final Report? cachedReport;
     // get Cached followers list from local
-    final failureOrFollowersListFromLocal = await localRepository.getCachedFollowersList();
-    final List<Friend> cachedFollowers = (failureOrFollowersListFromLocal as Right).value;
+    final failureOrFollowersListFromLocal = localRepository.getCachedFollowersList();
+    if (failureOrFollowersListFromLocal.isRight()) {
+      cachedFollowers = (failureOrFollowersListFromLocal as Right).value;
+    } else {
+      cachedFollowers = null;
+    }
     // get Cached followings list from local
-    final failureOrFollowingsListFromLocal = await localRepository.getCachedFollowingsList();
-    final List<Friend> cachedFollowings = (failureOrFollowingsListFromLocal as Right).value;
+    final failureOrFollowingsListFromLocal = localRepository.getCachedFollowingsList();
+    if (failureOrFollowingsListFromLocal.isRight()) {
+      cachedFollowings = (failureOrFollowingsListFromLocal as Right).value;
+    } else {
+      cachedFollowings = null;
+    }
     // get cached report from local
-    final failureOrReportFromLocal = await localRepository.getCachedReport();
-    final Report cachedReport = (failureOrReportFromLocal as Right).value;
+    final failureOrReportFromLocal = localRepository.getCachedReport();
+    if (failureOrReportFromLocal.isRight()) {
+      cachedReport = (failureOrReportFromLocal as Right).value;
+    } else {
+      cachedReport = null;
+    }
 
     // get followings list from instagram ----->
     final Either<Failure, List<Friend>> followingsEither =
@@ -74,7 +89,7 @@ class UpdateReportUseCase {
 
     // if there is no cached report, initialize chart data else puch new data ------->
     // followers chart data
-    if (cachedReport.followersChartData.isEmpty) {
+    if (cachedReport == null || cachedReport.followersChartData.isEmpty) {
       followersChartData = [ChartData(date: today, value: accountInfo.followers)];
     } else {
       followersChartData = cachedReport.followersChartData;
@@ -85,7 +100,7 @@ class UpdateReportUseCase {
       }
     }
     // followings chart data
-    if (cachedReport.followingsChartData.isEmpty) {
+    if (cachedReport == null || cachedReport.followingsChartData.isEmpty) {
       followingsChartData = [ChartData(date: today, value: accountInfo.followings)];
     } else {
       followingsChartData = cachedReport.followingsChartData;
@@ -96,7 +111,7 @@ class UpdateReportUseCase {
       }
     }
     // new followers chart data
-    if (cachedReport.newFollowersChartData.isEmpty) {
+    if (cachedReport == null || cachedReport.newFollowersChartData.isEmpty) {
       newFollowersChartData = [ChartData(date: today, value: 0)];
     } else {
       newFollowersChartData = cachedReport.newFollowersChartData;
@@ -107,7 +122,7 @@ class UpdateReportUseCase {
       }
     }
     // lost followers chart data
-    if (cachedReport.lostFollowersChartData.isEmpty) {
+    if (cachedReport == null || cachedReport.lostFollowersChartData.isEmpty) {
       lostFollowersChartData = [ChartData(date: today, value: 0)];
     } else {
       lostFollowersChartData = cachedReport.lostFollowersChartData;
