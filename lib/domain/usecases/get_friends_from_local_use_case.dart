@@ -9,9 +9,9 @@ class GetFriendsFromLocalUseCase {
 
   Future<Either<Failure, List<Friend>?>?> execute({required String dataName}) async {
     if (dataName == "followings") {
-      return localRepository.getCachedFollowingsList();
+      return localRepository.getCachedFriendsList(boxKey: Friend.followingsBoxKey);
     }
 
-    return localRepository.getCachedFollowersList();
+    return localRepository.getCachedFriendsList(boxKey: dataName);
   }
 }

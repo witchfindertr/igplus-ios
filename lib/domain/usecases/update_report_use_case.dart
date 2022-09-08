@@ -2,11 +2,8 @@ import 'package:dartz/dartz.dart';
 
 import 'package:igplus_ios/domain/entities/account_info.dart';
 import 'package:igplus_ios/domain/entities/friend.dart';
-import 'package:igplus_ios/domain/entities/ig_headers.dart';
-import 'package:igplus_ios/domain/repositories/firebase/headers_repository.dart';
 import 'package:igplus_ios/domain/repositories/local/local_repository.dart';
 import 'package:intl/intl.dart';
-
 import '../../data/failure.dart';
 import '../entities/report.dart';
 import '../entities/user.dart';
@@ -27,14 +24,14 @@ class UpdateReportUseCase {
     final List<Friend>? cachedFollowings;
     final Report? cachedReport;
     // get Cached followers list from local
-    final failureOrFollowersListFromLocal = localRepository.getCachedFollowersList();
+    final failureOrFollowersListFromLocal = localRepository.getCachedFriendsList(boxKey: Friend.followersBoxKey);
     if (failureOrFollowersListFromLocal.isRight()) {
       cachedFollowers = (failureOrFollowersListFromLocal as Right).value;
     } else {
       cachedFollowers = null;
     }
     // get Cached followings list from local
-    final failureOrFollowingsListFromLocal = localRepository.getCachedFollowingsList();
+    final failureOrFollowingsListFromLocal = localRepository.getCachedFriendsList(boxKey: Friend.followingsBoxKey);
     if (failureOrFollowingsListFromLocal.isRight()) {
       cachedFollowings = (failureOrFollowingsListFromLocal as Right).value;
     } else {
@@ -57,7 +54,7 @@ class UpdateReportUseCase {
     final List<Friend> followings = (followingsEither as Right).value;
 
     // save followings to local
-    await localRepository.cacheFollowings(friendsList: followings);
+    await localRepository.cacheFriendsList(friendsList: followings, boxKey: Friend.followingsBoxKey);
 
     // get followers list from instagram ----->
     final Either<Failure, List<Friend>> followersEither =
@@ -68,7 +65,7 @@ class UpdateReportUseCase {
     final List<Friend> followers = (followersEither as Right).value;
 
     // save followers to local
-    await localRepository.cacheFollowers(friendsList: followers);
+    await localRepository.cacheFriendsList(friendsList: followers, boxKey: Friend.followersBoxKey);
 
     // list of friends that are not in the followers list
     final List<Friend> notFollowingMeBack = followings.where((friend) => !followers.contains(friend)).toList();
@@ -131,6 +128,15 @@ class UpdateReportUseCase {
       } else {
         lostFollowersChartData.last.value = 0;
       }
+    }
+
+    // new followers and lost followers
+    //TODO : To be verified and tested
+    List<Friend> newFollowersList = [];
+    List<Friend> lostFollowersList = [];
+    if (cachedFollowers != null) {
+      newFollowersList = followers.where((friend) => !cachedFollowers!.contains(friend)).toList();
+      lostFollowersList = cachedFollowers.where((friend) => !followers.contains(friend)).toList();
     }
 
     final Report report = Report(

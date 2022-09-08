@@ -7,6 +7,14 @@ part 'friend.g.dart';
 class Friend extends Equatable {
   static const String followersBoxKey = "followersBoxKey";
   static const String followingsBoxKey = "followingsBoxKey";
+  static const String newFollowersBoxKey = "newFollowersBoxKey";
+  static const String lostFollowersBoxKey = "lostFollowersBoxKey";
+  static const String whoAdmiresYouBoxKey = "whoAdmiresYouBoxKey";
+  static const String notFollowingBackBoxKey = "notFollowingBackBoxKey";
+  static const String youDontFollowBackBoxKey = "youDontFollowBackBoxKey";
+  static const String mutualFollowersBoxKey = "mutualFollowersBoxKey";
+  static const String youHaveUnfollowedBoxKey = "youHaveUnfollowedBoxKey";
+  static const String newStoryViewersBoxKey = "newStoryViewersBoxKey";
 
   @HiveField(0)
   final int igUserId;
