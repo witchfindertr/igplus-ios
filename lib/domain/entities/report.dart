@@ -65,7 +65,7 @@ class ChartData {
   @HiveField(0)
   final String date;
   @HiveField(1)
-  final int value;
+  late final int value;
 
   ChartData({
     required this.date,
