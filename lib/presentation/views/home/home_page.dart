@@ -45,7 +45,7 @@ class _HomePageState extends State<HomePage> {
                     followers: state.report.followers,
                     followings: state.report.followings,
                   ),
-                  const LineChartSample(),
+                  LineChartSample(chartData: state.report.followersChartData),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                     children: [
