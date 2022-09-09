@@ -2,6 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:go_router/go_router.dart';
 
 import 'package:igplus_ios/presentation/blocs/home/cubit/report_cubit.dart';
 import 'package:igplus_ios/presentation/resources/colors_manager.dart';
@@ -29,6 +30,50 @@ class _HomePageState extends State<HomePage> {
   @override
   Widget build(BuildContext context) {
     return CupertinoPageScaffold(
+      navigationBar: CupertinoNavigationBar(
+        backgroundColor: ColorsManager.appBack,
+        middle: Container(
+          decoration: BoxDecoration(
+            color: ColorsManager.cardBack,
+            borderRadius: BorderRadius.circular(10),
+          ),
+          padding: const EdgeInsets.all(6.0),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.start,
+            mainAxisSize: MainAxisSize.min,
+            children: const [
+              Icon(
+                FontAwesomeIcons.user,
+                color: ColorsManager.secondarytextColor,
+                size: 16.0,
+              ),
+              SizedBox(width: 6.0),
+              Text("Brahimaito", style: TextStyle(fontSize: 14, color: ColorsManager.textColor)),
+              SizedBox(width: 4.0),
+              Icon(
+                FontAwesomeIcons.chevronDown,
+                color: ColorsManager.secondarytextColor,
+                size: 12.0,
+              ),
+            ],
+          ),
+        ),
+        trailing: GestureDetector(
+          onTap: () => GoRouter.of(context).push('/settings'),
+          child: Row(
+            mainAxisSize: MainAxisSize.min,
+            children: const [
+              Text("Refresh", style: TextStyle(fontSize: 12, color: ColorsManager.secondarytextColor)),
+              SizedBox(width: 6.0),
+              Icon(
+                FontAwesomeIcons.arrowsRotate,
+                size: 20.0,
+                color: ColorsManager.textColor,
+              ),
+            ],
+          ),
+        ),
+      ),
       child: BlocBuilder<ReportCubit, ReportState>(
         builder: (context, state) {
           if (state is ReportInProgress) {
@@ -69,7 +114,7 @@ class _HomePageState extends State<HomePage> {
                     title: "Who Admires You",
                     subTitle: "Find out who's intersted in you",
                     icon: FontAwesomeIcons.solidHeart,
-                    count: "53",
+                    count: "000",
                     context: context,
                     style: 1,
                   ),
@@ -115,13 +160,13 @@ class _HomePageState extends State<HomePage> {
                       InfoCard(
                         title: "mutual followings",
                         icon: CupertinoIcons.person_crop_circle,
-                        count: "221",
+                        count: "000",
                         context: context,
                       ),
                       InfoCard(
                         title: "I have unfollowed",
                         icon: CupertinoIcons.person_crop_circle,
-                        count: "222",
+                        count: "000",
                         context: context,
                       ),
                     ],
@@ -188,17 +233,6 @@ class ProfileCard extends StatelessWidget {
                       image: NetworkImage(picture),
                     ),
                   ),
-                ),
-                Row(
-                  children: [
-                    const Icon(
-                      FontAwesomeIcons.penToSquare,
-                      color: ColorsManager.secondarytextColor,
-                      size: 16.0,
-                    ),
-                    const SizedBox(width: 4.0),
-                    Text(username, style: TextStyle(fontSize: 16, color: ColorsManager.textColor)),
-                  ],
                 ),
                 const SizedBox(height: 10.0),
               ],

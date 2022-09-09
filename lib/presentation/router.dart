@@ -1,4 +1,5 @@
 import 'package:go_router/go_router.dart';
+import 'package:igplus_ios/presentation/views/friends_list/friends_list.dart';
 import 'package:igplus_ios/presentation/views/login/instagram_login_page.dart';
 import 'package:igplus_ios/presentation/views/login/login_page.dart';
 import 'package:igplus_ios/presentation/views/tab_page.dart';
@@ -21,11 +22,14 @@ GoRouter routes() {
           ),
         ]),
     GoRoute(
-      name: 'tabs',
-      path: '/tabs',
-      builder: (context, state) {
-        return const TabPage();
-      },
-    ),
+        name: 'home',
+        path: '/home',
+        builder: (context, state) {
+          return const TabPage();
+        },
+        routes: [
+          GoRoute(
+              name: 'friendsList', path: 'friendsList', builder: (context, state) => FriendsList(type: "followers")),
+        ]),
   ]);
 }

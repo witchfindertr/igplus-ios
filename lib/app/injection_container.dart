@@ -11,6 +11,7 @@ import 'package:igplus_ios/domain/repositories/local/local_repository.dart';
 import 'package:igplus_ios/domain/usecases/get_friends_from_local_use_case.dart';
 import 'package:igplus_ios/domain/usecases/get_report_from_local_use_case.dart';
 import 'package:igplus_ios/domain/usecases/update_report_use_case.dart';
+import 'package:igplus_ios/presentation/blocs/friends_list/cubit/friends_list_cubit.dart';
 import 'package:igplus_ios/presentation/blocs/home/cubit/report_cubit.dart';
 import '../data/repositories/firebase/firebase_repository_imp.dart';
 import '../data/repositories/firebase/headers_repository_imp.dart';
@@ -46,6 +47,8 @@ Future<void> init() async {
         getDataFromLocal: sl(),
         getReportFromLocal: sl(),
       ));
+
+  sl.registerFactory(() => FriendsListCubit(getFriendsFromLocal: sl()));
 
   // Use cases
   sl.registerLazySingleton(() => GetAccountInfoUseCase(instagramRepository: sl()));
