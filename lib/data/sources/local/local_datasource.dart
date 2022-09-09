@@ -50,7 +50,6 @@ class LocalDataSourceImp extends LocalDataSource {
   List<Friend>? getCachedFriendsList({required String boxKey}) {
     Box<Friend> friendBox = Hive.box<Friend>(boxKey);
 
-    print(friendBox.get(0));
     if (friendBox.isEmpty) {
       return null;
     } else {

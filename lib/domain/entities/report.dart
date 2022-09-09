@@ -29,6 +29,12 @@ class Report extends Equatable {
   final List<ChartData> newFollowersChartData;
   @HiveField(8)
   final List<ChartData> lostFollowersChartData;
+  @HiveField(9)
+  final int newFollowers;
+  @HiveField(10)
+  final int lostFollowers;
+  @HiveField(11)
+  final int youHaveUnfollowed;
 
   const Report({
     required this.followers,
@@ -44,6 +50,9 @@ class Report extends Equatable {
     required this.followingsChartData,
     required this.newFollowersChartData,
     required this.lostFollowersChartData,
+    required this.newFollowers,
+    required this.lostFollowers,
+    required this.youHaveUnfollowed,
   });
 
   @override

@@ -26,13 +26,16 @@ class ReportAdapter extends TypeAdapter<Report> {
       followingsChartData: (fields[6] as List).cast<ChartData>(),
       newFollowersChartData: (fields[7] as List).cast<ChartData>(),
       lostFollowersChartData: (fields[8] as List).cast<ChartData>(),
+      newFollowers: fields[9] as int,
+      lostFollowers: fields[10] as int,
+      youHaveUnfollowed: fields[11] as int,
     );
   }
 
   @override
   void write(BinaryWriter writer, Report obj) {
     writer
-      ..writeByte(9)
+      ..writeByte(12)
       ..writeByte(0)
       ..write(obj.followers)
       ..writeByte(1)
@@ -50,7 +53,13 @@ class ReportAdapter extends TypeAdapter<Report> {
       ..writeByte(7)
       ..write(obj.newFollowersChartData)
       ..writeByte(8)
-      ..write(obj.lostFollowersChartData);
+      ..write(obj.lostFollowersChartData)
+      ..writeByte(9)
+      ..write(obj.newFollowers)
+      ..writeByte(10)
+      ..write(obj.lostFollowers)
+      ..writeByte(11)
+      ..write(obj.youHaveUnfollowed);
   }
 
   @override

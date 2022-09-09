@@ -13,7 +13,8 @@ class ReportInProgress extends ReportState {}
 
 class ReportSuccess extends ReportState {
   final Report report;
-  const ReportSuccess({required this.report});
+  final AccountInfo accountInfo;
+  const ReportSuccess({required this.report, required this.accountInfo});
   @override
   List<Object> get props => [report];
 }

@@ -45,17 +45,6 @@ class UpdateReportUseCase {
       cachedReport = null;
     }
 
-    // get followings list from instagram ----->
-    final Either<Failure, List<Friend>> followingsEither =
-        await instagramRepository.getFollowings(igUserId: accountInfo.igUserId, igHeaders: currentUser.igHeaders);
-    if (followingsEither.isLeft()) {
-      return Left((followingsEither as Left).value);
-    }
-    final List<Friend> followings = (followingsEither as Right).value;
-
-    // save followings to local
-    await localRepository.cacheFriendsList(friendsList: followings, boxKey: Friend.followingsBoxKey);
-
     // get followers list from instagram ----->
     final Either<Failure, List<Friend>> followersEither =
         await instagramRepository.getFollowers(igUserId: accountInfo.igUserId, igHeaders: currentUser.igHeaders);
@@ -66,6 +55,17 @@ class UpdateReportUseCase {
 
     // save followers to local
     await localRepository.cacheFriendsList(friendsList: followers, boxKey: Friend.followersBoxKey);
+
+    // get followings list from instagram ----->
+    final Either<Failure, List<Friend>> followingsEither =
+        await instagramRepository.getFollowings(igUserId: accountInfo.igUserId, igHeaders: currentUser.igHeaders);
+    if (followingsEither.isLeft()) {
+      return Left((followingsEither as Left).value);
+    }
+    final List<Friend> followings = (followingsEither as Right).value;
+
+    // save followings to local
+    await localRepository.cacheFriendsList(friendsList: followings, boxKey: Friend.followingsBoxKey);
 
     // list of friends that are not in the followers list
     final List<Friend> notFollowingMeBack = followings.where((friend) => !followers.contains(friend)).toList();
@@ -131,12 +131,25 @@ class UpdateReportUseCase {
     }
 
     // new followers and lost followers
-    //TODO : To be verified and tested
+    // TODO: check if there is a better way to do this
     List<Friend> newFollowersList = [];
     List<Friend> lostFollowersList = [];
     if (cachedFollowers != null) {
       newFollowersList = followers.where((friend) => !cachedFollowers!.contains(friend)).toList();
       lostFollowersList = cachedFollowers.where((friend) => !followers.contains(friend)).toList();
+      // save new followers to local
+      await localRepository.cacheFriendsList(friendsList: newFollowersList, boxKey: Friend.newFollowersBoxKey);
+      // save lost followers to local
+      await localRepository.cacheFriendsList(friendsList: lostFollowersList, boxKey: Friend.lostFollowersBoxKey);
+    }
+
+    // you have unfollowed
+    List<Friend> youHaveUnfollowedList = [];
+    if (cachedFollowings != null) {
+      youHaveUnfollowedList = cachedFollowings.where((friend) => !followings.contains(friend)).toList();
+      // save you have unfollowed to local
+      await localRepository.cacheFriendsList(
+          friendsList: youHaveUnfollowedList, boxKey: Friend.youHaveUnfollowedBoxKey);
     }
 
     final Report report = Report(
@@ -149,10 +162,13 @@ class UpdateReportUseCase {
       notFollowingMeBack: notFollowingMeBack.length,
       iamNotFollowingBack: iamNotFollowingBack.length,
       mutualFollowing: mutualFollowing.length,
+      newFollowers: newFollowersList.length,
+      lostFollowers: lostFollowersList.length,
       followersChartData: followersChartData,
       followingsChartData: followingsChartData,
       newFollowersChartData: newFollowersChartData,
       lostFollowersChartData: lostFollowersChartData,
+      youHaveUnfollowed: youHaveUnfollowedList.length,
     );
 
     // save report to local

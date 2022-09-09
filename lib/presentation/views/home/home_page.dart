@@ -44,6 +44,8 @@ class _HomePageState extends State<HomePage> {
                   ProfileCard(
                     followers: state.report.followers,
                     followings: state.report.followings,
+                    username: state.accountInfo.username,
+                    picture: state.accountInfo.picture,
                   ),
                   LineChartSample(chartData: state.report.followersChartData),
                   Row(
@@ -52,13 +54,13 @@ class _HomePageState extends State<HomePage> {
                       InfoCard(
                         title: "New Followers",
                         icon: FontAwesomeIcons.userPlus,
-                        count: "122",
+                        count: state.report.newFollowers.toString(),
                         context: context,
                       ),
                       InfoCard(
                         title: "Followers Lost",
                         icon: FontAwesomeIcons.userMinus,
-                        count: "323",
+                        count: state.report.lostFollowers.toString(),
                         context: context,
                       ),
                     ],
@@ -102,7 +104,7 @@ class _HomePageState extends State<HomePage> {
                       InfoCard(
                         title: "You have unfollowed",
                         icon: FontAwesomeIcons.usersSlash,
-                        count: "199",
+                        count: state.report.youHaveUnfollowed.toString(),
                         context: context,
                       ),
                     ],
@@ -140,10 +142,14 @@ class _HomePageState extends State<HomePage> {
 class ProfileCard extends StatelessWidget {
   final int followers;
   final int followings;
+  final String username;
+  final String picture;
   const ProfileCard({
     Key? key,
     required this.followers,
     required this.followings,
+    required this.username,
+    required this.picture,
   }) : super(key: key);
 
   @override
@@ -174,24 +180,24 @@ class ProfileCard extends StatelessWidget {
                   alignment: Alignment.centerLeft,
                   width: 90.0,
                   height: 90.0,
-                  decoration: const BoxDecoration(
-                    border: Border.fromBorderSide(BorderSide(color: ColorsManager.secondarytextColor, width: 2)),
+                  decoration: BoxDecoration(
+                    border: const Border.fromBorderSide(BorderSide(color: ColorsManager.secondarytextColor, width: 2)),
                     shape: BoxShape.circle,
                     image: DecorationImage(
                       fit: BoxFit.fill,
-                      image: AssetImage("assets/images/brahim.jpg"),
+                      image: NetworkImage(picture),
                     ),
                   ),
                 ),
                 Row(
-                  children: const [
-                    Icon(
+                  children: [
+                    const Icon(
                       FontAwesomeIcons.penToSquare,
                       color: ColorsManager.secondarytextColor,
                       size: 16.0,
                     ),
-                    SizedBox(width: 4.0),
-                    Text("Tiktube", style: TextStyle(fontSize: 16, color: ColorsManager.textColor)),
+                    const SizedBox(width: 4.0),
+                    Text(username, style: TextStyle(fontSize: 16, color: ColorsManager.textColor)),
                   ],
                 ),
                 const SizedBox(height: 10.0),
