@@ -2,6 +2,7 @@ import 'package:bloc/bloc.dart';
 import 'package:dartz/dartz.dart';
 import 'package:equatable/equatable.dart';
 import 'package:igplus_ios/data/failure.dart';
+import 'package:igplus_ios/domain/entities/account_info.dart';
 import 'package:igplus_ios/domain/repositories/local/local_repository.dart';
 
 import 'package:igplus_ios/domain/usecases/get_account_info_use_case.dart';
@@ -43,7 +44,7 @@ class ReportCubit extends Cubit<ReportState> {
       if (failureOrAccountInfo.isLeft()) {
         emit(const ReportFailure(message: 'Failed to get account info'));
       } else {
-        final accountInfo = (failureOrAccountInfo as Right).value;
+        final AccountInfo accountInfo = (failureOrAccountInfo as Right).value;
         Either<Failure, Report?>? failureOrReport;
 
         // get report from local
@@ -59,7 +60,7 @@ class ReportCubit extends Cubit<ReportState> {
             emit(const ReportFailure(message: 'Failed to update report'));
           } else {
             final report = (failureOrReport as Right).value;
-            emit(ReportSuccess(report: report));
+            emit(ReportSuccess(report: report, accountInfo: accountInfo));
           }
         } else {
           // get report from local
@@ -67,7 +68,7 @@ class ReportCubit extends Cubit<ReportState> {
           if (failureOrReport.isLeft()) {
             emit(const ReportFailure(message: 'Failed to get report from local'));
           } else {
-            emit(ReportSuccess(report: report));
+            emit(ReportSuccess(report: report, accountInfo: accountInfo));
           }
         }
       }

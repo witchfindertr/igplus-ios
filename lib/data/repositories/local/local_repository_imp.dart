@@ -45,7 +45,7 @@ class LocalRepositoryImpl implements LocalRepository {
   @override
   Either<Failure, List<Friend>?> getCachedFriendsList({required String boxKey}) {
     try {
-      final List<Friend>? cachedFriendsList = localDataSource.getCachedFriendsList(boxKey: Friend.followersBoxKey);
+      final List<Friend>? cachedFriendsList = localDataSource.getCachedFriendsList(boxKey: boxKey);
       return Right(cachedFriendsList);
     } catch (e) {
       return const Left(InvalidParamsFailure("getCachedFriendsList catch"));
