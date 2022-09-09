@@ -8,6 +8,7 @@ import 'package:hive_flutter/hive_flutter.dart';
 import 'package:igplus_ios/app/app.dart';
 import 'package:igplus_ios/domain/entities/friend.dart';
 import 'package:igplus_ios/domain/entities/report.dart';
+import 'package:igplus_ios/presentation/blocs/friends_list/cubit/friends_list_cubit.dart';
 import 'package:igplus_ios/presentation/blocs/home/cubit/report_cubit.dart';
 import 'package:igplus_ios/presentation/blocs/login/cubit/instagram_auth_cubit.dart';
 import 'app/bloc_observer.dart';
@@ -52,6 +53,7 @@ void main() async {
         create: (_) => di.sl<InstagramAuthCubit>(),
       ),
       BlocProvider<ReportCubit>(create: (_) => di.sl<ReportCubit>()),
+      BlocProvider<FriendsListCubit>(create: (_) => di.sl<FriendsListCubit>()),
     ], child: App()),
   );
 }
