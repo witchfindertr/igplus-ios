@@ -69,12 +69,19 @@ class UpdateReportUseCase {
 
     // list of friends that are not in the followers list
     final List<Friend> notFollowingMeBack = followings.where((friend) => !followers.contains(friend)).toList();
+    // save notFollowingMeBack to local
+    await localRepository.cacheFriendsList(friendsList: notFollowingMeBack, boxKey: Friend.notFollowingBackBoxKey);
 
     // list of friends that are not in the followings list
-    final List<Friend> iamNotFollowingBack = followers.where((friend) => !followings.contains(friend)).toList();
+    final List<Friend> youDontFollowBackBoxKey = followers.where((friend) => !followings.contains(friend)).toList();
+    // save youDontFollowBackBoxKey to local
+    await localRepository.cacheFriendsList(
+        friendsList: youDontFollowBackBoxKey, boxKey: Friend.youDontFollowBackBoxKey);
 
     // list of friends that are in both lists
-    final List<Friend> mutualFollowing = followers.where((friend) => followings.contains(friend)).toList();
+    final List<Friend> mutualFollowings = followings.where((friend) => followers.contains(friend)).toList();
+    // save mutualFollowings to local
+    await localRepository.cacheFriendsList(friendsList: mutualFollowings, boxKey: Friend.mutualFollowingsBoxKey);
 
     // initialize chart data
     String today =
@@ -160,8 +167,8 @@ class UpdateReportUseCase {
       // totalLikes: accountInfo.totalLikes,
       // totalComments: accountInfo.totalComments,
       notFollowingMeBack: notFollowingMeBack.length,
-      iamNotFollowingBack: iamNotFollowingBack.length,
-      mutualFollowing: mutualFollowing.length,
+      youDontFollowBackBoxKey: youDontFollowBackBoxKey.length,
+      mutualFollowings: mutualFollowings.length,
       newFollowers: newFollowersList.length,
       lostFollowers: lostFollowersList.length,
       followersChartData: followersChartData,

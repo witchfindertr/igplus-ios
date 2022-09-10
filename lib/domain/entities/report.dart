@@ -18,9 +18,9 @@ class Report extends Equatable {
   @HiveField(2)
   final int notFollowingMeBack;
   @HiveField(3)
-  final int iamNotFollowingBack;
+  final int youDontFollowBackBoxKey;
   @HiveField(4)
-  final int mutualFollowing;
+  final int mutualFollowings;
   @HiveField(5)
   final List<ChartData> followersChartData;
   @HiveField(6)
@@ -44,8 +44,8 @@ class Report extends Equatable {
     // required this.totalLikes,
     // required this.totalComments,
     required this.notFollowingMeBack,
-    required this.iamNotFollowingBack,
-    required this.mutualFollowing,
+    required this.youDontFollowBackBoxKey,
+    required this.mutualFollowings,
     required this.followersChartData,
     required this.followingsChartData,
     required this.newFollowersChartData,
@@ -65,7 +65,7 @@ class Report extends Equatable {
         // totalLikes,
         // totalComments,
         notFollowingMeBack,
-        iamNotFollowingBack,
+        youDontFollowBackBoxKey,
       ];
 }
 

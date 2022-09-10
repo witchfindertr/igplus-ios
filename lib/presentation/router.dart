@@ -29,7 +29,9 @@ GoRouter routes() {
         },
         routes: [
           GoRoute(
-              name: 'friendsList', path: 'friendsList', builder: (context, state) => FriendsList(type: "followers")),
+            path: 'friendsList/:type',
+            builder: (context, state) => FriendsList(type: state.params['type'] ?? ""),
+          ),
         ]),
   ]);
 }

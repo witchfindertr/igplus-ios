@@ -10,6 +10,7 @@ class InfoCard extends StatelessWidget {
   final IconData icon;
   final BuildContext context;
   final int? style;
+  final String type;
   const InfoCard(
       {Key? key,
       required this.title,
@@ -17,7 +18,8 @@ class InfoCard extends StatelessWidget {
       required this.count,
       required this.icon,
       required this.context,
-      this.style})
+      this.style,
+      required this.type})
       : super(key: key);
 
   @override
@@ -25,54 +27,64 @@ class InfoCard extends StatelessWidget {
     if (style == 1) {
       return GestureDetector(
         onTap: () {
-          GoRouter.of(context).goNamed('friendsList');
+          GoRouter.of(context).goNamed(type);
         },
         child: Card(
           color: ColorsManager.cardBack,
           elevation: 1,
           margin: const EdgeInsets.all(8),
           child: ConstrainedBox(
-            constraints: BoxConstraints(minWidth: context.width - 16, minHeight: context.height / 7),
+            constraints: BoxConstraints(minWidth: context.width - 20, minHeight: context.height / 7),
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                Padding(
-                  padding: const EdgeInsets.fromLTRB(20.0, 20.0, 10.0, 20.0),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Padding(
-                        padding: const EdgeInsets.fromLTRB(0, 10, 15, 10),
-                        child: Container(
-                          alignment: Alignment.centerLeft,
-                          width: 60.0,
-                          height: 60.0,
-                          decoration: const BoxDecoration(
-                            border: Border.fromBorderSide(BorderSide(color: ColorsManager.textColor, width: 2)),
-                            shape: BoxShape.circle,
-                            image: DecorationImage(
-                              fit: BoxFit.fill,
-                              image: AssetImage("assets/images/brahimaito.jpg"),
+                Container(
+                  alignment: Alignment.centerLeft,
+                  width: context.width / 1.375,
+                  child: Padding(
+                    padding: const EdgeInsets.fromLTRB(12.0, 14.0, 10.0, 12.0),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Padding(
+                          padding: const EdgeInsets.fromLTRB(0, 10, 15, 10),
+                          child: Container(
+                            alignment: Alignment.centerLeft,
+                            width: 60.0,
+                            height: 60.0,
+                            decoration: const BoxDecoration(
+                              border: Border.fromBorderSide(BorderSide(color: ColorsManager.textColor, width: 2)),
+                              shape: BoxShape.circle,
+                              image: DecorationImage(
+                                fit: BoxFit.fill,
+                                image: AssetImage("assets/images/brahimaito.jpg"),
+                              ),
                             ),
                           ),
                         ),
-                      ),
-                      Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text(title, style: const TextStyle(fontSize: 16, color: ColorsManager.textColor)),
-                          Text(subTitle ?? "",
-                              style: const TextStyle(fontSize: 14, color: ColorsManager.secondarytextColor)),
-                        ],
-                      ),
-                    ],
+                        Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(title, style: const TextStyle(fontSize: 16, color: ColorsManager.textColor)),
+                            Text(subTitle ?? "",
+                                style: const TextStyle(fontSize: 14, color: ColorsManager.secondarytextColor)),
+                          ],
+                        ),
+                      ],
+                    ),
                   ),
                 ),
-                Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 20),
-                  child: Text(count,
-                      style:
-                          const TextStyle(fontSize: 20, color: ColorsManager.textColor, fontWeight: FontWeight.bold)),
+                Container(
+                  alignment: Alignment.center,
+                  width: context.width / 5.2,
+                  child: Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 10),
+                    child: Text(
+                      count,
+                      style: const TextStyle(fontSize: 20, color: ColorsManager.textColor, fontWeight: FontWeight.bold),
+                      textAlign: TextAlign.center,
+                    ),
+                  ),
                 ),
               ],
             ),
@@ -82,14 +94,15 @@ class InfoCard extends StatelessWidget {
     } else {
       return GestureDetector(
         onTap: () {
-          GoRouter.of(context).goNamed('friendsList');
+          // GoRouter.of(context).goNamed('friendsList');
+          GoRouter.of(context).go('/home/friendsList/$type');
         },
         child: Card(
           color: ColorsManager.cardBack,
           elevation: 1,
           margin: const EdgeInsets.all(8),
           child: ConstrainedBox(
-            constraints: BoxConstraints(minWidth: context.width / 2 - 16, minHeight: context.height / 5),
+            constraints: BoxConstraints(minWidth: context.width / 2.27, minHeight: context.height / 7),
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [

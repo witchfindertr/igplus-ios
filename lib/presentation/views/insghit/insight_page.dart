@@ -60,6 +60,7 @@ class InsightPage extends StatelessWidget {
               count: "53",
               context: context,
               style: 1,
+              type: "whoAdmiresYou",
             ),
             const SectionTitle(
               title: "Media insights",

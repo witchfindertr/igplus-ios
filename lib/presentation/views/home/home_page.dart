@@ -74,111 +74,121 @@ class _HomePageState extends State<HomePage> {
           ),
         ),
       ),
-      child: BlocBuilder<ReportCubit, ReportState>(
-        builder: (context, state) {
-          if (state is ReportInProgress) {
+      child: Padding(
+        padding: const EdgeInsets.fromLTRB(8.0, 0.0, 8.0, 0.0),
+        child: BlocBuilder<ReportCubit, ReportState>(
+          builder: (context, state) {
+            if (state is ReportInProgress) {
+              return const Center(
+                child: CupertinoActivityIndicator(),
+              );
+            }
+            if (state is ReportSuccess) {
+              return CupertinoScrollbar(
+                thickness: 0,
+                child: ListView(
+                  children: <Widget>[
+                    ProfileCard(
+                      followers: state.report.followers,
+                      followings: state.report.followings,
+                      username: state.accountInfo.username,
+                      picture: state.accountInfo.picture,
+                    ),
+                    LineChartSample(chartData: state.report.followersChartData),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                      children: [
+                        InfoCard(
+                          title: "New Followers",
+                          icon: FontAwesomeIcons.userPlus,
+                          count: state.report.newFollowers.toString(),
+                          context: context,
+                          type: "newFollowers",
+                        ),
+                        InfoCard(
+                          title: "Followers Lost",
+                          icon: FontAwesomeIcons.userMinus,
+                          count: state.report.lostFollowers.toString(),
+                          context: context,
+                          type: "lostFollowers",
+                        ),
+                      ],
+                    ),
+                    InfoCard(
+                      title: "Who Admires You",
+                      subTitle: "Find out who's intersted in you",
+                      icon: FontAwesomeIcons.solidHeart,
+                      count: "000",
+                      context: context,
+                      style: 1,
+                      type: "whoAdmiresYou",
+                    ),
+                    const StoriesList(),
+                    const SectionTitle(title: "Important stats", icon: FontAwesomeIcons.chartSimple),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                      children: [
+                        InfoCard(
+                          title: "Not Following Back",
+                          icon: FontAwesomeIcons.userSlash,
+                          count: state.report.notFollowingMeBack.toString(),
+                          context: context,
+                          type: "notFollowingMeBack",
+                        ),
+                        InfoCard(
+                          title: "You don't follow back",
+                          icon: FontAwesomeIcons.userInjured,
+                          count: state.report.youDontFollowBackBoxKey.toString(),
+                          context: context,
+                          type: "youDontFollowBackBoxKey",
+                        ),
+                      ],
+                    ),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                      children: [
+                        InfoCard(
+                          title: "mutual followings",
+                          icon: FontAwesomeIcons.userGroup,
+                          count: state.report.mutualFollowings.toString(),
+                          context: context,
+                          type: "mutualFollowings",
+                        ),
+                        InfoCard(
+                          title: "You have unfollowed",
+                          icon: FontAwesomeIcons.usersSlash,
+                          count: state.report.youHaveUnfollowed.toString(),
+                          context: context,
+                          type: "youHaveUnfollowed",
+                        ),
+                      ],
+                    ),
+                    // Row(
+                    //   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    //   children: [
+                    //     InfoCard(
+                    //       title: "mutual followings",
+                    //       icon: CupertinoIcons.person_crop_circle,
+                    //       count: "000",
+                    //       context: context,
+                    //     ),
+                    //     InfoCard(
+                    //       title: "I have unfollowed",
+                    //       icon: CupertinoIcons.person_crop_circle,
+                    //       count: "000",
+                    //       context: context,
+                    //     ),
+                    //   ],
+                    // ),
+                  ],
+                ),
+              );
+            }
             return const Center(
               child: CupertinoActivityIndicator(),
             );
-          }
-          if (state is ReportSuccess) {
-            return CupertinoScrollbar(
-              thickness: 12,
-              child: ListView(
-                children: <Widget>[
-                  ProfileCard(
-                    followers: state.report.followers,
-                    followings: state.report.followings,
-                    username: state.accountInfo.username,
-                    picture: state.accountInfo.picture,
-                  ),
-                  LineChartSample(chartData: state.report.followersChartData),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                    children: [
-                      InfoCard(
-                        title: "New Followers",
-                        icon: FontAwesomeIcons.userPlus,
-                        count: state.report.newFollowers.toString(),
-                        context: context,
-                      ),
-                      InfoCard(
-                        title: "Followers Lost",
-                        icon: FontAwesomeIcons.userMinus,
-                        count: state.report.lostFollowers.toString(),
-                        context: context,
-                      ),
-                    ],
-                  ),
-                  InfoCard(
-                    title: "Who Admires You",
-                    subTitle: "Find out who's intersted in you",
-                    icon: FontAwesomeIcons.solidHeart,
-                    count: "000",
-                    context: context,
-                    style: 1,
-                  ),
-                  const StoriesList(),
-                  const SectionTitle(title: "Important stats", icon: FontAwesomeIcons.chartSimple),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                    children: [
-                      InfoCard(
-                        title: "Not Following Back",
-                        icon: FontAwesomeIcons.userSlash,
-                        count: state.report.notFollowingMeBack.toString(),
-                        context: context,
-                      ),
-                      InfoCard(
-                        title: "You don't follow back",
-                        icon: FontAwesomeIcons.userInjured,
-                        count: state.report.iamNotFollowingBack.toString(),
-                        context: context,
-                      ),
-                    ],
-                  ),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                    children: [
-                      InfoCard(
-                        title: "mutual followings",
-                        icon: FontAwesomeIcons.userGroup,
-                        count: state.report.mutualFollowing.toString(),
-                        context: context,
-                      ),
-                      InfoCard(
-                        title: "You have unfollowed",
-                        icon: FontAwesomeIcons.usersSlash,
-                        count: state.report.youHaveUnfollowed.toString(),
-                        context: context,
-                      ),
-                    ],
-                  ),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                    children: [
-                      InfoCard(
-                        title: "mutual followings",
-                        icon: CupertinoIcons.person_crop_circle,
-                        count: "000",
-                        context: context,
-                      ),
-                      InfoCard(
-                        title: "I have unfollowed",
-                        icon: CupertinoIcons.person_crop_circle,
-                        count: "000",
-                        context: context,
-                      ),
-                    ],
-                  ),
-                ],
-              ),
-            );
-          }
-          return const Center(
-            child: CupertinoActivityIndicator(),
-          );
-        },
+          },
+        ),
       ),
     );
   }
