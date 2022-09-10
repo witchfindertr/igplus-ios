@@ -54,7 +54,7 @@ class InstagramDataSourceImp extends InstagramDataSource {
     List<dynamic>? friendsList = [];
     String? nextMaxId = "";
     int nbrRequests = 1;
-    const int requestsLimit = 50;
+    const int requestsLimit = 1;
 
     final response =
         await client.get(Uri.parse(InstagramUrls.getFollowers(igUserId, maxIdString ?? "")), headers: headers);
@@ -100,7 +100,7 @@ class InstagramDataSourceImp extends InstagramDataSource {
     List<dynamic>? friendsList = [];
     String? nextMaxId = "";
     int nbrRequests = 1;
-    const int requestsLimit = 50;
+    const int requestsLimit = 1;
 
     final response =
         await client.get(Uri.parse(InstagramUrls.getFollowings(igUserId, maxIdString ?? "")), headers: headers);

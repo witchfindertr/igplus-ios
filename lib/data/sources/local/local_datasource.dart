@@ -48,13 +48,13 @@ class LocalDataSourceImp extends LocalDataSource {
 
   @override
   List<Friend>? getCachedFriendsList({required String boxKey}) {
-    Box<Friend> friendBox = Hive.box<Friend>(boxKey);
+    Box<Friend> friendsBox = Hive.box<Friend>(boxKey);
 
-    if (friendBox.isEmpty) {
+    if (friendsBox.isEmpty) {
       return null;
     } else {
-      final List<Friend> friendsList =
-          List.generate(friendBox.length, (index) => friendBox.getAt(index)).whereType<Friend>().toList();
+      final List<Friend> friendsList = friendsBox.values.toList();
+      // List.generate(friendBox.length, (index) => friendBox.getAt(index)).whereType<Friend>().toList();
       return friendsList;
     }
   }

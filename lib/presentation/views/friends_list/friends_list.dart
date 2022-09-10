@@ -1,4 +1,3 @@
-import 'package:android_intent/android_intent.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -7,11 +6,12 @@ import 'package:go_router/go_router.dart';
 import 'package:igplus_ios/domain/entities/friend.dart';
 import 'package:igplus_ios/presentation/blocs/friends_list/cubit/friends_list_cubit.dart';
 import 'package:igplus_ios/presentation/resources/colors_manager.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class FriendsList extends StatefulWidget {
-  const FriendsList({Key? key, required String this.type}) : super(key: key);
+  const FriendsList({Key? key, required this.type}) : super(key: key);
 
-  final String? type;
+  final String type;
 
   @override
   State<FriendsList> createState() => _FriendsListState();
@@ -23,7 +23,7 @@ class _FriendsListState extends State<FriendsList> {
     // TODO: implement initState
     super.initState();
 
-    context.read<FriendsListCubit>().init();
+    context.read<FriendsListCubit>().init(dataName: widget.type);
   }
 
   @override
@@ -56,7 +56,7 @@ class _FriendsListState extends State<FriendsList> {
               color: Colors.white,
               size: 26.0,
             )),
-        middle: const Text("New Followers", style: TextStyle(fontSize: 16, color: Colors.white)),
+        middle: Text(pageTitle, style: const TextStyle(fontSize: 16, color: Colors.white)),
       ),
       child: SafeArea(
         child: Scaffold(
@@ -93,6 +93,10 @@ class _FriendsListState extends State<FriendsList> {
                         ),
                       );
                     });
+              } else if (state is FriendsListFailure) {
+                return Center(
+                  child: Text(state.message, style: const TextStyle(color: ColorsManager.textColor)),
+                );
               } else {
                 return const Center(
                   child: CircularProgressIndicator(),
@@ -105,10 +109,15 @@ class _FriendsListState extends State<FriendsList> {
     );
   }
 
-  void _openProfileLinkOnInsta(String username) {
-    var url = 'http://instagram.com/$username';
-    final AndroidIntent intent =
-        AndroidIntent(action: 'action_view', data: Uri.encodeFull(url), package: 'com.instagram.android');
-    intent.launch();
+  void _openProfileLinkOnInsta(String username) async {
+    var url = 'instagram://user?username=$username';
+    Uri uri = Uri.parse(url);
+    try {
+      await launchUrl(
+        uri,
+      );
+    } catch (e) {
+      throw 'There was a problem to open the url: $url';
+    }
   }
 }

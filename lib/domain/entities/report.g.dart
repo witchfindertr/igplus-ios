@@ -20,8 +20,8 @@ class ReportAdapter extends TypeAdapter<Report> {
       followers: fields[0] as int,
       followings: fields[1] as int,
       notFollowingMeBack: fields[2] as int,
-      iamNotFollowingBack: fields[3] as int,
-      mutualFollowing: fields[4] as int,
+      youDontFollowBackBoxKey: fields[3] as int,
+      mutualFollowings: fields[4] as int,
       followersChartData: (fields[5] as List).cast<ChartData>(),
       followingsChartData: (fields[6] as List).cast<ChartData>(),
       newFollowersChartData: (fields[7] as List).cast<ChartData>(),
@@ -43,9 +43,9 @@ class ReportAdapter extends TypeAdapter<Report> {
       ..writeByte(2)
       ..write(obj.notFollowingMeBack)
       ..writeByte(3)
-      ..write(obj.iamNotFollowingBack)
+      ..write(obj.youDontFollowBackBoxKey)
       ..writeByte(4)
-      ..write(obj.mutualFollowing)
+      ..write(obj.mutualFollowings)
       ..writeByte(5)
       ..write(obj.followersChartData)
       ..writeByte(6)
@@ -67,10 +67,7 @@ class ReportAdapter extends TypeAdapter<Report> {
 
   @override
   bool operator ==(Object other) =>
-      identical(this, other) ||
-      other is ReportAdapter &&
-          runtimeType == other.runtimeType &&
-          typeId == other.typeId;
+      identical(this, other) || other is ReportAdapter && runtimeType == other.runtimeType && typeId == other.typeId;
 }
 
 class ChartDataAdapter extends TypeAdapter<ChartData> {
@@ -104,8 +101,5 @@ class ChartDataAdapter extends TypeAdapter<ChartData> {
 
   @override
   bool operator ==(Object other) =>
-      identical(this, other) ||
-      other is ChartDataAdapter &&
-          runtimeType == other.runtimeType &&
-          typeId == other.typeId;
+      identical(this, other) || other is ChartDataAdapter && runtimeType == other.runtimeType && typeId == other.typeId;
 }

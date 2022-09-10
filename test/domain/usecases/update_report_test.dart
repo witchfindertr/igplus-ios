@@ -48,9 +48,9 @@ void main() {
   const Report testReport = Report(
     followers: 4,
     followings: 5,
-    iamNotFollowingBack: 2,
+    youDontFollowBackBoxKey: 2,
     notFollowingMeBack: 3,
-    mutualFollowing: 2,
+    mutualFollowings: 2,
   );
 
   setUp(() {

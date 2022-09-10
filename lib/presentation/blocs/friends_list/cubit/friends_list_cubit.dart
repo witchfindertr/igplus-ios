@@ -10,15 +10,19 @@ class FriendsListCubit extends Cubit<FriendsListState> {
   final GetFriendsFromLocalUseCase getFriendsFromLocal;
   FriendsListCubit({required this.getFriendsFromLocal}) : super(FriendsListInitial());
 
-  void init() async {
+  void init({required String dataName}) async {
     emit(FriendsListLoading());
     // get friends from local
-    final failureOrFriends = await getFriendsFromLocal.execute(dataName: "followers");
+    final failureOrFriends = await getFriendsFromLocal.execute(dataName: dataName);
     if (failureOrFriends == null || failureOrFriends.isLeft()) {
       emit(const FriendsListFailure(message: 'Failed to get friends'));
     } else {
       final friends = (failureOrFriends as Right).value;
-      emit(FriendsListSuccess(friendsList: friends));
+      if (friends != null) {
+        emit(FriendsListSuccess(friendsList: friends));
+      } else {
+        emit(const FriendsListFailure(message: 'No friend to show!'));
+      }
     }
   }
 }
