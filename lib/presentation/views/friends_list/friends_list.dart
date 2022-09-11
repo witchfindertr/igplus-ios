@@ -45,6 +45,9 @@ class _FriendsListState extends State<FriendsList> {
       case "youHaveUnfollowed":
         pageTitle = "You Have Unfollowed";
         break;
+      case "mutualFollowings":
+        pageTitle = "Mutual Followings";
+        break;
       default:
         pageTitle = "";
         break;
