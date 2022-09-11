@@ -20,6 +20,14 @@ class FriendModel extends Equatable {
     );
   }
 
+  factory FriendModel.fromFriend(Friend friend) {
+    return FriendModel(
+      igUserId: friend.igUserId,
+      username: friend.username,
+      picture: friend.picture,
+    );
+  }
+
   Friend toEntity() {
     return Friend(
       igUserId: igUserId,

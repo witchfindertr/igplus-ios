@@ -131,9 +131,9 @@ class _HomePageState extends State<HomePage> {
                         InfoCard(
                           title: "Not Following Back",
                           icon: FontAwesomeIcons.userSlash,
-                          count: state.report.notFollowingMeBack.toString(),
+                          count: state.report.notFollowingBack.toString(),
                           context: context,
-                          type: "notFollowingMeBack",
+                          type: "notFollowingBack",
                         ),
                         InfoCard(
                           title: "You don't follow back",
