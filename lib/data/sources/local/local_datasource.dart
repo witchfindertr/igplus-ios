@@ -61,14 +61,16 @@ class LocalDataSourceImp extends LocalDataSource {
 
   @override
   Future<void> cacheFriendsList({required List<Friend> friendsList, required String boxKey}) async {
-    Box<Friend> friendBox = Hive.box<Friend>(boxKey);
+    Box<Friend> friendsBox = Hive.box<Friend>(boxKey);
+    final List<Friend> cachedFriendsList = friendsBox.values.toList();
+    // new friends list
+    final List<Friend> newFriendsListToAdd = friendsList
+        .where((friend) => cachedFriendsList.indexWhere((element) => friend.igUserId == element.igUserId) == -1)
+        .toList();
+
     try {
-      for (var e in friendsList) {
-        if (friendBox.get(e.igUserId) == null) {
-          friendBox.add(e);
-        } else {
-          break;
-        }
+      for (var e in newFriendsListToAdd) {
+        friendsBox.add(e);
       }
     } catch (e) {
       print(e);

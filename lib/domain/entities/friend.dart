@@ -22,11 +22,14 @@ class Friend extends Equatable {
   final String username;
   @HiveField(2)
   final String picture;
+  @HiveField(3)
+  final DateTime createdOn;
 
   const Friend({
     required this.igUserId,
     required this.username,
     required this.picture,
+    required this.createdOn,
   });
 
   @override

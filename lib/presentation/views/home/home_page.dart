@@ -140,7 +140,7 @@ class _HomePageState extends State<HomePage> {
                           icon: FontAwesomeIcons.userInjured,
                           count: state.report.youDontFollowBackBoxKey.toString(),
                           context: context,
-                          type: "youDontFollowBackBoxKey",
+                          type: "youDontFollowBack",
                         ),
                       ],
                     ),

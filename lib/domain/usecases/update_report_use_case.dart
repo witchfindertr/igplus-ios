@@ -56,9 +56,6 @@ class UpdateReportUseCase {
     }
     final List<Friend> followers = (followersEither as Right).value;
 
-    // save followers to local
-    await localRepository.cacheFriendsList(friendsList: followers, boxKey: Friend.followersBoxKey);
-
     // get followings list from instagram ----->
     final Either<Failure, List<Friend>> followingsEither =
         await instagramRepository.getFollowings(igUserId: accountInfo.igUserId, igHeaders: currentUser.igHeaders);
@@ -69,6 +66,8 @@ class UpdateReportUseCase {
 
     // save followings to local
     await localRepository.cacheFriendsList(friendsList: followings, boxKey: Friend.followingsBoxKey);
+    // save followers to local
+    await localRepository.cacheFriendsList(friendsList: followers, boxKey: Friend.followersBoxKey);
 
     // list of friends that are not in the followers list
     final List<Friend> notFollowingBack = followings
@@ -92,6 +91,34 @@ class UpdateReportUseCase {
         .toList();
     // save mutualFollowings to local
     await localRepository.cacheFriendsList(friendsList: mutualFollowings, boxKey: Friend.mutualFollowingsBoxKey);
+
+    // new followers and lost followers
+    // TODO: check if there is a better way to do this
+    List<Friend> newFollowersList = [];
+    List<Friend> lostFollowersList = [];
+    if (cachedFollowers != null) {
+      newFollowersList = followers
+          .where((friend) => cachedFollowers!.indexWhere((element) => friend.igUserId == element.igUserId) == -1)
+          .toList();
+      lostFollowersList = cachedFollowers
+          .where((friend) => followers.indexWhere((element) => friend.igUserId == element.igUserId) == -1)
+          .toList();
+      // save new followers to local
+      await localRepository.cacheFriendsList(friendsList: newFollowersList, boxKey: Friend.newFollowersBoxKey);
+      // save lost followers to local
+      await localRepository.cacheFriendsList(friendsList: lostFollowersList, boxKey: Friend.lostFollowersBoxKey);
+    }
+
+    // you have unfollowed
+    List<Friend> youHaveUnfollowedList = [];
+    if (cachedFollowings != null) {
+      youHaveUnfollowedList = cachedFollowings
+          .where((friend) => followings.indexWhere((element) => friend.igUserId == element.igUserId) == -1)
+          .toList();
+      // save you have unfollowed to local
+      await localRepository.cacheFriendsList(
+          friendsList: youHaveUnfollowedList, boxKey: Friend.youHaveUnfollowedBoxKey);
+    }
 
     // initialize chart data
     String today =
@@ -145,30 +172,6 @@ class UpdateReportUseCase {
       } else {
         lostFollowersChartData.last.value = 0;
       }
-    }
-
-    // new followers and lost followers
-    // TODO: check if there is a better way to do this
-    List<Friend> newFollowersList = [];
-    List<Friend> lostFollowersList = [];
-    if (cachedFollowers != null) {
-      newFollowersList = followers.where((friend) => !cachedFollowers!.contains(friend)).toList();
-      lostFollowersList = cachedFollowers.where((friend) => !followers.contains(friend)).toList();
-      // save new followers to local
-      await localRepository.cacheFriendsList(friendsList: newFollowersList, boxKey: Friend.newFollowersBoxKey);
-      // save lost followers to local
-      await localRepository.cacheFriendsList(friendsList: lostFollowersList, boxKey: Friend.lostFollowersBoxKey);
-    }
-
-    // you have unfollowed
-    List<Friend> youHaveUnfollowedList = [];
-    if (cachedFollowings != null) {
-      youHaveUnfollowedList = cachedFollowings
-          .where((friend) => followings.indexWhere((element) => friend.igUserId == element.igUserId) == -1)
-          .toList();
-      // save you have unfollowed to local
-      await localRepository.cacheFriendsList(
-          friendsList: youHaveUnfollowedList, boxKey: Friend.youHaveUnfollowedBoxKey);
     }
 
     final Report report = Report(

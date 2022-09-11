@@ -27,7 +27,7 @@ class InfoCard extends StatelessWidget {
     if (style == 1) {
       return GestureDetector(
         onTap: () {
-          GoRouter.of(context).goNamed(type);
+          GoRouter.of(context).go('/home/friendsList/$type');
         },
         child: Card(
           color: ColorsManager.cardBack,
