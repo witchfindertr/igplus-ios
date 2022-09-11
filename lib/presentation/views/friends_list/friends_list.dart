@@ -30,7 +30,7 @@ class _FriendsListState extends State<FriendsList> {
   Widget build(BuildContext context) {
     final String pageTitle;
     switch (widget.type) {
-      case "notFollowingYouBack":
+      case "notFollowingBack":
         pageTitle = "Didn't Following You Back";
         break;
       case "youDontFollowBack":
@@ -41,6 +41,9 @@ class _FriendsListState extends State<FriendsList> {
         break;
       case "lostFollowers":
         pageTitle = "Lost Followers";
+        break;
+      case "youHaveUnfollowed":
+        pageTitle = "You Have Unfollowed";
         break;
       default:
         pageTitle = "";

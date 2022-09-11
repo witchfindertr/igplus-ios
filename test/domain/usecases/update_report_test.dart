@@ -49,7 +49,7 @@ void main() {
     followers: 4,
     followings: 5,
     youDontFollowBackBoxKey: 2,
-    notFollowingMeBack: 3,
+    notFollowingBack: 3,
     mutualFollowings: 2,
   );
 
