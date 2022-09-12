@@ -19,4 +19,8 @@ class ColorsManager {
   static const Color cardBack = Color.fromARGB(255, 44, 46, 68);
   static const Color cardText = Color.fromRGBO(255, 255, 255, 1);
   static const Color cardIconColor = Color.fromRGBO(255, 255, 255, 1);
+
+  // arrow
+  static const Color upColor = Color.fromARGB(255, 106, 245, 166);
+  static const Color downColor = Color.fromARGB(255, 249, 94, 80);
 }

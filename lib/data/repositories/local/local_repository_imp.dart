@@ -51,4 +51,15 @@ class LocalRepositoryImpl implements LocalRepository {
       return const Left(InvalidParamsFailure("getCachedFriendsList catch"));
     }
   }
+
+  // get number of friends in box
+  @override
+  Either<Failure, int> getNumberOfFriendsInBox({required String boxKey}) {
+    try {
+      final int numberOfFriends = localDataSource.getNumberOfFriendsInBox(boxKey: boxKey);
+      return Right(numberOfFriends);
+    } catch (e) {
+      return const Left(InvalidParamsFailure("getNumberOfFriendsInBox catch"));
+    }
+  }
 }

@@ -21,5 +21,6 @@ abstract class InstagramRepository {
     required IgHeaders igHeaders,
     String? maxIdString,
     required List<Friend> cachedFollowersList,
+    required int newFollowersNumber,
   });
 }

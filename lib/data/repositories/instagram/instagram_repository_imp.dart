@@ -51,11 +51,16 @@ class InstagramRepositoryImp extends InstagramRepository {
     required IgHeaders igHeaders,
     String? maxIdString,
     required List<Friend> cachedFollowersList,
+    required int newFollowersNumber,
   }) async {
     try {
       final Map<String, String> headers = igHeaders.toMap();
       final List<FriendModel> friendModels = await instagramDataSource.getFollowers(
-          igUserId: igUserId, headers: headers, maxIdString: maxIdString, cachedFollowersList: cachedFollowersList);
+          igUserId: igUserId,
+          headers: headers,
+          maxIdString: maxIdString,
+          cachedFollowersList: cachedFollowersList,
+          newFollowersNumber: newFollowersNumber);
 
       return Right(friendModels.map((friendModel) => friendModel.toEntity()).toList());
     } on ServerFailure catch (e) {

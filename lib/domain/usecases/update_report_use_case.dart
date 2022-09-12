@@ -47,10 +47,12 @@ class UpdateReportUseCase {
 
     // get followers list from instagram ----->
     final Either<Failure, List<Friend>> followersEither = await instagramRepository.getFollowers(
-        igUserId: accountInfo.igUserId,
-        igHeaders: currentUser.igHeaders,
-        maxIdString: null,
-        cachedFollowersList: cachedFollowers ?? []);
+      igUserId: accountInfo.igUserId,
+      igHeaders: currentUser.igHeaders,
+      maxIdString: null,
+      cachedFollowersList: cachedFollowers ?? [],
+      newFollowersNumber: accountInfo.followers,
+    );
     if (followersEither.isLeft()) {
       return Left((followersEither as Left).value);
     }
@@ -73,17 +75,17 @@ class UpdateReportUseCase {
     final List<Friend> notFollowingBack = followings
         .where((friend) => followers.indexWhere((element) => friend.igUserId == element.igUserId) == -1)
         .toList();
+
     // save notFollowingBack to local
     await localRepository.cacheFriendsList(friendsList: notFollowingBack, boxKey: Friend.notFollowingBackBoxKey);
 
     // list of friends that are not in the followings list
-    final List<Friend> youDontFollowBackBoxKey = followers
+    final List<Friend> youDontFollowBack = followers
         .where((friend) => followings.indexWhere((element) => friend.igUserId == element.igUserId) == -1)
         .toList();
 
     // save youDontFollowBackBoxKey to local
-    await localRepository.cacheFriendsList(
-        friendsList: youDontFollowBackBoxKey, boxKey: Friend.youDontFollowBackBoxKey);
+    await localRepository.cacheFriendsList(friendsList: youDontFollowBack, boxKey: Friend.youDontFollowBackBoxKey);
 
     // list of friends that are in both lists
     final List<Friend> mutualFollowings = followings
@@ -97,9 +99,11 @@ class UpdateReportUseCase {
     List<Friend> newFollowersList = [];
     List<Friend> lostFollowersList = [];
     if (cachedFollowers != null) {
+      // new followers
       newFollowersList = followers
           .where((friend) => cachedFollowers!.indexWhere((element) => friend.igUserId == element.igUserId) == -1)
           .toList();
+      // lost followers
       lostFollowersList = cachedFollowers
           .where((friend) => followers.indexWhere((element) => friend.igUserId == element.igUserId) == -1)
           .toList();
@@ -174,6 +178,47 @@ class UpdateReportUseCase {
       }
     }
 
+    // Get Cycle Stats from local and calculate changes ---->
+    // get number of newFollowers
+    int newFollowersCycle = 0;
+    final Either<Failure, int> newFollowersCycleEither =
+        localRepository.getNumberOfFriendsInBox(boxKey: Friend.newFollowersBoxKey);
+    if (newFollowersCycleEither.isRight()) {
+      newFollowersCycle = (newFollowersCycleEither as Right).value;
+    }
+    // get number of lostFollowers
+    int lostFollowersCycle = 0;
+    final Either<Failure, int> lostFollowersCycleEither =
+        localRepository.getNumberOfFriendsInBox(boxKey: Friend.lostFollowersBoxKey);
+    if (lostFollowersCycleEither.isRight()) {
+      lostFollowersCycle = (lostFollowersCycleEither as Right).value;
+    }
+    // get number of youHaveUnfollowed
+    int youHaveUnfollowedCycle = 0;
+    final Either<Failure, int> youHaveUnfollowedCycleEither =
+        localRepository.getNumberOfFriendsInBox(boxKey: Friend.youHaveUnfollowedBoxKey);
+    if (youHaveUnfollowedCycleEither.isRight()) {
+      youHaveUnfollowedCycle = (youHaveUnfollowedCycleEither as Right).value;
+    }
+
+    // calculate changes
+    final int notFollowingBackChanges;
+    final int mutualFollowingsChanges;
+    final int youDontFollowBackChanges;
+
+    if (cachedReport != null) {
+      // calculate not following back changes
+      notFollowingBackChanges = notFollowingBack.length - cachedReport.notFollowingBack;
+      // calculate mutual followings changes
+      mutualFollowingsChanges = mutualFollowings.length - cachedReport.mutualFollowings;
+      // calculate you don't follow back changes
+      youDontFollowBackChanges = youDontFollowBack.length - cachedReport.youDontFollowBack;
+    } else {
+      notFollowingBackChanges = 0;
+      mutualFollowingsChanges = 0;
+      youDontFollowBackChanges = 0;
+    }
+
     final Report report = Report(
       followers: accountInfo.followers,
       followings: accountInfo.followings,
@@ -181,9 +226,9 @@ class UpdateReportUseCase {
       // video: accountInfo.video,
       // totalLikes: accountInfo.totalLikes,
       // totalComments: accountInfo.totalComments,
-      notFollowingBack: notFollowingBack.length,
-      youDontFollowBackBoxKey: youDontFollowBackBoxKey.length,
-      mutualFollowings: mutualFollowings.length,
+      notFollowingBack: notFollowingBackChanges,
+      youDontFollowBack: youDontFollowBackChanges,
+      mutualFollowings: mutualFollowingsChanges,
       newFollowers: newFollowersList.length,
       lostFollowers: lostFollowersList.length,
       followersChartData: followersChartData,
@@ -191,6 +236,12 @@ class UpdateReportUseCase {
       newFollowersChartData: newFollowersChartData,
       lostFollowersChartData: lostFollowersChartData,
       youHaveUnfollowed: youHaveUnfollowedList.length,
+      newFollowersCycle: newFollowersCycle,
+      lostFollowersCycle: lostFollowersCycle,
+      youHaveUnfollowedCycle: youHaveUnfollowedCycle,
+      notFollowingBackCycle: notFollowingBack.length,
+      youDontFollowBackCycle: youDontFollowBack.length,
+      mutualFollowingsCycle: mutualFollowings.length,
     );
 
     // save report to local

@@ -57,10 +57,11 @@ class InsightPage extends StatelessWidget {
               title: "Who Admires You",
               subTitle: "Find out who's intersted in you",
               icon: FontAwesomeIcons.solidHeart,
-              count: "53",
+              count: 53,
               context: context,
               style: 1,
               type: "whoAdmiresYou",
+              newFriends: 0,
             ),
             const SectionTitle(
               title: "Media insights",

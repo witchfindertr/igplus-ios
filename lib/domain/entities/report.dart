@@ -18,7 +18,7 @@ class Report extends Equatable {
   @HiveField(2)
   final int notFollowingBack;
   @HiveField(3)
-  final int youDontFollowBackBoxKey;
+  final int youDontFollowBack;
   @HiveField(4)
   final int mutualFollowings;
   @HiveField(5)
@@ -35,8 +35,20 @@ class Report extends Equatable {
   final int lostFollowers;
   @HiveField(11)
   final int youHaveUnfollowed;
+  @HiveField(12)
+  final int newFollowersCycle;
+  @HiveField(13)
+  int lostFollowersCycle;
+  @HiveField(14)
+  int youHaveUnfollowedCycle;
+  @HiveField(15)
+  int notFollowingBackCycle;
+  @HiveField(16)
+  int youDontFollowBackCycle;
+  @HiveField(17)
+  int mutualFollowingsCycle;
 
-  const Report({
+  Report({
     required this.followers,
     required this.followings,
     // required this.photo,
@@ -44,7 +56,7 @@ class Report extends Equatable {
     // required this.totalLikes,
     // required this.totalComments,
     required this.notFollowingBack,
-    required this.youDontFollowBackBoxKey,
+    required this.youDontFollowBack,
     required this.mutualFollowings,
     required this.followersChartData,
     required this.followingsChartData,
@@ -53,6 +65,12 @@ class Report extends Equatable {
     required this.newFollowers,
     required this.lostFollowers,
     required this.youHaveUnfollowed,
+    required this.newFollowersCycle,
+    required this.lostFollowersCycle,
+    required this.youHaveUnfollowedCycle,
+    required this.notFollowingBackCycle,
+    required this.youDontFollowBackCycle,
+    required this.mutualFollowingsCycle,
   });
 
   @override
@@ -65,7 +83,7 @@ class Report extends Equatable {
         // totalLikes,
         // totalComments,
         notFollowingBack,
-        youDontFollowBackBoxKey,
+        youDontFollowBack,
       ];
 }
 
