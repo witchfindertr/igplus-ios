@@ -1,26 +1,30 @@
 import 'package:flutter/material.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:go_router/go_router.dart';
 import 'package:igplus_ios/app/extensions/media_query_values.dart';
 import 'package:igplus_ios/presentation/resources/colors_manager.dart';
+import 'package:intl/intl.dart';
 
 class InfoCard extends StatelessWidget {
   final String title;
   final String? subTitle;
-  final String count;
+  final int count;
   final IconData icon;
   final BuildContext context;
   final int? style;
   final String type;
-  const InfoCard(
-      {Key? key,
-      required this.title,
-      this.subTitle,
-      required this.count,
-      required this.icon,
-      required this.context,
-      this.style,
-      required this.type})
-      : super(key: key);
+  final int newFriends;
+  const InfoCard({
+    Key? key,
+    required this.title,
+    this.subTitle,
+    required this.count,
+    required this.icon,
+    required this.context,
+    this.style,
+    required this.type,
+    required this.newFriends,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -79,10 +83,40 @@ class InfoCard extends StatelessWidget {
                   width: context.width / 5.2,
                   child: Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 10),
-                    child: Text(
-                      count,
-                      style: const TextStyle(fontSize: 20, color: ColorsManager.textColor, fontWeight: FontWeight.bold),
-                      textAlign: TextAlign.center,
+                    child: Column(
+                      children: [
+                        (newFriends != 0)
+                            ? Padding(
+                                padding: const EdgeInsets.all(8.0),
+                                child: Row(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: [
+                                    const Icon(FontAwesomeIcons.arrowUp,
+                                        size: 14,
+                                        color: ColorsManager.primaryColor,
+                                        shadows: [
+                                          Shadow(
+                                            blurRadius: 20.0,
+                                            color: ColorsManager.primaryColor,
+                                            offset: Offset(0.0, 0.0),
+                                          ),
+                                        ]),
+                                    Text(newFriends.toString(),
+                                        style: const TextStyle(
+                                            fontSize: 16,
+                                            color: ColorsManager.primaryColor,
+                                            fontWeight: FontWeight.bold)),
+                                  ],
+                                ),
+                              )
+                            : const SizedBox.shrink(),
+                        Text(
+                          NumberFormat.compact().format(count),
+                          style: const TextStyle(
+                              fontSize: 20, color: ColorsManager.textColor, fontWeight: FontWeight.bold),
+                          textAlign: TextAlign.center,
+                        ),
+                      ],
                     ),
                   ),
                 ),
@@ -113,9 +147,36 @@ class InfoCard extends StatelessWidget {
                       padding: const EdgeInsets.fromLTRB(0, 0, 15, 10),
                       child: Icon(icon, size: 24),
                     ),
-                    Text(count,
-                        style:
-                            const TextStyle(fontSize: 20, color: ColorsManager.textColor, fontWeight: FontWeight.bold)),
+                    Row(
+                      children: [
+                        Text(NumberFormat.compact().format(count),
+                            style: const TextStyle(
+                                fontSize: 20, color: ColorsManager.textColor, fontWeight: FontWeight.bold)),
+                        (newFriends != 0)
+                            ? Padding(
+                                padding: const EdgeInsets.all(8.0),
+                                child: Row(
+                                  children: [
+                                    Icon((newFriends > 0) ? FontAwesomeIcons.arrowUp : FontAwesomeIcons.arrowDown,
+                                        size: 14,
+                                        color: (newFriends > 0) ? ColorsManager.upColor : ColorsManager.downColor,
+                                        shadows: [
+                                          Shadow(
+                                            blurRadius: 20.0,
+                                            color: (newFriends > 0) ? ColorsManager.upColor : ColorsManager.downColor,
+                                          ),
+                                        ]),
+                                    Text(newFriends.toString(),
+                                        style: TextStyle(
+                                            fontSize: 16,
+                                            color: (newFriends > 0) ? ColorsManager.upColor : ColorsManager.downColor,
+                                            fontWeight: FontWeight.bold)),
+                                  ],
+                                ),
+                              )
+                            : const SizedBox.shrink(),
+                      ],
+                    ),
                   ],
                 ),
                 Text(title, style: const TextStyle(fontSize: 14, color: ColorsManager.secondarytextColor)),

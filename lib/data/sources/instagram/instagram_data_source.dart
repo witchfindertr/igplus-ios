@@ -8,9 +8,7 @@ import 'dart:convert';
 
 import 'package:igplus_ios/data/models/account_info_model.dart';
 import 'package:http/http.dart' as http;
-import 'package:igplus_ios/data/sources/local/local_datasource.dart';
 import 'package:igplus_ios/domain/entities/friend.dart';
-import 'package:igplus_ios/domain/usecases/get_friends_from_local_use_case.dart';
 
 import '../../constants.dart';
 import '../../failure.dart';
@@ -24,6 +22,7 @@ abstract class InstagramDataSource {
     required Map<String, String> headers,
     String? maxIdString,
     required List<Friend> cachedFollowersList,
+    required int newFollowersNumber,
   });
   Future<List<FriendModel>> getFollowings({required String igUserId, required Map<String, String> headers});
 }
@@ -62,6 +61,7 @@ class InstagramDataSourceImp extends InstagramDataSource {
     required Map<String, String> headers,
     String? maxIdString,
     required List<Friend> cachedFollowersList,
+    required int newFollowersNumber,
   }) async {
     List<FriendModel> friendsList = [];
     String? nextMaxId = "";
@@ -77,73 +77,92 @@ class InstagramDataSourceImp extends InstagramDataSource {
       if (cachedFollowersList.isNotEmpty) {
         bool lastCachedFollowersDetected = false;
         int currentCase = 0;
-        final List<dynamic> users = body["users"];
-        FriendModel lastFriend = FriendModel.fromJson(users.last);
+        final List<dynamic> users = body['users'];
+        List<FriendModel> friends = users.map((friend) => FriendModel.fromJson(friend)).toList();
+        FriendModel lastFollowers = friends.last;
 
-        int lastFriendIndexInCachedList =
-            cachedFollowersList.indexWhere((element) => element.igUserId == lastFriend.igUserId);
-        List<Friend> tmpCachedFriendList = cachedFollowersList.sublist(0, lastFriendIndexInCachedList);
+        int lastCachedFriendIndex =
+            cachedFollowersList.indexWhere((element) => element.igUserId == lastFollowers.igUserId);
+        List<Friend> tmpCachedFriendList = cachedFollowersList.sublist(0, lastCachedFriendIndex);
 
         // remove friends from cached list where igUserId is not in friends list (remove unfollowed)
-        tmpCachedFriendList.removeWhere((element) => users.indexWhere((e) => e['pk'] == element.igUserId) == -1);
+        tmpCachedFriendList.removeWhere((element) => friends.indexWhere((e) => e.igUserId == element.igUserId) == -1);
+        // save change to cached followers list
+        cachedFollowersList = [...tmpCachedFriendList, ...cachedFollowersList.sublist(lastCachedFriendIndex)];
 
         while (lastCachedFollowersDetected == false) {
           Friend lastCachedFriend = cachedFollowersList[currentCase];
-          int lastCachedFriendIndex = body["users"].indexWhere((friend) => friend["pk"] == lastCachedFriend.igUserId);
+          int lastCachedFriendIndex = friends.indexWhere((friend) => friend.igUserId == lastCachedFriend.igUserId);
 
           // test if last cached friends is still friend or no
           if (lastCachedFriendIndex != -1) {
             lastCachedFollowersDetected = true;
             if (lastCachedFriendIndex != 0) {
-              List<dynamic> newFriendsList = body["users"]
-                  .sublist(0, lastCachedFriendIndex)
-                  .map((friend) => FriendModel.fromJson(friend))
-                  .toList();
+              List<dynamic> newFriendsList = friends.sublist(0, lastCachedFriendIndex);
               // friendsList.removeWhere((element) => false);
               friendsList = [
                 ...newFriendsList,
                 ...cachedFollowersList.map((friend) => FriendModel.fromFriend(friend)).toList()
               ];
-              print(friendsList);
+            } else {
+              friendsList = cachedFollowersList.map((friend) => FriendModel.fromFriend(friend)).toList();
             }
           } else {
-            cachedFollowersList.removeAt(currentCase);
-            currentCase++;
+            if (friends.length < newFollowersNumber) {
+              List<FriendModel> nextUsers =
+                  await _loadAllFriends(nextMaxId, body, friendsList, nbrRequests, requestsLimit, igUserId, headers, 0);
+              friends = [...nextUsers, ...users];
+            } else {
+              cachedFollowersList.removeAt(currentCase);
+              currentCase++;
+            }
           }
         }
       } else {
-        nextMaxId = body['next_max_id'];
-        List<dynamic> users = body["users"];
-        friendsList = users.map((friend) => FriendModel.fromJson(friend)).toList();
-
-        while (nextMaxId != null && nbrRequests < requestsLimit) {
-          nbrRequests++;
-          String maxIdString = "";
-          if (nextMaxId != "") {
-            await Future.delayed(const Duration(seconds: 3));
-            maxIdString = "&max_id=$nextMaxId";
-            nextMaxId = null;
-
-            final response =
-                await client.get(Uri.parse(InstagramUrls.getFollowers(igUserId, maxIdString)), headers: headers);
-
-            final rs = jsonDecode(response.body);
-            final List<dynamic> users = rs['users'];
-
-            if (users.isNotEmpty) {
-              nextMaxId = rs['next_max_id'];
-              friendsList.addAll(users.map((f) => FriendModel.fromJson(f as Map<String, dynamic>)).toList());
-            }
-          } else {
-            break;
-          }
-        }
+        friendsList =
+            await _loadAllFriends(nextMaxId, body, friendsList, nbrRequests, requestsLimit, igUserId, headers, 0);
       }
 
       return friendsList;
     } else {
       throw const ServerFailure("Failed to get followers from Instagram");
     }
+  }
+
+  Future<List<FriendModel>> _loadAllFriends(String? nextMaxId, body, List<FriendModel> friendsList, int nbrRequests,
+      int requestsLimit, String igUserId, Map<String, String> headers, int limit) async {
+    nextMaxId = body['next_max_id'];
+    List<dynamic> users = body["users"];
+    friendsList = users.map((friend) => FriendModel.fromJson(friend)).toList();
+    bool pagesLimit = (limit != 0) ? (friendsList.length < limit * 194) : true;
+
+    while (nextMaxId != null && nbrRequests < requestsLimit && pagesLimit) {
+      nbrRequests++;
+      String maxIdString = "";
+      if (nextMaxId != "") {
+        await Future.delayed(const Duration(seconds: 3));
+        nextMaxId = await _loadNextFollowersPage(maxIdString, nextMaxId, igUserId, headers, friendsList);
+      } else {
+        break;
+      }
+    }
+    return friendsList;
+  }
+
+  Future<String?> _loadNextFollowersPage(String maxIdString, String? nextMaxId, String igUserId,
+      Map<String, String> headers, List<FriendModel> friendsList) async {
+    maxIdString = "&max_id=$nextMaxId";
+
+    final response = await client.get(Uri.parse(InstagramUrls.getFollowers(igUserId, maxIdString)), headers: headers);
+
+    final rs = jsonDecode(response.body);
+    final List<dynamic> users = rs['users'];
+
+    if (users.isNotEmpty) {
+      nextMaxId = rs['next_max_id'];
+      friendsList.addAll(users.map((f) => FriendModel.fromJson(f as Map<String, dynamic>)).toList());
+    }
+    return nextMaxId;
   }
 
   @override

@@ -58,7 +58,7 @@ class _LoginPageState extends State<LoginPage> {
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
                     Padding(
-                      padding: const EdgeInsets.only(top: 40.0),
+                      padding: const EdgeInsets.only(top: 20.0),
                       child: Center(
                         child: Image.asset(
                           "assets/images/LoginITopImg.png",
@@ -66,7 +66,6 @@ class _LoginPageState extends State<LoginPage> {
                         ),
                       ),
                     ),
-                    const SizedBox(height: 40),
                     const Padding(
                       padding: EdgeInsets.symmetric(horizontal: 20.0),
                       child: Text(

@@ -8,6 +8,7 @@ abstract class LocalDataSource {
   Future<void> cacheReport({required Report report});
   List<Friend>? getCachedFriendsList({required String boxKey});
   Future<void> cacheFriendsList({required List<Friend> friendsList, required String boxKey});
+  int getNumberOfFriendsInBox({required String boxKey});
 }
 
 class LocalDataSourceImp extends LocalDataSource {
@@ -62,11 +63,27 @@ class LocalDataSourceImp extends LocalDataSource {
   @override
   Future<void> cacheFriendsList({required List<Friend> friendsList, required String boxKey}) async {
     Box<Friend> friendsBox = Hive.box<Friend>(boxKey);
+
     final List<Friend> cachedFriendsList = friendsBox.values.toList();
+    final List<Friend> newFriendsListToAdd;
     // new friends list
-    final List<Friend> newFriendsListToAdd = friendsList
-        .where((friend) => cachedFriendsList.indexWhere((element) => friend.igUserId == element.igUserId) == -1)
-        .toList();
+    if (boxKey != Friend.followersBoxKey && boxKey != Friend.followingsBoxKey) {
+      // keep only new friends in the list
+      final List<Friend> friendsToKeep = cachedFriendsList
+          .where((friend) => friend.createdOn.isAfter(DateTime.now().subtract(const Duration(days: 1))))
+          .toList();
+      await friendsBox.clear();
+      newFriendsListToAdd = [
+        ...friendsList
+            .where((friend) => friendsToKeep.indexWhere((element) => friend.igUserId == element.igUserId) == -1)
+            .toList(),
+        ...friendsToKeep
+      ];
+    } else {
+      newFriendsListToAdd = friendsList
+          .where((friend) => cachedFriendsList.indexWhere((element) => friend.igUserId == element.igUserId) == -1)
+          .toList();
+    }
 
     try {
       for (var e in newFriendsListToAdd) {
@@ -75,5 +92,12 @@ class LocalDataSourceImp extends LocalDataSource {
     } catch (e) {
       print(e);
     }
+  }
+
+  // get number of friends in the box
+  @override
+  int getNumberOfFriendsInBox({required String boxKey}) {
+    Box<Friend> friendsBox = Hive.box<Friend>(boxKey);
+    return friendsBox.length;
   }
 }

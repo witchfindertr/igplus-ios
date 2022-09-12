@@ -11,4 +11,5 @@ abstract class LocalRepository {
   // friends
   Either<Failure, List<Friend>?> getCachedFriendsList({required String boxKey});
   Future<void> cacheFriendsList({required List<Friend> friendsList, required String boxKey});
+  Either<Failure, int> getNumberOfFriendsInBox({required String boxKey});
 }

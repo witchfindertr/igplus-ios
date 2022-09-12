@@ -20,7 +20,7 @@ class ReportAdapter extends TypeAdapter<Report> {
       followers: fields[0] as int,
       followings: fields[1] as int,
       notFollowingBack: fields[2] as int,
-      youDontFollowBackBoxKey: fields[3] as int,
+      youDontFollowBack: fields[3] as int,
       mutualFollowings: fields[4] as int,
       followersChartData: (fields[5] as List).cast<ChartData>(),
       followingsChartData: (fields[6] as List).cast<ChartData>(),
@@ -29,13 +29,19 @@ class ReportAdapter extends TypeAdapter<Report> {
       newFollowers: fields[9] as int,
       lostFollowers: fields[10] as int,
       youHaveUnfollowed: fields[11] as int,
+      newFollowersCycle: fields[12] as int,
+      lostFollowersCycle: fields[13] as int,
+      youHaveUnfollowedCycle: fields[14] as int,
+      notFollowingBackCycle: fields[15] as int,
+      youDontFollowBackCycle: fields[16] as int,
+      mutualFollowingsCycle: fields[17] as int,
     );
   }
 
   @override
   void write(BinaryWriter writer, Report obj) {
     writer
-      ..writeByte(12)
+      ..writeByte(18)
       ..writeByte(0)
       ..write(obj.followers)
       ..writeByte(1)
@@ -43,7 +49,7 @@ class ReportAdapter extends TypeAdapter<Report> {
       ..writeByte(2)
       ..write(obj.notFollowingBack)
       ..writeByte(3)
-      ..write(obj.youDontFollowBackBoxKey)
+      ..write(obj.youDontFollowBack)
       ..writeByte(4)
       ..write(obj.mutualFollowings)
       ..writeByte(5)
@@ -59,7 +65,19 @@ class ReportAdapter extends TypeAdapter<Report> {
       ..writeByte(10)
       ..write(obj.lostFollowers)
       ..writeByte(11)
-      ..write(obj.youHaveUnfollowed);
+      ..write(obj.youHaveUnfollowed)
+      ..writeByte(12)
+      ..write(obj.newFollowersCycle)
+      ..writeByte(13)
+      ..write(obj.lostFollowersCycle)
+      ..writeByte(14)
+      ..write(obj.youHaveUnfollowedCycle)
+      ..writeByte(15)
+      ..write(obj.notFollowingBackCycle)
+      ..writeByte(16)
+      ..write(obj.youDontFollowBackCycle)
+      ..writeByte(17)
+      ..write(obj.mutualFollowingsCycle);
   }
 
   @override

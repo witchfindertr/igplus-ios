@@ -183,13 +183,15 @@ class MockInstagramRepository extends _i1.Mock
           {String? igUserId,
           _i14.IgHeaders? igHeaders,
           String? maxIdString,
-          List<_i15.Friend>? cachedFollowersList}) =>
+          List<_i15.Friend>? cachedFollowersList,
+          int? newFollowersNumber}) =>
       (super.noSuchMethod(
           Invocation.method(#getFollowers, [], {
             #igUserId: igUserId,
             #igHeaders: igHeaders,
             #maxIdString: maxIdString,
-            #cachedFollowersList: cachedFollowersList
+            #cachedFollowersList: cachedFollowersList,
+            #newFollowersNumber: newFollowersNumber
           }),
           returnValue:
               _i11.Future<_i2.Either<_i12.Failure, List<_i15.Friend>>>.value(
@@ -199,7 +201,8 @@ class MockInstagramRepository extends _i1.Mock
                         #igUserId: igUserId,
                         #igHeaders: igHeaders,
                         #maxIdString: maxIdString,
-                        #cachedFollowersList: cachedFollowersList
+                        #cachedFollowersList: cachedFollowersList,
+                        #newFollowersNumber: newFollowersNumber
                       })))) as _i11
           .Future<_i2.Either<_i12.Failure, List<_i15.Friend>>>);
 }
@@ -242,13 +245,15 @@ class MockInstagramDataSource extends _i1.Mock
           {String? igUserId,
           Map<String, String>? headers,
           String? maxIdString,
-          List<_i15.Friend>? cachedFollowersList}) =>
+          List<_i15.Friend>? cachedFollowersList,
+          int? newFollowersNumber}) =>
       (super.noSuchMethod(
           Invocation.method(#getFollowers, [], {
             #igUserId: igUserId,
             #headers: headers,
             #maxIdString: maxIdString,
-            #cachedFollowersList: cachedFollowersList
+            #cachedFollowersList: cachedFollowersList,
+            #newFollowersNumber: newFollowersNumber
           }),
           returnValue: _i11.Future<List<_i17.FriendModel>>.value(
               <_i17.FriendModel>[])) as _i11.Future<List<_i17.FriendModel>>);
