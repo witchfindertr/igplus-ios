@@ -30,7 +30,7 @@ class _LoginPageState extends State<LoginPage> {
             listener: (context, state) {
               if (state is InstagramAuthSuccess) {
                 ScaffoldMessenger.of(context).removeCurrentSnackBar();
-                GoRouter.of(context).goNamed('tabs');
+                GoRouter.of(context).goNamed('home');
               }
               if (state is InstagramAuthFailure) {
                 ScaffoldMessenger.of(context)
@@ -54,23 +54,22 @@ class _LoginPageState extends State<LoginPage> {
               }
               if (state is InstagramAuthInitial) {
                 return Column(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
                     Padding(
-                      padding: const EdgeInsets.only(top: 40.0),
+                      padding: const EdgeInsets.only(top: 20.0),
                       child: Center(
                         child: Image.asset(
                           "assets/images/LoginITopImg.png",
-                          fit: BoxFit.cover,
+                          fit: BoxFit.fitWidth,
                         ),
                       ),
                     ),
-                    const SizedBox(height: 40),
                     const Padding(
                       padding: EdgeInsets.symmetric(horizontal: 20.0),
                       child: Text(
-                        "Instant Analysis of your Instagram Freind",
+                        "Instant Analysis of your Instagram Freinds",
                         style: TextStyle(
                           color: Colors.white,
                           fontSize: 28,

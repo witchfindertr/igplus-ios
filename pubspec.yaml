@@ -6,9 +6,10 @@ publish_to: "none" # Remove this line if you wish to publish to pub.dev
 version: 1.0.0+1
 
 environment:
-  sdk: ">=2.17.1 <3.0.0"
+  sdk: ">=2.18.0 <3.0.0"
 dependencies:
   bloc: ^8.1.0
+  cached_network_image: ^3.2.2
   cloud_firestore: ^3.4.6
   cupertino_icons: ^1.0.2
   dartz: ^0.10.1
@@ -21,10 +22,16 @@ dependencies:
   font_awesome_flutter: ^10.1.0
   get_it: ^7.2.0
   go_router: ^4.1.1
+  hive: ^2.2.2
+  hive_flutter: ^1.1.0
   http: ^0.13.4
+  infinite_scroll_pagination: ^3.2.0
   intl: ^0.17.0
   mrx_charts: ^0.1.3
+  rxdart: ^0.27.5
   story: ^0.7.0
+  timeago: ^3.3.0
+  url_launcher: ^6.1.5
   webview_cookie_manager: ^2.0.6
   webview_flutter: ^3.0.4
 
@@ -33,6 +40,7 @@ dev_dependencies:
   flutter_lints: ^2.0.0
   flutter_test:
     sdk: flutter
+  hive_generator: ^1.1.3
   mockito: ^5.2.0
 flutter:
   uses-material-design: true

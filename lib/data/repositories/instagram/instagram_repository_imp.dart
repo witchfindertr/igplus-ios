@@ -49,20 +49,21 @@ class InstagramRepositoryImp extends InstagramRepository {
   }
 
   @override
-  Future<Either<Failure, List<Friend>>> getNewFollowers() async {
-    // TODO: implement getNewFollowers
-    throw UnimplementedError();
-  }
-
-  @override
   Future<Either<Failure, List<Friend>>> getFollowers({
     required String igUserId,
     required IgHeaders igHeaders,
+    String? maxIdString,
+    required List<Friend> cachedFollowersList,
+    required int newFollowersNumber,
   }) async {
     try {
       final Map<String, String> headers = igHeaders.toMap();
-      final List<FriendModel> friendModels =
-          await instagramDataSource.getFollowers(igUserId: igUserId, headers: headers);
+      final List<FriendModel> friendModels = await instagramDataSource.getFollowers(
+          igUserId: igUserId,
+          headers: headers,
+          maxIdString: maxIdString,
+          cachedFollowersList: cachedFollowersList,
+          newFollowersNumber: newFollowersNumber);
 
       return Right(friendModels.map((friendModel) => friendModel.toEntity()).toList());
     } on ServerFailure catch (e) {
@@ -78,6 +79,7 @@ class InstagramRepositoryImp extends InstagramRepository {
   Future<Either<Failure, List<Friend>>> getFollowings({
     required String igUserId,
     required IgHeaders igHeaders,
+    String? maxIdString,
   }) async {
     try {
       final Map<String, String> headers = igHeaders.toMap();

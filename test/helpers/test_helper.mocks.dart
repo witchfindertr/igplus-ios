@@ -168,33 +168,43 @@ class MockInstagramRepository extends _i1.Mock
                               #getAccountInfo, [], {#username: username, #igUserId: igUserId, #igHeaders: igHeaders}))))
           as _i11.Future<_i2.Either<_i12.Failure, _i13.AccountInfo>>);
   @override
-  _i11.Future<_i2.Either<_i12.Failure, List<_i15.Friend>>> getNewFollowers() =>
-      (super.noSuchMethod(Invocation.method(#getNewFollowers, []),
-          returnValue:
-              _i11.Future<_i2.Either<_i12.Failure, List<_i15.Friend>>>.value(
-                  _FakeEither_0<_i12.Failure, List<_i15.Friend>>(
-                      this, Invocation.method(#getNewFollowers, [])))) as _i11
-          .Future<_i2.Either<_i12.Failure, List<_i15.Friend>>>);
-  @override
   _i11.Future<_i2.Either<_i12.Failure, List<_i15.Friend>>> getFollowings(
-          {String? igUserId, _i14.IgHeaders? igHeaders}) =>
-      (super.noSuchMethod(
-              Invocation.method(
-                  #getFollowings, [], {#igUserId: igUserId, #igHeaders: igHeaders}),
-              returnValue: _i11.Future<_i2.Either<_i12.Failure, List<_i15.Friend>>>.value(
-                  _FakeEither_0<_i12.Failure, List<_i15.Friend>>(
-                      this, Invocation.method(#getFollowings, [], {#igUserId: igUserId, #igHeaders: igHeaders}))))
+          {String? igUserId, _i14.IgHeaders? igHeaders, String? maxIdString}) =>
+      (super.noSuchMethod(Invocation.method(#getFollowings, [], {#igUserId: igUserId, #igHeaders: igHeaders, #maxIdString: maxIdString}),
+              returnValue:
+                  _i11.Future<_i2.Either<_i12.Failure, List<_i15.Friend>>>.value(
+                      _FakeEither_0<_i12.Failure, List<_i15.Friend>>(
+                          this,
+                          Invocation.method(
+                              #getFollowings, [], {#igUserId: igUserId, #igHeaders: igHeaders, #maxIdString: maxIdString}))))
           as _i11.Future<_i2.Either<_i12.Failure, List<_i15.Friend>>>);
   @override
   _i11.Future<_i2.Either<_i12.Failure, List<_i15.Friend>>> getFollowers(
-          {String? igUserId, _i14.IgHeaders? igHeaders}) =>
+          {String? igUserId,
+          _i14.IgHeaders? igHeaders,
+          String? maxIdString,
+          List<_i15.Friend>? cachedFollowersList,
+          int? newFollowersNumber}) =>
       (super.noSuchMethod(
-              Invocation.method(
-                  #getFollowers, [], {#igUserId: igUserId, #igHeaders: igHeaders}),
-              returnValue: _i11.Future<_i2.Either<_i12.Failure, List<_i15.Friend>>>.value(
+          Invocation.method(#getFollowers, [], {
+            #igUserId: igUserId,
+            #igHeaders: igHeaders,
+            #maxIdString: maxIdString,
+            #cachedFollowersList: cachedFollowersList,
+            #newFollowersNumber: newFollowersNumber
+          }),
+          returnValue:
+              _i11.Future<_i2.Either<_i12.Failure, List<_i15.Friend>>>.value(
                   _FakeEither_0<_i12.Failure, List<_i15.Friend>>(
-                      this, Invocation.method(#getFollowers, [], {#igUserId: igUserId, #igHeaders: igHeaders}))))
-          as _i11.Future<_i2.Either<_i12.Failure, List<_i15.Friend>>>);
+                      this,
+                      Invocation.method(#getFollowers, [], {
+                        #igUserId: igUserId,
+                        #igHeaders: igHeaders,
+                        #maxIdString: maxIdString,
+                        #cachedFollowersList: cachedFollowersList,
+                        #newFollowersNumber: newFollowersNumber
+                      })))) as _i11
+          .Future<_i2.Either<_i12.Failure, List<_i15.Friend>>>);
 }
 
 /// A class which mocks [InstagramDataSource].
@@ -232,10 +242,19 @@ class MockInstagramDataSource extends _i1.Mock
                       })))) as _i11.Future<_i3.AccountInfoModel>);
   @override
   _i11.Future<List<_i17.FriendModel>> getFollowers(
-          {String? igUserId, Map<String, String>? headers}) =>
+          {String? igUserId,
+          Map<String, String>? headers,
+          String? maxIdString,
+          List<_i15.Friend>? cachedFollowersList,
+          int? newFollowersNumber}) =>
       (super.noSuchMethod(
-          Invocation.method(
-              #getFollowers, [], {#igUserId: igUserId, #headers: headers}),
+          Invocation.method(#getFollowers, [], {
+            #igUserId: igUserId,
+            #headers: headers,
+            #maxIdString: maxIdString,
+            #cachedFollowersList: cachedFollowersList,
+            #newFollowersNumber: newFollowersNumber
+          }),
           returnValue: _i11.Future<List<_i17.FriendModel>>.value(
               <_i17.FriendModel>[])) as _i11.Future<List<_i17.FriendModel>>);
   @override
