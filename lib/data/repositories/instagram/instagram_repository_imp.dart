@@ -1,6 +1,8 @@
 import 'dart:io';
 
 import 'package:dartz/dartz.dart';
+import 'package:igplus_ios/data/models/user_stories_model.dart';
+import 'package:igplus_ios/domain/entities/User_story.dart';
 import 'package:igplus_ios/domain/entities/friend.dart';
 import 'package:igplus_ios/domain/entities/ig_headers.dart';
 
@@ -15,8 +17,9 @@ import '../../sources/instagram/instagram_data_source.dart';
 
 class InstagramRepositoryImp extends InstagramRepository {
   final InstagramDataSource instagramDataSource;
+  final UserStoryMapper userStoryMapper;
 
-  InstagramRepositoryImp({required this.instagramDataSource});
+  InstagramRepositoryImp({required this.instagramDataSource, required this.userStoryMapper});
   @override
   Future<Either<Failure, AccountInfo>> getAccountInfo({
     String? username,
@@ -82,6 +85,21 @@ class InstagramRepositoryImp extends InstagramRepository {
           await instagramDataSource.getFollowings(igUserId: igUserId, headers: headers);
 
       return Right(friendModels.map((friendModel) => friendModel.toEntity()).toList());
+    } on ServerFailure catch (e) {
+      return Left(ServerFailure(e.message));
+    } on SocketException {
+      return const Left(ConnectionFailure("No internet connection"));
+    } on Exception {
+      return const Left(ServerFailure("Unknown error"));
+    }
+  }
+
+  @override
+  Future<Either<Failure, List<UserStory>>> getUserStories({required IgHeaders igHeaders}) async {
+    try {
+      final Map<String, String> headers = igHeaders.toMap();
+      final List<UserStoryModel> userStoriesModels = await instagramDataSource.getActiveStories(headers: headers);
+      return Right(userStoryMapper.mapToEntityList(userStoriesModels));
     } on ServerFailure catch (e) {
       return Left(ServerFailure(e.message));
     } on SocketException {

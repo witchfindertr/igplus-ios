@@ -1,4 +1,5 @@
 import 'package:dartz/dartz.dart';
+import 'package:igplus_ios/domain/entities/User_story.dart';
 import 'package:igplus_ios/domain/entities/friend.dart';
 import 'package:igplus_ios/domain/entities/ig_headers.dart';
 
@@ -18,6 +19,11 @@ abstract class InstagramRepository {
   });
   Future<Either<Failure, List<Friend>>> getFollowers({
     required String igUserId,
+    required IgHeaders igHeaders,
+  });
+
+  // get active stories
+  Future<Either<Failure, List<UserStory>>> getUserStories({
     required IgHeaders igHeaders,
   });
 }
