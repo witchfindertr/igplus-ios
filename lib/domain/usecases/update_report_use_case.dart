@@ -208,11 +208,11 @@ class UpdateReportUseCase {
 
     if (cachedReport != null) {
       // calculate not following back changes
-      notFollowingBackChanges = notFollowingBack.length - cachedReport.notFollowingBack;
+      notFollowingBackChanges = notFollowingBack.length - cachedReport.notFollowingBackCycle;
       // calculate mutual followings changes
-      mutualFollowingsChanges = mutualFollowings.length - cachedReport.mutualFollowings;
+      mutualFollowingsChanges = mutualFollowings.length - cachedReport.mutualFollowingsCycle;
       // calculate you don't follow back changes
-      youDontFollowBackChanges = youDontFollowBack.length - cachedReport.youDontFollowBack;
+      youDontFollowBackChanges = youDontFollowBack.length - cachedReport.youDontFollowBackCycle;
     } else {
       notFollowingBackChanges = 0;
       mutualFollowingsChanges = 0;

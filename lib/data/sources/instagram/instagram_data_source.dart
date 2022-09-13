@@ -88,7 +88,7 @@ class InstagramDataSourceImp extends InstagramDataSource {
         // remove friends from cached list where igUserId is not in friends list (remove unfollowed)
         tmpCachedFriendList.removeWhere((element) => friends.indexWhere((e) => e.igUserId == element.igUserId) == -1);
         // save change to cached followers list
-        cachedFollowersList = [...tmpCachedFriendList, ...cachedFollowersList.sublist(lastCachedFriendIndex)];
+        cachedFollowersList = [...tmpCachedFriendList, ...cachedFollowersList.sublist(tmpCachedFriendList.length)];
 
         while (lastCachedFollowersDetected == false) {
           Friend lastCachedFriend = cachedFollowersList[currentCase];
