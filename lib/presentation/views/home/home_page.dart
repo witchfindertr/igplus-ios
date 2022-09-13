@@ -59,7 +59,7 @@ class _HomePageState extends State<HomePage> {
           ),
         ),
         trailing: GestureDetector(
-          onTap: () => GoRouter.of(context).push('/settings'),
+          onTap: () => context.read<ReportCubit>().init(),
           child: Row(
             mainAxisSize: MainAxisSize.min,
             children: const [
@@ -225,9 +225,10 @@ class ProfileCard extends StatelessWidget {
             Column(
               children: [
                 Padding(
-                  padding: EdgeInsets.only(bottom: 8.0),
+                  padding: const EdgeInsets.only(bottom: 8.0),
                   child: Text(followers.toString(),
-                      style: TextStyle(fontSize: 20, color: ColorsManager.textColor, fontWeight: FontWeight.bold)),
+                      style:
+                          const TextStyle(fontSize: 20, color: ColorsManager.textColor, fontWeight: FontWeight.bold)),
                 ),
                 const Text("Followers", style: TextStyle(fontSize: 16, color: ColorsManager.secondarytextColor)),
               ],

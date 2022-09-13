@@ -26,6 +26,7 @@ class _FriendsListState extends State<FriendsList> {
   String? _searchTerm;
   bool _showSearchForm = false;
   late ScrollController _scrollController;
+  late FocusNode _searchFocusNode;
 
   @override
   void initState() {
@@ -51,6 +52,7 @@ class _FriendsListState extends State<FriendsList> {
     });
 
     _scrollController = ScrollController();
+    _searchFocusNode = FocusNode();
 
     super.initState();
   }
@@ -59,6 +61,7 @@ class _FriendsListState extends State<FriendsList> {
   void dispose() {
     _scrollController.dispose(); // dispose the controller
     _pagingController.dispose();
+    _searchFocusNode.dispose();
     super.dispose();
   }
 
@@ -125,6 +128,11 @@ class _FriendsListState extends State<FriendsList> {
           onTap: () {
             if (_showSearchForm == false) {
               _scrollToTop();
+              try {
+                _searchFocusNode.requestFocus();
+              } catch (e) {
+                // print(e);
+              }
             }
             setState(() {
               _showSearchForm = !_showSearchForm;
@@ -151,6 +159,7 @@ class _FriendsListState extends State<FriendsList> {
                         slivers: <Widget>[
                           FriendSearch(
                             onChanged: (searchTerm) => _updateSearchTerm(searchTerm),
+                            searchFocusNode: _searchFocusNode,
                           ),
                           PagedSliverList<int, Friend>(
                             pagingController: _pagingController,
