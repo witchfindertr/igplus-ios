@@ -44,6 +44,7 @@ class ReportCubit extends Cubit<ReportState> {
         emit(const ReportFailure(message: 'Failed to get account info'));
       } else {
         final AccountInfo accountInfo = (failureOrAccountInfo as Right).value;
+        emit(ReportAccountInfoLoaded(accountInfo: accountInfo));
         Either<Failure, Report?>? failureOrReport;
 
         // get report from local
