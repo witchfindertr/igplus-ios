@@ -7,9 +7,11 @@ class FriendSearch extends StatefulWidget {
     Key? key,
     this.onChanged,
     this.debounceTime,
+    this.searchFocusNode,
   }) : super(key: key);
   final ValueChanged<String>? onChanged;
   final Duration? debounceTime;
+  final FocusNode? searchFocusNode;
 
   @override
   _FriendSearchState createState() => _FriendSearchState();
@@ -41,6 +43,7 @@ class _FriendSearchState extends State<FriendSearch> {
         child: Padding(
           padding: const EdgeInsets.all(16),
           child: TextField(
+            focusNode: widget.searchFocusNode,
             decoration: const InputDecoration(
               prefixIcon: Icon(Icons.search),
               labelText: 'Friend Name',
