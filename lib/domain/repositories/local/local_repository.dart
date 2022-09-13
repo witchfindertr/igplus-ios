@@ -9,7 +9,8 @@ abstract class LocalRepository {
   Future<void> cacheReport({required Report report});
 
   // friends
-  Either<Failure, List<Friend>?> getCachedFriendsList({required String boxKey});
+  Either<Failure, List<Friend>?> getCachedFriendsList(
+      {required String boxKey, int? pageKey, int? pageSize, String? searchTerm});
   Future<void> cacheFriendsList({required List<Friend> friendsList, required String boxKey});
   Either<Failure, int> getNumberOfFriendsInBox({required String boxKey});
 }

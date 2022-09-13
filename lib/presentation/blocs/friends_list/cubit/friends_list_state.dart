@@ -22,11 +22,13 @@ class FriendsListFailure extends FriendsListState {
 
 class FriendsListSuccess extends FriendsListState {
   final List<Friend> friendsList;
+  final int pageKey;
 
   const FriendsListSuccess({
     required this.friendsList,
+    required this.pageKey,
   });
 
   @override
-  List<Object> get props => [friendsList];
+  List<Object> get props => [friendsList, pageKey];
 }

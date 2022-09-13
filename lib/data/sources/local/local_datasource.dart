@@ -6,7 +6,7 @@ import 'package:igplus_ios/domain/entities/report.dart';
 abstract class LocalDataSource {
   Report? getCachedReport();
   Future<void> cacheReport({required Report report});
-  List<Friend>? getCachedFriendsList({required String boxKey});
+  List<Friend>? getCachedFriendsList({required String boxKey, int? pageKey, int? pageSize, String? searchTerm});
   Future<void> cacheFriendsList({required List<Friend> friendsList, required String boxKey});
   int getNumberOfFriendsInBox({required String boxKey});
 }
@@ -48,14 +48,29 @@ class LocalDataSourceImp extends LocalDataSource {
   // ----------------------->
 
   @override
-  List<Friend>? getCachedFriendsList({required String boxKey}) {
+  List<Friend>? getCachedFriendsList({required String boxKey, int? pageKey, int? pageSize, String? searchTerm}) {
     Box<Friend> friendsBox = Hive.box<Friend>(boxKey);
+    final List<Friend> friendsList;
+    int? startKey;
+    int? endKey;
+    if (pageKey != null && pageSize != null) {
+      startKey = pageKey;
+      endKey = startKey + pageSize;
+      if (endKey > friendsBox.length - 1) {
+        endKey = friendsBox.length;
+      }
+    }
 
     if (friendsBox.isEmpty) {
       return null;
     } else {
-      final List<Friend> friendsList = friendsBox.values.toList();
-      // List.generate(friendBox.length, (index) => friendBox.getAt(index)).whereType<Friend>().toList();
+      if (startKey != null && endKey != null && searchTerm == null) {
+        friendsList = friendsBox.values.toList().sublist(startKey, endKey);
+      } else if (searchTerm != null) {
+        friendsList = friendsBox.values.where((c) => c.username.toLowerCase().contains(searchTerm)).toList();
+      } else {
+        friendsList = friendsBox.values.toList();
+      }
       return friendsList;
     }
   }
