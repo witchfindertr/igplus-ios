@@ -8,6 +8,8 @@ class InstagramUrls {
   //'https://i.instagram.com/api/v1/friendships/55299305811/followers/?order=date_followed_latest'); //?max_id=$i&order=date_followed_latest
   static String getFollowers(String igUserId, String maxId) =>
       '$baseUrl/friendships/$igUserId/followers/?order=date_followed_latest$maxId';
+  //https://i.instagram.com/api/v1/feed/reels_tray/
+  static String getActiveStories() => '$baseUrl/feed/reels_tray/';
 }
 
 class FirebaseFunctionsUrls {

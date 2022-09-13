@@ -8,7 +8,12 @@ import 'dart:convert';
 
 import 'package:igplus_ios/data/models/account_info_model.dart';
 import 'package:http/http.dart' as http;
+
+import 'package:igplus_ios/data/models/user_stories_model.dart';
+import 'package:igplus_ios/domain/entities/User_story.dart';
+
 import 'package:igplus_ios/domain/entities/friend.dart';
+
 
 import '../../constants.dart';
 import '../../failure.dart';
@@ -25,6 +30,7 @@ abstract class InstagramDataSource {
     required int newFollowersNumber,
   });
   Future<List<FriendModel>> getFollowings({required String igUserId, required Map<String, String> headers});
+  Future<List<UserStoryModel>> getActiveStories({required Map<String, String> headers});
 }
 
 class InstagramDataSourceImp extends InstagramDataSource {
@@ -210,7 +216,28 @@ class InstagramDataSourceImp extends InstagramDataSource {
       throw const ServerFailure("Failed to get followers from Instagram");
     }
   }
+
+  //get active stories from peaple you follow
+  @override
+  Future<List<UserStoryModel>> getActiveStories({required Map<String, String> headers}) async {
+    final response = await client.get(Uri.parse(InstagramUrls.getActiveStories()), headers: headers);
+
+    if (response.statusCode == 200) {
+      final result = jsonDecode(response.body)["tray"] as List<Map<String, dynamic>>;
+      return result.map((story) => UserStoryModel.fromJson(story)).toList();
+    } else {
+      throw const ServerFailure("Failed to get active stories from Instagram");
+    }
+  }
 }
+
+// get viewers of a my stories
+//https://i.instagram.com/api/v1/feed/user/{user_id}/reel_media/
+
+// get stories
+//https://i.instagram.com/api/v1/feed/reels_tray/
+
+
 
 // //https://github.com/postaddictme/instagram-php-scraper
 // class InstagramDataSource {
