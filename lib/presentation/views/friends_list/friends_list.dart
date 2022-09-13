@@ -1,12 +1,14 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:go_router/go_router.dart';
 import 'package:igplus_ios/domain/entities/friend.dart';
 import 'package:igplus_ios/presentation/blocs/friends_list/cubit/friends_list_cubit.dart';
 import 'package:igplus_ios/presentation/resources/colors_manager.dart';
-import 'package:url_launcher/url_launcher.dart';
+import 'package:igplus_ios/presentation/resources/theme_manager.dart';
+import 'package:igplus_ios/presentation/views/friends_list/infinite_scroll_search/friend_list_item.dart';
+import 'package:igplus_ios/presentation/views/friends_list/infinite_scroll_search/friend_search.dart';
+import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
 
 class FriendsList extends StatefulWidget {
   const FriendsList({Key? key, required this.type}) : super(key: key);
@@ -18,12 +20,68 @@ class FriendsList extends StatefulWidget {
 }
 
 class _FriendsListState extends State<FriendsList> {
+  static const _pageSize = 15;
+  static const int _initialPageKey = 0;
+  final PagingController<int, Friend> _pagingController = PagingController(firstPageKey: _initialPageKey);
+  String? _searchTerm;
+  bool _showSearchForm = false;
+  late ScrollController _scrollController;
+
   @override
   void initState() {
     // TODO: implement initState
-    super.initState();
+    _pagingController.addPageRequestListener((pageKey) {
+      _fetchPage(pageKey);
+    });
 
-    context.read<FriendsListCubit>().init(dataName: widget.type);
+    _pagingController.addStatusListener((status) {
+      if (status == PagingStatus.subsequentPageError) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: const Text(
+              'Something went wrong while fetching a new page.',
+            ),
+            action: SnackBarAction(
+              label: 'Retry',
+              onPressed: () => _pagingController.retryLastFailedRequest(),
+            ),
+          ),
+        );
+      }
+    });
+
+    _scrollController = ScrollController();
+
+    super.initState();
+  }
+
+  @override
+  void dispose() {
+    _scrollController.dispose(); // dispose the controller
+    _pagingController.dispose();
+    super.dispose();
+  }
+
+  Future<void> _fetchPage(pageKey) async {
+    try {
+      final List<Friend>? friendsList = await context
+          .read<FriendsListCubit>()
+          .getFriendsList(dataName: widget.type, pageKey: pageKey, pageSize: _pageSize, searchTerm: _searchTerm);
+
+      if (friendsList == null || friendsList.isEmpty) {
+        _pagingController.appendLastPage([]);
+      } else {
+        final isLastPage = friendsList.length < _pageSize;
+        if (isLastPage) {
+          _pagingController.appendLastPage(friendsList);
+        } else {
+          final nextPageKey = pageKey + friendsList.length;
+          _pagingController.appendPage(friendsList, nextPageKey);
+        }
+      }
+    } catch (error) {
+      _pagingController.error = error;
+    }
   }
 
   @override
@@ -63,51 +121,65 @@ class _FriendsListState extends State<FriendsList> {
               size: 26.0,
             )),
         middle: Text(pageTitle, style: const TextStyle(fontSize: 16, color: Colors.white)),
+        trailing: GestureDetector(
+          onTap: () {
+            if (_showSearchForm == false) {
+              _scrollToTop();
+            }
+            setState(() {
+              _showSearchForm = !_showSearchForm;
+            });
+          },
+          child: const Icon(
+            Icons.search,
+            color: ColorsManager.textColor,
+            size: 26.0,
+          ),
+        ),
       ),
       child: SafeArea(
         child: Scaffold(
           backgroundColor: ColorsManager.appBack,
           body: BlocBuilder<FriendsListCubit, FriendsListState>(
             builder: (context, state) {
-              if (state is FriendsListLoading) {
-                return const Center(
-                  child: CircularProgressIndicator(),
-                );
-              } else if (state is FriendsListSuccess) {
-                List<Friend> friendList = state.friendsList;
-                return ListView.builder(
-                    itemCount: friendList.length,
-                    itemBuilder: (BuildContext context, int index) {
-                      return Padding(
-                        padding: const EdgeInsets.all(8.0),
-                        child: ListTile(
-                          contentPadding: const EdgeInsets.symmetric(horizontal: 12, vertical: 4),
-                          tileColor: ColorsManager.cardBack,
-                          onTap: () => _openProfileLinkOnInsta(friendList[index].username),
-                          leading: Hero(
-                            tag: index,
-                            child: CircleAvatar(
-                              backgroundImage: NetworkImage(friendList[index].picture),
+              return MaterialApp(
+                debugShowCheckedModeBanner: false,
+                theme: appMaterialTheme(),
+                home: (_showSearchForm)
+                    ? CustomScrollView(
+                        controller: _scrollController,
+                        slivers: <Widget>[
+                          FriendSearch(
+                            onChanged: (searchTerm) => _updateSearchTerm(searchTerm),
+                          ),
+                          PagedSliverList<int, Friend>(
+                            pagingController: _pagingController,
+                            builderDelegate: PagedChildBuilderDelegate<Friend>(
+                              animateTransitions: true,
+                              itemBuilder: (context, item, index) => FriendListItem(
+                                friend: item,
+                                index: index,
+                              ),
                             ),
                           ),
-                          title:
-                              Text(friendList[index].username, style: const TextStyle(color: ColorsManager.cardText)),
-                          trailing: const Icon(
-                            FontAwesomeIcons.instagram,
-                            color: ColorsManager.cardText,
+                        ],
+                      )
+                    : CustomScrollView(
+                        controller: _scrollController,
+                        slivers: <Widget>[
+                          PagedSliverList<int, Friend>(
+                            pagingController: _pagingController,
+                            builderDelegate: PagedChildBuilderDelegate<Friend>(
+                              animateTransitions: true,
+                              itemBuilder: (context, item, index) => FriendListItem(
+                                friend: item,
+                                index: index,
+                              ),
+                            ),
                           ),
-                        ),
-                      );
-                    });
-              } else if (state is FriendsListFailure) {
-                return Center(
-                  child: Text(state.message, style: const TextStyle(color: ColorsManager.textColor)),
-                );
-              } else {
-                return const Center(
-                  child: CircularProgressIndicator(),
-                );
-              }
+                        ],
+                      ),
+              );
             },
           ),
         ),
@@ -115,15 +187,12 @@ class _FriendsListState extends State<FriendsList> {
     );
   }
 
-  void _openProfileLinkOnInsta(String username) async {
-    var url = 'instagram://user?username=$username';
-    Uri uri = Uri.parse(url);
-    try {
-      await launchUrl(
-        uri,
-      );
-    } catch (e) {
-      throw 'There was a problem to open the url: $url';
-    }
+  void _updateSearchTerm(String searchTerm) {
+    _searchTerm = searchTerm;
+    _pagingController.refresh();
+  }
+
+  void _scrollToTop() {
+    _scrollController.animateTo(0, duration: const Duration(milliseconds: 300), curve: Curves.linear);
   }
 }
