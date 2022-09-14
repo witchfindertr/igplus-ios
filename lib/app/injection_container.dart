@@ -14,9 +14,11 @@ import 'package:igplus_ios/domain/repositories/instagram/instagram_repository.da
 import 'package:igplus_ios/domain/repositories/local/local_repository.dart';
 import 'package:igplus_ios/domain/usecases/get_friends_from_local_use_case.dart';
 import 'package:igplus_ios/domain/usecases/get_report_from_local_use_case.dart';
+import 'package:igplus_ios/domain/usecases/get_user_stories_use_case.dart';
 import 'package:igplus_ios/domain/usecases/update_report_use_case.dart';
 import 'package:igplus_ios/presentation/blocs/friends_list/cubit/friends_list_cubit.dart';
 import 'package:igplus_ios/presentation/blocs/home/cubit/report_cubit.dart';
+import 'package:igplus_ios/presentation/blocs/user_stories/cubit/user_stories_cubit.dart';
 import '../data/repositories/firebase/firebase_repository_imp.dart';
 import '../data/repositories/firebase/headers_repository_imp.dart';
 import '../data/repositories/instagram/instagram_repository_imp.dart';
@@ -54,6 +56,8 @@ Future<void> init() async {
 
   sl.registerFactory(() => FriendsListCubit(getFriendsFromLocal: sl()));
 
+  sl.registerFactory(() => UserStoriesCubit(getUserStories: sl(), getUser: sl()));
+
   // Use cases
   sl.registerLazySingleton(() => GetAccountInfoUseCase(instagramRepository: sl()));
   sl.registerLazySingleton(() => GetHeadersUseCase(headersRepository: sl()));
@@ -63,7 +67,7 @@ Future<void> init() async {
   sl.registerLazySingleton(() => GetUserUseCase(firebaseRepository: sl()));
   sl.registerLazySingleton(() => GetFriendsFromLocalUseCase(localRepository: sl()));
   sl.registerLazySingleton(() => UpdateReportUseCase(instagramRepository: sl(), localRepository: sl()));
-
+  sl.registerLazySingleton(() => GetUserStoriesUseCase(instagramRepository: sl()));
   sl.registerLazySingleton(() => GetReportFromLocalUseCase(localRepository: sl()));
 
   // Repositories

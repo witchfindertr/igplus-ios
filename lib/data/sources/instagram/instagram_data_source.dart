@@ -14,7 +14,6 @@ import 'package:igplus_ios/domain/entities/User_story.dart';
 
 import 'package:igplus_ios/domain/entities/friend.dart';
 
-
 import '../../constants.dart';
 import '../../failure.dart';
 import '../../models/friend_model.dart';
@@ -223,8 +222,8 @@ class InstagramDataSourceImp extends InstagramDataSource {
     final response = await client.get(Uri.parse(InstagramUrls.getActiveStories()), headers: headers);
 
     if (response.statusCode == 200) {
-      final result = jsonDecode(response.body)["tray"] as List<Map<String, dynamic>>;
-      return result.map((story) => UserStoryModel.fromJson(story)).toList();
+      final result = jsonDecode(response.body)["tray"] as List<dynamic>;
+      return result.map((story) => UserStoryModel.fromJson(story as Map<String, dynamic>)).toList();
     } else {
       throw const ServerFailure("Failed to get active stories from Instagram");
     }
