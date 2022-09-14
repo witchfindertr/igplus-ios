@@ -31,7 +31,7 @@ class ReportData extends StatelessWidget {
               username: accountInfo.username,
               picture: accountInfo.picture,
             ),
-            //     LineChartSample(chartData: report!.followersChartData),
+            LineChartSample(chartData: report!.followersChartData),
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: [

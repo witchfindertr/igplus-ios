@@ -42,7 +42,12 @@ class InstagramDataSourceImp extends InstagramDataSource {
     final response = await client.get(Uri.parse(InstagramUrls.getAccountInfoById(igUserId)), headers: headers);
 
     if (response.statusCode == 200) {
-      return AccountInfoModel.fromJsonById(jsonDecode(response.body));
+      final jsonResponse = json.decode(response.body);
+      if (jsonResponse['user']['is_private'] == null) {
+        throw const InstagramSessionExpiredFailure("Instagram session expired");
+      } else {
+        return AccountInfoModel.fromJsonById(jsonResponse);
+      }
     } else {
       throw const ServerFailure("Failed to get account info by ID");
     }
@@ -54,7 +59,12 @@ class InstagramDataSourceImp extends InstagramDataSource {
     final response = await client.get(Uri.parse(InstagramUrls.getAccountInfoByUsername(username)), headers: headers);
 
     if (response.statusCode == 200) {
-      return AccountInfoModel.fromJsonByUsername(jsonDecode(response.body));
+      final jsonResponse = json.decode(response.body);
+      if (jsonResponse['user']['is_private'] == null) {
+        throw const InstagramSessionExpiredFailure("Instagram session expired");
+      } else {
+        return AccountInfoModel.fromJsonByUsername(jsonResponse);
+      }
     } else {
       throw const ServerFailure("Failed to get account info by username");
     }
