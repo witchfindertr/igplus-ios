@@ -24,10 +24,10 @@ class UserStoryModel extends Equatable {
   // fromJson
   factory UserStoryModel.fromJson(Map<String, dynamic> json) {
     return UserStoryModel(
-      ownerId: json['user']['pk'],
+      ownerId: json['user']['pk'].toString(),
       ownerUsername: json['user']['username'],
       ownerPicUrl: json['user']['profile_pic_url'],
-      id: json['id'],
+      id: json['id'].toString(),
       expiringAt: json['expiring_at'],
       latestReelMedia: json['latest_reel_media'],
       seen: json['seen'],

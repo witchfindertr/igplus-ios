@@ -8,7 +8,7 @@ import '../entities/ig_headers.dart';
 class GetUserStoriesUseCase {
   final InstagramRepository instagramRepository;
 
-  GetUserStoriesUseCase(this.instagramRepository);
+  GetUserStoriesUseCase({required this.instagramRepository});
 
   Future<Either<Failure, List<UserStory>>> execute({required IgHeaders igHeaders}) async {
     return await instagramRepository.getUserStories(igHeaders: igHeaders);
