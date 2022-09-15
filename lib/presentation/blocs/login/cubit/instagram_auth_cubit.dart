@@ -1,6 +1,7 @@
 import 'package:bloc/bloc.dart';
 import 'package:dartz/dartz.dart';
 import 'package:equatable/equatable.dart';
+import 'package:igplus_ios/data/failure.dart';
 
 import 'package:igplus_ios/domain/entities/account_info.dart';
 import 'package:igplus_ios/domain/entities/ig_headers.dart';
@@ -43,7 +44,12 @@ class InstagramAuthCubit extends Cubit<InstagramAuthState> {
       // get account info
       final failurOrAccountInfo = await getAccountInfo.execute(igUserId: user.igUserId, igHeaders: user.igHeaders);
       if (failurOrAccountInfo.isLeft()) {
-        emit(const InstagramAuthFailure(message: 'Failed to get account info'));
+        final Failure failure = (failurOrAccountInfo as Left).value;
+        if (failure is InstagramSessionExpiredFailure) {
+          emit(InstagramAuthFailure(message: failure.message));
+        } else {
+          emit(const InstagramAuthFailure(message: 'Failed to get account info'));
+        }
       } else {
         final accountInfo = (failurOrAccountInfo as Right).value;
         // update user

@@ -41,7 +41,12 @@ class ReportCubit extends Cubit<ReportState> {
       final failureOrAccountInfo =
           await getAccountInfo.execute(igUserId: currentUser.igUserId, igHeaders: currentUser.igHeaders);
       if (failureOrAccountInfo.isLeft()) {
-        emit(const ReportFailure(message: 'Failed to get account info'));
+        final failure = (failureOrAccountInfo as Left).value;
+        if (failure is InstagramSessionExpiredFailure) {
+          emit(ReportFailure(message: failure.message));
+        } else {
+          emit(const ReportFailure(message: 'Failed to get account info'));
+        }
       } else {
         final AccountInfo accountInfo = (failureOrAccountInfo as Right).value;
         emit(ReportAccountInfoLoaded(accountInfo: accountInfo));

@@ -19,3 +19,7 @@ class ConnectionFailure extends Failure {
 class InvalidParamsFailure extends Failure {
   const InvalidParamsFailure(String message) : super(message);
 }
+
+class InstagramSessionExpiredFailure extends Failure {
+  const InstagramSessionExpiredFailure(String message) : super(message);
+}

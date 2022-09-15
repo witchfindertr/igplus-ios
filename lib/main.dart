@@ -11,6 +11,7 @@ import 'package:igplus_ios/domain/entities/report.dart';
 import 'package:igplus_ios/presentation/blocs/friends_list/cubit/friends_list_cubit.dart';
 import 'package:igplus_ios/presentation/blocs/home/cubit/report_cubit.dart';
 import 'package:igplus_ios/presentation/blocs/login/cubit/instagram_auth_cubit.dart';
+import 'package:igplus_ios/presentation/blocs/user_stories/cubit/user_stories_cubit.dart';
 import 'app/bloc_observer.dart';
 import 'app/injection_container.dart' as di;
 
@@ -49,12 +50,16 @@ void main() async {
   await di.init();
   Bloc.observer = AppBlocObserver();
   runApp(
-    MultiBlocProvider(providers: [
-      BlocProvider<InstagramAuthCubit>(
-        create: (_) => di.sl<InstagramAuthCubit>(),
-      ),
-      BlocProvider<ReportCubit>(create: (_) => di.sl<ReportCubit>()),
-      BlocProvider<FriendsListCubit>(create: (_) => di.sl<FriendsListCubit>()),
-    ], child: App()),
+    MultiBlocProvider(
+      providers: [
+        BlocProvider<InstagramAuthCubit>(
+          create: (_) => di.sl<InstagramAuthCubit>(),
+        ),
+        BlocProvider<ReportCubit>(create: (_) => di.sl<ReportCubit>()),
+        BlocProvider<FriendsListCubit>(create: (_) => di.sl<FriendsListCubit>()),
+        BlocProvider<UserStoriesCubit>(create: (_) => di.sl<UserStoriesCubit>()),
+      ],
+      child: App(),
+    ),
   );
 }

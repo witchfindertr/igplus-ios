@@ -39,6 +39,8 @@ class InstagramRepositoryImp extends InstagramRepository {
       } else {
         return const Left(InvalidParamsFailure("username or igUserId is required"));
       }
+    } on InstagramSessionExpiredFailure catch (e) {
+      return Left(InstagramSessionExpiredFailure(e.message));
     } on ServerFailure catch (e) {
       return Left(ServerFailure(e.message));
     } on SocketException {

@@ -1,9 +1,16 @@
 import 'package:flutter/material.dart';
+
 import 'package:igplus_ios/presentation/resources/colors_manager.dart';
 import 'package:igplus_ios/presentation/views/home/stories/stories.dart';
 
+import '../../../../domain/entities/User_story.dart';
+
 class Story extends StatelessWidget {
-  const Story({Key? key}) : super(key: key);
+  final UserStory userStory;
+  const Story({
+    Key? key,
+    required this.userStory,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -40,11 +47,11 @@ class Story extends StatelessWidget {
             padding: const EdgeInsets.all(3.0),
             child: Container(
               alignment: Alignment.centerLeft,
-              decoration: const BoxDecoration(
+              decoration: BoxDecoration(
                 color: ColorsManager.appBack,
                 shape: BoxShape.circle,
                 image: DecorationImage(
-                  image: AssetImage("assets/images/brahim.jpg"),
+                  image: NetworkImage(userStory.owner.profilePicUrl),
                 ),
               ),
             ),

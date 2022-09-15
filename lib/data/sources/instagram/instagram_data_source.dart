@@ -42,7 +42,12 @@ class InstagramDataSourceImp extends InstagramDataSource {
     final response = await client.get(Uri.parse(InstagramUrls.getAccountInfoById(igUserId)), headers: headers);
 
     if (response.statusCode == 200) {
-      return AccountInfoModel.fromJsonById(jsonDecode(response.body));
+      final jsonResponse = json.decode(response.body);
+      if (jsonResponse['user']['is_private'] == null) {
+        throw const InstagramSessionExpiredFailure("Instagram session expired");
+      } else {
+        return AccountInfoModel.fromJsonById(jsonResponse);
+      }
     } else {
       throw const ServerFailure("Failed to get account info by ID");
     }
@@ -54,7 +59,12 @@ class InstagramDataSourceImp extends InstagramDataSource {
     final response = await client.get(Uri.parse(InstagramUrls.getAccountInfoByUsername(username)), headers: headers);
 
     if (response.statusCode == 200) {
-      return AccountInfoModel.fromJsonByUsername(jsonDecode(response.body));
+      final jsonResponse = json.decode(response.body);
+      if (jsonResponse['user']['is_private'] == null) {
+        throw const InstagramSessionExpiredFailure("Instagram session expired");
+      } else {
+        return AccountInfoModel.fromJsonByUsername(jsonResponse);
+      }
     } else {
       throw const ServerFailure("Failed to get account info by username");
     }
@@ -222,8 +232,8 @@ class InstagramDataSourceImp extends InstagramDataSource {
     final response = await client.get(Uri.parse(InstagramUrls.getActiveStories()), headers: headers);
 
     if (response.statusCode == 200) {
-      final result = jsonDecode(response.body)["tray"] as List<Map<String, dynamic>>;
-      return result.map((story) => UserStoryModel.fromJson(story)).toList();
+      final result = jsonDecode(response.body)["tray"] as List<dynamic>;
+      return result.map((story) => UserStoryModel.fromJson(story as Map<String, dynamic>)).toList();
     } else {
       throw const ServerFailure("Failed to get active stories from Instagram");
     }
