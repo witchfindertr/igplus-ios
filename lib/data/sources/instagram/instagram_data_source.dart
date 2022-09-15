@@ -17,6 +17,7 @@ import 'package:igplus_ios/domain/entities/friend.dart';
 import '../../constants.dart';
 import '../../failure.dart';
 import '../../models/friend_model.dart';
+import '../../models/story_model.dart';
 
 abstract class InstagramDataSource {
   Future<AccountInfoModel> getAccountInfoByUsername({required String username, required Map<String, String> headers});
@@ -29,7 +30,8 @@ abstract class InstagramDataSource {
     required int newFollowersNumber,
   });
   Future<List<FriendModel>> getFollowings({required String igUserId, required Map<String, String> headers});
-  Future<List<UserStoryModel>> getActiveStories({required Map<String, String> headers});
+  Future<List<UserStoryModel>> getUserStories({required Map<String, String> headers});
+  Future<List<StoryModel>> getStories({required String userId, required Map<String, String> headers});
 }
 
 class InstagramDataSourceImp extends InstagramDataSource {
@@ -228,12 +230,24 @@ class InstagramDataSourceImp extends InstagramDataSource {
 
   //get active stories from peaple you follow
   @override
-  Future<List<UserStoryModel>> getActiveStories({required Map<String, String> headers}) async {
-    final response = await client.get(Uri.parse(InstagramUrls.getActiveStories()), headers: headers);
+  Future<List<UserStoryModel>> getUserStories({required Map<String, String> headers}) async {
+    final response = await client.get(Uri.parse(InstagramUrls.getUserStories()), headers: headers);
 
     if (response.statusCode == 200) {
       final result = jsonDecode(response.body)["tray"] as List<dynamic>;
       return result.map((story) => UserStoryModel.fromJson(story as Map<String, dynamic>)).toList();
+    } else {
+      throw const ServerFailure("Failed to get active stories from Instagram");
+    }
+  }
+
+  @override
+  Future<List<StoryModel>> getStories({required String userId, required Map<String, String> headers}) async {
+    final response = await client.get(Uri.parse(InstagramUrls.getStories(userId: userId)), headers: headers);
+
+    if (response.statusCode == 200) {
+      final result = jsonDecode(response.body)["reels_media"][0]['items'] as List<dynamic>;
+      return result.map((story) => StoryModel.fromJson(story as Map<String, dynamic>)).toList();
     } else {
       throw const ServerFailure("Failed to get active stories from Instagram");
     }

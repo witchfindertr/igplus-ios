@@ -1,5 +1,7 @@
 import 'package:go_router/go_router.dart';
+import 'package:igplus_ios/domain/entities/User_story.dart';
 import 'package:igplus_ios/presentation/views/friends_list/friends_list.dart';
+import 'package:igplus_ios/presentation/views/home/stories/stories_view.dart';
 import 'package:igplus_ios/presentation/views/login/instagram_login_page.dart';
 import 'package:igplus_ios/presentation/views/login/login_page.dart';
 import 'package:igplus_ios/presentation/views/tab_page.dart';
@@ -31,6 +33,10 @@ GoRouter routes() {
           GoRoute(
             path: 'friendsList/:type',
             builder: (context, state) => FriendsList(type: state.params['type'] ?? ""),
+          ),
+          GoRoute(
+            path: 'storiesView',
+            builder: (context, state) => StoriesView(storyOwner: state.extra! as StoryOwner),
           ),
         ]),
   ]);
