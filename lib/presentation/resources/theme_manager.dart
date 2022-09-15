@@ -29,14 +29,10 @@ ThemeData appMaterialTheme() {
       primaryColorDark: ColorsManager.primaryColor,
       primarySwatch: generateMaterialColor(color: ColorsManager.primaryColor),
     ),
+    iconTheme: const IconThemeData(color: ColorsManager.primaryColor),
     textTheme: const TextTheme(
       bodyText1: TextStyle(
         color: ColorsManager.textColor,
-        fontSize: 14,
-        fontStyle: FontStyle.italic,
-      ),
-      button: TextStyle(
-        color: ColorsManager.primaryColor,
         fontSize: 14,
         fontStyle: FontStyle.italic,
       ),

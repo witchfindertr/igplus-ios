@@ -14,7 +14,6 @@ import 'package:igplus_ios/domain/entities/User_story.dart';
 
 import 'package:igplus_ios/domain/entities/friend.dart';
 
-
 import '../../constants.dart';
 import '../../failure.dart';
 import '../../models/friend_model.dart';
@@ -236,8 +235,6 @@ class InstagramDataSourceImp extends InstagramDataSource {
 
 // get stories
 //https://i.instagram.com/api/v1/feed/reels_tray/
-
-
 
 // //https://github.com/postaddictme/instagram-php-scraper
 // class InstagramDataSource {
