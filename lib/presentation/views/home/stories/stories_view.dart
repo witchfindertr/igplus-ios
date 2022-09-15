@@ -36,24 +36,16 @@ class _StoriesViewState extends State<StoriesView> {
   @override
   Widget build(BuildContext context) {
     return CupertinoPageScaffold(
-      navigationBar: CupertinoNavigationBar(
-        backgroundColor: ColorsManager.appBack,
-        leading: GestureDetector(
-            onTap: () => GoRouter.of(context).pop(),
-            child: const Icon(
-              Icons.arrow_back_ios,
-              color: Colors.white,
-              size: 26.0,
-            )),
-        middle:
-            Text("${widget.storyOwner.username} stories", style: const TextStyle(fontSize: 16, color: Colors.white)),
-      ),
-      child: Container(
-        margin: const EdgeInsets.all(8),
-        child: BlocBuilder<StoriesCubit, StoriesState>(
-          builder: (context, state) {
-            if (state is StoriesLoaded) {
-              return StoryView(
+      child: BlocBuilder<StoriesCubit, StoriesState>(
+        builder: (context, state) {
+          if (state is StoriesLoaded) {
+            return GestureDetector(
+              onHorizontalDragEnd: (dragUpdateDetails) {
+                // TODO:  play the next user stories
+                controller.next();
+              },
+              onLongPress: () {},
+              child: StoryView(
                 storyItems: state.storyItems,
                 controller: controller,
                 inline: false,
@@ -61,12 +53,18 @@ class _StoriesViewState extends State<StoriesView> {
                 onComplete: () {
                   GoRouter.of(context).pop();
                 },
-              );
-            } else {
-              return const Center(child: CircularProgressIndicator());
-            }
-          },
-        ),
+                onVerticalSwipeComplete: (direction) {
+                  GoRouter.of(context).pop();
+                },
+              ),
+            );
+          } else {
+            return const Center(
+                child: CircularProgressIndicator(
+              color: ColorsManager.primaryColor,
+            ));
+          }
+        },
       ),
     );
   }
