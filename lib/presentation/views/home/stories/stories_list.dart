@@ -23,7 +23,7 @@ class _StoriesListState extends State<StoriesList> {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        SectionTitle(title: "Watch stories anonymously", icon: FontAwesomeIcons.eyeLowVision),
+        const SectionTitle(title: "Watch stories anonymously", icon: FontAwesomeIcons.eyeLowVision),
         BlocBuilder<UserStoriesCubit, UserStoriesState>(
           builder: (context, state) {
             if (state is UserStoriesInitial) {
@@ -32,7 +32,7 @@ class _StoriesListState extends State<StoriesList> {
               return const Center(child: CircularProgressIndicator());
             } else if (state is UserStoriesLoaded) {
               return SizedBox(
-                height: 100,
+                height: 100.00,
                 child: ListView.builder(
                   scrollDirection: Axis.horizontal,
                   itemCount: state.userStories.length,
@@ -44,20 +44,6 @@ class _StoriesListState extends State<StoriesList> {
             } else {
               return const Center(child: Text("Error"));
             }
-            //   return SingleChildScrollView(
-            //     scrollDirection: Axis.horizontal,
-            //     child: Row(
-            //       children: const [
-            //         Story(),
-            //         Story(),
-            //         Story(),
-            //         Story(),
-            //         Story(),
-            //         Story(),
-            //         Story(),
-            //       ],
-            //     ),
-            //   );
           },
         ),
       ],
