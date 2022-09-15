@@ -1,12 +1,8 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:dartz/dartz.dart';
 import 'package:igplus_ios/data/models/user_model.dart';
 
 import 'package:igplus_ios/data/sources/firebase/firebase_data_source.dart';
-import 'package:firebase_auth/firebase_auth.dart' as auth;
 
-import '../../../domain/entities/account_info.dart';
-import '../../../domain/entities/ig_headers.dart';
 import '../../../domain/entities/user.dart';
 import '../../../domain/repositories/firebase/firebase_repository.dart';
 import '../../failure.dart';

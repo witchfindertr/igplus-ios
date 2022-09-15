@@ -5,6 +5,7 @@ import 'package:igplus_ios/domain/entities/ig_headers.dart';
 
 import '../../../data/failure.dart';
 import '../../entities/account_info.dart';
+import '../../entities/story.dart';
 
 abstract class InstagramRepository {
   Future<Either<Failure, AccountInfo>> getAccountInfo({
@@ -25,8 +26,14 @@ abstract class InstagramRepository {
     required int newFollowersNumber,
   });
 
-  // get active stories
+  // get user stories
   Future<Either<Failure, List<UserStory>>> getUserStories({
+    required IgHeaders igHeaders,
+  });
+
+  // getstories
+  Future<Either<Failure, List<Story>>> getStories({
+    required String userId,
     required IgHeaders igHeaders,
   });
 }

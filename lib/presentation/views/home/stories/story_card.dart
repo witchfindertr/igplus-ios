@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 
 import 'package:igplus_ios/presentation/resources/colors_manager.dart';
-import 'package:igplus_ios/presentation/views/home/stories/stories.dart';
 
 import '../../../../domain/entities/User_story.dart';
 
-class Story extends StatelessWidget {
+class StoryCard extends StatelessWidget {
   final UserStory userStory;
-  const Story({
+  const StoryCard({
     Key? key,
     required this.userStory,
   }) : super(key: key);
@@ -19,14 +19,7 @@ class Story extends StatelessWidget {
       width: 80.00,
       child: GestureDetector(
         onTap: () {
-          Navigator.push(
-            context,
-            MaterialPageRoute(
-              builder: (context) {
-                return const StoryPage();
-              },
-            ),
-          );
+          GoRouter.of(context).go('/home/storiesView', extra: userStory.owner);
         },
         child: Container(
           margin: const EdgeInsets.all(4.0),

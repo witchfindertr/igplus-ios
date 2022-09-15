@@ -9,7 +9,9 @@ class InstagramUrls {
   static String getFollowers(String igUserId, String maxId) =>
       '$baseUrl/friendships/$igUserId/followers/?order=date_followed_latest$maxId';
   //https://i.instagram.com/api/v1/feed/reels_tray/
-  static String getActiveStories() => '$baseUrl/feed/reels_tray/';
+  static String getUserStories() => '$baseUrl/feed/reels_tray/';
+  //https://i.instagram.com/api/v1/feed/reels_media/?reel_ids=3139331705
+  static String getStories({required userId}) => '$baseUrl/feed/reels_media/?reel_ids=$userId';
 }
 
 class FirebaseFunctionsUrls {

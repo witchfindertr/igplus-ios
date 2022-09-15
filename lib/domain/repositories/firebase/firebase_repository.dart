@@ -2,8 +2,6 @@ import 'package:dartz/dartz.dart';
 import 'package:igplus_ios/domain/entities/user.dart';
 
 import '../../../data/failure.dart';
-import '../../entities/account_info.dart';
-import '../../entities/ig_headers.dart';
 
 abstract class FirebaseRepository {
   Future<Either<Failure, Unit>> createUser({required User user});

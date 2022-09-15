@@ -3,7 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:igplus_ios/presentation/blocs/user_stories/cubit/user_stories_cubit.dart';
 import 'package:igplus_ios/presentation/views/global/section_title.dart';
-import 'package:igplus_ios/presentation/views/home/stories/story.dart';
+import 'package:igplus_ios/presentation/views/home/stories/story_card.dart';
 
 class StoriesList extends StatefulWidget {
   const StoriesList({Key? key}) : super(key: key);
@@ -37,7 +37,7 @@ class _StoriesListState extends State<StoriesList> {
                   scrollDirection: Axis.horizontal,
                   itemCount: state.userStories.length,
                   itemBuilder: (context, index) {
-                    return Story(userStory: state.userStories[index]);
+                    return StoryCard(userStory: state.userStories[index]);
                   },
                 ),
               );

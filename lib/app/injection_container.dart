@@ -18,13 +18,16 @@ import 'package:igplus_ios/domain/usecases/get_user_stories_use_case.dart';
 import 'package:igplus_ios/domain/usecases/update_report_use_case.dart';
 import 'package:igplus_ios/presentation/blocs/friends_list/cubit/friends_list_cubit.dart';
 import 'package:igplus_ios/presentation/blocs/home/cubit/report_cubit.dart';
+import 'package:igplus_ios/presentation/blocs/stories/cubit/stories_cubit.dart';
 import 'package:igplus_ios/presentation/blocs/user_stories/cubit/user_stories_cubit.dart';
+import '../data/models/story_model.dart';
 import '../data/repositories/firebase/firebase_repository_imp.dart';
 import '../data/repositories/firebase/headers_repository_imp.dart';
 import '../data/repositories/instagram/instagram_repository_imp.dart';
 import '../data/sources/firebase/firebase_data_source.dart';
 import '../domain/usecases/authorize_user.dart';
 import '../domain/usecases/get_headers_use_case.dart';
+import '../domain/usecases/get_stories_use_case.dart';
 import '../presentation/blocs/login/cubit/instagram_auth_cubit.dart';
 
 import '../data/sources/instagram/instagram_data_source.dart';
@@ -57,6 +60,7 @@ Future<void> init() async {
   sl.registerFactory(() => FriendsListCubit(getFriendsFromLocal: sl()));
 
   sl.registerFactory(() => UserStoriesCubit(getUserStories: sl(), getUser: sl()));
+  sl.registerFactory(() => StoriesCubit(getStories: sl(), getUser: sl()));
 
   // Use cases
   sl.registerLazySingleton(() => GetAccountInfoUseCase(instagramRepository: sl()));
@@ -69,12 +73,13 @@ Future<void> init() async {
   sl.registerLazySingleton(() => UpdateReportUseCase(instagramRepository: sl(), localRepository: sl()));
   sl.registerLazySingleton(() => GetUserStoriesUseCase(instagramRepository: sl()));
   sl.registerLazySingleton(() => GetReportFromLocalUseCase(localRepository: sl()));
+  sl.registerLazySingleton(() => GetStoriesUseCase(instagramRepository: sl()));
 
   // Repositories
   sl.registerLazySingleton<FirebaseRepository>(() => FirebaseRepositporyImp(firebaseDataSource: sl()));
 
   sl.registerLazySingleton<InstagramRepository>(
-      () => InstagramRepositoryImp(instagramDataSource: sl(), userStoryMapper: sl()));
+      () => InstagramRepositoryImp(instagramDataSource: sl(), userStoryMapper: sl(), storyMapper: sl()));
 
   sl.registerLazySingleton<LocalRepository>(() => LocalRepositoryImpl(localDataSource: sl()));
 
@@ -88,6 +93,7 @@ Future<void> init() async {
 
   // Data Mapper
   sl.registerLazySingleton<UserStoryMapper>(() => UserStoryMapper());
+  sl.registerLazySingleton<StoryMapper>(() => StoryMapper());
 
   // External
   final client = http.Client();
