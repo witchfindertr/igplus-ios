@@ -36,24 +36,19 @@ class ProfileCard extends StatelessWidget {
                 const Text("Followers", style: TextStyle(fontSize: 16, color: ColorsManager.secondarytextColor)),
               ],
             ),
-            Column(
-              children: [
-                Container(
-                  margin: const EdgeInsets.fromLTRB(40.0, 10.0, 40.0, 4.0),
-                  alignment: Alignment.centerLeft,
-                  width: 90.0,
-                  height: 90.0,
-                  decoration: BoxDecoration(
-                    border: const Border.fromBorderSide(BorderSide(color: ColorsManager.secondarytextColor, width: 2)),
-                    shape: BoxShape.circle,
-                    image: DecorationImage(
-                      fit: BoxFit.fill,
-                      image: NetworkImage(picture),
-                    ),
-                  ),
+            Container(
+              margin: const EdgeInsets.all(10),
+              alignment: Alignment.centerLeft,
+              width: 90.0,
+              height: 90.0,
+              decoration: BoxDecoration(
+                border: const Border.fromBorderSide(BorderSide(color: ColorsManager.secondarytextColor, width: 2)),
+                shape: BoxShape.circle,
+                image: DecorationImage(
+                  fit: BoxFit.fill,
+                  image: NetworkImage(picture),
                 ),
-                const SizedBox(height: 10.0),
-              ],
+              ),
             ),
             Column(
               children: [

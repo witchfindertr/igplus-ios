@@ -38,20 +38,20 @@ class InfoCard extends StatelessWidget {
           elevation: 1,
           margin: const EdgeInsets.all(8),
           child: ConstrainedBox(
-            constraints: BoxConstraints(minWidth: context.width - 20, minHeight: context.height / 7),
+            constraints: BoxConstraints(minWidth: context.width - 23, minHeight: context.height / 7),
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 Container(
                   alignment: Alignment.centerLeft,
-                  width: context.width / 1.375,
+                  width: context.width / 1.34,
                   child: Padding(
-                    padding: const EdgeInsets.fromLTRB(12.0, 14.0, 10.0, 12.0),
+                    padding: const EdgeInsets.fromLTRB(8.0, 14.0, 4.0, 12.0),
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
                         Padding(
-                          padding: const EdgeInsets.fromLTRB(0, 10, 15, 10),
+                          padding: const EdgeInsets.fromLTRB(0, 10, 4, 10),
                           child: Container(
                             alignment: Alignment.centerLeft,
                             width: 60.0,
@@ -80,7 +80,7 @@ class InfoCard extends StatelessWidget {
                 ),
                 Container(
                   alignment: Alignment.center,
-                  width: context.width / 5.2,
+                  width: context.width / 6,
                   child: Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 10),
                     child: Column(
@@ -136,7 +136,7 @@ class InfoCard extends StatelessWidget {
           elevation: 1,
           margin: const EdgeInsets.all(8),
           child: ConstrainedBox(
-            constraints: BoxConstraints(minWidth: context.width / 2.27, minHeight: context.height / 7),
+            constraints: BoxConstraints(minWidth: context.width / 2.3, minHeight: context.height / 7),
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [

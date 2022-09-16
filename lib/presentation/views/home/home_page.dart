@@ -34,9 +34,6 @@ class _HomePageState extends State<HomePage> {
         DefaultWidgetsLocalizations.delegate,
         DefaultCupertinoLocalizations.delegate,
       ],
-      supportedLocales: const [
-        Locale('en', 'US'),
-      ],
       theme: appMaterialTheme(),
       home: Scaffold(
         body: CupertinoPageScaffold(
