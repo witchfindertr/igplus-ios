@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:igplus_ios/presentation/resources/colors_manager.dart';
+import 'package:intl/intl.dart';
 
 class ProfileCard extends StatelessWidget {
   final int followers;
@@ -29,7 +30,7 @@ class ProfileCard extends StatelessWidget {
               children: [
                 Padding(
                   padding: const EdgeInsets.only(bottom: 8.0),
-                  child: Text(followers.toString(),
+                  child: Text(NumberFormat.compact().format(followers),
                       style:
                           const TextStyle(fontSize: 20, color: ColorsManager.textColor, fontWeight: FontWeight.bold)),
                 ),
@@ -54,7 +55,7 @@ class ProfileCard extends StatelessWidget {
               children: [
                 Padding(
                   padding: const EdgeInsets.only(bottom: 8.0),
-                  child: Text(followings.toString(),
+                  child: Text(NumberFormat.compact().format(followings),
                       style:
                           const TextStyle(fontSize: 20, color: ColorsManager.textColor, fontWeight: FontWeight.bold)),
                 ),

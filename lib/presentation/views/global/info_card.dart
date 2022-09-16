@@ -44,14 +44,14 @@ class InfoCard extends StatelessWidget {
               children: [
                 Container(
                   alignment: Alignment.centerLeft,
-                  width: context.width / 1.34,
+                  width: context.width / 1.4,
                   child: Padding(
-                    padding: const EdgeInsets.fromLTRB(8.0, 14.0, 4.0, 12.0),
+                    padding: const EdgeInsets.fromLTRB(4.0, 14.0, 4.0, 12.0),
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
                         Padding(
-                          padding: const EdgeInsets.fromLTRB(0, 10, 4, 10),
+                          padding: const EdgeInsets.fromLTRB(0, 10, 8, 10),
                           child: Container(
                             alignment: Alignment.centerLeft,
                             width: 60.0,
@@ -66,13 +66,16 @@ class InfoCard extends StatelessWidget {
                             ),
                           ),
                         ),
-                        Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Text(title, style: const TextStyle(fontSize: 16, color: ColorsManager.textColor)),
-                            Text(subTitle ?? "",
-                                style: const TextStyle(fontSize: 14, color: ColorsManager.secondarytextColor)),
-                          ],
+                        Flexible(
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(title, style: const TextStyle(fontSize: 16, color: ColorsManager.textColor)),
+                              Text(subTitle ?? "",
+                                  overflow: TextOverflow.ellipsis,
+                                  style: const TextStyle(fontSize: 14, color: ColorsManager.secondarytextColor)),
+                            ],
+                          ),
                         ),
                       ],
                     ),
@@ -80,7 +83,7 @@ class InfoCard extends StatelessWidget {
                 ),
                 Container(
                   alignment: Alignment.center,
-                  width: context.width / 6,
+                  width: context.width / 4.8,
                   child: Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 10),
                     child: Column(
