@@ -13,8 +13,9 @@ class StoriesLoading extends StoriesState {}
 
 class StoriesLoaded extends StoriesState {
   final List<StoryItem> storyItems;
-  const StoriesLoaded({required this.storyItems});
+  final StoryController controller;
+  const StoriesLoaded({required this.storyItems, required this.controller});
 
   @override
-  List<Object> get props => [storyItems];
+  List<Object> get props => [storyItems, controller];
 }
