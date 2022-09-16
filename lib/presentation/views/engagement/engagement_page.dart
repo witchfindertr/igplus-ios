@@ -13,17 +13,14 @@ class EngagementPage extends StatelessWidget {
     List<Map> bestFollowers = [
       {
         "title": "Most Likes",
-        "subTitle": "",
         "context": context,
       },
       {
         "title": "Most Comments",
-        "subTitle": "",
         "context": context,
       },
       {
         "title": "Most Likes & Commented",
-        "subTitle": "",
         "context": context,
       }
     ];
@@ -31,12 +28,10 @@ class EngagementPage extends StatelessWidget {
     List<Map> missedConnections = [
       {
         "title": "Users engaged, but didn't follow",
-        "subTitle": "",
         "context": context,
       },
       {
         "title": "Users liked me, but didn't follow",
-        "subTitle": "",
         "context": context,
       },
     ];
@@ -61,31 +56,34 @@ class EngagementPage extends StatelessWidget {
 
     return CupertinoPageScaffold(
       child: CupertinoScrollbar(
-        thickness: 12,
-        child: ListView(
-          children: <Widget>[
-            const SectionTitle(
-              title: "Best Followers",
-              icon: FontAwesomeIcons.usersGear,
-            ),
-            InfoCardList(
-              cards: bestFollowers,
-            ),
-            const SectionTitle(
-              title: "Missed Connections",
-              icon: FontAwesomeIcons.linkSlash,
-            ),
-            InfoCardList(
-              cards: missedConnections,
-            ),
-            const SectionTitle(
-              title: "Ghost Followers",
-              icon: FontAwesomeIcons.ghost,
-            ),
-            InfoCardList(
-              cards: ghostFollowers,
-            ),
-          ],
+        thickness: 0,
+        child: Padding(
+          padding: const EdgeInsets.fromLTRB(8.0, 0.0, 8.0, 0.0),
+          child: ListView(
+            children: <Widget>[
+              const SectionTitle(
+                title: "Best Followers",
+                icon: FontAwesomeIcons.usersGear,
+              ),
+              InfoCardList(
+                cards: bestFollowers,
+              ),
+              const SectionTitle(
+                title: "Missed Connections",
+                icon: FontAwesomeIcons.linkSlash,
+              ),
+              InfoCardList(
+                cards: missedConnections,
+              ),
+              const SectionTitle(
+                title: "Ghost Followers",
+                icon: FontAwesomeIcons.ghost,
+              ),
+              InfoCardList(
+                cards: ghostFollowers,
+              ),
+            ],
+          ),
         ),
       ),
     );

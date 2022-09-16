@@ -94,39 +94,36 @@ class _HomePageState extends State<HomePage> {
                         ));
             }),
           ),
-          child: Padding(
-            padding: const EdgeInsets.fromLTRB(8.0, 0.0, 8.0, 0.0),
-            child: BlocBuilder<ReportCubit, ReportState>(
-              builder: (context, state) {
-                if (state is ReportInProgress) {
-                  return const Center(
-                    child: CupertinoActivityIndicator(),
-                  );
-                } else if (state is ReportAccountInfoLoaded) {
-                  return ReportData(accountInfo: state.accountInfo);
-                }
-                if (state is ReportSuccess) {
-                  return ReportData(report: state.report, accountInfo: state.accountInfo);
-                } else if (state is ReportFailure) {
-                  return Center(
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Text(state.message),
-                        TextButton(
-                          onPressed: () => context.read<ReportCubit>().init(),
-                          child: const Text("Retry", style: TextStyle(color: ColorsManager.primaryColor)),
-                        ),
-                      ],
-                    ),
-                  );
-                } else {
-                  return const Center(
-                    child: CupertinoActivityIndicator(),
-                  );
-                }
-              },
-            ),
+          child: BlocBuilder<ReportCubit, ReportState>(
+            builder: (context, state) {
+              if (state is ReportInProgress) {
+                return const Center(
+                  child: CupertinoActivityIndicator(),
+                );
+              } else if (state is ReportAccountInfoLoaded) {
+                return ReportData(accountInfo: state.accountInfo);
+              }
+              if (state is ReportSuccess) {
+                return ReportData(report: state.report, accountInfo: state.accountInfo);
+              } else if (state is ReportFailure) {
+                return Center(
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Text(state.message),
+                      TextButton(
+                        onPressed: () => context.read<ReportCubit>().init(),
+                        child: const Text("Retry", style: TextStyle(color: ColorsManager.primaryColor)),
+                      ),
+                    ],
+                  ),
+                );
+              } else {
+                return const Center(
+                  child: CupertinoActivityIndicator(),
+                );
+              }
+            },
           ),
         ),
       ),

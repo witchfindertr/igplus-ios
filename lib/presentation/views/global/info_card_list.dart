@@ -28,7 +28,7 @@ class InfoCardList extends StatelessWidget {
       elevation: 1,
       margin: const EdgeInsets.fromLTRB(8.0, 0.5, 8.0, 0.5),
       child: ConstrainedBox(
-        constraints: BoxConstraints(minWidth: context.width - 16, minHeight: context.height / 9),
+        constraints: BoxConstraints(minWidth: context.width - 16, minHeight: context.height / 12),
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
@@ -36,8 +36,8 @@ class InfoCardList extends StatelessWidget {
               padding: const EdgeInsets.symmetric(horizontal: 20),
               child: Row(
                 children: [
-                  Container(
-                    width: MediaQuery.of(context).size.width / 1.5,
+                  SizedBox(
+                    width: MediaQuery.of(context).size.width / 1.57,
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       mainAxisAlignment: MainAxisAlignment.center,

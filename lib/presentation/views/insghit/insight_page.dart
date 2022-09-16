@@ -46,38 +46,41 @@ class InsightPage extends StatelessWidget {
     ];
     return CupertinoPageScaffold(
       child: CupertinoScrollbar(
-        thickness: 12,
-        child: ListView(
-          children: <Widget>[
-            const SectionTitle(
-              title: "Insights",
-              icon: FontAwesomeIcons.chartPie,
-            ),
-            InfoCard(
-              title: "Who Admires You",
-              subTitle: "Find out who's intersted in you",
-              icon: FontAwesomeIcons.solidHeart,
-              count: 53,
-              context: context,
-              style: 1,
-              type: "whoAdmiresYou",
-              newFriends: 0,
-            ),
-            const SectionTitle(
-              title: "Media insights",
-              icon: FontAwesomeIcons.images,
-            ),
-            InfoCardList(
-              cards: mediaInsigntCards,
-            ),
-            const SectionTitle(
-              title: "Stories insights",
-              icon: FontAwesomeIcons.circleNotch,
-            ),
-            InfoCardList(
-              cards: storiesInsigntCards,
-            ),
-          ],
+        thickness: 0,
+        child: Padding(
+          padding: const EdgeInsets.fromLTRB(8.0, 0.0, 8.0, 0.0),
+          child: ListView(
+            children: <Widget>[
+              const SectionTitle(
+                title: "Insights",
+                icon: FontAwesomeIcons.chartPie,
+              ),
+              InfoCard(
+                title: "Who Admires You",
+                subTitle: "Find out who's intersted in you",
+                icon: FontAwesomeIcons.solidHeart,
+                count: 53,
+                context: context,
+                style: 1,
+                type: "whoAdmiresYou",
+                newFriends: 0,
+              ),
+              const SectionTitle(
+                title: "Media insights",
+                icon: FontAwesomeIcons.images,
+              ),
+              InfoCardList(
+                cards: mediaInsigntCards,
+              ),
+              const SectionTitle(
+                title: "Stories insights",
+                icon: FontAwesomeIcons.circleNotch,
+              ),
+              InfoCardList(
+                cards: storiesInsigntCards,
+              ),
+            ],
+          ),
         ),
       ),
     );
