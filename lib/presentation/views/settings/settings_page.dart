@@ -50,49 +50,52 @@ class SettingPage extends StatelessWidget {
     ];
     return CupertinoPageScaffold(
       child: CupertinoScrollbar(
-        thickness: 12,
-        child: ListView(
-          children: <Widget>[
-            const SectionTitle(
-              title: "App settings",
-              icon: FontAwesomeIcons.gear,
-            ),
-            InfoCardList(
-              cards: AppSettings1,
-            ),
-            const SizedBox(
-              height: 8,
-            ),
-            InfoCardList(
-              cards: AppSettings2,
-            ),
-            const SizedBox(
-              height: 8,
-            ),
-            InfoCardList(
-              cards: AppSettings3,
-            ),
-            const Divider(
-              height: 10,
-              color: ColorsManager.cardBack,
-              thickness: 2,
-            ),
-            Padding(
-              padding: const EdgeInsets.all(10.0),
-              child: CupertinoButton(
-                  color: ColorsManager.buttonColor2,
-                  child: const Text(
-                    "Logout",
-                    style: TextStyle(
-                      color: ColorsManager.textColor,
-                      fontSize: 18,
+        thickness: 0,
+        child: Padding(
+          padding: const EdgeInsets.fromLTRB(8.0, 0.0, 8.0, 0.0),
+          child: ListView(
+            children: <Widget>[
+              const SectionTitle(
+                title: "App settings",
+                icon: FontAwesomeIcons.gear,
+              ),
+              InfoCardList(
+                cards: AppSettings1,
+              ),
+              const SizedBox(
+                height: 8,
+              ),
+              InfoCardList(
+                cards: AppSettings2,
+              ),
+              const SizedBox(
+                height: 8,
+              ),
+              InfoCardList(
+                cards: AppSettings3,
+              ),
+              const Divider(
+                height: 10,
+                color: ColorsManager.cardBack,
+                thickness: 2,
+              ),
+              Padding(
+                padding: const EdgeInsets.all(10.0),
+                child: CupertinoButton(
+                    color: ColorsManager.buttonColor2,
+                    child: const Text(
+                      "Logout",
+                      style: TextStyle(
+                        color: ColorsManager.textColor,
+                        fontSize: 18,
+                      ),
                     ),
-                  ),
-                  onPressed: () {
-                    GoRouter.of(context).pushNamed('instagram_login');
-                  }),
-            ),
-          ],
+                    onPressed: () {
+                      GoRouter.of(context).pushNamed('instagram_login');
+                    }),
+              ),
+            ],
+          ),
         ),
       ),
     );

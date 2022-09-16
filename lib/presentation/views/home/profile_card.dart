@@ -55,7 +55,7 @@ class ProfileCard extends StatelessWidget {
               children: [
                 Padding(
                   padding: const EdgeInsets.only(bottom: 8.0),
-                  child: Text(NumberFormat.compact().format(followings),
+                  child: Text(followings.toString(),
                       style:
                           const TextStyle(fontSize: 20, color: ColorsManager.textColor, fontWeight: FontWeight.bold)),
                 ),
