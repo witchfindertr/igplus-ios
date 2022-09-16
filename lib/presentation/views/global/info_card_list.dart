@@ -28,7 +28,7 @@ class InfoCardList extends StatelessWidget {
       elevation: 1,
       margin: const EdgeInsets.fromLTRB(8.0, 0.5, 8.0, 0.5),
       child: ConstrainedBox(
-        constraints: BoxConstraints(minWidth: context.width - 16, minHeight: context.height / 12),
+        constraints: BoxConstraints(minWidth: context.width - 16, minHeight: context.height / 10),
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
