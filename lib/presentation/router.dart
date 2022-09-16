@@ -19,8 +19,17 @@ GoRouter routes() {
             name: 'instagram_login',
             path: 'instagram_login',
             builder: (context, state) {
-              return const InstagramLoginPage();
+              return InstagramLoginPage();
             },
+            routes: [
+              GoRoute(
+                name: 'session_expired',
+                path: 'session_expired',
+                builder: (context, state) {
+                  return InstagramLoginPage(sessionExpired: true);
+                },
+              ),
+            ],
           ),
         ]),
     GoRoute(

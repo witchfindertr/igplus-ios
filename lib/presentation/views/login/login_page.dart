@@ -13,6 +13,7 @@ class LoginPage extends StatefulWidget {
 }
 
 class _LoginPageState extends State<LoginPage> {
+  bool sessionExpired = false;
   @override
   void initState() {
     // TODO: implement initState
@@ -43,6 +44,7 @@ class _LoginPageState extends State<LoginPage> {
                       ),
                     ),
                   );
+                sessionExpired = true;
                 context.read<InstagramAuthCubit>().emitInstagramAuthInitialState();
               }
             },
@@ -90,7 +92,11 @@ class _LoginPageState extends State<LoginPage> {
                             ),
                           ),
                           onPressed: () {
-                            GoRouter.of(context).pushNamed('instagram_login');
+                            if (sessionExpired == true) {
+                              GoRouter.of(context).pushNamed('session_expired');
+                            } else {
+                              GoRouter.of(context).pushNamed('instagram_login');
+                            }
                           }),
                     ),
                     const Padding(
