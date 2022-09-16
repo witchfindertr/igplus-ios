@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:go_router/go_router.dart';
 import 'package:igplus_ios/presentation/resources/colors_manager.dart';
 
 class ProfileManager extends StatelessWidget {
@@ -12,7 +13,7 @@ class ProfileManager extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      height: 35.0,
+      height: 30.0,
       decoration: BoxDecoration(
         color: ColorsManager.cardBack,
         borderRadius: BorderRadius.circular(10),
@@ -25,7 +26,6 @@ class ProfileManager extends StatelessWidget {
           PopupMenuButton<int>(
             offset: const Offset(-6, 32),
             color: ColorsManager.cardBack,
-            iconSize: 16.0,
             itemBuilder: (context) => [
               PopupMenuItem(
                 value: 1,
@@ -47,6 +47,7 @@ class ProfileManager extends StatelessWidget {
                 height: 10.0,
               ),
               PopupMenuItem(
+                onTap: () => logoutAlert(context),
                 value: 2,
                 height: 35.0,
                 child: Row(
@@ -58,7 +59,7 @@ class ProfileManager extends StatelessWidget {
                       size: 14.0,
                     ),
                     SizedBox(width: 10.0),
-                    Text("Lgout", style: TextStyle(color: ColorsManager.textColor, fontSize: 16)),
+                    Text("Logout", style: TextStyle(color: ColorsManager.textColor, fontSize: 16)),
                   ],
                 ),
               ),
@@ -73,12 +74,51 @@ class ProfileManager extends StatelessWidget {
                 const SizedBox(width: 6.0),
                 Text(username, style: const TextStyle(fontSize: 14, color: ColorsManager.textColor)),
                 const SizedBox(width: 4.0),
-                const Icon(FontAwesomeIcons.angleDown, color: ColorsManager.secondarytextColor),
+                const Icon(
+                  FontAwesomeIcons.angleDown,
+                  color: ColorsManager.secondarytextColor,
+                  size: 16.0,
+                ),
               ],
             ),
           )
         ],
       ),
+    );
+  }
+
+  logoutAlert(BuildContext context) {
+    // set up the buttons
+    Widget cancelButton = TextButton(
+      child: const Text("Cancel"),
+      onPressed: () {
+        Navigator.of(context, rootNavigator: true).pop();
+      },
+    );
+    Widget continueButton = TextButton(
+      child: const Text("Logout"),
+      onPressed: () {
+        GoRouter.of(context).go('/login');
+      },
+    );
+
+    // set up the AlertDialog
+    AlertDialog alert = AlertDialog(
+      backgroundColor: ColorsManager.cardBack,
+      title: const Text("Are you sure you want to log out?"),
+      content: const Text("When you log out, all your data will be deleted permanently."),
+      actions: [
+        cancelButton,
+        continueButton,
+      ],
+    );
+
+    // show the dialog
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return alert;
+      },
     );
   }
 }
