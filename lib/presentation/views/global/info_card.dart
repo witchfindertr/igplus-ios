@@ -83,7 +83,7 @@ class InfoCard extends StatelessWidget {
                 ),
                 Container(
                   alignment: Alignment.center,
-                  width: context.width / 4.8,
+                  width: context.width / 5,
                   child: Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 10),
                     child: Column(
