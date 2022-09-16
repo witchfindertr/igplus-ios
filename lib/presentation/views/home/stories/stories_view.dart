@@ -23,7 +23,7 @@ class StoriesView extends StatefulWidget {
 }
 
 class _StoriesViewState extends State<StoriesView> {
-  final StoryController controller = StoryController();
+//  final StoryController controller = StoryController();
 
   @override
   void initState() {
@@ -41,13 +41,12 @@ class _StoriesViewState extends State<StoriesView> {
           if (state is StoriesLoaded) {
             return GestureDetector(
               onHorizontalDragEnd: (dragUpdateDetails) {
-                // TODO:  play the next user stories
-                controller.next();
+                state.controller.next();
               },
               onLongPress: () {},
               child: StoryView(
                 storyItems: state.storyItems,
-                controller: controller,
+                controller: state.controller,
                 inline: false,
                 repeat: false,
                 onComplete: () {
