@@ -9,7 +9,13 @@ abstract class ReportState extends Equatable {
 
 class ReportInitial extends ReportState {}
 
-class ReportInProgress extends ReportState {}
+class ReportInProgress extends ReportState {
+  final String loadingMessage;
+  const ReportInProgress({this.loadingMessage = 'Loading...'});
+
+  @override
+  List<Object> get props => [loadingMessage];
+}
 
 class ReportSuccess extends ReportState {
   final Report report;
@@ -21,9 +27,10 @@ class ReportSuccess extends ReportState {
 
 class ReportAccountInfoLoaded extends ReportState {
   final AccountInfo accountInfo;
-  const ReportAccountInfoLoaded({required this.accountInfo});
+  final String loadingMessage;
+  const ReportAccountInfoLoaded({required this.accountInfo, this.loadingMessage = 'Loading...'});
   @override
-  List<Object> get props => [accountInfo];
+  List<Object> get props => [accountInfo, loadingMessage];
 }
 
 class ReportFailure extends ReportState {

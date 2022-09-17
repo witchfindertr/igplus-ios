@@ -97,11 +97,23 @@ class _HomePageState extends State<HomePage> {
           child: BlocBuilder<ReportCubit, ReportState>(
             builder: (context, state) {
               if (state is ReportInProgress) {
-                return const Center(
-                  child: CupertinoActivityIndicator(),
+                return Center(
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                      const CupertinoActivityIndicator(
+                        radius: 12.0,
+                      ),
+                      const SizedBox(height: 20.0),
+                      Text(state.loadingMessage, style: const TextStyle(fontSize: 12, color: ColorsManager.textColor)),
+                      const Text("This can take a few minutes depending on your account size",
+                          style: TextStyle(fontSize: 10, color: ColorsManager.secondarytextColor)),
+                    ],
+                  ),
                 );
               } else if (state is ReportAccountInfoLoaded) {
-                return ReportData(accountInfo: state.accountInfo);
+                return ReportData(accountInfo: state.accountInfo, loadingMessage: state.loadingMessage);
               }
               if (state is ReportSuccess) {
                 return ReportData(report: state.report, accountInfo: state.accountInfo);
