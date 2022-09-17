@@ -228,7 +228,7 @@ class InstagramDataSourceImp extends InstagramDataSource {
     }
   }
 
-  //get active stories from peaple you follow
+  // get active stories from peaple you follow
   @override
   Future<List<UserStoryModel>> getUserStories({required Map<String, String> headers}) async {
     final response = await client.get(Uri.parse(InstagramUrls.getUserStories()), headers: headers);

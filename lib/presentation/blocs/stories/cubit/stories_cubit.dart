@@ -29,37 +29,18 @@ class StoriesCubit extends Cubit<StoriesState> {
     // get user info
     final failureOrCurrentUser = await getUser.execute();
     if (failureOrCurrentUser.isLeft()) {
-      emit(StoriesLoaded(storyItems: const [], controller: controller));
+      emit(StoriesLoaded(stories: const [], controller: controller, storyOwner: storyOwner));
     } else {
       final currentUser = (failureOrCurrentUser as Right).value;
       // get user stories
       final failureOrStories = await getStories.execute(storyOwnerId: storyOwner.id, igHeaders: currentUser.igHeaders);
 
       if (failureOrStories.isLeft()) {
-        emit(StoriesLoaded(storyItems: const [], controller: controller));
+        emit(StoriesLoaded(stories: const [], controller: controller, storyOwner: storyOwner));
       } else {
         final List<Story> stories = (failureOrStories as Right).value;
-        final List<StoryItem> storyItems = stories.map((story) {
-          if (story.mediaType == MediaConstants.TYPE_IMAGE) {
-            return StoryItem.pageImage(
-              url: story.mediaUrl,
-              controller: controller,
-              // caption: story.caption,
-              // imageFit: BoxFit.cover,
-            );
-          } else if (story.mediaType == MediaConstants.TYPE_VIDEO) {
-            return StoryItem.pageVideo(
-              story.mediaUrl,
-              controller: controller,
-              // caption: story.caption,
-              // imageFit: BoxFit.cover,
-            );
-          } else {
-            return StoryItem.text(
-                title: "No Stories for ${storyOwner.username}", backgroundColor: Color.fromARGB(255, 200, 7, 7));
-          }
-        }).toList();
-        emit(StoriesLoaded(storyItems: storyItems, controller: controller));
+
+        emit(StoriesLoaded(stories: stories, controller: controller, storyOwner: storyOwner));
       }
     }
   }

@@ -33,9 +33,9 @@ class StoryCard extends StatelessWidget {
                   begin: Alignment.topRight,
                   end: Alignment.bottomRight,
                   colors: [
-                    Colors.purple,
-                    Colors.pink,
-                    Color.fromARGB(255, 164, 100, 5),
+                    Color.fromARGB(255, 133, 16, 154),
+                    Color.fromARGB(255, 203, 27, 86),
+                    Color.fromARGB(255, 159, 24, 69),
                   ],
                 ),
                 borderRadius: BorderRadius.circular(35.0),
@@ -55,8 +55,16 @@ class StoryCard extends StatelessWidget {
               ),
             ),
           ),
-          Text(userStory.owner.username,
-              style: const TextStyle(color: ColorsManager.secondarytextColor, fontSize: 10.0)),
+          SizedBox(
+            width: 80.00,
+            child: Flexible(
+              child: Center(
+                child: Text(userStory.owner.username,
+                    overflow: TextOverflow.ellipsis,
+                    style: const TextStyle(color: ColorsManager.secondarytextColor, fontSize: 10.0)),
+              ),
+            ),
+          ),
         ],
       ),
     );

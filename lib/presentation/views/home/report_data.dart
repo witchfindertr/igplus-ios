@@ -2,6 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:igplus_ios/domain/entities/account_info.dart';
 import 'package:igplus_ios/domain/entities/report.dart';
+import 'package:igplus_ios/presentation/resources/colors_manager.dart';
 import 'package:igplus_ios/presentation/views/global/info_card.dart';
 import 'package:igplus_ios/presentation/views/global/section_title.dart';
 import 'package:igplus_ios/presentation/views/home/profile_card.dart';
@@ -12,11 +13,13 @@ class ReportData extends StatelessWidget {
   const ReportData({
     Key? key,
     required this.accountInfo,
+    this.loadingMessage,
     this.report,
   }) : super(key: key);
 
   final Report? report;
   final AccountInfo accountInfo;
+  final String? loadingMessage;
 
   @override
   Widget build(BuildContext context) {
@@ -138,7 +141,22 @@ class ReportData extends StatelessWidget {
             Center(
               child: Padding(
                 padding: EdgeInsets.only(top: MediaQuery.of(context).size.height / 4),
-                child: const CupertinoActivityIndicator(),
+                child: Center(
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                      const CupertinoActivityIndicator(
+                        radius: 12.0,
+                      ),
+                      const SizedBox(height: 20.0),
+                      Text(loadingMessage ?? "", style: const TextStyle(fontSize: 12, color: ColorsManager.textColor)),
+                      const SizedBox(height: 4.0),
+                      const Text("This can take a few minutes depending on your account size",
+                          style: TextStyle(fontSize: 10, color: ColorsManager.secondarytextColor)),
+                    ],
+                  ),
+                ),
               ),
             ),
           ]));
