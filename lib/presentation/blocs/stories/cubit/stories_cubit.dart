@@ -1,8 +1,6 @@
 import 'package:bloc/bloc.dart';
 import 'package:dartz/dartz.dart';
 import 'package:equatable/equatable.dart';
-import 'package:flutter/material.dart';
-import 'package:igplus_ios/app/constants/media_constants.dart';
 import 'package:igplus_ios/domain/entities/User_story.dart';
 
 import 'package:igplus_ios/domain/usecases/get_stories_use_case.dart';

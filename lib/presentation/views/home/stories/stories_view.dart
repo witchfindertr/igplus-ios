@@ -72,7 +72,13 @@ class _StoriesViewState extends State<StoriesView> {
 
             return GestureDetector(
                 onHorizontalDragEnd: (dragUpdateDetails) {
-                  controller.next();
+                  if (dragUpdateDetails.primaryVelocity != null) {
+                    if (dragUpdateDetails.primaryVelocity! > 0) {
+                      controller.previous();
+                    } else if (dragUpdateDetails.primaryVelocity! < 0) {
+                      controller.next();
+                    }
+                  }
                 },
                 onLongPressDown: (onLongPressDown) {
                   controller.pause();
@@ -92,13 +98,14 @@ class _StoriesViewState extends State<StoriesView> {
                       },
                     ),
                     Container(
-                      height: 80.0,
+                      height: MediaQuery.of(context).size.height * 0.15,
+                      width: MediaQuery.of(context).size.width,
                       decoration: BoxDecoration(
                         gradient: LinearGradient(
                           begin: Alignment.topCenter,
                           end: Alignment.bottomCenter,
                           stops: const [
-                            0,
+                            0.5,
                             1,
                           ],
                           colors: [
@@ -107,13 +114,14 @@ class _StoriesViewState extends State<StoriesView> {
                           ],
                         ),
                       ),
-                      padding: const EdgeInsets.only(
-                        top: 38,
-                        left: 16,
+                      padding: EdgeInsets.only(
+                        top: MediaQuery.of(context).size.height * 0.08,
                         right: 16,
                       ),
-                      child: _buildProfileView(state.storyOwner,
-                          (stories[0] != null) ? stories[0]!.takenAt : DateTime.now().millisecondsSinceEpoch),
+                      child: _buildProfileView(
+                          storyOwner: state.storyOwner,
+                          takenAt: (stories[0] != null) ? stories[0]!.takenAt : DateTime.now().millisecondsSinceEpoch,
+                          context: context),
                     )
                   ],
                 ));
@@ -134,40 +142,51 @@ class _StoriesViewState extends State<StoriesView> {
   }
 }
 
-Widget _buildProfileView(StoryOwner storyOwner, takenAt) {
-  return Row(
-    crossAxisAlignment: CrossAxisAlignment.start,
-    children: <Widget>[
-      Row(
-        children: [
-          const Icon(FontAwesomeIcons.angleLeft, color: Colors.white, size: 14),
-          const SizedBox(width: 4.0),
-          CircleAvatar(
-            radius: 12,
-            backgroundImage: NetworkImage(storyOwner.profilePicUrl),
-          ),
-        ],
-      ),
-      const SizedBox(width: 8.0),
-      Expanded(
-        child: Column(
+Widget _buildProfileView({required StoryOwner storyOwner, required int takenAt, required BuildContext context}) {
+  return GestureDetector(
+    onTap: () {
+      GoRouter.of(context).pop();
+    },
+    child: SizedBox(
+      width: 200.0,
+      child: Padding(
+        padding: const EdgeInsets.only(left: 16.0),
+        child: Row(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: <Widget>[
-            Text(
-              storyOwner.username,
-              style: const TextStyle(fontSize: 10, fontWeight: FontWeight.bold, color: Colors.white),
+            Row(
+              children: [
+                const Icon(FontAwesomeIcons.angleLeft, color: Colors.white, size: 16),
+                const SizedBox(width: 6.0),
+                CircleAvatar(
+                  radius: 20.0,
+                  backgroundImage: NetworkImage(storyOwner.profilePicUrl),
+                ),
+              ],
             ),
-            const SizedBox(height: 1.0),
-            Text(
-              timeago.format(DateTime.fromMillisecondsSinceEpoch(takenAt * 1000)),
-              style: const TextStyle(
-                color: Colors.white38,
-                fontSize: 8.0,
+            const SizedBox(width: 8.0),
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: <Widget>[
+                  Text(
+                    storyOwner.username,
+                    style: const TextStyle(fontSize: 14, fontWeight: FontWeight.bold, color: Colors.white),
+                  ),
+                  const SizedBox(height: 1.0),
+                  Text(
+                    timeago.format(DateTime.fromMillisecondsSinceEpoch(takenAt * 1000)),
+                    style: const TextStyle(
+                      color: Colors.white38,
+                      fontSize: 10.0,
+                    ),
+                  )
+                ],
               ),
             )
           ],
         ),
-      )
-    ],
+      ),
+    ),
   );
 }

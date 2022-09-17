@@ -133,4 +133,36 @@ class InstagramRepositoryImp extends InstagramRepository {
       return const Left(ServerFailure("Unknown error"));
     }
   }
+
+  // follow user
+  @override
+  Future<Either<Failure, bool>> followUser({required int userId, required IgHeaders igHeaders}) async {
+    try {
+      final Map<String, String> headers = igHeaders.toMap();
+      final bool isFollowed = await instagramDataSource.followUser(userId: userId, headers: headers);
+      return Right(isFollowed);
+    } on ServerFailure catch (e) {
+      return Left(ServerFailure(e.message));
+    } on SocketException {
+      return const Left(ConnectionFailure("No internet connection"));
+    } on Exception {
+      return const Left(ServerFailure("Unknown error"));
+    }
+  }
+
+  // unfollow user
+  @override
+  Future<Either<Failure, bool>> unfollowUser({required int userId, required IgHeaders igHeaders}) async {
+    try {
+      final Map<String, String> headers = igHeaders.toMap();
+      final bool isUnfollowed = await instagramDataSource.unfollowUser(userId: userId, headers: headers);
+      return Right(isUnfollowed);
+    } on ServerFailure catch (e) {
+      return Left(ServerFailure(e.message));
+    } on SocketException {
+      return const Left(ConnectionFailure("No internet connection"));
+    } on Exception {
+      return const Left(ServerFailure("Unknown error"));
+    }
+  }
 }

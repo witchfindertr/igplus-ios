@@ -80,6 +80,7 @@ class ReportCubit extends Cubit<ReportState> {
 
           // update report
           failureOrReport = await updateReport.execute(currentUser: currentUser, accountInfo: accountInfo);
+
           if (failureOrReport.isLeft()) {
             emit(const ReportFailure(message: 'Failed to update report'));
           } else {

@@ -32,6 +32,8 @@ abstract class InstagramDataSource {
   Future<List<FriendModel>> getFollowings({required String igUserId, required Map<String, String> headers});
   Future<List<UserStoryModel>> getUserStories({required Map<String, String> headers});
   Future<List<StoryModel>> getStories({required String userId, required Map<String, String> headers});
+  Future<bool> followUser({required int userId, required Map<String, String> headers});
+  Future<bool> unfollowUser({required int userId, required Map<String, String> headers});
 }
 
 class InstagramDataSourceImp extends InstagramDataSource {
@@ -250,6 +252,37 @@ class InstagramDataSourceImp extends InstagramDataSource {
       return result.map((story) => StoryModel.fromJson(story as Map<String, dynamic>)).toList();
     } else {
       throw const ServerFailure("Failed to get active stories from Instagram");
+    }
+  }
+
+  // follow user
+  @override
+  Future<bool> followUser({required int userId, required Map<String, String> headers}) async {
+    final response = await client.post(Uri.parse(InstagramUrls.followUser(userId.toString())), headers: headers);
+
+    if (response.statusCode == 200 && response.body.contains('"status":"ok"')) {
+      return true;
+    } else if (response.statusCode == 302 && response.body == "") {
+      return true;
+    } else if (response.body.contains("The link you followed may be broken, or the page may have been removed.")) {
+      throw const ServerFailure("User not found");
+    } else {
+      throw const ServerFailure("Failed to follow user");
+    }
+  }
+
+  // unfollow user
+  @override
+  Future<bool> unfollowUser({required int userId, required Map<String, String> headers}) async {
+    final response = await client.post(Uri.parse(InstagramUrls.unfollowUser(userId.toString())), headers: headers);
+    if (response.statusCode == 200 && response.body.contains('"status":"ok"')) {
+      return true;
+    } else if (response.statusCode == 302 && response.body == "") {
+      return true;
+    } else if (response.body.contains("The link you followed may be broken, or the page may have been removed.")) {
+      throw const ServerFailure("User not found");
+    } else {
+      throw const ServerFailure("Failed to follow user");
     }
   }
 }

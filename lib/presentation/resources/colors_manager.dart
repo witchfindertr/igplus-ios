@@ -15,8 +15,10 @@ class ColorsManager {
   static const Color secondarytextColor = Color.fromRGBO(163, 162, 189, 1);
 
   // button color
-  static const Color buttonColor1 = Color.fromRGBO(86, 183, 245, 1);
-  static const Color buttonColor2 = Color.fromARGB(255, 44, 46, 68);
+  static const Color buttonColor1 = Color.fromARGB(255, 106, 245, 166);
+  static const Color buttonTextColor1 = Color.fromARGB(255, 32, 32, 44);
+  static const Color buttonColor2 = Color.fromARGB(255, 54, 56, 77);
+  static const Color buttonTextColor2 = Color.fromARGB(255, 226, 226, 226);
 
   // card
   static const Color cardBack = Color.fromARGB(255, 44, 46, 68);

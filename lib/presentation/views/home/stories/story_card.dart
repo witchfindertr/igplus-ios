@@ -18,54 +18,55 @@ class StoryCard extends StatelessWidget {
       onTap: () {
         GoRouter.of(context).go('/home/storiesView', extra: userStory.owner);
       },
-      child: Column(
-        mainAxisSize: MainAxisSize.max,
-        crossAxisAlignment: CrossAxisAlignment.center,
-        children: [
-          SizedBox(
-            width: 80.00,
-            height: 80.00,
-            child: Container(
-              margin: const EdgeInsets.all(4.0),
-              alignment: Alignment.centerLeft,
-              decoration: BoxDecoration(
-                gradient: const LinearGradient(
-                  begin: Alignment.topRight,
-                  end: Alignment.bottomRight,
-                  colors: [
-                    Color.fromARGB(255, 133, 16, 154),
-                    Color.fromARGB(255, 203, 27, 86),
-                    Color.fromARGB(255, 159, 24, 69),
-                  ],
-                ),
-                borderRadius: BorderRadius.circular(35.0),
-              ),
-              child: Padding(
-                padding: const EdgeInsets.all(3.0),
+      child: SizedBox(
+        width: 76.0,
+        child: Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 0.0),
+          child: Column(
+            mainAxisSize: MainAxisSize.max,
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              SizedBox(
+                width: 70.00,
+                height: 70.00,
                 child: Container(
+                  margin: const EdgeInsets.all(4.0),
                   alignment: Alignment.centerLeft,
                   decoration: BoxDecoration(
-                    color: ColorsManager.appBack,
-                    shape: BoxShape.circle,
-                    image: DecorationImage(
-                      image: NetworkImage(userStory.owner.profilePicUrl),
+                    gradient: const LinearGradient(
+                      begin: Alignment.topRight,
+                      end: Alignment.bottomRight,
+                      colors: [
+                        Color.fromARGB(255, 133, 16, 154),
+                        Color.fromARGB(255, 203, 27, 86),
+                        Color.fromARGB(255, 159, 24, 69),
+                      ],
+                    ),
+                    borderRadius: BorderRadius.circular(35.0),
+                  ),
+                  child: Padding(
+                    padding: const EdgeInsets.all(3.0),
+                    child: Container(
+                      alignment: Alignment.centerLeft,
+                      decoration: BoxDecoration(
+                        color: ColorsManager.appBack,
+                        shape: BoxShape.circle,
+                        image: DecorationImage(
+                          image: NetworkImage(userStory.owner.profilePicUrl),
+                        ),
+                      ),
                     ),
                   ),
                 ),
               ),
-            ),
-          ),
-          SizedBox(
-            width: 80.00,
-            child: Flexible(
-              child: Center(
+              Flexible(
                 child: Text(userStory.owner.username,
                     overflow: TextOverflow.ellipsis,
                     style: const TextStyle(color: ColorsManager.secondarytextColor, fontSize: 10.0)),
               ),
-            ),
+            ],
           ),
-        ],
+        ),
       ),
     );
   }
