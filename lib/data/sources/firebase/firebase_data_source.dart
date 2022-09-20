@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:convert';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -9,7 +10,14 @@ import '../../failure.dart';
 import '../../models/ig_headers_model.dart';
 import '../../models/user_model.dart';
 
+// extension on firebase_auth.User {
+//   UserModel get toUserModel {
+//     return UserModel(uid: uid, igUserId: uid, username: username, contactPhoneNumber: contactPhoneNumber, phoneCountryCode: phoneCountryCode, publicPhoneNumber: publicPhoneNumber, publicEmail: publicEmail, picture: picture, igHeaders: igHeaders, igAuth: igAuth, isActive: isActive, createdAt: createdAt, privateMessage: privateMessage)
+//   }
+// }
+
 abstract class FirebaseDataSource {
+  Stream<User?> get authStateChange;
   Future<UserModel> getUser({required String userId});
   Future<Unit> setUser({required String uid, required Map<String, dynamic> userData});
 
@@ -18,7 +26,16 @@ abstract class FirebaseDataSource {
   String getCurrentUserId();
 
   Future<IgHeadersModel> getLatestHeaders();
-  Future<Unit> login();
+  // Future<Unit> login();
+
+  //get custom token
+  Future<String> getCustomToken({required String uid});
+
+  // login to firebase with custom token
+  Future<Unit> loginWithCustomToken({required String customToken});
+
+  // logout from firebase
+  Future<Unit> logout();
 }
 
 class FirebaseDataSourceImp extends FirebaseDataSource {
@@ -66,17 +83,17 @@ class FirebaseDataSourceImp extends FirebaseDataSource {
     // }
   }
 
-  @override
-  Future<Unit> login() async {
-    final FirebaseAuth auth = FirebaseAuth.instance;
+  // @override
+  // Future<Unit> login() async {
+  //   final FirebaseAuth auth = FirebaseAuth.instance;
 
-    try {
-      await auth.signInAnonymously();
-      return unit;
-    } catch (e) {
-      throw const ServerFailure("Failed to login to Firebase");
-    }
-  }
+  //   try {
+  //     await auth.signInAnonymously();
+  //     return unit;
+  //   } catch (e) {
+  //     throw const ServerFailure("Failed to login to Firebase");
+  //   }
+  // }
 
   @override
   Future<UserModel> getUser({required String userId}) async {
@@ -120,4 +137,39 @@ class FirebaseDataSourceImp extends FirebaseDataSource {
 
     return unit;
   }
+
+  @override
+  Future<Unit> loginWithCustomToken({required String customToken}) async {
+    try {
+      await firebaseAuth.signInWithCustomToken(customToken);
+      return unit;
+    } catch (e) {
+      throw const ServerFailure("Failed to login to Firebase");
+    }
+  }
+
+  @override
+  Future<String> getCustomToken({required String uid}) async {
+    //https://us-central1-igplusios.cloudfunctions.net/createFirebaseToken?uid=igUserId
+    var uri = Uri.https('us-central1-igplusios.cloudfunctions.net', '/createFirebaseToken', {'uid': uid});
+
+    http.Response response = await http.get(uri);
+
+    if (response.statusCode == 200) {
+      String customToken = jsonDecode(response.body)["customToken"];
+      return customToken;
+    } else {
+      throw const ServerFailure("Failed to login to Firebase with custom token");
+    }
+  }
+
+  @override
+  Future<Unit> logout() async {
+    // logout from firebase
+    await firebaseAuth.signOut();
+    return unit;
+  }
+
+  @override
+  Stream<User?> get authStateChange => firebaseAuth.authStateChanges();
 }

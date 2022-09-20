@@ -1,29 +1,29 @@
-import 'package:dartz/dartz.dart';
-import 'package:flutter_test/flutter_test.dart';
-import 'package:igplus_ios/domain/usecases/login_use_case.dart';
-import 'package:mockito/mockito.dart';
+// import 'package:dartz/dartz.dart';
+// import 'package:flutter_test/flutter_test.dart';
+// import 'package:igplus_ios/domain/usecases/login_use_case.dart';
+// import 'package:mockito/mockito.dart';
 
-import '../../helpers/test_helper.mocks.dart';
+// import '../../helpers/test_helper.mocks.dart';
 
-void main() {
-  group('LoginUseCase', () {
-    late LoginUseCase useCase;
-    late MockAuthRepository authRepository;
+// void main() {
+//   group('LoginUseCase', () {
+//     late LoginUseCase useCase;
+//     late MockAuthRepository authRepository;
 
-    setUp(() {
-      authRepository = MockAuthRepository();
-      useCase = LoginUseCase(authRepository: authRepository);
-    });
+//     setUp(() {
+//       authRepository = MockAuthRepository();
+//       useCase = LoginUseCase(authRepository: authRepository);
+//     });
 
-    test('should return unit when login ', () async {
-      // arrange
-      when(authRepository.login()).thenAnswer((_) async => const Right(unit));
-      // act
-      final result = await useCase.execute();
+//     test('should return unit when login ', () async {
+//       // arrange
+//       when(authRepository.login()).thenAnswer((_) async => const Right(unit));
+//       // act
+//       final result = await useCase.execute();
 
-      // assert
+//       // assert
 
-      expect(result, const Right(unit));
-    });
-  });
-}
+//       expect(result, const Right(unit));
+//     });
+//   });
+// }

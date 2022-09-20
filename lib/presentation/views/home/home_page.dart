@@ -2,6 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:go_router/go_router.dart';
 
 import 'package:igplus_ios/presentation/blocs/home/cubit/report_cubit.dart';
 import 'package:igplus_ios/presentation/resources/colors_manager.dart';
@@ -117,7 +118,15 @@ class _HomePageState extends State<HomePage> {
                       children: [
                         Text(state.message),
                         TextButton(
-                          onPressed: () => context.read<ReportCubit>().init(),
+                          onPressed: () {
+                            if (state.message == "Instagram session expired") {
+                              GoRouter.of(context).goNamed('instagram_login', queryParams: {
+                                'updateInstagramAccount': 'true',
+                              });
+                            } else {
+                              context.read<ReportCubit>().init();
+                            }
+                          },
                           child: const Text("Retry", style: TextStyle(color: ColorsManager.primaryColor)),
                         ),
                       ],

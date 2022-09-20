@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:go_router/go_router.dart';
+import 'package:igplus_ios/app/bloc/app_bloc.dart';
 import 'package:igplus_ios/presentation/resources/colors_manager.dart';
 
 class ProfileManager extends StatelessWidget {
@@ -98,7 +100,8 @@ class ProfileManager extends StatelessWidget {
     Widget continueButton = TextButton(
       child: const Text("Logout"),
       onPressed: () {
-        GoRouter.of(context).go('/login');
+        context.read<AppBloc>().add(AppLogoutRequested());
+        Navigator.of(context, rootNavigator: true).pop();
       },
     );
 

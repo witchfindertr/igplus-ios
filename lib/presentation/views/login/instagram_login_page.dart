@@ -16,11 +16,9 @@ class InstagramLoginPage extends StatefulWidget {
   InstagramLoginPage({
     Key? key,
     this.updateInstagramAccount = false,
-    this.sessionExpired = false,
   }) : super(key: key);
 
   final bool updateInstagramAccount;
-  bool sessionExpired;
 
   @override
   State<InstagramLoginPage> createState() => _InstagramLoginPageState();
@@ -54,8 +52,8 @@ class _InstagramLoginPageState extends State<InstagramLoginPage> {
               webViewController.clearCache();
               final cookieManager = CookieManager();
               cookieManager.clearCookies();
+              // _cookieManager.clearCookies();
             }
-            inspect(widget.updateInstagramAccount);
           },
           onProgress: (int progress) {},
           navigationDelegate: (NavigationRequest request) async {
@@ -67,7 +65,9 @@ class _InstagramLoginPageState extends State<InstagramLoginPage> {
             final useridCookies = findCookie(name: "ds_user_id", cookies: cookies);
             final Cookie? csrftokenCookies = findCookie(name: "csrftoken", cookies: cookies);
 
-            if (sessionidCookies != null && useridCookies != null && mounted && widget.sessionExpired == false) {
+            if (sessionidCookies != null && useridCookies != null && mounted) {
+              //"23689336944%3A7RknvrX3SdUpYB%3A7%3AAYfosXmPcAl9__jTr47HqVTK2gjTrqh5sa8rnvoY5g"
+
               GoRouter.of(context).pop();
               Map<String, String> headers = {
                 'User-Agent': userAgent.replaceAll('"', '').trim(),
@@ -87,7 +87,7 @@ class _InstagramLoginPageState extends State<InstagramLoginPage> {
 
               return NavigationDecision.prevent;
             }
-            widget.sessionExpired = false;
+
             return NavigationDecision.navigate;
           },
           onPageStarted: (String url) {},

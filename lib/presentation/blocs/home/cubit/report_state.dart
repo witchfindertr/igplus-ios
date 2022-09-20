@@ -29,7 +29,9 @@ class ReportAccountInfoLoaded extends ReportState {
 class ReportFailure extends ReportState {
   final String message;
 
-  const ReportFailure({required this.message});
+  const ReportFailure({
+    required this.message,
+  });
   @override
   List<Object> get props => [message];
 }
