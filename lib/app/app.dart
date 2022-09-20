@@ -1,13 +1,17 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:igplus_ios/presentation/router.dart';
 import 'package:igplus_ios/presentation/resources/theme_manager.dart';
 
+import 'bloc/app_bloc.dart';
+
 class App extends StatelessWidget {
   App({Key? key}) : super(key: key);
-  final router = routes();
+
   @override
   Widget build(BuildContext context) {
+    final router = routes(context.watch<AppBloc>());
     return CupertinoApp.router(
       localizationsDelegates: const [
         DefaultMaterialLocalizations.delegate,

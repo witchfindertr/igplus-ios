@@ -52,6 +52,8 @@ class InstagramDataSourceImp extends InstagramDataSource {
       } else {
         return AccountInfoModel.fromJsonById(jsonResponse);
       }
+      // 400
+      //{"message":"checkpoint_required","checkpoint_url":"https://i.instagram.com/challenge/?next=/api/v1/users/23689336944/info/","lock":true,"flow_render_type":0,"status":"fail"}
     } else {
       throw const ServerFailure("Failed to get account info by ID");
     }

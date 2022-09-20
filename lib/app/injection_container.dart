@@ -2,11 +2,13 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:get_it/get_it.dart';
 import 'package:http/http.dart' as http;
+import 'package:igplus_ios/app/bloc/app_bloc.dart';
 
 import 'package:igplus_ios/data/models/user_stories_model.dart';
 
 import 'package:igplus_ios/data/repositories/local/local_repository_imp.dart';
 import 'package:igplus_ios/data/sources/local/local_datasource.dart';
+import 'package:igplus_ios/domain/repositories/auth/auth_repository.dart';
 
 import 'package:igplus_ios/domain/repositories/firebase/firebase_repository.dart';
 import 'package:igplus_ios/domain/repositories/firebase/headers_repository.dart';
@@ -16,7 +18,11 @@ import 'package:igplus_ios/domain/usecases/follow_user_use_case.dart';
 import 'package:igplus_ios/domain/usecases/get_friends_from_local_use_case.dart';
 import 'package:igplus_ios/domain/usecases/get_report_from_local_use_case.dart';
 import 'package:igplus_ios/domain/usecases/get_user_stories_use_case.dart';
+
+import 'package:igplus_ios/domain/usecases/sign_up_with_cstom_token_use_case.dart';
+
 import 'package:igplus_ios/domain/usecases/unfollow_user_use_case%20copy.dart';
+
 import 'package:igplus_ios/domain/usecases/update_report_use_case.dart';
 import 'package:igplus_ios/presentation/blocs/friends_list/cubit/friends_list_cubit.dart';
 import 'package:igplus_ios/presentation/blocs/home/cubit/report_cubit.dart';
@@ -49,6 +55,7 @@ Future<void> init() async {
         createUser: sl(),
         updateUser: sl(),
         getUser: sl(),
+        signUpWithCustomToken: sl(),
       ));
 
   sl.registerFactory(() => ReportCubit(
@@ -64,6 +71,8 @@ Future<void> init() async {
   sl.registerFactory(() => UserStoriesCubit(getUserStories: sl(), getUser: sl()));
   sl.registerFactory(() => StoriesCubit(getStories: sl(), getUser: sl()));
 
+  sl.registerFactory(() => AppBloc(authRepository: sl()));
+
   // Use cases
   sl.registerLazySingleton(() => GetAccountInfoUseCase(instagramRepository: sl()));
   sl.registerLazySingleton(() => GetHeadersUseCase(headersRepository: sl()));
@@ -76,8 +85,12 @@ Future<void> init() async {
   sl.registerLazySingleton(() => GetUserStoriesUseCase(instagramRepository: sl()));
   sl.registerLazySingleton(() => GetReportFromLocalUseCase(localRepository: sl()));
   sl.registerLazySingleton(() => GetStoriesUseCase(instagramRepository: sl()));
+
+  sl.registerLazySingleton(() => SignUpWithCustomTokenUseCase(sl()));
+
   sl.registerLazySingleton(() => FollowUserUseCase(instagramRepository: sl()));
   sl.registerLazySingleton(() => UnfollowUserUseCase(instagramRepository: sl()));
+
 
   // Repositories
   sl.registerLazySingleton<FirebaseRepository>(() => FirebaseRepositporyImp(firebaseDataSource: sl()));
@@ -88,6 +101,8 @@ Future<void> init() async {
   sl.registerLazySingleton<LocalRepository>(() => LocalRepositoryImpl(localDataSource: sl()));
 
   sl.registerLazySingleton<HeadersRepository>(() => HeadersRepositoryImp(firebaseDataSource: sl()));
+
+  sl.registerLazySingleton<AuthRepository>(() => AuthRepositoryImp(firebaseDataSource: sl()));
 
   // Data sources
   sl.registerLazySingleton<FirebaseDataSource>(

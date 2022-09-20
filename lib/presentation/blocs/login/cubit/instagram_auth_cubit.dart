@@ -2,8 +2,8 @@ import 'package:bloc/bloc.dart';
 import 'package:dartz/dartz.dart';
 import 'package:equatable/equatable.dart';
 import 'package:go_router/go_router.dart';
-import 'package:igplus_ios/data/failure.dart';
 
+import 'package:igplus_ios/data/failure.dart';
 import 'package:igplus_ios/domain/entities/account_info.dart';
 import 'package:igplus_ios/domain/entities/ig_headers.dart';
 import 'package:igplus_ios/domain/usecases/authorize_user.dart';
@@ -11,6 +11,7 @@ import 'package:igplus_ios/domain/usecases/creat_user_use_case.dart';
 import 'package:igplus_ios/domain/usecases/get_account_info_use_case.dart';
 import 'package:igplus_ios/domain/usecases/get_headers_use_case.dart';
 import 'package:igplus_ios/domain/usecases/get_user_use_case.dart';
+import 'package:igplus_ios/domain/usecases/sign_up_with_cstom_token_use_case.dart';
 import 'package:igplus_ios/domain/usecases/update_user_use_case.dart';
 
 import '../../../../domain/entities/user.dart';
@@ -24,6 +25,7 @@ class InstagramAuthCubit extends Cubit<InstagramAuthState> {
   final GetAccountInfoUseCase getAccountInfo;
   final GetHeadersUseCase getHeaders;
   final AuthorizeUser authorizeUser;
+  final SignUpWithCustomTokenUseCase signUpWithCustomToken;
   InstagramAuthCubit({
     required this.getUser,
     required this.createUser,
@@ -31,6 +33,7 @@ class InstagramAuthCubit extends Cubit<InstagramAuthState> {
     required this.getAccountInfo,
     required this.getHeaders,
     required this.authorizeUser,
+    required this.signUpWithCustomToken,
   }) : super(const InstagramAuthInitial());
 
 // if user is not connected to instagram, redirect to login page
@@ -39,7 +42,7 @@ class InstagramAuthCubit extends Cubit<InstagramAuthState> {
     emit(InstagramAuthInProgress());
     final failureOrUser = await authorizeUser.execute();
     if (failureOrUser.isLeft()) {
-      emit(const InstagramAuthInitial());
+      emit(const InstagramAuthInitial(updateInstagramAccount: false));
     } else {
       final user = (failureOrUser as Right).value;
       // get account info
@@ -47,7 +50,8 @@ class InstagramAuthCubit extends Cubit<InstagramAuthState> {
       if (failurOrAccountInfo.isLeft()) {
         final Failure failure = (failurOrAccountInfo as Left).value;
         if (failure is InstagramSessionExpiredFailure) {
-          emit(InstagramAuthFailure(message: failure.message));
+          // emit(InstagramAuthFailure(message: failure.message));
+          emit(const InstagramAuthInitial(updateInstagramAccount: true));
         } else {
           emit(const InstagramAuthFailure(message: 'Failed to get account info'));
         }
@@ -79,32 +83,43 @@ class InstagramAuthCubit extends Cubit<InstagramAuthState> {
     final IgHeaders igHeaders = (failurOrIgHeaders as Right).value;
     final failurOrAccountInfo = await getAccountInfo.execute(igUserId: igUserId, igHeaders: igHeaders);
     if (failurOrAccountInfo.isLeft()) {
-      emit(const InstagramAuthFailure(message: 'Failed to get account info'));
+      final Failure failure = (failurOrAccountInfo as Left).value;
+      if (failure is InstagramSessionExpiredFailure) {
+        emit(const InstagramAuthInitial(updateInstagramAccount: true));
+      } else {
+        emit(const InstagramAuthFailure(message: 'Failed to get account info'));
+      }
     } else {
       final AccountInfo accountInfo = (failurOrAccountInfo as Right).value;
-      // check if user already exists
-      final failureOrCurrentUser = await getUser.execute();
-      // if user does not exist, create  new user
-      if (failureOrCurrentUser.isLeft()) {
-        // create user in Firestore
-        final failureOrSuccess = await createUser.execute(accountInfo: accountInfo, igHeaders: igHeaders);
-        if (failureOrSuccess.isLeft()) {
-          emit(const InstagramAuthFailure(message: 'Failed to create user'));
-        } else {
-          emit(InstagramAuthSuccess());
-        }
+      // we have account info, now we need to sign up or sign in with custom token
+      final failureOrSignUpSuccess = await signUpWithCustomToken.execute(uid: accountInfo.igUserId);
+      if (failureOrSignUpSuccess.isLeft()) {
+        emit(const InstagramAuthFailure(message: "Failed to sign up with custom token"));
       } else {
-        // if user exists, update user
-        final User currentUser = (failureOrCurrentUser as Right).value;
-        final failureOrUser = await updateUser.execute(
-          currentUser: currentUser,
-          accountInfo: accountInfo,
-          igHeaders: igHeaders,
-        );
-        if (failureOrUser.isLeft()) {
-          emit(const InstagramAuthFailure(message: 'Failed to update user'));
+        // get user from Firestore
+        final failureOrCurrentUser = await getUser.execute();
+        // if user does not exist
+        if (failureOrCurrentUser.isLeft()) {
+          // create user in Firestore
+          final failureOrSuccess = await createUser.execute(accountInfo: accountInfo, igHeaders: igHeaders);
+          if (failureOrSuccess.isLeft()) {
+            emit(const InstagramAuthFailure(message: 'Failed to create user'));
+          } else {
+            emit(InstagramAuthSuccess());
+          }
         } else {
-          emit(InstagramAuthSuccess());
+          // if user exists, update user
+          final User currentUser = (failureOrCurrentUser as Right).value;
+          final failureOrUser = await updateUser.execute(
+            currentUser: currentUser,
+            accountInfo: accountInfo,
+            igHeaders: igHeaders,
+          );
+          if (failureOrUser.isLeft()) {
+            emit(const InstagramAuthFailure(message: 'Failed to update user'));
+          } else {
+            emit(InstagramAuthSuccess());
+          }
         }
 
         // TODO : block user if account is private or suspended

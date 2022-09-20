@@ -45,8 +45,8 @@ class _LoginPageState extends State<LoginPage> {
                       ),
                     ),
                   );
-                sessionExpired = true;
-                context.read<InstagramAuthCubit>().emitInstagramAuthInitialState();
+                // sessionExpired = true;
+                // context.read<InstagramAuthCubit>().emitInstagramAuthInitialState();
               }
             },
             builder: (context, state) {
@@ -93,11 +93,9 @@ class _LoginPageState extends State<LoginPage> {
                             ),
                           ),
                           onPressed: () {
-                            if (sessionExpired == true) {
-                              GoRouter.of(context).pushNamed('session_expired');
-                            } else {
-                              GoRouter.of(context).pushNamed('instagram_login');
-                            }
+                            GoRouter.of(context).pushNamed('instagram_login', queryParams: {
+                              'updateInstagramAccount': state.updateInstagramAccount ? 'true' : 'false'
+                            });
                           }),
                     ),
                     const Padding(
