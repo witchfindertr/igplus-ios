@@ -35,9 +35,6 @@ class _HomePageState extends State<HomePage> {
         DefaultWidgetsLocalizations.delegate,
         DefaultCupertinoLocalizations.delegate,
       ],
-      supportedLocales: const [
-        Locale('en', 'US'),
-      ],
       theme: appMaterialTheme(),
       home: Scaffold(
         body: CupertinoPageScaffold(
@@ -98,27 +95,38 @@ class _HomePageState extends State<HomePage> {
                         ));
             }),
           ),
-          child: Padding(
-            padding: const EdgeInsets.fromLTRB(8.0, 0.0, 8.0, 0.0),
-            child: BlocBuilder<ReportCubit, ReportState>(
-              builder: (context, state) {
-                if (state is ReportInProgress) {
-                  return const Center(
-                    child: CupertinoActivityIndicator(),
-                  );
-                } else if (state is ReportAccountInfoLoaded) {
-                  return ReportData(accountInfo: state.accountInfo);
-                }
-                if (state is ReportSuccess) {
-                  return ReportData(report: state.report, accountInfo: state.accountInfo);
-                } else if (state is ReportFailure) {
-                  return Center(
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Text(state.message),
-                        TextButton(
-                          onPressed: () {
+      
+          child: BlocBuilder<ReportCubit, ReportState>(
+            builder: (context, state) {
+              if (state is ReportInProgress) {
+                return Center(
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                      const CupertinoActivityIndicator(
+                        radius: 12.0,
+                      ),
+                      const SizedBox(height: 20.0),
+                      Text(state.loadingMessage, style: const TextStyle(fontSize: 12, color: ColorsManager.textColor)),
+                      const Text("This can take a few minutes depending on your account size",
+                          style: TextStyle(fontSize: 10, color: ColorsManager.secondarytextColor)),
+                    ],
+                  ),
+                );
+              } else if (state is ReportAccountInfoLoaded) {
+                return ReportData(accountInfo: state.accountInfo, loadingMessage: state.loadingMessage);
+              }
+              if (state is ReportSuccess) {
+                return ReportData(report: state.report, accountInfo: state.accountInfo);
+              } else if (state is ReportFailure) {
+                return Center(
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Text(state.message),
+                      TextButton(
+                        onPressed: () {
                             if (state.message == "Instagram session expired") {
                               GoRouter.of(context).goNamed('instagram_login', queryParams: {
                                 'updateInstagramAccount': 'true',
@@ -127,18 +135,18 @@ class _HomePageState extends State<HomePage> {
                               context.read<ReportCubit>().init();
                             }
                           },
-                          child: const Text("Retry", style: TextStyle(color: ColorsManager.primaryColor)),
-                        ),
-                      ],
-                    ),
-                  );
-                } else {
-                  return const Center(
-                    child: CupertinoActivityIndicator(),
-                  );
-                }
-              },
-            ),
+                        child: const Text("Retry", style: TextStyle(color: ColorsManager.primaryColor)),
+                      ),
+                    ],
+                  ),
+                );
+              } else {
+                return const Center(
+                  child: CupertinoActivityIndicator(),
+                );
+              }
+            },
+
           ),
         ),
       ),

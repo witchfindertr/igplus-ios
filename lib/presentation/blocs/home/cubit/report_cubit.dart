@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:bloc/bloc.dart';
 import 'package:dartz/dartz.dart';
 import 'package:equatable/equatable.dart';
@@ -29,7 +31,8 @@ class ReportCubit extends Cubit<ReportState> {
   }) : super(ReportInitial());
 
   void init() async {
-    emit(ReportInProgress());
+    emit(const ReportInProgress(loadingMessage: "We are loading your data"));
+
     // get user info
     final failureOrCurrentUser = await getUser.execute();
     if (failureOrCurrentUser.isLeft()) {
@@ -49,7 +52,7 @@ class ReportCubit extends Cubit<ReportState> {
         }
       } else {
         final AccountInfo accountInfo = (failureOrAccountInfo as Right).value;
-        emit(ReportAccountInfoLoaded(accountInfo: accountInfo));
+        emit(ReportAccountInfoLoaded(accountInfo: accountInfo, loadingMessage: "Account info loading..."));
         Either<Failure, Report?>? failureOrReport;
 
         // get report from local
@@ -59,8 +62,25 @@ class ReportCubit extends Cubit<ReportState> {
         if (failureOrReport.isLeft() ||
             ((failureOrReport as Right).value.followers != accountInfo.followers ||
                 (failureOrReport as Right).value.followings != accountInfo.followings)) {
+          // track progress of data loading from instagram
+          if (failureOrReport.isLeft()) {
+            int loadedFriends = 0;
+            Timer.periodic(const Duration(seconds: 4), (timer) {
+              loadedFriends += 191;
+              if (loadedFriends < accountInfo.followers) {
+                emit(ReportAccountInfoLoaded(
+                    accountInfo: accountInfo,
+                    loadingMessage: "$loadedFriends of ${accountInfo.followers} Friends Loaded..."));
+              } else {
+                emit(ReportAccountInfoLoaded(accountInfo: accountInfo, loadingMessage: "Analysing loaded data..."));
+                timer.cancel();
+              }
+            });
+          }
+
           // update report
           failureOrReport = await updateReport.execute(currentUser: currentUser, accountInfo: accountInfo);
+
           if (failureOrReport.isLeft()) {
             emit(const ReportFailure(message: 'Failed to update report'));
           } else {

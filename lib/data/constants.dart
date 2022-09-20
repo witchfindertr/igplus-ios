@@ -2,16 +2,26 @@ class InstagramUrls {
   static const baseUrl = 'https://i.instagram.com/api/v1';
   static String getAccountInfoById(String igUserId) => '$baseUrl/users/$igUserId/info';
   static String getAccountInfoByUsername(String username) => '$baseUrl/users/web_profile_info/?username=$username';
+
   //'https://i.instagram.com/api/v1/friendships/$friendIgUserId/following/?order=date_followed_latest$maxIdString'); //?max_id=$i&order=date_followed_latest
   static String getFollowings(String igUserId, String maxId) =>
       '$baseUrl/friendships/$igUserId/following/?order=date_followed_latest$maxId';
+
   //'https://i.instagram.com/api/v1/friendships/55299305811/followers/?order=date_followed_latest'); //?max_id=$i&order=date_followed_latest
   static String getFollowers(String igUserId, String maxId) =>
       '$baseUrl/friendships/$igUserId/followers/?order=date_followed_latest$maxId';
+
   //https://i.instagram.com/api/v1/feed/reels_tray/
   static String getUserStories() => '$baseUrl/feed/reels_tray/';
+
   //https://i.instagram.com/api/v1/feed/reels_media/?reel_ids=3139331705
   static String getStories({required userId}) => '$baseUrl/feed/reels_media/?reel_ids=$userId';
+
+  // https://i.instagram.com/api/v1/web/friendships/3923655548/follow/
+  static String followUser(String userId) => '$baseUrl/web/friendships/$userId/follow/';
+
+  // https://i.instagram.com/api/v1/web/friendships/3923655548/unfollow/
+  static String unfollowUser(String userId) => '$baseUrl/web/friendships/$userId/unfollow/';
 }
 
 class FirebaseFunctionsUrls {

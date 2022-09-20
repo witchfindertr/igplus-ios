@@ -32,7 +32,7 @@ class _StoriesListState extends State<StoriesList> {
               return const Center(child: CircularProgressIndicator());
             } else if (state is UserStoriesLoaded) {
               return SizedBox(
-                height: 100.00,
+                height: 82.00,
                 child: ListView.builder(
                   scrollDirection: Axis.horizontal,
                   itemCount: state.userStories.length,

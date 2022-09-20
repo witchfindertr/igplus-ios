@@ -12,10 +12,12 @@ class StoriesInitial extends StoriesState {}
 class StoriesLoading extends StoriesState {}
 
 class StoriesLoaded extends StoriesState {
-  final List<StoryItem> storyItems;
+  final List<Story?> stories;
   final StoryController controller;
-  const StoriesLoaded({required this.storyItems, required this.controller});
+  final StoryOwner storyOwner;
+
+  const StoriesLoaded({required this.stories, required this.controller, required this.storyOwner});
 
   @override
-  List<Object> get props => [storyItems, controller];
+  List<Object> get props => [stories, controller, storyOwner];
 }

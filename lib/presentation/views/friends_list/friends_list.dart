@@ -6,8 +6,8 @@ import 'package:igplus_ios/domain/entities/friend.dart';
 import 'package:igplus_ios/presentation/blocs/friends_list/cubit/friends_list_cubit.dart';
 import 'package:igplus_ios/presentation/resources/colors_manager.dart';
 import 'package:igplus_ios/presentation/resources/theme_manager.dart';
-import 'package:igplus_ios/presentation/views/friends_list/infinite_scroll_search/friend_list_item.dart';
-import 'package:igplus_ios/presentation/views/friends_list/infinite_scroll_search/friend_search.dart';
+import 'package:igplus_ios/presentation/views/friends_list/friend_list_item.dart';
+import 'package:igplus_ios/presentation/views/friends_list/friend_search.dart';
 import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
 
 class FriendsList extends StatefulWidget {
@@ -168,6 +168,7 @@ class _FriendsListState extends State<FriendsList> {
                               itemBuilder: (context, item, index) => FriendListItem(
                                 friend: item,
                                 index: index,
+                                type: widget.type,
                               ),
                             ),
                           ),
@@ -183,6 +184,7 @@ class _FriendsListState extends State<FriendsList> {
                               itemBuilder: (context, item, index) => FriendListItem(
                                 friend: item,
                                 index: index,
+                                type: widget.type,
                               ),
                             ),
                           ),
