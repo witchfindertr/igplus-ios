@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:dartz/dartz.dart';
 import 'package:igplus_ios/data/models/user_model.dart';
 
@@ -38,8 +40,14 @@ class FirebaseRepositporyImp implements FirebaseRepository {
       final String currentUserId = firebaseDataSource.getCurrentUserId();
       final UserModel userModel = await firebaseDataSource.getUser(userId: currentUserId);
       return Right(userModel.toEntity());
-    } catch (e) {
-      return Left(ServerFailure(e.toString()));
+    } on UserAuthenticationFailure catch (e) {
+      return Left(UserAuthenticationFailure(e.message));
+    } on ServerFailure catch (e) {
+      return Left(ServerFailure(e.message));
+    } on SocketException {
+      return const Left(ConnectionFailure("No internet connection"));
+    } on Exception {
+      return const Left(ServerFailure("Unknown error"));
     }
   }
 

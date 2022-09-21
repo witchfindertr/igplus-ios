@@ -21,3 +21,12 @@ class StoriesLoaded extends StoriesState {
   @override
   List<Object> get props => [stories, controller, storyOwner];
 }
+
+class StoriesFailure extends StoriesState {
+  final Failure failure;
+
+  const StoriesFailure({required this.failure});
+
+  @override
+  List<Object> get props => [failure];
+}

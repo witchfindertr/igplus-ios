@@ -3,18 +3,18 @@ import 'package:equatable/equatable.dart';
 import '../../domain/entities/account_info.dart';
 
 class AccountInfoModel extends Equatable {
-  String igUserId; //pk
-  String username; //username
-  bool isPrivate; //is_private
-  String picture; // profile_pic_url
-  int followers; //follower_count
-  int followings; //following_count
-  String? contactPhoneNumber; //contact_phone_number
-  String? phoneCountryCode; //public_phone_country_code
-  String? publicPhoneNumber; //public_phone_number
-  String? publicEmail; //public_email
+  final String igUserId; //pk
+  final String username; //username
+  final bool isPrivate; //is_private
+  final String picture; // profile_pic_url
+  final int followers; //follower_count
+  final int followings; //following_count
+  final String? contactPhoneNumber; //contact_phone_number
+  final String? phoneCountryCode; //public_phone_country_code
+  final String? publicPhoneNumber; //public_phone_number
+  final String? publicEmail; //public_email
 
-  AccountInfoModel({
+  const AccountInfoModel({
     required this.igUserId,
     required this.username,
     required this.isPrivate,
@@ -61,8 +61,8 @@ class AccountInfoModel extends Equatable {
     final int followers = json['data']['user']['edge_followed_by']['count'];
     final int followings = json['data']['user']['edge_follow']['count'];
     final String? contactPhoneNumber = json['data']['user']['business_phone_number'];
-    final String? phoneCountryCode = null;
-    final String? publicPhoneNumber = null;
+    const String? phoneCountryCode = null;
+    const String? publicPhoneNumber = null;
     final String? publicEmail = json['data']['user']['business_email'];
 
     return AccountInfoModel(

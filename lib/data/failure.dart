@@ -20,6 +20,12 @@ class InvalidParamsFailure extends Failure {
   const InvalidParamsFailure(String message) : super(message);
 }
 
-class InstagramSessionExpiredFailure extends Failure {
-  const InstagramSessionExpiredFailure(String message) : super(message);
+//  user authentication failures
+class UserAuthenticationFailure extends Failure {
+  const UserAuthenticationFailure(String message) : super(message);
+}
+
+// instagram authentication failures
+class InstagramSessionFailure extends Failure {
+  const InstagramSessionFailure(String message) : super(message);
 }

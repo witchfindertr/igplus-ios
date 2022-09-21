@@ -49,8 +49,7 @@ class InstagramAuthCubit extends Cubit<InstagramAuthState> {
       final failurOrAccountInfo = await getAccountInfo.execute(igUserId: user.igUserId, igHeaders: user.igHeaders);
       if (failurOrAccountInfo.isLeft()) {
         final Failure failure = (failurOrAccountInfo as Left).value;
-        if (failure is InstagramSessionExpiredFailure) {
-          // emit(InstagramAuthFailure(message: failure.message));
+        if (failure is InstagramSessionFailure) {
           emit(const InstagramAuthInitial(updateInstagramAccount: true));
         } else {
           emit(const InstagramAuthFailure(message: 'Failed to get account info'));
@@ -84,7 +83,7 @@ class InstagramAuthCubit extends Cubit<InstagramAuthState> {
     final failurOrAccountInfo = await getAccountInfo.execute(igUserId: igUserId, igHeaders: igHeaders);
     if (failurOrAccountInfo.isLeft()) {
       final Failure failure = (failurOrAccountInfo as Left).value;
-      if (failure is InstagramSessionExpiredFailure) {
+      if (failure is InstagramSessionFailure) {
         emit(const InstagramAuthInitial(updateInstagramAccount: true));
       } else {
         emit(const InstagramAuthFailure(message: 'Failed to get account info'));
