@@ -103,7 +103,7 @@ class FirebaseDataSourceImp extends FirebaseDataSource {
     if (snap.exists) {
       return UserModel.fromFirestore(snap);
     }
-    throw const ServerFailure("Failed to get User from firestore");
+    throw const ServerFailure("Failed to get User Info");
   }
 
   @override
@@ -112,9 +112,9 @@ class FirebaseDataSourceImp extends FirebaseDataSource {
 
     if (currentUser != null) {
       return currentUser.uid;
+    } else {
+      throw const UserAuthenticationFailure("Please login to continue");
     }
-
-    throw const ServerFailure("Failed to get current user id");
   }
 
   @override

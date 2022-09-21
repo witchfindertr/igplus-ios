@@ -43,7 +43,8 @@ class ReportCubit extends Cubit<ReportState> {
     // get user info
     final failureOrCurrentUser = await getUser.execute();
     if (failureOrCurrentUser.isLeft()) {
-      emit(const ReportFailure(message: 'Failed to get user info'));
+      final failure = (failureOrCurrentUser as Left).value;
+      emit(ReportFailure(message: 'Failed to get user info', failure: failure));
     } else {
       User currentUser = (failureOrCurrentUser as Right).value;
 
@@ -60,11 +61,7 @@ class ReportCubit extends Cubit<ReportState> {
           await getAccountInfo.execute(igUserId: currentUser.igUserId, igHeaders: currentUser.igHeaders);
       if (failureOrAccountInfo.isLeft()) {
         final failure = (failureOrAccountInfo as Left).value;
-        if (failure is InstagramSessionExpiredFailure) {
-          emit(ReportFailure(message: failure.message));
-        } else {
-          emit(const ReportFailure(message: 'Failed to get account info'));
-        }
+        emit(ReportFailure(message: "failed to get account info", failure: failure));
       } else {
         final AccountInfo accountInfo = (failureOrAccountInfo as Right).value;
         emit(ReportAccountInfoLoaded(accountInfo: accountInfo, loadingMessage: "We are updating your data..."));
@@ -97,7 +94,8 @@ class ReportCubit extends Cubit<ReportState> {
           failureOrReport = await updateReport.execute(currentUser: currentUser, accountInfo: accountInfo);
 
           if (failureOrReport.isLeft()) {
-            emit(const ReportFailure(message: 'Failed to update report'));
+            final failure = (failureOrReport as Left).value;
+            emit(ReportFailure(message: 'Failed to update report', failure: failure));
           } else {
             final report = (failureOrReport as Right).value;
             emit(ReportSuccess(report: report, accountInfo: accountInfo));
@@ -106,7 +104,8 @@ class ReportCubit extends Cubit<ReportState> {
           // get report from local
           final report = (failureOrReport as Right).value;
           if (failureOrReport.isLeft()) {
-            emit(const ReportFailure(message: 'Failed to get report from local'));
+            final failure = (failureOrReport as Left).value;
+            emit(ReportFailure(message: 'Failed to get report from local', failure: failure));
           } else {
             emit(ReportSuccess(report: report, accountInfo: accountInfo));
           }

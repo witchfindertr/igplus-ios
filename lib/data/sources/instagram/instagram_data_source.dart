@@ -50,12 +50,14 @@ class InstagramDataSourceImp extends InstagramDataSource {
     if (response.statusCode == 200) {
       final jsonResponse = json.decode(response.body);
       if (jsonResponse['user']['is_private'] == null) {
-        throw const InstagramSessionExpiredFailure("Instagram session expired");
+        throw const InstagramSessionFailure("Instagram session expired");
       } else {
         return AccountInfoModel.fromJsonById(jsonResponse);
       }
+    } else if (response.statusCode == 400) {
       // 400
       //{"message":"checkpoint_required","checkpoint_url":"https://i.instagram.com/challenge/?next=/api/v1/users/23689336944/info/","lock":true,"flow_render_type":0,"status":"fail"}
+      throw const InstagramSessionFailure("checkpoint required");
     } else {
       throw const ServerFailure("Failed to get account info by ID");
     }
@@ -69,10 +71,14 @@ class InstagramDataSourceImp extends InstagramDataSource {
     if (response.statusCode == 200) {
       final jsonResponse = json.decode(response.body);
       if (jsonResponse['user']['is_private'] == null) {
-        throw const InstagramSessionExpiredFailure("Instagram session expired");
+        throw const InstagramSessionFailure("Instagram session expired");
       } else {
         return AccountInfoModel.fromJsonByUsername(jsonResponse);
       }
+    } else if (response.statusCode == 400) {
+      // 400
+      //{"message":"checkpoint_required","checkpoint_url":"https://i.instagram.com/challenge/?next=/api/v1/users/23689336944/info/","lock":true,"flow_render_type":0,"status":"fail"}
+      throw const InstagramSessionFailure("checkpoint required");
     } else {
       throw const ServerFailure("Failed to get account info by username");
     }

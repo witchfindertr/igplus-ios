@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:go_router/go_router.dart';
+import 'package:igplus_ios/data/failure.dart';
 
 import 'package:igplus_ios/presentation/blocs/home/cubit/report_cubit.dart';
 import 'package:igplus_ios/presentation/resources/colors_manager.dart';
@@ -123,10 +124,10 @@ class _HomePageState extends State<HomePage> {
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      Text(state.message),
+                      Text(state.failure.message),
                       TextButton(
                         onPressed: () {
-                          if (state.message == "Instagram session expired") {
+                          if (state.failure is InstagramSessionFailure) {
                             GoRouter.of(context).goNamed('instagram_login', queryParams: {
                               'updateInstagramAccount': 'true',
                             });
@@ -134,7 +135,7 @@ class _HomePageState extends State<HomePage> {
                             context.read<ReportCubit>().init();
                           }
                         },
-                        child: Text((state.message == "Instagram session expired") ? "Login" : "Retry",
+                        child: Text((state.failure is InstagramSessionFailure) ? "Login" : "Retry",
                             style: const TextStyle(color: ColorsManager.primaryColor)),
                       ),
                     ],
