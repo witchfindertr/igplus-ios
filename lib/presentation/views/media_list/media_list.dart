@@ -2,27 +2,27 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
-import 'package:igplus_ios/domain/entities/friend.dart';
-import 'package:igplus_ios/presentation/blocs/friends_list/cubit/friends_list_cubit.dart';
+import 'package:igplus_ios/domain/entities/media.dart';
+import 'package:igplus_ios/presentation/blocs/media_list/cubit/media_list_cubit.dart';
 import 'package:igplus_ios/presentation/resources/colors_manager.dart';
 import 'package:igplus_ios/presentation/resources/theme_manager.dart';
-import 'package:igplus_ios/presentation/views/friends_list/friend_list_item.dart';
-import 'package:igplus_ios/presentation/views/friends_list/friend_search.dart';
+import 'package:igplus_ios/presentation/views/media_list/media_list_item.dart';
+import 'package:igplus_ios/presentation/views/media_list/media_search.dart';
 import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
 
-class FriendsList extends StatefulWidget {
-  const FriendsList({Key? key, required this.type}) : super(key: key);
+class MediaList extends StatefulWidget {
+  const MediaList({Key? key, required this.type}) : super(key: key);
 
   final String type;
 
   @override
-  State<FriendsList> createState() => _FriendsListState();
+  State<MediaList> createState() => _MediaListState();
 }
 
-class _FriendsListState extends State<FriendsList> {
-  static const _pageSize = 15;
+class _MediaListState extends State<MediaList> {
+  static const _pageSize = 30;
   static const int _initialPageKey = 0;
-  final PagingController<int, Friend> _pagingController = PagingController(firstPageKey: _initialPageKey);
+  final PagingController<int, Media> _pagingController = PagingController(firstPageKey: _initialPageKey);
   String? _searchTerm;
   bool _showSearchForm = false;
   late ScrollController _scrollController;
@@ -67,19 +67,19 @@ class _FriendsListState extends State<FriendsList> {
 
   Future<void> _fetchPage(pageKey) async {
     try {
-      final List<Friend>? friendsList = await context
-          .read<FriendsListCubit>()
-          .getFriendsList(dataName: widget.type, pageKey: pageKey, pageSize: _pageSize, searchTerm: _searchTerm);
+      final List<Media>? mediaList = await context
+          .read<MediaListCubit>()
+          .getMediaList(dataName: widget.type, pageKey: pageKey, pageSize: _pageSize, searchTerm: _searchTerm);
 
-      if (friendsList == null || friendsList.isEmpty) {
+      if (mediaList == null || mediaList.isEmpty) {
         _pagingController.appendLastPage([]);
       } else {
-        final isLastPage = friendsList.length < _pageSize;
+        final isLastPage = mediaList.length < _pageSize;
         if (isLastPage) {
-          _pagingController.appendLastPage(friendsList);
+          _pagingController.appendLastPage(mediaList);
         } else {
-          final nextPageKey = pageKey + friendsList.length;
-          _pagingController.appendPage(friendsList, nextPageKey);
+          final nextPageKey = pageKey + mediaList.length;
+          _pagingController.appendPage(mediaList, nextPageKey);
         }
       }
     } catch (error) {
@@ -91,24 +91,16 @@ class _FriendsListState extends State<FriendsList> {
   Widget build(BuildContext context) {
     final String pageTitle;
     switch (widget.type) {
-      case "notFollowingBack":
-        pageTitle = "Didn't Following You Back";
+      case "mostLikedMedia":
+        pageTitle = "Most Liked Media";
         break;
-      case "youDontFollowBack":
-        pageTitle = "You Don't Follow Back";
+      case "mostCommentedMedia":
+        pageTitle = "Most Commented Media";
         break;
-      case "newFollowers":
-        pageTitle = "New Followers";
+      case "mostViewedMedia":
+        pageTitle = "Most Viewed Media";
         break;
-      case "lostFollowers":
-        pageTitle = "Lost Followers";
-        break;
-      case "youHaveUnfollowed":
-        pageTitle = "You Have Unfollowed";
-        break;
-      case "mutualFollowings":
-        pageTitle = "Mutual Followings";
-        break;
+
       default:
         pageTitle = "";
         break;
@@ -150,38 +142,47 @@ class _FriendsListState extends State<FriendsList> {
         theme: appMaterialTheme(),
         home: Scaffold(
           backgroundColor: ColorsManager.appBack,
-          body: BlocBuilder<FriendsListCubit, FriendsListState>(
+          body: BlocBuilder<MediaListCubit, MediaListState>(
             builder: (context, state) {
               return (_showSearchForm)
                   ? CustomScrollView(
                       controller: _scrollController,
                       slivers: <Widget>[
-                        FriendSearch(
+                        MediaSearch(
                           onChanged: (searchTerm) => _updateSearchTerm(searchTerm),
                           searchFocusNode: _searchFocusNode,
                         ),
-                        PagedSliverList<int, Friend>(
+                        PagedSliverGrid<int, Media>(
                           pagingController: _pagingController,
-                          builderDelegate: PagedChildBuilderDelegate<Friend>(
-                            animateTransitions: true,
-                            itemBuilder: (context, item, index) => FriendListItem(
-                              friend: item,
+                          gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                            childAspectRatio: 100 / 150,
+                            crossAxisSpacing: 10,
+                            mainAxisSpacing: 10,
+                            crossAxisCount: 3,
+                          ),
+                          builderDelegate: PagedChildBuilderDelegate<Media>(
+                            itemBuilder: (context, item, index) => MediaListItem(
+                              media: item,
                               index: index,
                               type: widget.type,
                             ),
                           ),
-                        )
+                        ),
                       ],
                     )
                   : CustomScrollView(
-                      controller: _scrollController,
                       slivers: <Widget>[
-                        PagedSliverList<int, Friend>(
+                        PagedSliverGrid<int, Media>(
                           pagingController: _pagingController,
-                          builderDelegate: PagedChildBuilderDelegate<Friend>(
-                            animateTransitions: true,
-                            itemBuilder: (context, item, index) => FriendListItem(
-                              friend: item,
+                          gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                            childAspectRatio: 100 / 100,
+                            crossAxisSpacing: 10,
+                            mainAxisSpacing: 10,
+                            crossAxisCount: 3,
+                          ),
+                          builderDelegate: PagedChildBuilderDelegate<Media>(
+                            itemBuilder: (context, item, index) => MediaListItem(
+                              media: item,
                               index: index,
                               type: widget.type,
                             ),

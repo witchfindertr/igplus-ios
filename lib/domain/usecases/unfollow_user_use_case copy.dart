@@ -7,7 +7,7 @@ class UnfollowUserUseCase {
   final InstagramRepository instagramRepository;
   UnfollowUserUseCase({required this.instagramRepository});
 
-  // follow user
+  // unfollow user
   Future<Either<Failure, bool>> execute({required int userId, required IgHeaders igHeaders}) async {
     return instagramRepository.unfollowUser(userId: userId, igHeaders: igHeaders);
   }

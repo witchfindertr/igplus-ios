@@ -118,7 +118,7 @@ class ReportData extends StatelessWidget {
                           type: "youDontFollowBack",
                           newFriends: report!.youDontFollowBack,
                         )
-                      : LoadingCard(
+                      : const LoadingCard(
                           title: "You don't Dollow Back",
                           icon: FontAwesomeIcons.userInjured,
                         ),
@@ -139,7 +139,7 @@ class ReportData extends StatelessWidget {
                           type: "mutualFollowings",
                           newFriends: report!.mutualFollowings,
                         )
-                      : LoadingCard(
+                      : const LoadingCard(
                           title: "Mutual Followings",
                           icon: FontAwesomeIcons.userGroup,
                         ),
@@ -152,7 +152,7 @@ class ReportData extends StatelessWidget {
                           type: "youHaveUnfollowed",
                           newFriends: report!.youHaveUnfollowed,
                         )
-                      : LoadingCard(
+                      : const LoadingCard(
                           title: "You Have Unfollowed",
                           icon: FontAwesomeIcons.usersSlash,
                         ),
@@ -168,7 +168,7 @@ class ReportData extends StatelessWidget {
                   child: Container(
                     width: MediaQuery.of(context).size.width / 1.1,
                     decoration: BoxDecoration(
-                      color: ColorsManager.appBack.withOpacity(0.7),
+                      color: ColorsManager.appBack.withOpacity(0.8),
                       borderRadius: BorderRadius.circular(4),
                     ),
                     padding: const EdgeInsets.only(top: 4.0, bottom: 4.0),
@@ -177,7 +177,7 @@ class ReportData extends StatelessWidget {
                       child: Text(
                         loadingMessage!,
                         style: const TextStyle(
-                          fontSize: 8.0,
+                          fontSize: 10.0,
                           color: ColorsManager.cardText,
                         ),
                       ),

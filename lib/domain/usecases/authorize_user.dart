@@ -10,7 +10,8 @@ class AuthorizeUser {
   AuthorizeUser({required this.firebaseRepository});
 
   Future<Either<Failure, User>> execute() async {
-    auth.User? currentUser = auth.FirebaseAuth.instance.currentUser;
+    final fbAuth = auth.FirebaseAuth.instance;
+    auth.User? currentUser = fbAuth.currentUser;
 
     // user is not authenticated
     if (currentUser == null) {
@@ -18,6 +19,12 @@ class AuthorizeUser {
     }
 
     // user is authenticated and not blocked
-    return await firebaseRepository.validateUser(userId: currentUser.uid);
+    Either<Failure, User> user = await firebaseRepository.validateUser(userId: currentUser.uid);
+
+    // signout user
+    if (user is Left) {
+      fbAuth.signOut();
+    }
+    return user;
   }
 }

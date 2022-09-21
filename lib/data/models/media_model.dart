@@ -6,6 +6,7 @@ class MediaModel {
   final int id;
   final String text;
   final int mediaType;
+  final String code;
   final String url;
   final int commentsCount;
   final int likeCount;
@@ -18,6 +19,7 @@ class MediaModel {
     required this.id,
     required this.text,
     required this.mediaType,
+    required this.code,
     required this.url,
     required this.commentsCount,
     required this.likeCount,
@@ -49,11 +51,13 @@ class MediaModel {
       likers.add(FriendModel.fromJson(liker).toEntity());
     }
     DateTime updatedOn = DateTime.now();
+    String code = json['code'];
 
     return MediaModel(
       id: id,
       text: text,
       mediaType: mediaType,
+      code: code,
       url: mediaUrl,
       commentsCount: commentsCount,
       likeCount: likeCount,
@@ -69,6 +73,7 @@ class MediaModel {
       id: id,
       text: text,
       mediaType: mediaType,
+      code: code,
       url: url,
       commentsCount: commentsCount,
       likeCount: likeCount,
