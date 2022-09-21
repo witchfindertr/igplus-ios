@@ -8,6 +8,7 @@ import 'dart:convert';
 
 import 'package:igplus_ios/data/models/account_info_model.dart';
 import 'package:http/http.dart' as http;
+import 'package:igplus_ios/data/models/media_model.dart';
 
 import 'package:igplus_ios/data/models/user_stories_model.dart';
 import 'package:igplus_ios/domain/entities/User_story.dart';
@@ -34,6 +35,7 @@ abstract class InstagramDataSource {
   Future<List<StoryModel>> getStories({required String userId, required Map<String, String> headers});
   Future<bool> followUser({required int userId, required Map<String, String> headers});
   Future<bool> unfollowUser({required int userId, required Map<String, String> headers});
+  Future<List<MediaModel>> getUserFeed({required String userId, required Map<String, String> headers});
 }
 
 class InstagramDataSourceImp extends InstagramDataSource {
@@ -283,6 +285,20 @@ class InstagramDataSourceImp extends InstagramDataSource {
       throw const ServerFailure("User not found");
     } else {
       throw const ServerFailure("Failed to follow user");
+    }
+  }
+
+  // user feed media
+  @override
+  Future<List<MediaModel>> getUserFeed({required String userId, required Map<String, String> headers}) async {
+    headers['User-Agent'] = "Instagram 219.0.0.12.117 Android";
+    final response = await client.get(Uri.parse(InstagramUrls.getUserFeed(userId)), headers: headers);
+
+    if (response.statusCode == 200) {
+      final result = jsonDecode(response.body)["items"] as List<dynamic>;
+      return result.map((friend) => MediaModel.fromJson(friend as Map<String, dynamic>)).toList();
+    } else {
+      throw const ServerFailure("Failed to get besties from Instagram");
     }
   }
 }

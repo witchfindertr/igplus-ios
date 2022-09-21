@@ -13,6 +13,7 @@ import 'package:igplus_ios/domain/repositories/firebase/headers_repository.dart'
 import 'package:igplus_ios/domain/repositories/instagram/instagram_repository.dart';
 import 'package:igplus_ios/domain/repositories/local/local_repository.dart';
 import 'package:igplus_ios/domain/usecases/follow_user_use_case.dart';
+import 'package:igplus_ios/domain/usecases/get_user_feed_use_case.dart';
 import 'package:igplus_ios/domain/usecases/get_friends_from_local_use_case.dart';
 import 'package:igplus_ios/domain/usecases/get_report_from_local_use_case.dart';
 import 'package:igplus_ios/domain/usecases/get_user_stories_use_case.dart';
@@ -57,6 +58,7 @@ Future<void> init() async {
         getAccountInfo: sl(),
         getDataFromLocal: sl(),
         getReportFromLocal: sl(),
+        getUserFeed: sl(),
       ));
 
   sl.registerFactory(() =>
@@ -78,6 +80,7 @@ Future<void> init() async {
   sl.registerLazySingleton(() => GetStoriesUseCase(instagramRepository: sl()));
   sl.registerLazySingleton(() => FollowUserUseCase(instagramRepository: sl()));
   sl.registerLazySingleton(() => UnfollowUserUseCase(instagramRepository: sl()));
+  sl.registerLazySingleton(() => GetUserFeedUseCase(instagramRepository: sl()));
 
   // Repositories
   sl.registerLazySingleton<FirebaseRepository>(() => FirebaseRepositporyImp(firebaseDataSource: sl()));

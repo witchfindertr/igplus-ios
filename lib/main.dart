@@ -7,6 +7,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:igplus_ios/app/app.dart';
 import 'package:igplus_ios/domain/entities/friend.dart';
+import 'package:igplus_ios/domain/entities/media.dart';
 import 'package:igplus_ios/domain/entities/report.dart';
 import 'package:igplus_ios/presentation/blocs/friends_list/cubit/friends_list_cubit.dart';
 import 'package:igplus_ios/presentation/blocs/home/cubit/report_cubit.dart';
@@ -27,6 +28,7 @@ void main() async {
   Hive.registerAdapter(FriendAdapter());
   Hive.registerAdapter(ReportAdapter());
   Hive.registerAdapter(ChartDataAdapter());
+  Hive.registerAdapter(MediaAdapter());
 
   // loading the <key,values> pair from the local storage into memory
   try {
@@ -44,6 +46,9 @@ void main() async {
 
     // report box
     await Hive.openBox<Report>(Report.boxKey);
+
+    // media box
+    await Hive.openBox<Media>(Media.boxKey);
   } catch (e) {
     debugPrint(e.toString());
   }

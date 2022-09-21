@@ -23,23 +23,6 @@ class FriendsListCubit extends Cubit<FriendsListState> {
       required this.unfollowUserUseCase})
       : super(FriendsListInitial());
 
-  // void init({required String dataName, required int pageKey, required int pageSize, String? searchTerm}) async {
-  //   emit(FriendsListLoading());
-  //   // get friends from local
-  //   final failureOrFriends = await getFriendsFromLocal.execute(
-  //       dataName: dataName, pageKey: pageKey, pageSize: pageSize, searchTerm: searchTerm);
-  //   if (failureOrFriends == null || failureOrFriends.isLeft()) {
-  //     emit(const FriendsListFailure(message: 'Failed to get friends'));
-  //   } else {
-  //     final friends = (failureOrFriends as Right).value;
-  //     if (friends != null) {
-  //       emit(FriendsListSuccess(friendsList: friends, pageKey: pageKey));
-  //     } else {
-  //       emit(const FriendsListFailure(message: 'No friend to show!'));
-  //     }
-  //   }
-  // }
-
   Future<List<Friend>?> getFriendsList(
       {required String dataName, required int pageKey, required int pageSize, String? searchTerm}) async {
     final failureOrFriends = await getFriendsFromLocal.execute(

@@ -3,7 +3,7 @@ import 'package:hive_flutter/adapters.dart';
 
 part 'report.g.dart';
 
-@HiveType(typeId: 2)
+@HiveType(typeId: 1)
 class Report extends Equatable {
   static const String boxKey = "reportBoxKey";
 

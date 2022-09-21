@@ -4,6 +4,7 @@ import 'package:igplus_ios/domain/entities/account_info.dart';
 import 'package:igplus_ios/domain/entities/report.dart';
 import 'package:igplus_ios/presentation/resources/colors_manager.dart';
 import 'package:igplus_ios/presentation/views/global/info_card.dart';
+import 'package:igplus_ios/presentation/views/global/loading_card.dart';
 import 'package:igplus_ios/presentation/views/global/section_title.dart';
 import 'package:igplus_ios/presentation/views/home/profile_card.dart';
 import 'package:igplus_ios/presentation/views/home/stats/line-chart.dart';
@@ -23,13 +24,16 @@ class ReportData extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    if (report != null) {
-      return CupertinoScrollbar(
-        thickness: 0,
-        child: ListView(
+    // String loadingMessage = "we are loading your data";
+    return CupertinoScrollbar(
+      thickness: 0,
+      child: Stack(alignment: Alignment.center, children: [
+        ListView(
           children: <Widget>[
             Padding(
-              padding: const EdgeInsets.fromLTRB(8.0, 0.0, 8.0, 0.0),
+              padding: (loadingMessage != null)
+                  ? const EdgeInsets.fromLTRB(8.0, 30.0, 8.0, 0.0)
+                  : const EdgeInsets.fromLTRB(8.0, 10.0, 8.0, 0.0),
               child: ProfileCard(
                 followers: accountInfo.followers,
                 followings: accountInfo.followings,
@@ -43,22 +47,32 @@ class ReportData extends StatelessWidget {
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: [
-                  InfoCard(
-                    title: "New Followers",
-                    icon: FontAwesomeIcons.userPlus,
-                    count: report!.newFollowersCycle,
-                    context: context,
-                    type: "newFollowers",
-                    newFriends: report!.newFollowers,
-                  ),
-                  InfoCard(
-                    title: "Followers Lost",
-                    icon: FontAwesomeIcons.userMinus,
-                    count: report!.lostFollowersCycle,
-                    context: context,
-                    type: "lostFollowers",
-                    newFriends: report!.lostFollowers,
-                  ),
+                  (report != null)
+                      ? InfoCard(
+                          title: "New Followers",
+                          icon: FontAwesomeIcons.userPlus,
+                          count: report!.newFollowersCycle,
+                          context: context,
+                          type: "newFollowers",
+                          newFriends: report!.newFollowers,
+                        )
+                      : const LoadingCard(
+                          title: "New Followers",
+                          icon: FontAwesomeIcons.userPlus,
+                        ),
+                  (report != null)
+                      ? InfoCard(
+                          title: "Followers Lost",
+                          icon: FontAwesomeIcons.userMinus,
+                          count: report!.lostFollowersCycle,
+                          context: context,
+                          type: "lostFollowers",
+                          newFriends: report!.lostFollowers,
+                        )
+                      : const LoadingCard(
+                          title: "Followers Lost",
+                          icon: FontAwesomeIcons.userMinus,
+                        ),
                 ],
               ),
             ),
@@ -82,22 +96,32 @@ class ReportData extends StatelessWidget {
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: [
-                  InfoCard(
-                    title: "Not Following Back",
-                    icon: FontAwesomeIcons.userSlash,
-                    count: report!.notFollowingBackCycle,
-                    context: context,
-                    type: "notFollowingBack",
-                    newFriends: report!.notFollowingBack,
-                  ),
-                  InfoCard(
-                    title: "You don't follow back",
-                    icon: FontAwesomeIcons.userInjured,
-                    count: report!.youDontFollowBackCycle,
-                    context: context,
-                    type: "youDontFollowBack",
-                    newFriends: report!.youDontFollowBack,
-                  ),
+                  (report != null)
+                      ? InfoCard(
+                          title: "Not Following Back",
+                          icon: FontAwesomeIcons.userSlash,
+                          count: report!.notFollowingBackCycle,
+                          context: context,
+                          type: "notFollowingBack",
+                          newFriends: report!.notFollowingBack,
+                        )
+                      : const LoadingCard(
+                          title: "Not Following Back",
+                          icon: FontAwesomeIcons.userSlash,
+                        ),
+                  (report != null)
+                      ? InfoCard(
+                          title: "You don't follow back",
+                          icon: FontAwesomeIcons.userInjured,
+                          count: report!.youDontFollowBackCycle,
+                          context: context,
+                          type: "youDontFollowBack",
+                          newFriends: report!.youDontFollowBack,
+                        )
+                      : LoadingCard(
+                          title: "You don't Dollow Back",
+                          icon: FontAwesomeIcons.userInjured,
+                        ),
                 ],
               ),
             ),
@@ -106,60 +130,63 @@ class ReportData extends StatelessWidget {
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: [
-                  InfoCard(
-                    title: "mutual followings",
-                    icon: FontAwesomeIcons.userGroup,
-                    count: report!.mutualFollowingsCycle,
-                    context: context,
-                    type: "mutualFollowings",
-                    newFriends: report!.mutualFollowings,
-                  ),
-                  InfoCard(
-                    title: "You have unfollowed",
-                    icon: FontAwesomeIcons.usersSlash,
-                    count: report!.youHaveUnfollowedCycle,
-                    context: context,
-                    type: "youHaveUnfollowed",
-                    newFriends: report!.youHaveUnfollowed,
-                  ),
+                  (report != null)
+                      ? InfoCard(
+                          title: "Mutual Followings",
+                          icon: FontAwesomeIcons.userGroup,
+                          count: report!.mutualFollowingsCycle,
+                          context: context,
+                          type: "mutualFollowings",
+                          newFriends: report!.mutualFollowings,
+                        )
+                      : LoadingCard(
+                          title: "Mutual Followings",
+                          icon: FontAwesomeIcons.userGroup,
+                        ),
+                  (report != null)
+                      ? InfoCard(
+                          title: "You Have Unfollowed",
+                          icon: FontAwesomeIcons.usersSlash,
+                          count: report!.youHaveUnfollowedCycle,
+                          context: context,
+                          type: "youHaveUnfollowed",
+                          newFriends: report!.youHaveUnfollowed,
+                        )
+                      : LoadingCard(
+                          title: "You Have Unfollowed",
+                          icon: FontAwesomeIcons.usersSlash,
+                        ),
                 ],
               ),
             ),
           ],
         ),
-      );
-    } else {
-      return CupertinoScrollbar(
-          thickness: 0,
-          child: ListView(children: <Widget>[
-            ProfileCard(
-              followers: accountInfo.followers,
-              followings: accountInfo.followings,
-              username: accountInfo.username,
-              picture: accountInfo.picture,
-            ),
-            Center(
-              child: Padding(
-                padding: EdgeInsets.only(top: MediaQuery.of(context).size.height / 4),
+        (loadingMessage != null)
+            ? Positioned(
+                top: 1.0,
                 child: Center(
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    children: [
-                      const CupertinoActivityIndicator(
-                        radius: 12.0,
+                  child: Container(
+                    width: MediaQuery.of(context).size.width / 1.1,
+                    decoration: BoxDecoration(
+                      color: ColorsManager.appBack.withOpacity(0.7),
+                      borderRadius: BorderRadius.circular(4),
+                    ),
+                    padding: const EdgeInsets.only(top: 4.0, bottom: 4.0),
+                    margin: const EdgeInsets.only(top: 2.0, bottom: 2.0),
+                    child: Center(
+                      child: Text(
+                        loadingMessage!,
+                        style: const TextStyle(
+                          fontSize: 8.0,
+                          color: ColorsManager.cardText,
+                        ),
                       ),
-                      const SizedBox(height: 20.0),
-                      Text(loadingMessage ?? "", style: const TextStyle(fontSize: 12, color: ColorsManager.textColor)),
-                      const SizedBox(height: 4.0),
-                      const Text("This can take a few minutes depending on your account size",
-                          style: TextStyle(fontSize: 10, color: ColorsManager.secondarytextColor)),
-                    ],
+                    ),
                   ),
                 ),
-              ),
-            ),
-          ]));
-    }
+              )
+            : const SizedBox.shrink(),
+      ]),
+    );
   }
 }

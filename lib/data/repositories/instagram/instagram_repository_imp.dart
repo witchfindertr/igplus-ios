@@ -1,11 +1,13 @@
 import 'dart:io';
 
 import 'package:dartz/dartz.dart';
+import 'package:igplus_ios/data/models/media_model.dart';
 
 import 'package:igplus_ios/data/models/user_stories_model.dart';
 import 'package:igplus_ios/domain/entities/User_story.dart';
 import 'package:igplus_ios/domain/entities/friend.dart';
 import 'package:igplus_ios/domain/entities/ig_headers.dart';
+import 'package:igplus_ios/domain/entities/media.dart';
 import 'package:igplus_ios/domain/entities/story.dart';
 
 import '../../../domain/entities/account_info.dart';
@@ -157,6 +159,23 @@ class InstagramRepositoryImp extends InstagramRepository {
       final Map<String, String> headers = igHeaders.toMap();
       final bool isUnfollowed = await instagramDataSource.unfollowUser(userId: userId, headers: headers);
       return Right(isUnfollowed);
+    } on ServerFailure catch (e) {
+      return Left(ServerFailure(e.message));
+    } on SocketException {
+      return const Left(ConnectionFailure("No internet connection"));
+    } on Exception {
+      return const Left(ServerFailure("Unknown error"));
+    }
+  }
+
+  // besties friends
+  @override
+  Future<Either<Failure, List<Media>>> getUserFeed({required String userId, required IgHeaders igHeaders}) async {
+    try {
+      final Map<String, String> headers = igHeaders.toMap();
+      final List<MediaModel> userFeed = await instagramDataSource.getUserFeed(userId: userId, headers: headers);
+
+      return Right(userFeed.map((media) => media.toEntity()).toList());
     } on ServerFailure catch (e) {
       return Left(ServerFailure(e.message));
     } on SocketException {
