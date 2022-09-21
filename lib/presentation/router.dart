@@ -5,6 +5,7 @@ import 'package:igplus_ios/presentation/views/friends_list/friends_list.dart';
 import 'package:igplus_ios/presentation/views/home/stories/stories_view.dart';
 import 'package:igplus_ios/presentation/views/login/instagram_login_page.dart';
 import 'package:igplus_ios/presentation/views/login/login_page.dart';
+import 'package:igplus_ios/presentation/views/media_list/media_list.dart';
 import 'package:igplus_ios/presentation/views/tab_page.dart';
 
 GoRouter routes(AppBloc appBloc) {
@@ -48,6 +49,10 @@ GoRouter routes(AppBloc appBloc) {
             GoRoute(
               path: 'storiesView',
               builder: (context, state) => StoriesView(storyOwner: state.extra! as StoryOwner),
+            ),
+            GoRoute(
+              path: 'mediaList/:type',
+              builder: (context, state) => MediaList(type: state.params['type'] ?? ""),
             ),
           ]),
     ],

@@ -15,24 +15,27 @@ class Media extends Equatable {
   @HiveField(2)
   final int mediaType;
   @HiveField(3)
-  final String url;
+  final String code;
   @HiveField(4)
-  final int commentsCount;
+  final String url;
   @HiveField(5)
-  final int likeCount;
+  final int commentsCount;
   @HiveField(6)
-  final int viewCount;
+  final int likeCount;
   @HiveField(7)
-  final String createdAt;
+  final int viewCount;
   @HiveField(8)
-  final List<Friend> topLikers;
+  final String createdAt;
   @HiveField(9)
+  final List<Friend> topLikers;
+  @HiveField(10)
   final DateTime updatedOn;
 
   const Media({
     required this.id,
     required this.text,
     required this.mediaType,
+    required this.code,
     required this.url,
     required this.commentsCount,
     required this.likeCount,
@@ -47,6 +50,7 @@ class Media extends Equatable {
         id,
         text,
         mediaType,
+        code,
         url,
         commentsCount,
         likeCount,

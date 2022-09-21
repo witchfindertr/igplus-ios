@@ -15,6 +15,8 @@ import 'package:igplus_ios/domain/usecases/get_user_feed_use_case.dart';
 import 'package:igplus_ios/domain/usecases/get_friends_from_local_use_case.dart';
 import 'package:igplus_ios/domain/usecases/get_report_from_local_use_case.dart';
 import 'package:igplus_ios/domain/usecases/get_user_use_case.dart';
+import 'package:igplus_ios/domain/usecases/save_friends_to_local_use_case.dart';
+import 'package:igplus_ios/domain/usecases/save_media_to_local_use_case%20copy.dart';
 import 'package:igplus_ios/domain/usecases/update_report_use_case.dart';
 
 import '../../../../domain/entities/report.dart';
@@ -28,6 +30,7 @@ class ReportCubit extends Cubit<ReportState> {
   final GetFriendsFromLocalUseCase getDataFromLocal;
   final GetReportFromLocalUseCase getReportFromLocal;
   final GetUserFeedUseCase getUserFeed;
+  final CacheMediaToLocalUseCase cacheMediaToLocal;
   ReportCubit({
     required this.updateReport,
     required this.getUser,
@@ -35,6 +38,7 @@ class ReportCubit extends Cubit<ReportState> {
     required this.getDataFromLocal,
     required this.getReportFromLocal,
     required this.getUserFeed,
+    required this.cacheMediaToLocal,
   }) : super(ReportInitial());
 
   void init() async {
@@ -47,14 +51,6 @@ class ReportCubit extends Cubit<ReportState> {
       emit(ReportFailure(message: 'Failed to get user info', failure: failure));
     } else {
       User currentUser = (failureOrCurrentUser as Right).value;
-
-      // get media list from instagram
-      // final Either<Failure, List<Media>> userFeedEither =
-      //     await getUserFeed.execute(userId: currentUser.igUserId, igHeaders: currentUser.igHeaders);
-      // if (userFeedEither.isRight()) {
-      //   final List<Media> userFeed = (userFeedEither as Right).value;
-      //   print(userFeed.length);
-      // }
 
       // get account info
       final failureOrAccountInfo =
@@ -99,6 +95,15 @@ class ReportCubit extends Cubit<ReportState> {
           } else {
             final report = (failureOrReport as Right).value;
             emit(ReportSuccess(report: report, accountInfo: accountInfo));
+
+            // get media list from instagram and save it to local
+            final Either<Failure, List<Media>> userFeedEither =
+                await getUserFeed.execute(userId: currentUser.igUserId, igHeaders: currentUser.igHeaders);
+            if (userFeedEither.isRight()) {
+              final List<Media> mediaList = (userFeedEither as Right).value;
+              // cach media on local
+              await cacheMediaToLocal.execute(dataName: Media.boxKey, mediaList: mediaList);
+            }
           }
         } else {
           // get report from local
