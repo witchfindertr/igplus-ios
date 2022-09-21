@@ -67,9 +67,8 @@ class _MediaListState extends State<MediaList> {
 
   Future<void> _fetchPage(pageKey) async {
     try {
-      final List<Media>? mediaList = await context
-          .read<MediaListCubit>()
-          .getMediaList(dataName: widget.type, pageKey: pageKey, pageSize: _pageSize, searchTerm: _searchTerm);
+      final List<Media>? mediaList = await context.read<MediaListCubit>().getMediaList(
+          dataName: Media.boxKey, pageKey: pageKey, pageSize: _pageSize, searchTerm: _searchTerm, type: widget.type);
 
       if (mediaList == null || mediaList.isEmpty) {
         _pagingController.appendLastPage([]);
@@ -91,6 +90,9 @@ class _MediaListState extends State<MediaList> {
   Widget build(BuildContext context) {
     final String pageTitle;
     switch (widget.type) {
+      case "mostPopularMedia":
+        pageTitle = "Most Popular Media";
+        break;
       case "mostLikedMedia":
         pageTitle = "Most Liked Media";
         break;
@@ -100,7 +102,6 @@ class _MediaListState extends State<MediaList> {
       case "mostViewedMedia":
         pageTitle = "Most Viewed Media";
         break;
-
       default:
         pageTitle = "";
         break;
@@ -155,7 +156,7 @@ class _MediaListState extends State<MediaList> {
                         PagedSliverGrid<int, Media>(
                           pagingController: _pagingController,
                           gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                            childAspectRatio: 100 / 150,
+                            childAspectRatio: 100 / 100,
                             crossAxisSpacing: 10,
                             mainAxisSpacing: 10,
                             crossAxisCount: 3,
@@ -203,6 +204,12 @@ class _MediaListState extends State<MediaList> {
   }
 
   void _scrollToTop() {
-    _scrollController.animateTo(0, duration: const Duration(milliseconds: 300), curve: Curves.linear);
+    if (_scrollController.hasClients) {
+      _scrollController.animateTo(
+        0,
+        duration: const Duration(milliseconds: 300),
+        curve: Curves.linear,
+      );
+    }
   }
 }

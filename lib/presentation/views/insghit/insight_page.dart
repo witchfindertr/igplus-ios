@@ -14,16 +14,25 @@ class InsightPage extends StatelessWidget {
         "title": "Most Popular",
         "subTitle": "Find the most popular posts",
         "context": context,
+        "type": "mostPopularMedia",
       },
       {
         "title": "Most Liked",
         "subTitle": "Find the most liked posts",
         "context": context,
+        "type": "mostLikedMedia",
       },
       {
         "title": "Most Commented",
         "subTitle": "Find the most commented posts",
         "context": context,
+        "type": "mostCommentedMedia",
+      },
+      {
+        "title": "Most Viewed",
+        "subTitle": "Find the most viewed videos",
+        "context": context,
+        "type": "mostViewedMedia",
       }
     ];
 

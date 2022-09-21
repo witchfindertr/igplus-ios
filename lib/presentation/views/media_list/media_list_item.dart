@@ -1,7 +1,10 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:igplus_ios/domain/entities/media.dart';
 import 'package:flutter/material.dart';
+import 'package:igplus_ios/presentation/resources/colors_manager.dart';
+import 'package:intl/intl.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:timeago/timeago.dart' as timeago;
 import 'package:provider/provider.dart';
@@ -29,15 +32,92 @@ class _MediaListItemState extends State<MediaListItem> {
 
   @override
   Widget build(BuildContext context) {
-    if (widget.type == 'notFollowingBack') {
-      showFollowButton = false;
-    } else if (widget.type == 'mutualFollowings') {
-      showFollowButton = false;
-    }
     return Padding(
       padding: const EdgeInsets.all(2.0),
-      child: CachedNetworkImage(
-        imageUrl: widget.media.url,
+      child: Stack(
+        children: [
+          CachedNetworkImage(
+            imageUrl: widget.media.url,
+          ),
+          Container(
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(4),
+              color: ColorsManager.appBack.withOpacity(0.5),
+            ),
+            padding: const EdgeInsets.all(4.0),
+            margin: const EdgeInsets.all(4.0),
+            child: Row(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Icon(
+                  (widget.type == "mostLikedMedia")
+                      ? FontAwesomeIcons.heart
+                      : (widget.type == "mostCommentedMedia")
+                          ? FontAwesomeIcons.comment
+                          : (widget.type == "mostViewedMedia")
+                              ? FontAwesomeIcons.eye
+                              : FontAwesomeIcons.groupArrowsRotate,
+                  color: Colors.white,
+                  size: 12,
+                ),
+                const SizedBox(
+                  width: 5,
+                ),
+                Text(
+                    (widget.type == "mostLikedMedia")
+                        ? NumberFormat.compact().format(widget.media.likeCount)
+                        : (widget.type == "mostCommentedMedia")
+                            ? NumberFormat.compact().format(widget.media.commentsCount)
+                            : (widget.type == "mostViewedMedia")
+                                ? NumberFormat.compact().format(widget.media.viewCount)
+                                : NumberFormat.compact().format(
+                                    (widget.media.likeCount + widget.media.commentsCount + widget.media.viewCount)),
+                    style: const TextStyle(color: Colors.white, fontSize: 10)),
+              ],
+            ),
+          ),
+          (widget.type == "mostPopularMedia")
+              ? Positioned(
+                  bottom: 1.0,
+                  left: 1.0,
+                  child: Row(
+                    children: [
+                      mediaCount(icon: FontAwesomeIcons.heart, count: widget.media.likeCount),
+                      mediaCount(icon: FontAwesomeIcons.comment, count: widget.media.commentsCount),
+                      mediaCount(icon: FontAwesomeIcons.eye, count: widget.media.viewCount),
+                    ],
+                  ),
+                )
+              : const SizedBox.shrink()
+        ],
+      ),
+    );
+  }
+
+  Container mediaCount({required IconData icon, required int count}) {
+    return Container(
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(4),
+        color: ColorsManager.appBack.withOpacity(0.6),
+      ),
+      padding: const EdgeInsets.all(2.0),
+      margin: const EdgeInsets.all(2.0),
+      child: Opacity(
+        opacity: 0.5,
+        child: Row(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Icon(
+              icon,
+              color: Colors.white,
+              size: 6,
+            ),
+            const SizedBox(
+              width: 2,
+            ),
+            Text(NumberFormat.compact().format((count)), style: const TextStyle(color: Colors.white, fontSize: 6)),
+          ],
+        ),
       ),
     );
   }

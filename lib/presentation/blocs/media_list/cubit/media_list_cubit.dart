@@ -14,9 +14,9 @@ class MediaListCubit extends Cubit<MediaListState> {
 
   // get cached media from local
   Future<List<Media>?> getMediaList(
-      {required String dataName, required int pageKey, required int pageSize, String? searchTerm}) async {
+      {required String dataName, required int pageKey, required int pageSize, String? searchTerm, String? type}) async {
     final failureOrMedia = await getMediaFromLocal.execute(
-        dataName: dataName, pageKey: pageKey, pageSize: pageSize, searchTerm: searchTerm);
+        dataName: dataName, pageKey: pageKey, pageSize: pageSize, searchTerm: searchTerm, type: type);
     if (failureOrMedia == null || failureOrMedia.isLeft()) {
       emit(const MediaListFailure(message: 'Failed to get media'));
       return null;

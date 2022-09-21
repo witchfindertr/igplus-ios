@@ -17,6 +17,6 @@ abstract class LocalRepository {
 
   // Media
   Either<Failure, List<Media>?> getCachedMediaList(
-      {required String boxKey, int? pageKey, int? pageSize, String? searchTerm});
+      {required String boxKey, int? pageKey, int? pageSize, String? searchTerm, String? type});
   Future<void> cacheMediaList({required List<Media> mediaList, required String boxKey});
 }

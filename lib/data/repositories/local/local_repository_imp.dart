@@ -75,10 +75,10 @@ class LocalRepositoryImpl implements LocalRepository {
 
   @override
   Either<Failure, List<Media>?> getCachedMediaList(
-      {required String boxKey, int? pageKey, int? pageSize, String? searchTerm}) {
+      {required String boxKey, int? pageKey, int? pageSize, String? searchTerm, String? type}) {
     try {
       final List<Media>? cachedMediaList = localDataSource.getCachedMediaList(
-          boxKey: boxKey, pageKey: pageKey, pageSize: pageSize, searchTerm: searchTerm);
+          boxKey: boxKey, pageKey: pageKey, pageSize: pageSize, searchTerm: searchTerm, type: type);
       return Right(cachedMediaList);
     } catch (e) {
       return const Left(InvalidParamsFailure("getCachedMediaList catch"));
