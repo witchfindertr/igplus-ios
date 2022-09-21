@@ -2,6 +2,7 @@ import 'dart:async';
 import 'dart:convert';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:cloud_functions/cloud_functions.dart';
 import 'package:dartz/dartz.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:http/http.dart' as http;
@@ -150,17 +151,32 @@ class FirebaseDataSourceImp extends FirebaseDataSource {
 
   @override
   Future<String> getCustomToken({required String uid}) async {
-    //https://us-central1-igplusios.cloudfunctions.net/createFirebaseToken?uid=igUserId
-    var uri = Uri.https('us-central1-igplusios.cloudfunctions.net', '/createFirebaseToken', {'uid': uid});
+    try {
+      HttpsCallable callable = FirebaseFunctions.instance.httpsCallable('createFirebaseToken');
 
-    http.Response response = await http.get(uri);
-
-    if (response.statusCode == 200) {
-      String customToken = jsonDecode(response.body)["customToken"];
+      final resp = await callable.call(<String, dynamic>{
+        'uid': uid,
+      });
+      String customToken = resp.data["customToken"];
       return customToken;
-    } else {
-      throw const ServerFailure("Failed to login to Firebase with custom token");
+    } on FirebaseFunctionsException catch (e) {
+      throw ServerFailure("Failed to get Custom Token : ${e.code}");
+      // print(error.code);
+      // print(error.details);
+      // print(error.message);
     }
+
+    //https://us-central1-igplusios.cloudfunctions.net/createFirebaseToken?uid=igUserId
+    // var uri = Uri.https('us-central1-igplusios.cloudfunctions.net', '/createFirebaseToken', {'uid': uid});
+
+    // http.Response response = await http.get(uri);
+
+    // if (response.statusCode == 200) {
+    //   String customToken = jsonDecode(response.body)["customToken"];
+    //   return customToken;
+    // } else {
+    //   throw const ServerFailure("Failed to login to Firebase with custom token");
+    // }
   }
 
   @override
