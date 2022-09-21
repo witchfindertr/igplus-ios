@@ -27,6 +27,7 @@ class _FriendsListState extends State<FriendsList> {
   bool _showSearchForm = false;
   late ScrollController _scrollController;
   late FocusNode _searchFocusNode;
+  int _friendsCount = 0;
 
   @override
   void initState() {
@@ -70,6 +71,10 @@ class _FriendsListState extends State<FriendsList> {
       final List<Friend>? friendsList = await context
           .read<FriendsListCubit>()
           .getFriendsList(dataName: widget.type, pageKey: pageKey, pageSize: _pageSize, searchTerm: _searchTerm);
+
+      if (friendsList != null) {
+        _friendsCount = friendsList.length;
+      }
 
       if (friendsList == null || friendsList.isEmpty) {
         _pagingController.appendLastPage([]);
@@ -145,52 +150,50 @@ class _FriendsListState extends State<FriendsList> {
           ),
         ),
       ),
-      child: SafeArea(
-        child: Scaffold(
+      child: MaterialApp(
+        debugShowCheckedModeBanner: false,
+        theme: appMaterialTheme(),
+        home: Scaffold(
           backgroundColor: ColorsManager.appBack,
           body: BlocBuilder<FriendsListCubit, FriendsListState>(
             builder: (context, state) {
-              return MaterialApp(
-                debugShowCheckedModeBanner: false,
-                theme: appMaterialTheme(),
-                home: (_showSearchForm)
-                    ? CustomScrollView(
-                        controller: _scrollController,
-                        slivers: <Widget>[
-                          FriendSearch(
-                            onChanged: (searchTerm) => _updateSearchTerm(searchTerm),
-                            searchFocusNode: _searchFocusNode,
-                          ),
-                          PagedSliverList<int, Friend>(
-                            pagingController: _pagingController,
-                            builderDelegate: PagedChildBuilderDelegate<Friend>(
-                              animateTransitions: true,
-                              itemBuilder: (context, item, index) => FriendListItem(
-                                friend: item,
-                                index: index,
-                                type: widget.type,
-                              ),
+              return (_showSearchForm)
+                  ? CustomScrollView(
+                      controller: _scrollController,
+                      slivers: <Widget>[
+                        FriendSearch(
+                          onChanged: (searchTerm) => _updateSearchTerm(searchTerm),
+                          searchFocusNode: _searchFocusNode,
+                        ),
+                        PagedSliverList<int, Friend>(
+                          pagingController: _pagingController,
+                          builderDelegate: PagedChildBuilderDelegate<Friend>(
+                            animateTransitions: true,
+                            itemBuilder: (context, item, index) => FriendListItem(
+                              friend: item,
+                              index: index,
+                              type: widget.type,
                             ),
                           ),
-                        ],
-                      )
-                    : CustomScrollView(
-                        controller: _scrollController,
-                        slivers: <Widget>[
-                          PagedSliverList<int, Friend>(
-                            pagingController: _pagingController,
-                            builderDelegate: PagedChildBuilderDelegate<Friend>(
-                              animateTransitions: true,
-                              itemBuilder: (context, item, index) => FriendListItem(
-                                friend: item,
-                                index: index,
-                                type: widget.type,
-                              ),
+                        )
+                      ],
+                    )
+                  : CustomScrollView(
+                      controller: _scrollController,
+                      slivers: <Widget>[
+                        PagedSliverList<int, Friend>(
+                          pagingController: _pagingController,
+                          builderDelegate: PagedChildBuilderDelegate<Friend>(
+                            animateTransitions: true,
+                            itemBuilder: (context, item, index) => FriendListItem(
+                              friend: item,
+                              index: index,
+                              type: widget.type,
                             ),
                           ),
-                        ],
-                      ),
-              );
+                        ),
+                      ],
+                    );
             },
           ),
         ),

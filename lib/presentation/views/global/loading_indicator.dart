@@ -1,3 +1,4 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:igplus_ios/presentation/resources/colors_manager.dart';
 
@@ -11,11 +12,14 @@ class LoadingIndicator extends StatelessWidget {
         SizedBox(
           width: 15,
           height: 15,
-          child: CircularProgressIndicator(
-            valueColor: AlwaysStoppedAnimation<Color>(ColorsManager.appBack),
-            backgroundColor: ColorsManager.cardBack,
-            strokeWidth: 2,
+          child: CupertinoActivityIndicator(
+            radius: 7.5,
           ),
+          // CircularProgressIndicator(
+          //   valueColor: AlwaysStoppedAnimation<Color>(ColorsManager.appBack),
+          //   backgroundColor: ColorsManager.cardBack,
+          //   strokeWidth: 2,
+          // ),
         )
       ],
     );

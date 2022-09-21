@@ -21,7 +21,7 @@ class ColorsManager {
   static const Color buttonTextColor2 = Color.fromARGB(255, 226, 226, 226);
 
   // card
-  static const Color cardBack = Color.fromARGB(255, 44, 46, 68);
+  static const Color cardBack = Color.fromARGB(255, 37, 37, 50); // Color.fromARGB(255, 44, 46, 68);
   static const Color cardText = Color.fromRGBO(255, 255, 255, 1);
   static const Color cardIconColor = Color.fromRGBO(255, 255, 255, 1);
 
