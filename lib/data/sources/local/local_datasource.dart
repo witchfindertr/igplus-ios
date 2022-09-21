@@ -10,7 +10,8 @@ abstract class LocalDataSource {
   List<Friend>? getCachedFriendsList({required String boxKey, int? pageKey, int? pageSize, String? searchTerm});
   Future<void> cacheFriendsList({required List<Friend> friendsList, required String boxKey});
   int getNumberOfFriendsInBox({required String boxKey});
-  List<Media>? getCachedMediaList({required String boxKey, int? pageKey, int? pageSize, String? searchTerm});
+  List<Media>? getCachedMediaList(
+      {required String boxKey, int? pageKey, int? pageSize, String? searchTerm, String? type});
   Future<void> cacheMediaList({required List<Media> mediaList, required String boxKey});
 }
 
@@ -133,7 +134,7 @@ class LocalDataSourceImp extends LocalDataSource {
 
     // new media list to add to the box
     newMediaListToAdd =
-        mediaList.where((media) => cachedMediaList.indexWhere((element) => media.id == element.id) == -1).toList();
+        mediaList.where((media) => cachedMediaList.indexWhere((element) => media.code == element.code) == -1).toList();
 
     try {
       for (var e in newMediaListToAdd) {
@@ -145,9 +146,11 @@ class LocalDataSourceImp extends LocalDataSource {
   }
 
   @override
-  List<Media>? getCachedMediaList({required String boxKey, int? pageKey, int? pageSize, String? searchTerm}) {
+  List<Media>? getCachedMediaList(
+      {required String boxKey, int? pageKey, int? pageSize, String? searchTerm, String? type}) {
     Box<Media> mediaBox = Hive.box<Media>(boxKey);
-    final List<Media> mediaList;
+    // mediaBox.deleteFromDisk();
+    List<Media> mediaList;
     int? startKey;
     int? endKey;
     if (pageKey != null && pageSize != null) {
@@ -161,10 +164,28 @@ class LocalDataSourceImp extends LocalDataSource {
     if (mediaBox.isEmpty) {
       return null;
     } else {
-      if (startKey != null && endKey != null && searchTerm == null) {
+      if (startKey != null && endKey != null) {
         mediaList = mediaBox.values.toList().sublist(startKey, endKey);
-      } else if (searchTerm != null) {
-        mediaList = mediaBox.values.where((c) => c.text.toLowerCase().contains(searchTerm)).toList();
+
+        //  search keyword
+        if (searchTerm != null) {
+          mediaList = mediaBox.values.where((c) => c.text.toLowerCase().contains(searchTerm)).toList();
+        }
+
+        // order by
+        if (type != null) {
+          if (type == 'mostPopularMedia') {
+            mediaList.sort((a, b) =>
+                (b.likeCount + b.commentsCount + b.viewCount).compareTo(a.likeCount + a.commentsCount + a.viewCount));
+          } else if (type == 'mostLikedMedia') {
+            mediaList.sort((a, b) => b.likeCount.compareTo(a.likeCount));
+          } else if (type == 'mostCommentedMedia') {
+            mediaList.sort((a, b) => b.commentsCount.compareTo(a.commentsCount));
+          } else if (type == 'mostViewedMedia') {
+            mediaList = mediaList.where((element) => element.mediaType == 2).toList();
+            mediaList.sort((a, b) => b.viewCount.compareTo(a.viewCount));
+          }
+        }
       } else {
         mediaList = mediaBox.values.toList();
       }

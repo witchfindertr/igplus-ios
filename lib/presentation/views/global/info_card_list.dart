@@ -16,6 +16,7 @@ class InfoCardList extends StatelessWidget {
         title: card["title"],
         subTitle: card["subTitle"],
         context: context,
+        type: card["type"],
       ));
     }
     return Column(
@@ -23,9 +24,9 @@ class InfoCardList extends StatelessWidget {
     );
   }
 
-  Widget myCard({required String title, String? subTitle, required BuildContext context, int? style}) {
+  Widget myCard({required String title, String? subTitle, required BuildContext context, int? style, String? type}) {
     return GestureDetector(
-      onTap: () => GoRouter.of(context).go('/home/mediaList/mostLikedMedia'),
+      onTap: () => GoRouter.of(context).go('/home/mediaList/$type'),
       child: Card(
         color: ColorsManager.cardBack,
         elevation: 1,

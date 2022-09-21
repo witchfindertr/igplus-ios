@@ -8,9 +8,9 @@ class GetMediaFromLocalUseCase {
   GetMediaFromLocalUseCase({required this.localRepository});
 
   Future<Either<Failure, List<Media>?>?> execute(
-      {required String dataName, int? pageKey, int? pageSize, String? searchTerm}) async {
+      {required String dataName, int? pageKey, int? pageSize, String? searchTerm, String? type}) async {
     // get media list from local
     return localRepository.getCachedMediaList(
-        boxKey: Media.boxKey, pageKey: pageKey, pageSize: pageSize, searchTerm: searchTerm);
+        boxKey: Media.boxKey, pageKey: pageKey, pageSize: pageSize, searchTerm: searchTerm, type: type);
   }
 }
