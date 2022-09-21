@@ -50,6 +50,7 @@ class _LoginPageState extends State<LoginPage> {
               }
             },
             builder: (context, state) {
+              print("Login state: $state");
               if (state is InstagramAuthInProgress) {
                 return const Center(
                   child: CupertinoActivityIndicator(),
@@ -111,8 +112,13 @@ class _LoginPageState extends State<LoginPage> {
                   ],
                 );
               }
+              if (state is InstagramAuthSuccess) {
+                return const Center(
+                  child: CupertinoActivityIndicator(),
+                );
+              }
               return const Center(
-                child: Text('Unknown'),
+                child: Text('Unknown state', style: TextStyle(color: ColorsManager.secondarytextColor)),
               );
             },
           ),

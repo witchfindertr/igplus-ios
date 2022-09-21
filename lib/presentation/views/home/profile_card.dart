@@ -18,7 +18,7 @@ class ProfileCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Card(
-      margin: const EdgeInsets.fromLTRB(8.0, 20.0, 8.0, 4.0),
+      margin: const EdgeInsets.fromLTRB(8.0, 0.0, 8.0, 4.0),
       color: ColorsManager.cardBack,
       elevation: 1,
       child: Padding(

@@ -1,6 +1,7 @@
 import 'package:dartz/dartz.dart';
 import 'package:igplus_ios/data/failure.dart';
 import 'package:igplus_ios/domain/entities/friend.dart';
+import 'package:igplus_ios/domain/entities/media.dart';
 import 'package:igplus_ios/domain/entities/report.dart';
 
 abstract class LocalRepository {
@@ -13,4 +14,9 @@ abstract class LocalRepository {
       {required String boxKey, int? pageKey, int? pageSize, String? searchTerm});
   Future<void> cacheFriendsList({required List<Friend> friendsList, required String boxKey});
   Either<Failure, int> getNumberOfFriendsInBox({required String boxKey});
+
+  // Media
+  Either<Failure, List<Media>?> getCachedMediaList(
+      {required String boxKey, int? pageKey, int? pageSize, String? searchTerm});
+  Future<void> cacheMediaList({required List<Media> mediaList, required String boxKey});
 }

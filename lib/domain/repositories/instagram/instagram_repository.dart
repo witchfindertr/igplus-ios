@@ -1,7 +1,9 @@
 import 'package:dartz/dartz.dart';
+import 'package:igplus_ios/data/models/media_model.dart';
 import 'package:igplus_ios/domain/entities/User_story.dart';
 import 'package:igplus_ios/domain/entities/friend.dart';
 import 'package:igplus_ios/domain/entities/ig_headers.dart';
+import 'package:igplus_ios/domain/entities/media.dart';
 
 import '../../../data/failure.dart';
 import '../../entities/account_info.dart';
@@ -48,4 +50,7 @@ abstract class InstagramRepository {
     required int userId,
     required IgHeaders igHeaders,
   });
+
+  // besties friends list
+  Future<Either<Failure, List<Media>>> getUserFeed({required String userId, required IgHeaders igHeaders});
 }

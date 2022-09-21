@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:igplus_ios/presentation/blocs/user_stories/cubit/user_stories_cubit.dart';
+import 'package:igplus_ios/presentation/resources/colors_manager.dart';
+import 'package:igplus_ios/presentation/views/global/loading_indicator.dart';
 import 'package:igplus_ios/presentation/views/global/section_title.dart';
 import 'package:igplus_ios/presentation/views/home/stories/story_card.dart';
 
@@ -27,9 +29,23 @@ class _StoriesListState extends State<StoriesList> {
         BlocBuilder<UserStoriesCubit, UserStoriesState>(
           builder: (context, state) {
             if (state is UserStoriesInitial) {
-              return const Center(child: CircularProgressIndicator());
+              return Center(
+                  child: SizedBox(
+                width: MediaQuery.of(context).size.width,
+                height: 82.00,
+                child: const Center(
+                  child: LoadingIndicator(),
+                ),
+              ));
             } else if (state is UserStoriesLoading) {
-              return const Center(child: CircularProgressIndicator());
+              return Center(
+                  child: SizedBox(
+                width: MediaQuery.of(context).size.width,
+                height: 82.00,
+                child: const Center(
+                  child: LoadingIndicator(),
+                ),
+              ));
             } else if (state is UserStoriesLoaded) {
               return SizedBox(
                 height: 82.00,
@@ -42,7 +58,7 @@ class _StoriesListState extends State<StoriesList> {
                 ),
               );
             } else {
-              return const Center(child: Text("Error"));
+              return const Center(child: Text("Error loading stories..."));
             }
           },
         ),

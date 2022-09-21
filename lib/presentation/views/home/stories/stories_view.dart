@@ -7,6 +7,7 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:go_router/go_router.dart';
 import 'package:igplus_ios/app/constants/media_constants.dart';
 import 'package:igplus_ios/domain/entities/User_story.dart';
+import 'package:igplus_ios/presentation/views/global/loading_indicator.dart';
 import 'package:story_view/story_view.dart';
 
 import 'package:igplus_ios/app/app.dart';
@@ -126,15 +127,7 @@ class _StoriesViewState extends State<StoriesView> {
                   ],
                 ));
           } else {
-            return const Center(
-                child: SizedBox(
-              width: 20.0,
-              height: 20.0,
-              child: CircularProgressIndicator(
-                strokeWidth: 2.0,
-                color: ColorsManager.primaryColor,
-              ),
-            ));
+            return const Center(child: LoadingIndicator());
           }
         },
       ),

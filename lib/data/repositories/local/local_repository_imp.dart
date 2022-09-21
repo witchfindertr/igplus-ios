@@ -2,6 +2,7 @@ import 'package:dartz/dartz.dart';
 import 'package:igplus_ios/data/failure.dart';
 import 'package:igplus_ios/data/sources/local/local_datasource.dart';
 import 'package:igplus_ios/domain/entities/friend.dart';
+import 'package:igplus_ios/domain/entities/media.dart';
 import 'package:igplus_ios/domain/entities/report.dart';
 import 'package:igplus_ios/domain/repositories/local/local_repository.dart';
 
@@ -60,6 +61,27 @@ class LocalRepositoryImpl implements LocalRepository {
       return Right(numberOfFriends);
     } catch (e) {
       return const Left(InvalidParamsFailure("getNumberOfFriendsInBox catch"));
+    }
+  }
+
+  // Media
+  @override
+  Future<void> cacheMediaList({required List<Media> mediaList, required String boxKey}) async {
+    await localDataSource.cacheMediaList(
+      mediaList: mediaList,
+      boxKey: boxKey,
+    );
+  }
+
+  @override
+  Either<Failure, List<Media>?> getCachedMediaList(
+      {required String boxKey, int? pageKey, int? pageSize, String? searchTerm}) {
+    try {
+      final List<Media>? cachedMediaList = localDataSource.getCachedMediaList(
+          boxKey: boxKey, pageKey: pageKey, pageSize: pageSize, searchTerm: searchTerm);
+      return Right(cachedMediaList);
+    } catch (e) {
+      return const Left(InvalidParamsFailure("getCachedMediaList catch"));
     }
   }
 }
