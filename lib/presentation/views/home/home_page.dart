@@ -95,7 +95,6 @@ class _HomePageState extends State<HomePage> {
                         ));
             }),
           ),
-      
           child: BlocBuilder<ReportCubit, ReportState>(
             builder: (context, state) {
               if (state is ReportInProgress) {
@@ -127,15 +126,16 @@ class _HomePageState extends State<HomePage> {
                       Text(state.message),
                       TextButton(
                         onPressed: () {
-                            if (state.message == "Instagram session expired") {
-                              GoRouter.of(context).goNamed('instagram_login', queryParams: {
-                                'updateInstagramAccount': 'true',
-                              });
-                            } else {
-                              context.read<ReportCubit>().init();
-                            }
-                          },
-                        child: const Text("Retry", style: TextStyle(color: ColorsManager.primaryColor)),
+                          if (state.message == "Instagram session expired") {
+                            GoRouter.of(context).goNamed('instagram_login', queryParams: {
+                              'updateInstagramAccount': 'true',
+                            });
+                          } else {
+                            context.read<ReportCubit>().init();
+                          }
+                        },
+                        child: Text((state.message == "Instagram session expired") ? "Login" : "Retry",
+                            style: const TextStyle(color: ColorsManager.primaryColor)),
                       ),
                     ],
                   ),
@@ -146,7 +146,6 @@ class _HomePageState extends State<HomePage> {
                 );
               }
             },
-
           ),
         ),
       ),
