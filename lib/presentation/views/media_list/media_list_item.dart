@@ -33,7 +33,7 @@ class _MediaListItemState extends State<MediaListItem> {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.all(2.0),
+      padding: const EdgeInsets.all(8.0),
       child: Stack(
         children: [
           CachedNetworkImage(
@@ -70,8 +70,7 @@ class _MediaListItemState extends State<MediaListItem> {
                             ? NumberFormat.compact().format(widget.media.commentsCount)
                             : (widget.type == "mostViewedMedia")
                                 ? NumberFormat.compact().format(widget.media.viewCount)
-                                : NumberFormat.compact().format(
-                                    (widget.media.likeCount + widget.media.commentsCount + widget.media.viewCount)),
+                                : NumberFormat.compact().format((widget.media.likeCount + widget.media.commentsCount)),
                     style: const TextStyle(color: Colors.white, fontSize: 10)),
               ],
             ),
@@ -84,7 +83,9 @@ class _MediaListItemState extends State<MediaListItem> {
                     children: [
                       mediaCount(icon: FontAwesomeIcons.heart, count: widget.media.likeCount),
                       mediaCount(icon: FontAwesomeIcons.comment, count: widget.media.commentsCount),
-                      mediaCount(icon: FontAwesomeIcons.eye, count: widget.media.viewCount),
+                      (widget.media.mediaType == 1)
+                          ? mediaCount(icon: FontAwesomeIcons.eye, count: widget.media.viewCount)
+                          : const SizedBox.shrink(),
                     ],
                   ),
                 )
@@ -94,16 +95,16 @@ class _MediaListItemState extends State<MediaListItem> {
     );
   }
 
-  Container mediaCount({required IconData icon, required int count}) {
-    return Container(
-      decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(4),
-        color: ColorsManager.appBack.withOpacity(0.6),
-      ),
-      padding: const EdgeInsets.all(2.0),
-      margin: const EdgeInsets.all(2.0),
-      child: Opacity(
-        opacity: 0.5,
+  mediaCount({required IconData icon, required int count}) {
+    return Opacity(
+      opacity: 0.7,
+      child: Container(
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(4),
+          color: ColorsManager.appBack.withOpacity(0.6),
+        ),
+        padding: const EdgeInsets.all(2.0),
+        margin: const EdgeInsets.all(2.0),
         child: Row(
           mainAxisSize: MainAxisSize.min,
           children: [

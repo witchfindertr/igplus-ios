@@ -175,8 +175,7 @@ class LocalDataSourceImp extends LocalDataSource {
         // order by
         if (type != null) {
           if (type == 'mostPopularMedia') {
-            mediaList.sort((a, b) =>
-                (b.likeCount + b.commentsCount + b.viewCount).compareTo(a.likeCount + a.commentsCount + a.viewCount));
+            mediaList.sort((a, b) => (b.likeCount + b.commentsCount).compareTo(a.likeCount + a.commentsCount));
           } else if (type == 'mostLikedMedia') {
             mediaList.sort((a, b) => b.likeCount.compareTo(a.likeCount));
           } else if (type == 'mostCommentedMedia') {
