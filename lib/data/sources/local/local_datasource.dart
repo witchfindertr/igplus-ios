@@ -238,17 +238,17 @@ class LocalDataSourceImp extends LocalDataSource {
     await Hive.deleteBoxFromDisk(Friend.youHaveUnfollowedBoxKey);
     await Hive.deleteBoxFromDisk(Friend.newStoryViewersBoxKey);
 
-    // Hive.box<Media>(Media.boxKey);
-    // Hive.box<Report>(Report.boxKey);
-    // Hive.box<Friend>(Friend.followersBoxKey);
-    // Hive.box<Friend>(Friend.followingsBoxKey);
-    // Hive.box<Friend>(Friend.newFollowersBoxKey);
-    // Hive.box<Friend>(Friend.lostFollowersBoxKey);
-    // Hive.box<Friend>(Friend.whoAdmiresYouBoxKey);
-    // Hive.box<Friend>(Friend.notFollowingBackBoxKey);
-    // Hive.box<Friend>(Friend.youDontFollowBackBoxKey);
-    // Hive.box<Friend>(Friend.mutualFollowingsBoxKey);
-    // Hive.box<Friend>(Friend.youHaveUnfollowedBoxKey);
-    // Hive.box<Friend>(Friend.newStoryViewersBoxKey);
+    Hive.box<Media>(Media.boxKey);
+    Hive.box<Report>(Report.boxKey);
+    Hive.box<Friend>(Friend.followersBoxKey);
+    Hive.box<Friend>(Friend.followingsBoxKey);
+    Hive.box<Friend>(Friend.newFollowersBoxKey);
+    Hive.box<Friend>(Friend.lostFollowersBoxKey);
+    Hive.box<Friend>(Friend.whoAdmiresYouBoxKey);
+    Hive.box<Friend>(Friend.notFollowingBackBoxKey);
+    Hive.box<Friend>(Friend.youDontFollowBackBoxKey);
+    Hive.box<Friend>(Friend.mutualFollowingsBoxKey);
+    Hive.box<Friend>(Friend.youHaveUnfollowedBoxKey);
+    Hive.box<Friend>(Friend.newStoryViewersBoxKey);
   }
 }

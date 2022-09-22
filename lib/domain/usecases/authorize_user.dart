@@ -21,10 +21,6 @@ class AuthorizeUser {
     // user is authenticated and not blocked
     Either<Failure, User> user = await firebaseRepository.validateUser(userId: currentUser.uid);
 
-    // signout user
-    if (user is Left) {
-      fbAuth.signOut();
-    }
     return user;
   }
 }
