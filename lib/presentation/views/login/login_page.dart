@@ -16,7 +16,6 @@ class _LoginPageState extends State<LoginPage> {
   bool sessionExpired = false;
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
     context.read<InstagramAuthCubit>().init();
   }
