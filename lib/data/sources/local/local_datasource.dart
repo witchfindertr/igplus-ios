@@ -225,30 +225,17 @@ class LocalDataSourceImp extends LocalDataSource {
   // ----------------------->
   @override
   Future<void> clearAllBoxes() async {
-    await Hive.deleteBoxFromDisk(Media.boxKey);
-    await Hive.deleteBoxFromDisk(Report.boxKey);
-    await Hive.deleteBoxFromDisk(Friend.followersBoxKey);
-    await Hive.deleteBoxFromDisk(Friend.followingsBoxKey);
-    await Hive.deleteBoxFromDisk(Friend.newFollowersBoxKey);
-    await Hive.deleteBoxFromDisk(Friend.lostFollowersBoxKey);
-    await Hive.deleteBoxFromDisk(Friend.whoAdmiresYouBoxKey);
-    await Hive.deleteBoxFromDisk(Friend.notFollowingBackBoxKey);
-    await Hive.deleteBoxFromDisk(Friend.youDontFollowBackBoxKey);
-    await Hive.deleteBoxFromDisk(Friend.mutualFollowingsBoxKey);
-    await Hive.deleteBoxFromDisk(Friend.youHaveUnfollowedBoxKey);
-    await Hive.deleteBoxFromDisk(Friend.newStoryViewersBoxKey);
-
-    Hive.box<Media>(Media.boxKey);
-    Hive.box<Report>(Report.boxKey);
-    Hive.box<Friend>(Friend.followersBoxKey);
-    Hive.box<Friend>(Friend.followingsBoxKey);
-    Hive.box<Friend>(Friend.newFollowersBoxKey);
-    Hive.box<Friend>(Friend.lostFollowersBoxKey);
-    Hive.box<Friend>(Friend.whoAdmiresYouBoxKey);
-    Hive.box<Friend>(Friend.notFollowingBackBoxKey);
-    Hive.box<Friend>(Friend.youDontFollowBackBoxKey);
-    Hive.box<Friend>(Friend.mutualFollowingsBoxKey);
-    Hive.box<Friend>(Friend.youHaveUnfollowedBoxKey);
-    Hive.box<Friend>(Friend.newStoryViewersBoxKey);
+    await Hive.box<Report>(Report.boxKey).clear();
+    await Hive.box<Media>(Media.boxKey).clear();
+    await Hive.box<Friend>(Friend.followersBoxKey).clear();
+    await Hive.box<Friend>(Friend.followingsBoxKey).clear();
+    await Hive.box<Friend>(Friend.newFollowersBoxKey).clear();
+    await Hive.box<Friend>(Friend.lostFollowersBoxKey).clear();
+    await Hive.box<Friend>(Friend.whoAdmiresYouBoxKey).clear();
+    await Hive.box<Friend>(Friend.notFollowingBackBoxKey).clear();
+    await Hive.box<Friend>(Friend.youDontFollowBackBoxKey).clear();
+    await Hive.box<Friend>(Friend.mutualFollowingsBoxKey).clear();
+    await Hive.box<Friend>(Friend.youHaveUnfollowedBoxKey).clear();
+    await Hive.box<Friend>(Friend.newStoryViewersBoxKey).clear();
   }
 }
