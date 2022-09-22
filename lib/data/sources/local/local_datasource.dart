@@ -1,4 +1,5 @@
 import 'package:hive/hive.dart';
+import 'package:igplus_ios/domain/entities/account_info.dart';
 import 'package:igplus_ios/domain/entities/friend.dart';
 import 'package:http/http.dart' as http;
 import 'package:igplus_ios/domain/entities/media.dart';
@@ -13,6 +14,9 @@ abstract class LocalDataSource {
   List<Media>? getCachedMediaList(
       {required String boxKey, int? pageKey, int? pageSize, String? searchTerm, String? type});
   Future<void> cacheMediaList({required List<Media> mediaList, required String boxKey});
+  AccountInfo? getCachedAccountInfo();
+  Future<void> cacheAccountInfo({required AccountInfo accountInfo});
+  Future<void> clearAllBoxes();
 }
 
 class LocalDataSourceImp extends LocalDataSource {
@@ -190,5 +194,61 @@ class LocalDataSourceImp extends LocalDataSource {
       }
       return mediaList;
     }
+  }
+
+  // ----------------------->
+  // Account Info ------------------>
+  // ----------------------->
+
+  @override
+  Future<void> cacheAccountInfo({required AccountInfo accountInfo}) async {
+    final accountInfoBox = Hive.box<AccountInfo>(AccountInfo.boxKey);
+    try {
+      accountInfoBox.put('accountInfo', accountInfo);
+    } catch (e) {
+      print(e);
+    }
+  }
+
+  @override
+  AccountInfo? getCachedAccountInfo() {
+    final accountInfoBox = Hive.box<AccountInfo>(AccountInfo.boxKey);
+    if (accountInfoBox.isEmpty) {
+      return null;
+    } else {
+      return accountInfoBox.get('accountInfo');
+    }
+  }
+
+  // ----------------------->
+  // Clear all boxes ------------------>
+  // ----------------------->
+  @override
+  Future<void> clearAllBoxes() async {
+    await Hive.deleteBoxFromDisk(Media.boxKey);
+    await Hive.deleteBoxFromDisk(Report.boxKey);
+    await Hive.deleteBoxFromDisk(Friend.followersBoxKey);
+    await Hive.deleteBoxFromDisk(Friend.followingsBoxKey);
+    await Hive.deleteBoxFromDisk(Friend.newFollowersBoxKey);
+    await Hive.deleteBoxFromDisk(Friend.lostFollowersBoxKey);
+    await Hive.deleteBoxFromDisk(Friend.whoAdmiresYouBoxKey);
+    await Hive.deleteBoxFromDisk(Friend.notFollowingBackBoxKey);
+    await Hive.deleteBoxFromDisk(Friend.youDontFollowBackBoxKey);
+    await Hive.deleteBoxFromDisk(Friend.mutualFollowingsBoxKey);
+    await Hive.deleteBoxFromDisk(Friend.youHaveUnfollowedBoxKey);
+    await Hive.deleteBoxFromDisk(Friend.newStoryViewersBoxKey);
+
+    // Hive.box<Media>(Media.boxKey);
+    // Hive.box<Report>(Report.boxKey);
+    // Hive.box<Friend>(Friend.followersBoxKey);
+    // Hive.box<Friend>(Friend.followingsBoxKey);
+    // Hive.box<Friend>(Friend.newFollowersBoxKey);
+    // Hive.box<Friend>(Friend.lostFollowersBoxKey);
+    // Hive.box<Friend>(Friend.whoAdmiresYouBoxKey);
+    // Hive.box<Friend>(Friend.notFollowingBackBoxKey);
+    // Hive.box<Friend>(Friend.youDontFollowBackBoxKey);
+    // Hive.box<Friend>(Friend.mutualFollowingsBoxKey);
+    // Hive.box<Friend>(Friend.youHaveUnfollowedBoxKey);
+    // Hive.box<Friend>(Friend.newStoryViewersBoxKey);
   }
 }

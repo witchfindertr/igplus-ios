@@ -14,12 +14,16 @@ import 'package:igplus_ios/domain/repositories/firebase/firebase_repository.dart
 import 'package:igplus_ios/domain/repositories/firebase/headers_repository.dart';
 import 'package:igplus_ios/domain/repositories/instagram/instagram_repository.dart';
 import 'package:igplus_ios/domain/repositories/local/local_repository.dart';
+import 'package:igplus_ios/domain/usecases/clear_local_data_use_case.dart';
 import 'package:igplus_ios/domain/usecases/follow_user_use_case.dart';
+import 'package:igplus_ios/domain/usecases/get_account_info_from_local_use_case.dart';
 import 'package:igplus_ios/domain/usecases/get_media_from_local_use_case.dart';
 import 'package:igplus_ios/domain/usecases/get_user_feed_use_case.dart';
 import 'package:igplus_ios/domain/usecases/get_friends_from_local_use_case.dart';
 import 'package:igplus_ios/domain/usecases/get_report_from_local_use_case.dart';
 import 'package:igplus_ios/domain/usecases/get_user_stories_use_case.dart';
+import 'package:igplus_ios/domain/usecases/save_account_info_to_local_use_case.dart';
+import 'package:igplus_ios/domain/usecases/save_friends_to_local_use_case.dart';
 import 'package:igplus_ios/domain/usecases/save_media_to_local_use_case%20copy.dart';
 
 import 'package:igplus_ios/domain/usecases/sign_up_with_cstom_token_use_case.dart';
@@ -70,6 +74,9 @@ Future<void> init() async {
         getReportFromLocal: sl(),
         getUserFeed: sl(),
         cacheMediaToLocal: sl(),
+        getAccountInfoFromLocalUseCase: sl(),
+        cacheAccountInfoToLocalUseCase: sl(),
+        clearAllBoxesUseCase: sl(),
       ));
 
   sl.registerFactory(() =>
@@ -77,7 +84,6 @@ Future<void> init() async {
   sl.registerFactory(() => UserStoriesCubit(getUserStories: sl(), getUser: sl()));
   sl.registerFactory(() => StoriesCubit(getStories: sl(), getUser: sl()));
   sl.registerFactory(() => MediaListCubit(getMediaFromLocal: sl()));
-
   sl.registerFactory(() => AppBloc(authRepository: sl()));
 
   // Use cases
@@ -98,6 +104,10 @@ Future<void> init() async {
   sl.registerLazySingleton(() => GetUserFeedUseCase(instagramRepository: sl()));
   sl.registerLazySingleton(() => CacheMediaToLocalUseCase(localRepository: sl()));
   sl.registerLazySingleton(() => GetMediaFromLocalUseCase(localRepository: sl()));
+  sl.registerLazySingleton(() => CacheFriendsToLocalUseCase(localRepository: sl()));
+  sl.registerLazySingleton(() => GetAccountInfoFromLocalUseCase(localRepository: sl()));
+  sl.registerLazySingleton(() => CacheAccountInfoToLocalUseCase(localRepository: sl()));
+  sl.registerLazySingleton(() => ClearAllBoxesUseCase(localRepository: sl()));
 
   // Repositories
   sl.registerLazySingleton<FirebaseRepository>(() => FirebaseRepositporyImp(firebaseDataSource: sl()));
@@ -114,7 +124,8 @@ Future<void> init() async {
   // Data sources
   sl.registerLazySingleton<FirebaseDataSource>(
       () => FirebaseDataSourceImp(client: sl(), firebaseAuth: sl(), firebaseFirestore: sl()));
-  sl.registerLazySingleton<InstagramDataSource>(() => InstagramDataSourceImp(client: sl()));
+  sl.registerLazySingleton<InstagramDataSource>(
+      () => InstagramDataSourceImp(client: sl(), cacheFriendsToLocalUseCase: sl()));
   sl.registerLazySingleton<LocalDataSource>(() => LocalDataSourceImp(client: sl()));
 
   // Data Mapper

@@ -1,6 +1,7 @@
 import 'package:dartz/dartz.dart';
 import 'package:igplus_ios/data/failure.dart';
 import 'package:igplus_ios/data/sources/local/local_datasource.dart';
+import 'package:igplus_ios/domain/entities/account_info.dart';
 import 'package:igplus_ios/domain/entities/friend.dart';
 import 'package:igplus_ios/domain/entities/media.dart';
 import 'package:igplus_ios/domain/entities/report.dart';
@@ -83,5 +84,31 @@ class LocalRepositoryImpl implements LocalRepository {
     } catch (e) {
       return const Left(InvalidParamsFailure("getCachedMediaList catch"));
     }
+  }
+
+  // account info
+  @override
+  Future<void> cacheAccountInfo({required AccountInfo accountInfo}) async {
+    await localDataSource.cacheAccountInfo(accountInfo: accountInfo);
+  }
+
+  @override
+  Either<Failure, AccountInfo?> getCachedAccountInfo() {
+    try {
+      final accountInfo = localDataSource.getCachedAccountInfo();
+      if (accountInfo == null) {
+        return const Left(InvalidParamsFailure('No accountInfo found'));
+      } else {
+        return Right(accountInfo);
+      }
+    } catch (e) {
+      return const Left(InvalidParamsFailure("getCachedAccountInfo catch"));
+    }
+  }
+
+  // clear all boxes
+  @override
+  Future<void> clearAllBoxes() async {
+    await localDataSource.clearAllBoxes();
   }
 }

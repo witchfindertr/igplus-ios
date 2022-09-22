@@ -6,10 +6,9 @@ class CacheFriendsToLocalUseCase {
   CacheFriendsToLocalUseCase({required this.localRepository});
 
   Future<void> execute({required String dataName, required List<Friend> friendsList}) async {
-    if (dataName == "followings") {
+    if (dataName == "followers") {
       return localRepository.cacheFriendsList(boxKey: Friend.followersBoxKey, friendsList: friendsList);
-    }
-    if (dataName == "followings") {
+    } else if (dataName == "followings") {
       return localRepository.cacheFriendsList(boxKey: Friend.followingsBoxKey, friendsList: friendsList);
     } else if (dataName == "newFollowers") {
       return localRepository.cacheFriendsList(boxKey: Friend.newFollowersBoxKey, friendsList: friendsList);
