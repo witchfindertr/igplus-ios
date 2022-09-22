@@ -132,6 +132,22 @@ class ReportCubit extends Cubit<ReportState> {
               final List<Media> mediaList = (userFeedEither as Right).value;
               // cach media on local
               await cacheMediaToLocal.execute(dataName: Media.boxKey, mediaList: mediaList);
+
+              // get top likers
+              Map<Friend, int> likersLikeCount = {};
+
+              for (Friend liker in mediaList[0].topLikers) {
+                likersLikeCount.map((Friend key, int value) {
+                  if (liker.igUserId == key.igUserId) {
+                    return MapEntry(key, value + 1);
+                  } else {
+                    return MapEntry(liker, value);
+                  }
+                });
+              }
+              likersLikeCount.forEach((key, value) {
+                print("key: ${key.igUserId} value: $value");
+              });
             }
           }
         } else {
