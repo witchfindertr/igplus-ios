@@ -14,6 +14,7 @@ import 'package:igplus_ios/data/models/user_stories_model.dart';
 import 'package:igplus_ios/domain/entities/User_story.dart';
 
 import 'package:igplus_ios/domain/entities/friend.dart';
+import 'package:igplus_ios/domain/usecases/save_friends_to_local_use_case.dart';
 
 import '../../constants.dart';
 import '../../failure.dart';
@@ -40,8 +41,9 @@ abstract class InstagramDataSource {
 
 class InstagramDataSourceImp extends InstagramDataSource {
   final http.Client client;
+  final CacheFriendsToLocalUseCase cacheFriendsToLocalUseCase;
 
-  InstagramDataSourceImp({required this.client});
+  InstagramDataSourceImp({required this.client, required this.cacheFriendsToLocalUseCase});
 
   @override
   Future<AccountInfoModel> getAccountInfoById({required String igUserId, required Map<String, String> headers}) async {
@@ -107,6 +109,7 @@ class InstagramDataSourceImp extends InstagramDataSource {
         bool lastCachedFollowersDetected = false;
         int currentCase = 0;
         final List<dynamic> users = body['users'];
+        nextMaxId = body['next_max_id'];
         List<FriendModel> friends = users.map((friend) => FriendModel.fromJson(friend)).toList();
         FriendModel lastFollowers = friends.last;
 
@@ -127,13 +130,14 @@ class InstagramDataSourceImp extends InstagramDataSource {
           if (lastCachedFriendIndex != -1) {
             lastCachedFollowersDetected = true;
             if (lastCachedFriendIndex != 0) {
+              // update friends list with new friends
               List<dynamic> newFriendsList = friends.sublist(0, lastCachedFriendIndex);
-              // friendsList.removeWhere((element) => false);
               friendsList = [
                 ...newFriendsList,
                 ...cachedFollowersList.map((friend) => FriendModel.fromFriend(friend)).toList()
               ];
             } else {
+              // no changes keep using cached followers
               friendsList = cachedFollowersList.map((friend) => FriendModel.fromFriend(friend)).toList();
             }
           } else {
@@ -142,8 +146,14 @@ class InstagramDataSourceImp extends InstagramDataSource {
                   await _loadAllFriends(nextMaxId, body, friendsList, nbrRequests, requestsLimit, igUserId, headers, 0);
               friends = [...nextUsers, ...users];
             } else {
-              cachedFollowersList.removeAt(currentCase);
-              currentCase++;
+              if (currentCase < cachedFollowersList.length - 1) {
+                cachedFollowersList.removeAt(currentCase);
+                currentCase++;
+              } else {
+                lastCachedFollowersDetected = true;
+                friendsList = await _loadAllFriends(
+                    nextMaxId, body, friendsList, nbrRequests, requestsLimit, igUserId, headers, 0);
+              }
             }
           }
         }
@@ -189,7 +199,12 @@ class InstagramDataSourceImp extends InstagramDataSource {
 
     if (users.isNotEmpty) {
       nextMaxId = rs['next_max_id'];
-      friendsList.addAll(users.map((f) => FriendModel.fromJson(f as Map<String, dynamic>)).toList());
+      final List<FriendModel> newFriendsList =
+          users.map((f) => FriendModel.fromJson(f as Map<String, dynamic>)).toList();
+      // save new friends list to local
+      cacheFriendsToLocalUseCase.execute(
+          dataName: "followers", friendsList: newFriendsList.map((e) => e.toEntity()).toList());
+      friendsList.addAll(newFriendsList);
     }
     return nextMaxId;
   }

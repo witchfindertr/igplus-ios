@@ -7,10 +7,13 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import 'package:go_router/go_router.dart';
+import 'package:igplus_ios/data/constants.dart';
+import 'package:igplus_ios/domain/usecases/get_account_info_use_case.dart';
 import 'package:igplus_ios/presentation/blocs/login/cubit/instagram_auth_cubit.dart';
 
 import 'package:webview_cookie_manager/webview_cookie_manager.dart';
 import 'package:webview_flutter/webview_flutter.dart';
+import 'package:http/http.dart' as http;
 
 class InstagramLoginPage extends StatefulWidget {
   InstagramLoginPage({
@@ -28,7 +31,7 @@ class _InstagramLoginPageState extends State<InstagramLoginPage> {
   final Completer<WebViewController> _controller = Completer<WebViewController>();
 
   final WebviewCookieManager _cookieManager = WebviewCookieManager();
-
+  late GetAccountInfoUseCase getAccountInfoUseCase;
   Cookie? findCookie({required String name, required List<Cookie> cookies}) {
     for (final cookie in cookies) {
       if (cookie.name == name) {
@@ -68,7 +71,12 @@ class _InstagramLoginPageState extends State<InstagramLoginPage> {
             if (sessionidCookies != null && useridCookies != null && mounted) {
               //"23689336944%3A7RknvrX3SdUpYB%3A7%3AAYfosXmPcAl9__jTr47HqVTK2gjTrqh5sa8rnvoY5g"
 
-              GoRouter.of(context).pop();
+              // GoRouter.of(context).pop();
+
+              // 1 https://www.instagram.com/accounts/login"
+              // 2 https://www.instagram.com/challenge/?
+              // 3 https://www.instagram.com/accounts/onetap/?next=%2F
+
               Map<String, String> headers = {
                 'User-Agent': userAgent.replaceAll('"', '').trim(),
                 'Cookie': 'sessionid=${sessionidCookies.value}',
@@ -80,12 +88,23 @@ class _InstagramLoginPageState extends State<InstagramLoginPage> {
                 'X-CSRFToken': csrftokenCookies?.value ?? ""
               };
 
-              context.read<InstagramAuthCubit>().createOrUpdateInstagramInfo(
-                    headers: headers,
-                    igUserId: useridCookies.value,
-                  );
+              // test if the session is valid
+              if (request.url.contains("instagram.com/accounts/onetap/")) {
+                final rs =
+                    await http.get(Uri.parse(InstagramUrls.getAccountInfoById(useridCookies.value)), headers: headers);
 
-              return NavigationDecision.prevent;
+                if (rs.statusCode == 200 && mounted) {
+                  context.read<InstagramAuthCubit>().createOrUpdateInstagramInfo(
+                        headers: headers,
+                        igUserId: useridCookies.value,
+                      );
+
+                  GoRouter.of(context).pop();
+                  return NavigationDecision.prevent;
+                }
+              }
+
+              return NavigationDecision.navigate;
             }
 
             return NavigationDecision.navigate;

@@ -1,5 +1,6 @@
 import 'package:dartz/dartz.dart';
 import 'package:igplus_ios/data/failure.dart';
+import 'package:igplus_ios/domain/entities/account_info.dart';
 import 'package:igplus_ios/domain/entities/friend.dart';
 import 'package:igplus_ios/domain/entities/media.dart';
 import 'package:igplus_ios/domain/entities/report.dart';
@@ -19,4 +20,11 @@ abstract class LocalRepository {
   Either<Failure, List<Media>?> getCachedMediaList(
       {required String boxKey, int? pageKey, int? pageSize, String? searchTerm, String? type});
   Future<void> cacheMediaList({required List<Media> mediaList, required String boxKey});
+
+  // Account info
+  Either<Failure, AccountInfo?> getCachedAccountInfo();
+  Future<void> cacheAccountInfo({required AccountInfo accountInfo});
+
+  // clear all boxes
+  Future<void> clearAllBoxes();
 }

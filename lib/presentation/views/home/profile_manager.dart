@@ -30,6 +30,7 @@ class ProfileManager extends StatelessWidget {
             color: ColorsManager.cardBack,
             itemBuilder: (context) => [
               PopupMenuItem(
+                onTap: () => changeUsernameAlert(context),
                 value: 1,
                 height: 35.0,
                 child: Row(
@@ -110,6 +111,42 @@ class ProfileManager extends StatelessWidget {
       backgroundColor: ColorsManager.cardBack,
       title: const Text("Are you sure you want to log out?"),
       content: const Text("When you log out, all your data will be deleted permanently."),
+      actions: [
+        cancelButton,
+        continueButton,
+      ],
+    );
+
+    // show the dialog
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return alert;
+      },
+    );
+  }
+
+  changeUsernameAlert(BuildContext context) {
+    // set up the buttons
+    Widget cancelButton = TextButton(
+      child: const Text("Cancel"),
+      onPressed: () {
+        Navigator.of(context, rootNavigator: true).pop();
+      },
+    );
+    Widget continueButton = TextButton(
+      child: const Text("Change it"),
+      onPressed: () {
+        GoRouter.of(context).pushNamed('instagram_login', queryParams: {'updateInstagramAccount': 'true'});
+        Navigator.of(context, rootNavigator: true).pop();
+      },
+    );
+
+    // set up the AlertDialog
+    AlertDialog alert = AlertDialog(
+      backgroundColor: ColorsManager.cardBack,
+      title: const Text("Are you sure you want to change your account?"),
+      content: const Text("When you change your account, all your old account data will be deleted permanently."),
       actions: [
         cancelButton,
         continueButton,

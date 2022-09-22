@@ -9,12 +9,15 @@ import 'package:igplus_ios/domain/entities/account_info.dart';
 import 'package:igplus_ios/domain/entities/friend.dart';
 import 'package:igplus_ios/domain/entities/media.dart';
 import 'package:igplus_ios/domain/entities/user.dart';
+import 'package:igplus_ios/domain/usecases/clear_local_data_use_case.dart';
+import 'package:igplus_ios/domain/usecases/get_account_info_from_local_use_case.dart';
 
 import 'package:igplus_ios/domain/usecases/get_account_info_use_case.dart';
 import 'package:igplus_ios/domain/usecases/get_user_feed_use_case.dart';
 import 'package:igplus_ios/domain/usecases/get_friends_from_local_use_case.dart';
 import 'package:igplus_ios/domain/usecases/get_report_from_local_use_case.dart';
 import 'package:igplus_ios/domain/usecases/get_user_use_case.dart';
+import 'package:igplus_ios/domain/usecases/save_account_info_to_local_use_case.dart';
 import 'package:igplus_ios/domain/usecases/save_friends_to_local_use_case.dart';
 import 'package:igplus_ios/domain/usecases/save_media_to_local_use_case%20copy.dart';
 import 'package:igplus_ios/domain/usecases/update_report_use_case.dart';
@@ -31,6 +34,9 @@ class ReportCubit extends Cubit<ReportState> {
   final GetReportFromLocalUseCase getReportFromLocal;
   final GetUserFeedUseCase getUserFeed;
   final CacheMediaToLocalUseCase cacheMediaToLocal;
+  final GetAccountInfoFromLocalUseCase getAccountInfoFromLocalUseCase;
+  final CacheAccountInfoToLocalUseCase cacheAccountInfoToLocalUseCase;
+  final ClearAllBoxesUseCase clearAllBoxesUseCase;
   ReportCubit({
     required this.updateReport,
     required this.getUser,
@@ -39,10 +45,25 @@ class ReportCubit extends Cubit<ReportState> {
     required this.getReportFromLocal,
     required this.getUserFeed,
     required this.cacheMediaToLocal,
+    required this.getAccountInfoFromLocalUseCase,
+    required this.cacheAccountInfoToLocalUseCase,
+    required this.clearAllBoxesUseCase,
   }) : super(ReportInitial());
 
   void init() async {
     emit(const ReportInProgress(loadingMessage: "We are loading your data..."));
+    // get cached account info from local // TODO - get from local
+    final accountInfoEither = await getAccountInfoFromLocalUseCase.execute();
+    AccountInfo? cachedAccountInfo = accountInfoEither.fold(
+      (failure) => null,
+      (accountInfo) => accountInfo,
+    );
+
+    // show old account info
+    if (cachedAccountInfo != null) {
+      emit(ReportAccountInfoLoaded(
+          accountInfo: cachedAccountInfo, loadingMessage: "We are updating your account info..."));
+    }
 
     // get user info
     final failureOrCurrentUser = await getUser.execute();
@@ -51,7 +72,6 @@ class ReportCubit extends Cubit<ReportState> {
       emit(ReportFailure(message: 'Failed to get user info', failure: failure));
     } else {
       User currentUser = (failureOrCurrentUser as Right).value;
-
       // get account info
       final failureOrAccountInfo =
           await getAccountInfo.execute(igUserId: currentUser.igUserId, igHeaders: currentUser.igHeaders);
@@ -60,7 +80,16 @@ class ReportCubit extends Cubit<ReportState> {
         emit(ReportFailure(message: "failed to get account info", failure: failure));
       } else {
         final AccountInfo accountInfo = (failureOrAccountInfo as Right).value;
-        emit(ReportAccountInfoLoaded(accountInfo: accountInfo, loadingMessage: "We are updating your data..."));
+
+        // check if user changed
+        if (cachedAccountInfo != null && accountInfo.igUserId != cachedAccountInfo.igUserId) {
+          // clear all boxes if user changed
+          await clearAllBoxesUseCase.execute();
+        }
+        // update account info to local
+        await cacheAccountInfoToLocalUseCase.execute(accountInfo: accountInfo);
+
+        emit(ReportAccountInfoLoaded(accountInfo: accountInfo, loadingMessage: "Updating satats..."));
         Either<Failure, Report?>? failureOrReport;
 
         // get report from local
