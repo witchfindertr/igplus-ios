@@ -1,7 +1,6 @@
 import 'package:bloc/bloc.dart';
 import 'package:dartz/dartz.dart';
 import 'package:equatable/equatable.dart';
-import 'package:go_router/go_router.dart';
 
 import 'package:igplus_ios/data/failure.dart';
 import 'package:igplus_ios/domain/entities/account_info.dart';

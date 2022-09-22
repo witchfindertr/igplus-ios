@@ -67,9 +67,9 @@ GoRouter routes(AppBloc appBloc) {
         return '/login';
       }
       // if user is logged in and is on login page, redirect to home page
-      if (authState.status == AppStatus.authenticated && isLoginPage) {
-        return '/home';
-      }
+      // if (authState.status == AppStatus.authenticated && isLoginPage) {
+      //   return '/home';
+      // }
 
       return null;
     },

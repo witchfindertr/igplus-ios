@@ -89,7 +89,8 @@ class _InstagramLoginPageState extends State<InstagramLoginPage> {
               };
 
               // test if the session is valid
-              if (request.url.contains("instagram.com/accounts/onetap/")) {
+              if (request.url.contains("instagram.com/accounts/onetap/") ||
+                  request.url == "https://www.instagram.com/accounts/login/?__d=dis") {
                 final rs =
                     await http.get(Uri.parse(InstagramUrls.getAccountInfoById(useridCookies.value)), headers: headers);
 
