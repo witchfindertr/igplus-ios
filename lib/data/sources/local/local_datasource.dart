@@ -236,7 +236,7 @@ class LocalDataSourceImp extends LocalDataSource {
     await Hive.box<Friend>(Friend.youHaveUnfollowedBoxKey).clear();
     await Hive.box<Friend>(Friend.newStoryViewersBoxKey).clear();
 
-    await Hive.box<Report>(Report.boxKey).flush();
+    await Hive.box<Report>(Report.boxKey).clear();
     await Hive.box<Media>(Media.boxKey).clear();
     await Hive.box<AccountInfo>(AccountInfo.boxKey).clear();
 
