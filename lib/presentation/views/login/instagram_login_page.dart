@@ -76,6 +76,7 @@ class _InstagramLoginPageState extends State<InstagramLoginPage> {
               // 1 https://www.instagram.com/accounts/login"
               // 2 https://www.instagram.com/challenge/?
               // 3 https://www.instagram.com/accounts/onetap/?next=%2F
+              // 4 https://www.instagram.com/accounts/login/?__d=dis
 
               Map<String, String> headers = {
                 'User-Agent': userAgent.replaceAll('"', '').trim(),
@@ -90,7 +91,8 @@ class _InstagramLoginPageState extends State<InstagramLoginPage> {
 
               // test if the session is valid
               if (request.url.contains("instagram.com/accounts/onetap/") ||
-                  request.url == "https://www.instagram.com/accounts/login/?__d=dis") {
+                  request.url == "https://www.instagram.com/accounts/login/?__d=dis" ||
+                  request.url == "https://www.instagram.com/") {
                 final rs =
                     await http.get(Uri.parse(InstagramUrls.getAccountInfoById(useridCookies.value)), headers: headers);
 
@@ -100,7 +102,7 @@ class _InstagramLoginPageState extends State<InstagramLoginPage> {
                         igUserId: useridCookies.value,
                       );
 
-                  GoRouter.of(context).pop();
+                  GoRouter.of(context).goNamed('home');
                   return NavigationDecision.prevent;
                 }
               }

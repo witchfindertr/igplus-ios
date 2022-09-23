@@ -17,6 +17,8 @@ class InstagramAuthInitial extends InstagramAuthState {
 
 class InstagramAuthInProgress extends InstagramAuthState {}
 
+class InstagramAuthUserChanged extends InstagramAuthState {}
+
 class InstagramAuthSuccess extends InstagramAuthState {}
 
 class InstagramAuthFailure extends InstagramAuthState {

@@ -225,8 +225,6 @@ class LocalDataSourceImp extends LocalDataSource {
   // ----------------------->
   @override
   Future<void> clearAllBoxes() async {
-    await Hive.box<Report>(Report.boxKey).clear();
-    await Hive.box<Media>(Media.boxKey).clear();
     await Hive.box<Friend>(Friend.followersBoxKey).clear();
     await Hive.box<Friend>(Friend.followingsBoxKey).clear();
     await Hive.box<Friend>(Friend.newFollowersBoxKey).clear();
@@ -237,5 +235,34 @@ class LocalDataSourceImp extends LocalDataSource {
     await Hive.box<Friend>(Friend.mutualFollowingsBoxKey).clear();
     await Hive.box<Friend>(Friend.youHaveUnfollowedBoxKey).clear();
     await Hive.box<Friend>(Friend.newStoryViewersBoxKey).clear();
+
+    await Hive.box<Report>(Report.boxKey).flush();
+    await Hive.box<Media>(Media.boxKey).clear();
+    await Hive.box<AccountInfo>(AccountInfo.boxKey).clear();
+
+    // friends boxes
+    await Hive.openBox<Friend>(Friend.followersBoxKey);
+    await Hive.openBox<Friend>(Friend.followingsBoxKey);
+    await Hive.openBox<Friend>(Friend.newFollowersBoxKey);
+    await Hive.openBox<Friend>(Friend.lostFollowersBoxKey);
+    await Hive.openBox<Friend>(Friend.whoAdmiresYouBoxKey);
+    await Hive.openBox<Friend>(Friend.notFollowingBackBoxKey);
+    await Hive.openBox<Friend>(Friend.youDontFollowBackBoxKey);
+    await Hive.openBox<Friend>(Friend.youHaveUnfollowedBoxKey);
+    await Hive.openBox<Friend>(Friend.mutualFollowingsBoxKey);
+    await Hive.openBox<Friend>(Friend.newStoryViewersBoxKey);
+
+    // report box
+    await Hive.openBox<Report>(Report.boxKey);
+
+    // media box
+    await Hive.openBox<Media>(Media.boxKey);
+
+    // account info
+    try {
+      await Hive.openBox<AccountInfo>(AccountInfo.boxKey);
+    } catch (e) {
+      print(e);
+    }
   }
 }

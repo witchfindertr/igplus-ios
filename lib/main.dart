@@ -42,12 +42,12 @@ void main() async {
     await Hive.openBox<Friend>(Friend.followingsBoxKey);
     await Hive.openBox<Friend>(Friend.newFollowersBoxKey);
     await Hive.openBox<Friend>(Friend.lostFollowersBoxKey);
-    // await Hive.openBox<Friend>(Friend.whoAdmiresYouBoxKey);
+    await Hive.openBox<Friend>(Friend.whoAdmiresYouBoxKey);
     await Hive.openBox<Friend>(Friend.notFollowingBackBoxKey);
     await Hive.openBox<Friend>(Friend.youDontFollowBackBoxKey);
     await Hive.openBox<Friend>(Friend.youHaveUnfollowedBoxKey);
     await Hive.openBox<Friend>(Friend.mutualFollowingsBoxKey);
-    // await Hive.openBox<Friend>(Friend.newStoryViewersBoxKey);
+    await Hive.openBox<Friend>(Friend.newStoryViewersBoxKey);
 
     // report box
     await Hive.openBox<Report>(Report.boxKey);

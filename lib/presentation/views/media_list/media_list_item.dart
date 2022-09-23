@@ -4,6 +4,7 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:igplus_ios/domain/entities/media.dart';
 import 'package:flutter/material.dart';
 import 'package:igplus_ios/presentation/resources/colors_manager.dart';
+import 'package:igplus_ios/presentation/views/global/loading_indicator.dart';
 import 'package:intl/intl.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:timeago/timeago.dart' as timeago;
@@ -38,6 +39,13 @@ class _MediaListItemState extends State<MediaListItem> {
         children: [
           CachedNetworkImage(
             imageUrl: widget.media.url,
+            placeholder: (context, url) => const Center(
+              child: LoadingIndicator(),
+            ),
+            errorWidget: (context, url, error) => const Icon(
+              FontAwesomeIcons.image,
+              color: ColorsManager.appBack,
+            ),
           ),
           Container(
             decoration: BoxDecoration(
