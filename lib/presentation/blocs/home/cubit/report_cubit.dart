@@ -9,6 +9,7 @@ import 'package:igplus_ios/domain/entities/account_info.dart';
 import 'package:igplus_ios/domain/entities/friend.dart';
 import 'package:igplus_ios/domain/entities/media.dart';
 import 'package:igplus_ios/domain/entities/user.dart';
+import 'package:igplus_ios/domain/repositories/auth/auth_repository.dart';
 import 'package:igplus_ios/domain/usecases/clear_local_data_use_case.dart';
 import 'package:igplus_ios/domain/usecases/get_account_info_from_local_use_case.dart';
 
@@ -37,6 +38,8 @@ class ReportCubit extends Cubit<ReportState> {
   final GetAccountInfoFromLocalUseCase getAccountInfoFromLocalUseCase;
   final CacheAccountInfoToLocalUseCase cacheAccountInfoToLocalUseCase;
   final ClearAllBoxesUseCase clearAllBoxesUseCase;
+  final AuthRepository authRepository;
+  late final StreamSubscription authSubscription;
   ReportCubit({
     required this.updateReport,
     required this.getUser,
@@ -48,7 +51,12 @@ class ReportCubit extends Cubit<ReportState> {
     required this.getAccountInfoFromLocalUseCase,
     required this.cacheAccountInfoToLocalUseCase,
     required this.clearAllBoxesUseCase,
-  }) : super(ReportInitial());
+    required this.authRepository,
+  }) : super(ReportInitial()) {
+    authSubscription = authRepository.authUser.listen((user) {
+      init();
+    });
+  }
 
   void init() async {
     emit(const ReportInProgress(loadingMessage: "We are loading your data..."));
@@ -81,7 +89,7 @@ class ReportCubit extends Cubit<ReportState> {
       } else {
         final AccountInfo accountInfo = (failureOrAccountInfo as Right).value;
 
-        // check if user changed
+        // check if account was changed
         if (cachedAccountInfo != null && accountInfo.igUserId != cachedAccountInfo.igUserId) {
           // clear all boxes if user changed
           await clearAllBoxesUseCase.execute();
