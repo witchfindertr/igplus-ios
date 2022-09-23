@@ -48,7 +48,13 @@ class _FriendListItemState extends State<FriendListItem> {
           onTap: () => _openProfileLinkOnInsta(widget.friend.username),
           child: CircleAvatar(
             radius: 20,
-            backgroundImage: CachedNetworkImageProvider(widget.friend.picture),
+            backgroundImage: CachedNetworkImageProvider(
+              widget.friend.picture,
+              errorListener: () => const Icon(
+                FontAwesomeIcons.image,
+                color: ColorsManager.appBack,
+              ),
+            ),
           ),
         ),
         title: GestureDetector(

@@ -62,7 +62,7 @@ class ReportCubit extends Cubit<ReportState> {
     // show old account info
     if (cachedAccountInfo != null) {
       emit(ReportAccountInfoLoaded(
-          accountInfo: cachedAccountInfo, loadingMessage: "We are updating your account info..."));
+          accountInfo: cachedAccountInfo, loadingMessage: "We are updating your account stats..."));
     }
 
     // get user info
@@ -86,7 +86,7 @@ class ReportCubit extends Cubit<ReportState> {
           // clear all boxes if user changed
           await clearAllBoxesUseCase.execute();
         }
-        // update account info to local
+        // cache new account info to local
         await cacheAccountInfoToLocalUseCase.execute(accountInfo: accountInfo);
 
         emit(ReportAccountInfoLoaded(accountInfo: accountInfo, loadingMessage: "Updating satats..."));
@@ -134,20 +134,22 @@ class ReportCubit extends Cubit<ReportState> {
               await cacheMediaToLocal.execute(dataName: Media.boxKey, mediaList: mediaList);
 
               // get top likers
-              Map<Friend, int> likersLikeCount = {};
-
-              for (Friend liker in mediaList[0].topLikers) {
-                likersLikeCount.map((Friend key, int value) {
-                  if (liker.igUserId == key.igUserId) {
-                    return MapEntry(key, value + 1);
+              List<Map<int, int>> likersLikeCount = [];
+              for (Media media in mediaList) {
+                for (Friend liker in media.topLikers) {
+                  if (likersLikeCount.isEmpty) {
+                    likersLikeCount.add({liker.igUserId: 1});
                   } else {
-                    return MapEntry(liker, value);
+                    for (var likeCount in likersLikeCount) {
+                      if (likeCount.containsKey(liker.igUserId)) {
+                        likeCount[liker.igUserId] = likeCount[liker.igUserId]! + 1;
+                      } else {
+                        likeCount[liker.igUserId] = 1;
+                      }
+                    }
                   }
-                });
+                }
               }
-              likersLikeCount.forEach((key, value) {
-                print("key: ${key.igUserId} value: $value");
-              });
             }
           }
         } else {
