@@ -77,6 +77,7 @@ Future<void> init() async {
         getAccountInfoFromLocalUseCase: sl(),
         cacheAccountInfoToLocalUseCase: sl(),
         clearAllBoxesUseCase: sl(),
+        authRepository: sl(),
       ));
 
   sl.registerFactory(() =>

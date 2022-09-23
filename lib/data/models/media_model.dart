@@ -41,9 +41,9 @@ class MediaModel {
     }
     String text = (json['caption'] != null) ? json['caption']['text'] : "";
     // media engagement count
-    int commentsCount = int.parse(json['comment_count'] ?? "0");
-    int likeCount = int.parse(json['like_count'] ?? "0");
-    int viewCount = int.parse(json['view_count'] ?? "0");
+    int commentsCount = json['comment_count'] ?? 0;
+    int likeCount = json['like_count'] ?? 0;
+    int viewCount = json['view_count'] ?? 0;
     String createdAt = json['taken_at'].toString();
     // likers list
     List<Friend> likers = [];
