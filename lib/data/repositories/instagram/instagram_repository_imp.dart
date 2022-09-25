@@ -3,8 +3,8 @@ import 'dart:io';
 import 'package:dartz/dartz.dart';
 import 'package:igplus_ios/data/models/media_model.dart';
 
-import 'package:igplus_ios/data/models/user_stories_model.dart';
-import 'package:igplus_ios/domain/entities/User_story.dart';
+import 'package:igplus_ios/data/models/stories_user.dart';
+import 'package:igplus_ios/domain/entities/stories_user.dart';
 import 'package:igplus_ios/domain/entities/friend.dart';
 import 'package:igplus_ios/domain/entities/ig_headers.dart';
 import 'package:igplus_ios/domain/entities/media.dart';
@@ -107,10 +107,10 @@ class InstagramRepositoryImp extends InstagramRepository {
   }
 
   @override
-  Future<Either<Failure, List<UserStory>>> getUserStories({required IgHeaders igHeaders}) async {
+  Future<Either<Failure, List<StoriesUser>>> getUserStories({required IgHeaders igHeaders}) async {
     try {
       final Map<String, String> headers = igHeaders.toMap();
-      final List<UserStoryModel> userStoriesModels = await instagramDataSource.getUserStories(headers: headers);
+      final List<StoriesUserModel> userStoriesModels = await instagramDataSource.getUserStories(headers: headers);
       return Right(userStoryMapper.mapToEntityList(userStoriesModels));
     } on ServerFailure catch (e) {
       return Left(ServerFailure(e.message));

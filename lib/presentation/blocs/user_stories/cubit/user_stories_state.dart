@@ -12,7 +12,7 @@ class UserStoriesInitial extends UserStoriesState {}
 class UserStoriesLoading extends UserStoriesState {}
 
 class UserStoriesLoaded extends UserStoriesState {
-  final List<UserStory> userStories;
+  final List<StoriesUser> userStories;
 
   const UserStoriesLoaded({required this.userStories});
 

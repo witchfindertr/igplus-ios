@@ -29,6 +29,18 @@ class InstagramUrls {
 
   // User feed
   static String getUserFeed(String userId) => '$baseUrl/feed/user/$userId/';
+
+  // get media info
+  // https://i.instagram.com/api/v1/media/2345678901234567890/info/
+  static String getMediaInfo(String mediaId) => '$baseUrl/media/$mediaId/info/';
+
+  // get media comments
+  // https://i.instagram.com/api/v1/media/2345678901234567890/comments/
+  static String getMediaComments(String mediaId) => '$baseUrl/media/$mediaId/comments/';
+
+  // get media likes
+  // https://i.instagram.com/api/v1/media/2345678901234567890/likers/
+  static String getMediaLikes(String mediaId) => '$baseUrl/media/$mediaId/likers/';
 }
 
 class FirebaseFunctionsUrls {

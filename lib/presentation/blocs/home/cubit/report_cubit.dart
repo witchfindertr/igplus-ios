@@ -59,6 +59,7 @@ class ReportCubit extends Cubit<ReportState> {
   }
 
   void init() async {
+    // await clearAllBoxesUseCase.execute();
     emit(const ReportInProgress(loadingMessage: "We are loading your data..."));
     // get cached account info from local // TODO - get from local
     final accountInfoEither = await getAccountInfoFromLocalUseCase.execute();
@@ -132,33 +133,6 @@ class ReportCubit extends Cubit<ReportState> {
           } else {
             final report = (failureOrReport as Right).value;
             emit(ReportSuccess(report: report, accountInfo: accountInfo));
-
-            // get media list from instagram and save it to local
-            final Either<Failure, List<Media>> userFeedEither =
-                await getUserFeed.execute(userId: currentUser.igUserId, igHeaders: currentUser.igHeaders);
-            if (userFeedEither.isRight()) {
-              final List<Media> mediaList = (userFeedEither as Right).value;
-              // cach media on local
-              await cacheMediaToLocal.execute(dataName: Media.boxKey, mediaList: mediaList);
-
-              // get top likers
-              List<Map<int, int>> likersLikeCount = [];
-              for (Media media in mediaList) {
-                for (Friend liker in media.topLikers) {
-                  if (likersLikeCount.isEmpty) {
-                    likersLikeCount.add({liker.igUserId: 1});
-                  } else {
-                    for (var likeCount in likersLikeCount) {
-                      if (likeCount.containsKey(liker.igUserId)) {
-                        likeCount[liker.igUserId] = likeCount[liker.igUserId]! + 1;
-                      } else {
-                        likeCount[liker.igUserId] = 1;
-                      }
-                    }
-                  }
-                }
-              }
-            }
           }
         } else {
           // get report from local

@@ -1,11 +1,11 @@
 import 'package:go_router/go_router.dart';
 import 'package:igplus_ios/app/bloc/app_bloc.dart';
-import 'package:igplus_ios/domain/entities/User_story.dart';
+import 'package:igplus_ios/domain/entities/stories_user.dart';
 import 'package:igplus_ios/presentation/views/friends_list/friends_list.dart';
 import 'package:igplus_ios/presentation/views/home/stories/stories_view.dart';
 import 'package:igplus_ios/presentation/views/login/instagram_login_page.dart';
 import 'package:igplus_ios/presentation/views/login/login_page.dart';
-import 'package:igplus_ios/presentation/views/media_list/media_list.dart';
+import 'package:igplus_ios/presentation/views/insghit/media/media_list.dart';
 import 'package:igplus_ios/presentation/views/tab_page.dart';
 
 GoRouter routes(AppBloc appBloc) {

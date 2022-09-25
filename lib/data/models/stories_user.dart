@@ -1,9 +1,8 @@
 import 'package:equatable/equatable.dart';
 import 'package:igplus_ios/domain/entities/entity_mapper.dart';
+import 'package:igplus_ios/domain/entities/stories_user.dart';
 
-import '../../domain/entities/User_story.dart';
-
-class UserStoryModel extends Equatable {
+class StoriesUserModel extends Equatable {
   final String ownerId;
   final String ownerUsername;
   final String ownerPicUrl;
@@ -11,7 +10,7 @@ class UserStoryModel extends Equatable {
   final int expiringAt;
   final int latestReelMedia;
   final int seen;
-  const UserStoryModel({
+  const StoriesUserModel({
     required this.ownerId,
     required this.ownerUsername,
     required this.ownerPicUrl,
@@ -22,8 +21,8 @@ class UserStoryModel extends Equatable {
   });
 
   // fromJson
-  factory UserStoryModel.fromJson(Map<String, dynamic> json) {
-    return UserStoryModel(
+  factory StoriesUserModel.fromJson(Map<String, dynamic> json) {
+    return StoriesUserModel(
       ownerId: json['user']['pk'].toString(),
       ownerUsername: json['user']['username'],
       ownerPicUrl: json['user']['profile_pic_url'],
@@ -40,16 +39,16 @@ class UserStoryModel extends Equatable {
 }
 
 // UserStoryMapper
-class UserStoryMapper implements EntityMapper<UserStory, UserStoryModel> {
+class UserStoryMapper implements EntityMapper<StoriesUser, StoriesUserModel> {
   @override
-  UserStory mapToEntity(UserStoryModel model) {
+  StoriesUser mapToEntity(StoriesUserModel model) {
     final storyOwner = StoryOwner(
       id: model.ownerId,
       username: model.ownerUsername,
       profilePicUrl: model.ownerPicUrl,
     );
 
-    return UserStory(
+    return StoriesUser(
       owner: storyOwner,
       id: model.id,
       expiringAt: model.expiringAt,
@@ -59,8 +58,8 @@ class UserStoryMapper implements EntityMapper<UserStory, UserStoryModel> {
   }
 
   @override
-  UserStoryModel mapToModel(UserStory entity) {
-    return UserStoryModel(
+  StoriesUserModel mapToModel(StoriesUser entity) {
+    return StoriesUserModel(
       ownerId: entity.owner.id,
       ownerUsername: entity.owner.username,
       ownerPicUrl: entity.owner.profilePicUrl,
@@ -71,11 +70,11 @@ class UserStoryMapper implements EntityMapper<UserStory, UserStoryModel> {
     );
   }
 
-  List<UserStory> mapToEntityList(List<UserStoryModel> models) {
+  List<StoriesUser> mapToEntityList(List<StoriesUserModel> models) {
     return models.map((model) => mapToEntity(model)).toList();
   }
 
-  List<UserStoryModel> mapToModelList(List<UserStory> entities) {
+  List<StoriesUserModel> mapToModelList(List<StoriesUser> entities) {
     return entities.map((entity) => mapToModel(entity)).toList();
   }
 }

@@ -10,8 +10,7 @@ import 'package:igplus_ios/data/models/account_info_model.dart';
 import 'package:http/http.dart' as http;
 import 'package:igplus_ios/data/models/media_model.dart';
 
-import 'package:igplus_ios/data/models/user_stories_model.dart';
-import 'package:igplus_ios/domain/entities/User_story.dart';
+import 'package:igplus_ios/data/models/stories_user.dart';
 
 import 'package:igplus_ios/domain/entities/friend.dart';
 import 'package:igplus_ios/domain/usecases/save_friends_to_local_use_case.dart';
@@ -32,7 +31,7 @@ abstract class InstagramDataSource {
     required int newFollowersNumber,
   });
   Future<List<FriendModel>> getFollowings({required String igUserId, required Map<String, String> headers});
-  Future<List<UserStoryModel>> getUserStories({required Map<String, String> headers});
+  Future<List<StoriesUserModel>> getUserStories({required Map<String, String> headers});
   Future<List<StoryModel>> getStories({required String userId, required Map<String, String> headers});
   Future<bool> followUser({required int userId, required Map<String, String> headers});
   Future<bool> unfollowUser({required int userId, required Map<String, String> headers});
@@ -173,7 +172,7 @@ class InstagramDataSourceImp extends InstagramDataSource {
     nextMaxId = body['next_max_id'];
     List<dynamic> users = body["users"];
     friendsList = users.map((friend) => FriendModel.fromJson(friend)).toList();
-    bool pagesLimit = (limit != 0) ? (friendsList.length < limit * 194) : true;
+    bool pagesLimit = (limit > 0) ? (friendsList.length < limit * 194) : true;
 
     while (nextMaxId != null && nbrRequests < requestsLimit && pagesLimit) {
       nbrRequests++;
@@ -201,9 +200,9 @@ class InstagramDataSourceImp extends InstagramDataSource {
       nextMaxId = rs['next_max_id'];
       final List<FriendModel> newFriendsList =
           users.map((f) => FriendModel.fromJson(f as Map<String, dynamic>)).toList();
-      // save new friends list to local
-      cacheFriendsToLocalUseCase.execute(
-          dataName: "followers", friendsList: newFriendsList.map((e) => e.toEntity()).toList());
+      // // save new friends list to local
+      // cacheFriendsToLocalUseCase.execute(
+      //     dataName: "followers", friendsList: newFriendsList.map((e) => e.toEntity()).toList());
       friendsList.addAll(newFriendsList);
     }
     return nextMaxId;
@@ -257,12 +256,12 @@ class InstagramDataSourceImp extends InstagramDataSource {
 
   // get active stories from peaple you follow
   @override
-  Future<List<UserStoryModel>> getUserStories({required Map<String, String> headers}) async {
+  Future<List<StoriesUserModel>> getUserStories({required Map<String, String> headers}) async {
     final response = await client.get(Uri.parse(InstagramUrls.getUserStories()), headers: headers);
 
     if (response.statusCode == 200) {
       final result = jsonDecode(response.body)["tray"] as List<dynamic>;
-      return result.map((story) => UserStoryModel.fromJson(story as Map<String, dynamic>)).toList();
+      return result.map((story) => StoriesUserModel.fromJson(story as Map<String, dynamic>)).toList();
     } else {
       throw const ServerFailure("Failed to get active stories from Instagram");
     }

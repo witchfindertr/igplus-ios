@@ -23,6 +23,7 @@ class UpdateReportUseCase {
     final List<Friend>? cachedFollowers;
     final List<Friend>? cachedFollowings;
     final Report? cachedReport;
+
     // get Cached followers list from local
     final failureOrFollowersListFromLocal = localRepository.getCachedFriendsList(boxKey: Friend.followersBoxKey);
     if (failureOrFollowersListFromLocal.isRight()) {
@@ -30,6 +31,7 @@ class UpdateReportUseCase {
     } else {
       cachedFollowers = null;
     }
+
     // get Cached followings list from local
     final failureOrFollowingsListFromLocal = localRepository.getCachedFriendsList(boxKey: Friend.followingsBoxKey);
     if (failureOrFollowingsListFromLocal.isRight()) {
@@ -37,6 +39,7 @@ class UpdateReportUseCase {
     } else {
       cachedFollowings = null;
     }
+
     // get cached report from local
     final failureOrReportFromLocal = localRepository.getCachedReport();
     if (failureOrReportFromLocal.isRight()) {
@@ -95,7 +98,7 @@ class UpdateReportUseCase {
     await localRepository.cacheFriendsList(friendsList: mutualFollowings, boxKey: Friend.mutualFollowingsBoxKey);
 
     // new followers and lost followers
-    // TODO: check if there is a better way to do this
+    // TODO: check if is there a better way to do this
     List<Friend> newFollowersList = [];
     List<Friend> lostFollowersList = [];
     if (cachedFollowers != null) {
