@@ -4,6 +4,8 @@ import 'package:igplus_ios/domain/entities/friend.dart';
 import 'package:http/http.dart' as http;
 import 'package:igplus_ios/domain/entities/media.dart';
 import 'package:igplus_ios/domain/entities/report.dart';
+import 'package:igplus_ios/domain/entities/stories_user.dart';
+import 'package:igplus_ios/domain/entities/story.dart';
 
 abstract class LocalDataSource {
   Report? getCachedReport();
@@ -17,6 +19,10 @@ abstract class LocalDataSource {
   AccountInfo? getCachedAccountInfo();
   Future<void> cacheAccountInfo({required AccountInfo accountInfo});
   Future<void> clearAllBoxes();
+  List<Story>? getCachedStoriesList({required String boxKey});
+  Future<void> cacheStoriesList({required List<Story> storiesList, required String boxKey});
+  List<StoriesUser>? getCachedStoriesUsersList({required String boxKey});
+  Future<void> cacheStoriesUsersList({required List<StoriesUser> storiesUserList, required String boxKey});
 }
 
 class LocalDataSourceImp extends LocalDataSource {
@@ -153,7 +159,8 @@ class LocalDataSourceImp extends LocalDataSource {
   List<Media>? getCachedMediaList(
       {required String boxKey, int? pageKey, int? pageSize, String? searchTerm, String? type}) {
     Box<Media> mediaBox = Hive.box<Media>(boxKey);
-    // mediaBox.deleteFromDisk();
+    // Hive.box<Media>(Media.boxKey).clear();
+
     List<Media> mediaList;
     int? startKey;
     int? endKey;
@@ -217,6 +224,88 @@ class LocalDataSourceImp extends LocalDataSource {
       return null;
     } else {
       return accountInfoBox.get('accountInfo');
+    }
+  }
+
+  // ----------------------->
+  // Stories ------------------>
+  // ----------------------->
+
+  // cache stories
+  @override
+  Future<void> cacheStoriesList({required List<Story> storiesList, required String boxKey}) async {
+    Box<Story> storiesBox = Hive.box<Story>(boxKey);
+
+    final List<Story> cachedStoriesList = storiesBox.values.toList();
+    final List<Story> newStoriesListToAdd;
+
+    // new stories list to add to the box
+    newStoriesListToAdd = storiesList
+        .where((story) => cachedStoriesList.indexWhere((element) => story.mediaId == element.mediaId) == -1)
+        .toList();
+
+    try {
+      for (var e in newStoriesListToAdd) {
+        storiesBox.add(e);
+      }
+    } catch (e) {
+      print(e);
+    }
+  }
+
+  // get stories from local storage
+  @override
+  List<Story>? getCachedStoriesList({required String boxKey}) {
+    Box<Story> storiesBox = Hive.box<Story>(boxKey);
+
+    List<Story> storiesList;
+
+    if (storiesBox.isEmpty) {
+      return null;
+    } else {
+      storiesList = storiesBox.values.toList();
+      return storiesList;
+    }
+  }
+
+  // ----------------------->
+  // Stories Users ------------------>
+  // ----------------------->
+
+  // cache stories user
+  @override
+  Future<void> cacheStoriesUsersList({required List<StoriesUser> storiesUserList, required String boxKey}) async {
+    Box<StoriesUser> usersStorytoriesBox = Hive.box<StoriesUser>(boxKey);
+
+    final List<StoriesUser> cachedStoriesList = usersStorytoriesBox.values.toList();
+    final List<StoriesUser> newStoriesListToAdd;
+
+    // new stories list to add to the box
+    newStoriesListToAdd = storiesUserList
+        .where((story) => cachedStoriesList.indexWhere((element) => story.id == element.id) == -1)
+        .toList();
+
+    try {
+      for (var e in newStoriesListToAdd) {
+        usersStorytoriesBox.add(e);
+      }
+    } catch (e) {
+      print(e);
+    }
+  }
+
+  // get stories from local storage
+  @override
+  List<StoriesUser>? getCachedStoriesUsersList({required String boxKey}) {
+    Box<StoriesUser> usersStorytoriesBox = Hive.box<StoriesUser>(boxKey);
+
+    List<StoriesUser> storiesUserList;
+
+    if (usersStorytoriesBox.isEmpty) {
+      return null;
+    } else {
+      storiesUserList = usersStorytoriesBox.values.toList();
+      return storiesUserList;
     }
   }
 

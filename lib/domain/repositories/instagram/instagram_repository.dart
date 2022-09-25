@@ -1,6 +1,5 @@
 import 'package:dartz/dartz.dart';
-import 'package:igplus_ios/data/models/media_model.dart';
-import 'package:igplus_ios/domain/entities/User_story.dart';
+import 'package:igplus_ios/domain/entities/stories_user.dart';
 import 'package:igplus_ios/domain/entities/friend.dart';
 import 'package:igplus_ios/domain/entities/ig_headers.dart';
 import 'package:igplus_ios/domain/entities/media.dart';
@@ -29,7 +28,7 @@ abstract class InstagramRepository {
   });
 
   // get user stories
-  Future<Either<Failure, List<UserStory>>> getUserStories({
+  Future<Either<Failure, List<StoriesUser>>> getUserStories({
     required IgHeaders igHeaders,
   });
 

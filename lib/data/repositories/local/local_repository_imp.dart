@@ -5,6 +5,8 @@ import 'package:igplus_ios/domain/entities/account_info.dart';
 import 'package:igplus_ios/domain/entities/friend.dart';
 import 'package:igplus_ios/domain/entities/media.dart';
 import 'package:igplus_ios/domain/entities/report.dart';
+import 'package:igplus_ios/domain/entities/stories_user.dart';
+import 'package:igplus_ios/domain/entities/story.dart';
 import 'package:igplus_ios/domain/repositories/local/local_repository.dart';
 
 class LocalRepositoryImpl implements LocalRepository {
@@ -103,6 +105,44 @@ class LocalRepositoryImpl implements LocalRepository {
       }
     } catch (e) {
       return const Left(InvalidParamsFailure("getCachedAccountInfo catch"));
+    }
+  }
+
+  // stories
+  @override
+  Future<void> cacheStoriesList({required List<Story> storiesList, required String boxKey}) async {
+    await localDataSource.cacheStoriesList(
+      storiesList: storiesList,
+      boxKey: boxKey,
+    );
+  }
+
+  @override
+  Either<Failure, List<Story>?> getCachedStoriesList({required String boxKey}) {
+    try {
+      final List<Story>? cachedStoriesList = localDataSource.getCachedStoriesList(boxKey: boxKey);
+      return Right(cachedStoriesList);
+    } catch (e) {
+      return const Left(InvalidParamsFailure("getCachedStoriesList catch"));
+    }
+  }
+
+  // stories users
+  @override
+  Future<void> cacheStoriesUsersList({required List<StoriesUser> storiesUserList, required String boxKey}) async {
+    await localDataSource.cacheStoriesUsersList(
+      storiesUserList: storiesUserList,
+      boxKey: boxKey,
+    );
+  }
+
+  @override
+  Either<Failure, List<StoriesUser>?> getCachedStoriesUsersList({required String boxKey}) {
+    try {
+      final List<StoriesUser>? cachedStoriesList = localDataSource.getCachedStoriesUsersList(boxKey: boxKey);
+      return Right(cachedStoriesList);
+    } catch (e) {
+      return const Left(InvalidParamsFailure("getCachedStoriesUserList catch"));
     }
   }
 

@@ -1,21 +1,17 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/src/widgets/container.dart';
-import 'package:flutter/src/widgets/framework.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:go_router/go_router.dart';
 import 'package:igplus_ios/app/constants/media_constants.dart';
-import 'package:igplus_ios/domain/entities/User_story.dart';
+import 'package:igplus_ios/domain/entities/stories_user.dart';
 import 'package:igplus_ios/presentation/views/global/loading_indicator.dart';
 import 'package:story_view/story_view.dart';
 
-import 'package:igplus_ios/app/app.dart';
 import 'package:timeago/timeago.dart' as timeago;
 
 import '../../../../domain/entities/story.dart';
 import '../../../blocs/stories/cubit/stories_cubit.dart';
-import '../../../resources/colors_manager.dart';
 
 class StoriesView extends StatefulWidget {
   const StoriesView({Key? key, required this.storyOwner}) : super(key: key);

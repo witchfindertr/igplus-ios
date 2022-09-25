@@ -11,7 +11,8 @@ import 'package:igplus_ios/domain/entities/account_info.dart';
 import 'package:igplus_ios/domain/entities/friend.dart';
 import 'package:igplus_ios/domain/entities/media.dart';
 import 'package:igplus_ios/domain/entities/report.dart';
-import 'package:igplus_ios/domain/repositories/auth/auth_repository.dart';
+import 'package:igplus_ios/domain/entities/stories_user.dart';
+import 'package:igplus_ios/domain/entities/story.dart';
 import 'package:igplus_ios/presentation/blocs/friends_list/cubit/friends_list_cubit.dart';
 import 'package:igplus_ios/presentation/blocs/home/cubit/report_cubit.dart';
 import 'package:igplus_ios/presentation/blocs/login/cubit/instagram_auth_cubit.dart';
@@ -34,6 +35,9 @@ void main() async {
   Hive.registerAdapter(ChartDataAdapter());
   Hive.registerAdapter(MediaAdapter());
   Hive.registerAdapter(AccountInfoAdapter());
+  Hive.registerAdapter(StoryAdapter());
+  Hive.registerAdapter(StoriesUserAdapter());
+  Hive.registerAdapter(StoryOwnerAdapter());
 
   // loading the <key,values> pair from the local storage into memory
   try {
@@ -48,15 +52,16 @@ void main() async {
     await Hive.openBox<Friend>(Friend.youHaveUnfollowedBoxKey);
     await Hive.openBox<Friend>(Friend.mutualFollowingsBoxKey);
     await Hive.openBox<Friend>(Friend.newStoryViewersBoxKey);
-
     // report box
     await Hive.openBox<Report>(Report.boxKey);
-
     // media box
     await Hive.openBox<Media>(Media.boxKey);
-
     // account info box
     await Hive.openBox<AccountInfo>(AccountInfo.boxKey);
+    // stories box
+    await Hive.openBox<Story>(Story.boxKey);
+    // stories user
+    await Hive.openBox<StoriesUser>(StoriesUser.boxKey);
   } catch (e) {
     debugPrint(e.toString());
   }

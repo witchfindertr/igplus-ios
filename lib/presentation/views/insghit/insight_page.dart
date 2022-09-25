@@ -1,14 +1,19 @@
 import 'package:flutter/cupertino.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:igplus_ios/presentation/blocs/media_list/cubit/media_list_cubit.dart';
 import 'package:igplus_ios/presentation/views/global/info_card.dart';
 import 'package:igplus_ios/presentation/views/global/info_card_list.dart';
 import 'package:igplus_ios/presentation/views/global/section_title.dart';
+import 'package:igplus_ios/presentation/views/insghit/media/media_card_list.dart';
 
 class InsightPage extends StatelessWidget {
   const InsightPage({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
+    BlocProvider.of<MediaListCubit>(context).init();
+
     List<Map> mediaInsigntCards = [
       {
         "title": "Most Popular",
@@ -78,7 +83,7 @@ class InsightPage extends StatelessWidget {
                 title: "Media insights",
                 icon: FontAwesomeIcons.images,
               ),
-              InfoCardList(
+              MediaCardList(
                 cards: mediaInsigntCards,
               ),
               const SectionTitle(

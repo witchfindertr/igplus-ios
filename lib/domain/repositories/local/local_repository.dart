@@ -4,6 +4,8 @@ import 'package:igplus_ios/domain/entities/account_info.dart';
 import 'package:igplus_ios/domain/entities/friend.dart';
 import 'package:igplus_ios/domain/entities/media.dart';
 import 'package:igplus_ios/domain/entities/report.dart';
+import 'package:igplus_ios/domain/entities/stories_user.dart';
+import 'package:igplus_ios/domain/entities/story.dart';
 
 abstract class LocalRepository {
   // report
@@ -24,6 +26,14 @@ abstract class LocalRepository {
   // Account info
   Either<Failure, AccountInfo?> getCachedAccountInfo();
   Future<void> cacheAccountInfo({required AccountInfo accountInfo});
+
+  // stories list
+  Either<Failure, List<Story>?> getCachedStoriesList({required String boxKey});
+  Future<void> cacheStoriesList({required List<Story> storiesList, required String boxKey});
+
+  // stories users list
+  Either<Failure, List<StoriesUser>?> getCachedStoriesUsersList({required String boxKey});
+  Future<void> cacheStoriesUsersList({required List<StoriesUser> storiesUserList, required String boxKey});
 
   // clear all boxes
   Future<void> clearAllBoxes();

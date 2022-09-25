@@ -6,8 +6,8 @@ import 'package:igplus_ios/domain/entities/media.dart';
 import 'package:igplus_ios/presentation/blocs/media_list/cubit/media_list_cubit.dart';
 import 'package:igplus_ios/presentation/resources/colors_manager.dart';
 import 'package:igplus_ios/presentation/resources/theme_manager.dart';
-import 'package:igplus_ios/presentation/views/media_list/media_list_item.dart';
-import 'package:igplus_ios/presentation/views/media_list/media_search.dart';
+import 'package:igplus_ios/presentation/views/insghit/media/media_list_item.dart';
+import 'package:igplus_ios/presentation/views/insghit/media/media_search.dart';
 import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
 
 class MediaList extends StatefulWidget {
@@ -67,7 +67,7 @@ class _MediaListState extends State<MediaList> {
 
   Future<void> _fetchPage(pageKey) async {
     try {
-      final List<Media>? mediaList = await context.read<MediaListCubit>().getMediaList(
+      final List<Media>? mediaList = await context.read<MediaListCubit>().getMediaListFromLocal(
           dataName: Media.boxKey, pageKey: pageKey, pageSize: _pageSize, searchTerm: _searchTerm, type: widget.type);
 
       if (mediaList == null || mediaList.isEmpty) {
