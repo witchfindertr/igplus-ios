@@ -16,10 +16,11 @@ class InstagramUrls {
   //https://i.instagram.com/api/v1/feed/reels_tray/
   static String getUserStories() => '$baseUrl/feed/reels_tray/';
 
-  // follow user
+  // get stories
   //https://i.instagram.com/api/v1/feed/reels_media/?reel_ids=3139331705
   static String getStories({required userId}) => '$baseUrl/feed/reels_media/?reel_ids=$userId';
 
+  // follow user
   // https://i.instagram.com/api/v1/web/friendships/3923655548/follow/
   static String followUser(String userId) => '$baseUrl/web/friendships/$userId/follow/';
 
@@ -48,4 +49,4 @@ class FirebaseFunctionsUrls {
   static String getLatestHeaders() => '$baseUrl/getLatestHeaders';
 }
 
-//https://www.instagram.com/graphql/query/?query_hash=c9100bf9110dd6361671f113dd02e7d6&variables={%22user_id%22:%2255072545782%22,%22include_chaining%22:false,%22include_reel%22:true,%22include_suggested_users%22:false,%22include_logged_out_extras%22:false,%22include_highlight_reels%22:false,%22include_related_profiles%22:false}
+// https://www.instagram.com/graphql/query/?query_hash=c9100bf9110dd6361671f113dd02e7d6&variables={%22user_id%22:%2255072545782%22,%22include_chaining%22:false,%22include_reel%22:true,%22include_suggested_users%22:false,%22include_logged_out_extras%22:false,%22include_highlight_reels%22:false,%22include_related_profiles%22:false}

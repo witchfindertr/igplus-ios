@@ -6,9 +6,16 @@ import 'package:dartz/dartz.dart';
 class GetStoriesFromLocalUseCase {
   final LocalRepository localRepository;
   GetStoriesFromLocalUseCase({required this.localRepository});
-
-  Future<Either<Failure, List<Story>?>> execute() async {
+// dataName: dataName, pageKey: pageKey, pageSize: pageSize, searchTerm: searchTerm, type: type)
+  Future<Either<Failure, List<Story>?>> execute({
+    required String boxKey,
+    required int pageKey,
+    required int pageSize,
+    String? searchTerm,
+    String? type,
+  }) async {
     // get media list from local
-    return localRepository.getCachedStoriesList(boxKey: Story.boxKey);
+    return localRepository.getCachedStoriesList(
+        boxKey: boxKey, pageKey: pageKey, pageSize: pageSize, searchTerm: searchTerm, type: type);
   }
 }

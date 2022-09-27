@@ -3,13 +3,13 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:go_router/go_router.dart';
 import 'package:igplus_ios/app/extensions/media_query_values.dart';
-import 'package:igplus_ios/presentation/blocs/media_list/cubit/media_list_cubit.dart';
+import 'package:igplus_ios/presentation/blocs/insight/media_insight/cubit/media_list_cubit.dart';
 import 'package:igplus_ios/presentation/resources/colors_manager.dart';
 import 'package:igplus_ios/presentation/views/global/loading_indicator.dart';
 
-class MediaCardList extends StatelessWidget {
+class StoriesCardList extends StatelessWidget {
   final List<Map> cards;
-  const MediaCardList({Key? key, required this.cards}) : super(key: key);
+  const StoriesCardList({Key? key, required this.cards}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -38,7 +38,7 @@ class MediaCardList extends StatelessWidget {
           return Center(child: Text(state.message, style: const TextStyle(color: ColorsManager.downColor)));
         } else if (state is MediaListSuccess) {
           return GestureDetector(
-            onTap: () => GoRouter.of(context).go('/home/mediaList/$type'),
+            onTap: () => GoRouter.of(context).go('/home/storiesList/$type'),
             child: Card(
               color: ColorsManager.cardBack,
               elevation: 1,

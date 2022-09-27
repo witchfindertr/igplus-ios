@@ -115,6 +115,10 @@ class _LoginPageState extends State<LoginPage> {
                 return const Center(
                   child: CupertinoActivityIndicator(),
                 );
+              } else if (state is InstagramAuthFailure) {
+                return Center(
+                  child: Text(state.message, style: const TextStyle(color: ColorsManager.secondarytextColor)),
+                );
               }
               return const Center(
                 child: Text('Unknown state', style: TextStyle(color: ColorsManager.secondarytextColor)),

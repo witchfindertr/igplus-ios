@@ -19,7 +19,8 @@ abstract class LocalDataSource {
   AccountInfo? getCachedAccountInfo();
   Future<void> cacheAccountInfo({required AccountInfo accountInfo});
   Future<void> clearAllBoxes();
-  List<Story>? getCachedStoriesList({required String boxKey});
+  List<Story>? getCachedStoriesList(
+      {required String boxKey, required int pageKey, required int pageSize, String? searchTerm, String? type});
   Future<void> cacheStoriesList({required List<Story> storiesList, required String boxKey});
   List<StoriesUser>? getCachedStoriesUsersList({required String boxKey});
   Future<void> cacheStoriesUsersList({required List<StoriesUser> storiesUserList, required String boxKey});
@@ -255,15 +256,30 @@ class LocalDataSourceImp extends LocalDataSource {
 
   // get stories from local storage
   @override
-  List<Story>? getCachedStoriesList({required String boxKey}) {
+  List<Story>? getCachedStoriesList(
+      {required String boxKey, String? searchTerm, String? type, int? pageKey, int? pageSize}) {
     Box<Story> storiesBox = Hive.box<Story>(boxKey);
+    // Hive.box<Story>(Story.boxKey).clear();
 
     List<Story> storiesList;
+    int? startKey;
+    int? endKey;
+    if (pageKey != null && pageSize != null) {
+      startKey = pageKey;
+      endKey = startKey + pageSize;
+      if (endKey > storiesBox.length - 1) {
+        endKey = storiesBox.length;
+      }
+    }
 
     if (storiesBox.isEmpty) {
       return null;
     } else {
-      storiesList = storiesBox.values.toList();
+      if (startKey != null && endKey != null && searchTerm == null) {
+        storiesList = storiesBox.values.toList().sublist(startKey, endKey);
+      } else {
+        storiesList = storiesBox.values.toList();
+      }
       return storiesList;
     }
   }
@@ -328,28 +344,36 @@ class LocalDataSourceImp extends LocalDataSource {
     await Hive.box<Report>(Report.boxKey).clear();
     await Hive.box<Media>(Media.boxKey).clear();
     await Hive.box<AccountInfo>(AccountInfo.boxKey).clear();
+    await Hive.box<Story>(Story.boxKey).clear();
+    await Hive.box<StoriesUser>(StoriesUser.boxKey).clear();
 
-    // friends boxes
-    await Hive.openBox<Friend>(Friend.followersBoxKey);
-    await Hive.openBox<Friend>(Friend.followingsBoxKey);
-    await Hive.openBox<Friend>(Friend.newFollowersBoxKey);
-    await Hive.openBox<Friend>(Friend.lostFollowersBoxKey);
-    await Hive.openBox<Friend>(Friend.whoAdmiresYouBoxKey);
-    await Hive.openBox<Friend>(Friend.notFollowingBackBoxKey);
-    await Hive.openBox<Friend>(Friend.youDontFollowBackBoxKey);
-    await Hive.openBox<Friend>(Friend.youHaveUnfollowedBoxKey);
-    await Hive.openBox<Friend>(Friend.mutualFollowingsBoxKey);
-    await Hive.openBox<Friend>(Friend.newStoryViewersBoxKey);
-
-    // report box
-    await Hive.openBox<Report>(Report.boxKey);
-
-    // media box
-    await Hive.openBox<Media>(Media.boxKey);
-
-    // account info
     try {
+      // friends boxes
+      await Hive.openBox<Friend>(Friend.followersBoxKey);
+      await Hive.openBox<Friend>(Friend.followingsBoxKey);
+      await Hive.openBox<Friend>(Friend.newFollowersBoxKey);
+      await Hive.openBox<Friend>(Friend.lostFollowersBoxKey);
+      await Hive.openBox<Friend>(Friend.whoAdmiresYouBoxKey);
+      await Hive.openBox<Friend>(Friend.notFollowingBackBoxKey);
+      await Hive.openBox<Friend>(Friend.youDontFollowBackBoxKey);
+      await Hive.openBox<Friend>(Friend.youHaveUnfollowedBoxKey);
+      await Hive.openBox<Friend>(Friend.mutualFollowingsBoxKey);
+      await Hive.openBox<Friend>(Friend.newStoryViewersBoxKey);
+
+      // report box
+      await Hive.openBox<Report>(Report.boxKey);
+
+      // media box
+      await Hive.openBox<Media>(Media.boxKey);
+
+      // account info
       await Hive.openBox<AccountInfo>(AccountInfo.boxKey);
+
+      // stories
+      await Hive.openBox<Story>(Story.boxKey);
+
+      // stories users
+      await Hive.openBox<StoriesUser>(StoriesUser.boxKey);
     } catch (e) {
       print(e);
     }

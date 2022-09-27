@@ -118,9 +118,16 @@ class LocalRepositoryImpl implements LocalRepository {
   }
 
   @override
-  Either<Failure, List<Story>?> getCachedStoriesList({required String boxKey}) {
+  Either<Failure, List<Story>?> getCachedStoriesList({
+    required String boxKey,
+    required int pageKey,
+    required int pageSize,
+    String? searchTerm,
+    String? type,
+  }) {
     try {
-      final List<Story>? cachedStoriesList = localDataSource.getCachedStoriesList(boxKey: boxKey);
+      final List<Story>? cachedStoriesList = localDataSource.getCachedStoriesList(
+          boxKey: boxKey, pageKey: pageKey, pageSize: pageSize, searchTerm: searchTerm, type: type);
       return Right(cachedStoriesList);
     } catch (e) {
       return const Left(InvalidParamsFailure("getCachedStoriesList catch"));

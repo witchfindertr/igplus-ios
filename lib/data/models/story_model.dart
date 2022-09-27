@@ -1,4 +1,6 @@
 import 'package:equatable/equatable.dart';
+import 'package:igplus_ios/data/models/friend_model.dart';
+import 'package:igplus_ios/domain/entities/friend.dart';
 
 import '../../app/constants/media_constants.dart';
 import '../../domain/entities/entity_mapper.dart';
@@ -9,28 +11,45 @@ class StoryModel extends Equatable {
   final int takenAt;
   final int mediaType;
   final String mediaUrl;
+  final int? viewersCount;
+  final List<Friend> viewers;
   const StoryModel({
     required this.mediaId,
     required this.takenAt,
     required this.mediaType,
     required this.mediaUrl,
+    this.viewersCount,
+    this.viewers = const [],
   });
 
   // fromJson
   factory StoryModel.fromJson(Map<String, dynamic> json) {
+    // get story viewers
+    final List<Friend> viewers = [];
+    if (json['viewers'] != null) {
+      for (var viewer in json['viewers']) {
+        viewers.add(FriendModel.fromJson(viewer).toEntity());
+      }
+    }
     if (json['media_type'] == MediaConstants.MEDIA_TYPE_IMAGE) {
-      return StoryModel(
+      StoryModel storyModel = StoryModel(
         mediaId: json['id'].toString(),
         takenAt: json['taken_at'],
         mediaType: json['media_type'],
         mediaUrl: json['image_versions2']['candidates'][0]['url'],
+        viewersCount: json['viewer_count'],
+        viewers: viewers,
       );
+
+      return storyModel;
     } else if (json['media_type'] == MediaConstants.MEDIA_TYPE_VIDEO) {
       return StoryModel(
         mediaId: json['id'].toString(),
         takenAt: json['taken_at'],
         mediaType: json['media_type'],
         mediaUrl: json['video_versions'][0]['url'],
+        viewersCount: json['viewer_count'],
+        viewers: viewers,
       );
     } else {
       throw Exception('Unknown media type');
@@ -51,6 +70,8 @@ class StoryMapper implements EntityMapper<Story, StoryModel> {
       mediaType:
           model.mediaType == MediaConstants.MEDIA_TYPE_IMAGE ? MediaConstants.TYPE_IMAGE : MediaConstants.TYPE_VIDEO,
       mediaUrl: model.mediaUrl,
+      viewersCount: model.viewersCount,
+      viewers: model.viewers,
     );
   }
 
@@ -63,6 +84,8 @@ class StoryMapper implements EntityMapper<Story, StoryModel> {
           ? MediaConstants.MEDIA_TYPE_IMAGE
           : MediaConstants.MEDIA_TYPE_VIDEO,
       mediaUrl: entity.mediaUrl,
+      viewersCount: entity.viewersCount,
+      viewers: entity.viewers,
     );
   }
 

@@ -7,9 +7,9 @@ import 'package:igplus_ios/presentation/blocs/insight/media_insight/cubit/media_
 import 'package:igplus_ios/presentation/resources/colors_manager.dart';
 import 'package:igplus_ios/presentation/views/global/loading_indicator.dart';
 
-class InfoCardList extends StatelessWidget {
+class MediaCardList extends StatelessWidget {
   final List<Map> cards;
-  const InfoCardList({Key? key, required this.cards}) : super(key: key);
+  const MediaCardList({Key? key, required this.cards}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {

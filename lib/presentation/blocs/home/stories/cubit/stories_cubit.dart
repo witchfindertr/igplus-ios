@@ -9,8 +9,8 @@ import 'package:igplus_ios/domain/usecases/get_user_use_case.dart';
 import 'package:igplus_ios/domain/usecases/save_stories_to_local_use_case.dart';
 import 'package:story_view/story_view.dart';
 
-import '../../../../data/failure.dart';
-import '../../../../domain/entities/story.dart';
+import 'package:igplus_ios/data/failure.dart';
+import 'package:igplus_ios/domain/entities/story.dart';
 
 part 'stories_state.dart';
 
@@ -43,7 +43,8 @@ class StoriesCubit extends Cubit<StoriesState> {
     } else {
       final currentUser = (failureOrCurrentUser as Right).value;
 
-      Either<Failure, List<Story>?> cachedStoriesList = await getStoriesFromLocal.execute();
+      Either<Failure, List<Story>?> cachedStoriesList = await getStoriesFromLocal.execute(
+          boxKey: Story.boxKey, pageKey: 0, pageSize: 10, searchTerm: null, type: "mostViewedStories");
       if (cachedStoriesList.isLeft() || (cachedStoriesList as Right).value == null) {
         // get stories user
         final failureOrStories =
