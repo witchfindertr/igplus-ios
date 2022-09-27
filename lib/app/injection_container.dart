@@ -34,6 +34,7 @@ import 'package:igplus_ios/presentation/blocs/home/report/cubit/report_cubit.dar
 import 'package:igplus_ios/presentation/blocs/insight/media_insight/cubit/media_list_cubit.dart';
 import 'package:igplus_ios/presentation/blocs/home/stories/cubit/stories_cubit.dart';
 import 'package:igplus_ios/presentation/blocs/home/user_stories/cubit/user_stories_cubit.dart';
+import 'package:igplus_ios/presentation/blocs/insight/stories_insight/cubit/stories_insight_cubit.dart';
 import '../data/models/story_model.dart';
 import '../data/repositories/firebase/firebase_repository_imp.dart';
 import '../data/repositories/firebase/headers_repository_imp.dart';
@@ -96,6 +97,12 @@ Future<void> init() async {
         getUser: sl(),
         cacheMediaToLocal: sl(),
         getUserFeed: sl(),
+      ));
+  sl.registerFactory(() => StoriesListCubit(
+        getStoriesFromLocal: sl(),
+        getUserFeed: sl(),
+        getUser: sl(),
+        cacheStoriesToLocal: sl(),
       ));
   sl.registerFactory(() => AppBloc(authRepository: sl()));
 

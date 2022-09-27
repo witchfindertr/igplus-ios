@@ -15,6 +15,7 @@ import 'package:igplus_ios/domain/entities/stories_user.dart';
 import 'package:igplus_ios/domain/entities/story.dart';
 import 'package:igplus_ios/presentation/blocs/friends_list/cubit/friends_list_cubit.dart';
 import 'package:igplus_ios/presentation/blocs/home/report/cubit/report_cubit.dart';
+import 'package:igplus_ios/presentation/blocs/insight/stories_insight/cubit/stories_insight_cubit.dart';
 import 'package:igplus_ios/presentation/blocs/login/cubit/instagram_auth_cubit.dart';
 import 'package:igplus_ios/presentation/blocs/insight/media_insight/cubit/media_list_cubit.dart';
 import 'package:igplus_ios/presentation/blocs/home/stories/cubit/stories_cubit.dart';
@@ -80,6 +81,7 @@ void main() async {
         BlocProvider<MediaListCubit>(create: (_) => di.sl<MediaListCubit>()),
         BlocProvider<UserStoriesCubit>(create: (_) => di.sl<UserStoriesCubit>()),
         BlocProvider<StoriesCubit>(create: (_) => di.sl<StoriesCubit>()),
+        BlocProvider<StoriesListCubit>(create: (_) => di.sl<StoriesListCubit>()),
         BlocProvider<AppBloc>(create: (_) => di.sl<AppBloc>()),
       ],
       child: const App(),

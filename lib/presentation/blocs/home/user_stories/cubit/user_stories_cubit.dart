@@ -36,7 +36,7 @@ class UserStoriesCubit extends Cubit<UserStoriesState> {
 
       // // try to get stories from local
       Either<Failure, List<StoriesUser>?> cachedStoriesUsersList = await getStoriesUsersFromLocal.execute();
-      if (cachedStoriesUsersList.isLeft() || (cachedStoriesUsersList as Right).value == null) {
+      if (true || cachedStoriesUsersList.isLeft() || (cachedStoriesUsersList as Right).value == null) {
         // get user stories from instagram
         final failureOrUserStories = await getUserStories.execute(igHeaders: currentUser.igHeaders);
         if (failureOrUserStories.isLeft()) {

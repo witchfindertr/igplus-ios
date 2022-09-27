@@ -45,7 +45,7 @@ class StoriesCubit extends Cubit<StoriesState> {
 
       Either<Failure, List<Story>?> cachedStoriesList = await getStoriesFromLocal.execute(
           boxKey: Story.boxKey, pageKey: 0, pageSize: 10, searchTerm: null, type: "mostViewedStories");
-      if (cachedStoriesList.isLeft() || (cachedStoriesList as Right).value == null) {
+      if (true || cachedStoriesList.isLeft() || (cachedStoriesList as Right).value == null) {
         // get stories user
         final failureOrStories =
             await getStories.execute(storyOwnerId: storyOwner.id, igHeaders: currentUser.igHeaders);
@@ -57,6 +57,8 @@ class StoriesCubit extends Cubit<StoriesState> {
             emit(StoriesLoaded(stories: const [], controller: controller, storyOwner: storyOwner));
           }
         } else {
+          // save stories to local
+          await cacheStoriesToLocal.execute(boxKey: Story.boxKey, storiesList: (failureOrStories as Right).value!);
           final List<Story> stories = (failureOrStories as Right).value;
           emit(StoriesLoaded(stories: stories, controller: controller, storyOwner: storyOwner));
         }
