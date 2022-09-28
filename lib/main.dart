@@ -59,9 +59,6 @@ void main() async {
     await Hive.openBox<Media>(Media.boxKey);
     // account info box
     await Hive.openBox<AccountInfo>(AccountInfo.boxKey);
-    // stories box
-    await Hive.openBox<Story>(Story.boxKey);
-
     // stories user
     await Hive.openBox<StoriesUser>(StoriesUser.boxKey);
   } catch (e) {

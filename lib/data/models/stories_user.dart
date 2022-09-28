@@ -1,4 +1,5 @@
 import 'package:equatable/equatable.dart';
+import 'package:igplus_ios/data/models/story_model.dart';
 import 'package:igplus_ios/domain/entities/entity_mapper.dart';
 import 'package:igplus_ios/domain/entities/stories_user.dart';
 
@@ -10,6 +11,7 @@ class StoriesUserModel extends Equatable {
   final int expiringAt;
   final int latestReelMedia;
   final int seen;
+  final List<StoryModel?> stories;
   const StoriesUserModel({
     required this.ownerId,
     required this.ownerUsername,
@@ -18,6 +20,7 @@ class StoriesUserModel extends Equatable {
     required this.expiringAt,
     required this.latestReelMedia,
     required this.seen,
+    required this.stories,
   });
 
   // fromJson
@@ -30,11 +33,11 @@ class StoriesUserModel extends Equatable {
       expiringAt: json['expiring_at'],
       latestReelMedia: json['latest_reel_media'],
       seen: json['seen'],
+      stories: json['items'] != null ? (json['items'] as List).map((e) => StoryModel.fromJson(e)).toList() : [],
     );
   }
 
   @override
-  // TODO: implement props
   List<Object?> get props => [ownerId, ownerUsername, ownerPicUrl, id, expiringAt, latestReelMedia, seen];
 }
 
@@ -54,6 +57,7 @@ class UserStoryMapper implements EntityMapper<StoriesUser, StoriesUserModel> {
       expiringAt: model.expiringAt,
       latestReelMedia: model.latestReelMedia,
       seen: model.seen,
+      stories: model.stories.map((e) => StoryMapper().mapToEntity(e!)).toList(),
     );
   }
 
@@ -67,6 +71,7 @@ class UserStoryMapper implements EntityMapper<StoriesUser, StoriesUserModel> {
       expiringAt: entity.expiringAt,
       latestReelMedia: entity.latestReelMedia,
       seen: entity.seen,
+      stories: entity.stories.map((e) => StoryMapper().mapToModel(e)).toList(),
     );
   }
 

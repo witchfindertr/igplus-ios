@@ -3,7 +3,6 @@ import 'package:dartz/dartz.dart';
 import 'package:equatable/equatable.dart';
 import 'package:igplus_ios/data/failure.dart';
 import 'package:igplus_ios/domain/entities/stories_user.dart';
-import 'package:igplus_ios/domain/usecases/get_stories_from_local_use_case.dart';
 import 'package:igplus_ios/domain/usecases/get_stories_user_from_local_use_case.dart';
 import 'package:igplus_ios/domain/usecases/get_stories_users_use_case.dart';
 import 'package:igplus_ios/domain/usecases/get_user_use_case.dart';
@@ -17,11 +16,13 @@ class UserStoriesCubit extends Cubit<UserStoriesState> {
   final GetUserUseCase getUser;
   final GetStoriesUsersFromLocalUseCase getStoriesUsersFromLocal;
   final CacheStoriesUserToLocalUseCase cacheStoriesUsersToLocal;
+  final CacheStoriesToLocalUseCase cacheStoriesToLocal;
   UserStoriesCubit({
     required this.getUserStories,
     required this.getUser,
     required this.getStoriesUsersFromLocal,
     required this.cacheStoriesUsersToLocal,
+    required this.cacheStoriesToLocal,
   }) : super(UserStoriesInitial());
 
   void init() async {
@@ -36,17 +37,25 @@ class UserStoriesCubit extends Cubit<UserStoriesState> {
 
       // // try to get stories from local
       Either<Failure, List<StoriesUser>?> cachedStoriesUsersList = await getStoriesUsersFromLocal.execute();
-      if (true || cachedStoriesUsersList.isLeft() || (cachedStoriesUsersList as Right).value == null) {
+      if (cachedStoriesUsersList.isLeft() || (cachedStoriesUsersList as Right).value == null) {
         // get user stories from instagram
         final failureOrUserStories = await getUserStories.execute(igHeaders: currentUser.igHeaders);
         if (failureOrUserStories.isLeft()) {
           emit(const UserStoriesLoaded(userStories: []));
         } else {
-          final storiesUsersList = (failureOrUserStories as Right).value;
+          List<StoriesUser> storiesUsersList = (failureOrUserStories as Right).value;
+          // delete duplicate stories user
+          storiesUsersList = storiesUsersList.toSet().toList();
+
           emit(UserStoriesLoaded(userStories: storiesUsersList));
 
-          // cache stories to local
+          // cache stories user to local
           cacheStoriesUsersToLocal.execute(storiesUserList: storiesUsersList, dataName: StoriesUser.boxKey);
+          // cache stories list to local
+          for (StoriesUser storiesUser in storiesUsersList) {
+            cacheStoriesToLocal.execute(
+                boxKey: StoriesUser.boxKey, storiesList: storiesUser.stories, ownerId: storiesUser.owner.id);
+          }
         }
       } else {
         final storiesList = (cachedStoriesUsersList as Right).value;

@@ -1,5 +1,4 @@
 import 'package:cached_network_image/cached_network_image.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:flutter/material.dart';
 import 'package:igplus_ios/domain/entities/story.dart';
@@ -7,8 +6,6 @@ import 'package:igplus_ios/presentation/resources/colors_manager.dart';
 import 'package:igplus_ios/presentation/views/global/loading_indicator.dart';
 import 'package:intl/intl.dart';
 import 'package:url_launcher/url_launcher.dart';
-import 'package:timeago/timeago.dart' as timeago;
-import 'package:provider/provider.dart';
 
 /// List item representing a single Character with its photo and name.
 class StoriesListItem extends StatefulWidget {
@@ -57,14 +54,8 @@ class _StoriesListItemState extends State<StoriesListItem> {
             child: Row(
               mainAxisSize: MainAxisSize.min,
               children: [
-                Icon(
-                  (widget.type == "mostLikedStories")
-                      ? FontAwesomeIcons.heart
-                      : (widget.type == "mostCommentedStories")
-                          ? FontAwesomeIcons.comment
-                          : (widget.type == "mostViewedStories")
-                              ? FontAwesomeIcons.eye
-                              : FontAwesomeIcons.groupArrowsRotate,
+                const Icon(
+                  FontAwesomeIcons.eye,
                   color: Colors.white,
                   size: 12,
                 ),

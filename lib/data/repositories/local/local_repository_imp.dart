@@ -110,10 +110,12 @@ class LocalRepositoryImpl implements LocalRepository {
 
   // stories
   @override
-  Future<void> cacheStoriesList({required List<Story> storiesList, required String boxKey}) async {
+  Future<void> cacheStoriesList(
+      {required List<Story> storiesList, required String boxKey, required String ownerId}) async {
     await localDataSource.cacheStoriesList(
       storiesList: storiesList,
       boxKey: boxKey,
+      ownerId: ownerId,
     );
   }
 
@@ -124,10 +126,11 @@ class LocalRepositoryImpl implements LocalRepository {
     required int pageSize,
     String? searchTerm,
     String? type,
+    required String ownerId,
   }) {
     try {
       final List<Story>? cachedStoriesList = localDataSource.getCachedStoriesList(
-          boxKey: boxKey, pageKey: pageKey, pageSize: pageSize, searchTerm: searchTerm, type: type);
+          boxKey: boxKey, pageKey: pageKey, pageSize: pageSize, searchTerm: searchTerm, type: type, ownerId: ownerId);
       return Right(cachedStoriesList);
     } catch (e) {
       return const Left(InvalidParamsFailure("getCachedStoriesList catch"));

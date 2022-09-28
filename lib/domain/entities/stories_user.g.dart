@@ -62,13 +62,14 @@ class StoriesUserAdapter extends TypeAdapter<StoriesUser> {
       expiringAt: fields[2] as int,
       latestReelMedia: fields[3] as int,
       seen: fields[4] as int,
+      stories: (fields[5] as List).cast<Story>(),
     );
   }
 
   @override
   void write(BinaryWriter writer, StoriesUser obj) {
     writer
-      ..writeByte(5)
+      ..writeByte(6)
       ..writeByte(0)
       ..write(obj.owner)
       ..writeByte(1)
@@ -78,7 +79,9 @@ class StoriesUserAdapter extends TypeAdapter<StoriesUser> {
       ..writeByte(3)
       ..write(obj.latestReelMedia)
       ..writeByte(4)
-      ..write(obj.seen);
+      ..write(obj.seen)
+      ..writeByte(5)
+      ..write(obj.stories);
   }
 
   @override

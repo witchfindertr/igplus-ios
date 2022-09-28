@@ -13,9 +13,10 @@ class GetStoriesFromLocalUseCase {
     required int pageSize,
     String? searchTerm,
     String? type,
+    required String ownerId,
   }) async {
     // get media list from local
     return localRepository.getCachedStoriesList(
-        boxKey: boxKey, pageKey: pageKey, pageSize: pageSize, searchTerm: searchTerm, type: type);
+        boxKey: boxKey, pageKey: pageKey, pageSize: pageSize, searchTerm: searchTerm, type: type, ownerId: ownerId);
   }
 }

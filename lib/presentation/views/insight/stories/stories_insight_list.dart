@@ -2,6 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
+import 'package:igplus_ios/domain/entities/stories_user.dart';
 import 'package:igplus_ios/domain/entities/story.dart';
 import 'package:igplus_ios/presentation/blocs/insight/stories_insight/cubit/stories_insight_cubit.dart';
 import 'package:igplus_ios/presentation/resources/colors_manager.dart';
@@ -68,7 +69,11 @@ class _StoriesInsightListState extends State<StoriesInsightList> {
   Future<void> _fetchPage(pageKey) async {
     try {
       final List<Story>? storiesList = await context.read<StoriesListCubit>().getStoriesListFromLocal(
-          boxKey: Story.boxKey, pageKey: pageKey, pageSize: _pageSize, searchTerm: _searchTerm, type: widget.type);
+          boxKey: StoriesUser.boxKey,
+          pageKey: pageKey,
+          pageSize: _pageSize,
+          searchTerm: _searchTerm,
+          type: widget.type);
 
       if (storiesList == null || storiesList.isEmpty) {
         _pagingController.appendLastPage([]);

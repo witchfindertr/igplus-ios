@@ -21,7 +21,7 @@ class StoryAdapter extends TypeAdapter<Story> {
       takenAt: fields[1] as int,
       mediaType: fields[2] as String,
       mediaUrl: fields[3] as String,
-      viewersCount: fields[4] as int,
+      viewersCount: fields[4] as int?,
       viewers: (fields[5] as List).cast<Friend>(),
     );
   }

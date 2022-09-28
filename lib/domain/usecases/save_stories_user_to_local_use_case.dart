@@ -1,6 +1,4 @@
-import 'package:igplus_ios/domain/entities/media.dart';
 import 'package:igplus_ios/domain/entities/stories_user.dart';
-import 'package:igplus_ios/domain/entities/story.dart';
 import 'package:igplus_ios/domain/repositories/local/local_repository.dart';
 
 class CacheStoriesUserToLocalUseCase {

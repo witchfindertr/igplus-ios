@@ -85,6 +85,7 @@ Future<void> init() async {
         getUser: sl(),
         getStoriesUsersFromLocal: sl(),
         cacheStoriesUsersToLocal: sl(),
+        cacheStoriesToLocal: sl(),
       ));
   sl.registerFactory(() => StoriesCubit(
         getStories: sl(),
