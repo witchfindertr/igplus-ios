@@ -117,7 +117,18 @@ class _LoginPageState extends State<LoginPage> {
                 );
               } else if (state is InstagramAuthFailure) {
                 return Center(
-                  child: Text(state.message, style: const TextStyle(color: ColorsManager.secondarytextColor)),
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Text(state.message),
+                      TextButton(
+                        onPressed: () {
+                          context.read<InstagramAuthCubit>().init();
+                        },
+                        child: const Text("Retry", style: TextStyle(color: ColorsManager.primaryColor)),
+                      ),
+                    ],
+                  ),
                 );
               }
               return const Center(

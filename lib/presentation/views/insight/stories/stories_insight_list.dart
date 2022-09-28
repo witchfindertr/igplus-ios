@@ -158,14 +158,8 @@ class _StoriesInsightListState extends State<StoriesInsightList> {
                           onChanged: (searchTerm) => _updateSearchTerm(searchTerm),
                           searchFocusNode: _searchFocusNode,
                         ),
-                        PagedSliverGrid<int, Story>(
+                        PagedSliverList<int, Story>(
                           pagingController: _pagingController,
-                          gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                            childAspectRatio: 100 / 100,
-                            crossAxisSpacing: 10,
-                            mainAxisSpacing: 10,
-                            crossAxisCount: 3,
-                          ),
                           builderDelegate: PagedChildBuilderDelegate<Story>(
                             itemBuilder: (context, item, index) => StoriesListItem(
                               story: item,
@@ -178,14 +172,8 @@ class _StoriesInsightListState extends State<StoriesInsightList> {
                     )
                   : CustomScrollView(
                       slivers: <Widget>[
-                        PagedSliverGrid<int, Story>(
+                        PagedSliverList<int, Story>(
                           pagingController: _pagingController,
-                          gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                            childAspectRatio: 100 / 100,
-                            crossAxisSpacing: 10,
-                            mainAxisSpacing: 10,
-                            crossAxisCount: 3,
-                          ),
                           builderDelegate: PagedChildBuilderDelegate<Story>(
                             itemBuilder: (context, item, index) => StoriesListItem(
                               story: item,

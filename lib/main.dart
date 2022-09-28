@@ -37,8 +37,8 @@ void main() async {
   Hive.registerAdapter(MediaAdapter());
   Hive.registerAdapter(AccountInfoAdapter());
   Hive.registerAdapter(StoryAdapter());
-  Hive.registerAdapter(StoriesUserAdapter());
   Hive.registerAdapter(StoryOwnerAdapter());
+  Hive.registerAdapter(StoriesUserAdapter());
 
   // loading the <key,values> pair from the local storage into memory
   try {

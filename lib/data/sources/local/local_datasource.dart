@@ -246,7 +246,7 @@ class LocalDataSourceImp extends LocalDataSource {
   Future<void> cacheStoriesList(
       {required List<Story> storiesList, required String boxKey, required String ownerId}) async {
     // open box
-    Box<StoriesUser> usersStorytoriesBox = Hive.box<StoriesUser>(boxKey);
+    Box<StoriesUser> usersStorytoriesBox = Hive.box<StoriesUser>(StoriesUser.boxKey);
     // get stories user to update
     final StoriesUser storiesUserToUpdate = usersStorytoriesBox.values.where((element) => element.id == ownerId).first;
     // update stories list
@@ -290,7 +290,7 @@ class LocalDataSourceImp extends LocalDataSource {
   // cache stories user
   @override
   Future<void> cacheStoriesUsersList({required List<StoriesUser> storiesUserList, required String boxKey}) async {
-    Box<StoriesUser> usersStorytoriesBox = Hive.box<StoriesUser>(boxKey);
+    Box<StoriesUser> usersStorytoriesBox = Hive.box<StoriesUser>(StoriesUser.boxKey);
 
     final List<StoriesUser> cachedStoriesList = usersStorytoriesBox.values.toList();
     final List<StoriesUser> newStoriesListToAdd;
@@ -312,7 +312,7 @@ class LocalDataSourceImp extends LocalDataSource {
   // get stories from local storage
   @override
   List<StoriesUser>? getCachedStoriesUsersList({required String boxKey}) {
-    Box<StoriesUser> usersStorytoriesBox = Hive.box<StoriesUser>(boxKey);
+    Box<StoriesUser> usersStorytoriesBox = Hive.box<StoriesUser>(StoriesUser.boxKey);
 
     List<StoriesUser> storiesUserList;
 

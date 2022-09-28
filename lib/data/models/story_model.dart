@@ -11,6 +11,7 @@ class StoryModel extends Equatable {
   final int takenAt;
   final int mediaType;
   final String mediaUrl;
+  final String mediaThumbnailUrl;
   final int? viewersCount;
   final List<Friend> viewers;
   const StoryModel({
@@ -18,6 +19,7 @@ class StoryModel extends Equatable {
     required this.takenAt,
     required this.mediaType,
     required this.mediaUrl,
+    required this.mediaThumbnailUrl,
     this.viewersCount,
     this.viewers = const [],
   });
@@ -37,6 +39,7 @@ class StoryModel extends Equatable {
         takenAt: json['taken_at'],
         mediaType: json['media_type'],
         mediaUrl: json['image_versions2']['candidates'][0]['url'],
+        mediaThumbnailUrl: json['image_versions2']['candidates'][0]['url'] ?? "",
         viewersCount: json['viewer_count'],
         viewers: viewers,
       );
@@ -48,6 +51,7 @@ class StoryModel extends Equatable {
         takenAt: json['taken_at'],
         mediaType: json['media_type'],
         mediaUrl: json['video_versions'][0]['url'],
+        mediaThumbnailUrl: json['image_versions2']['candidates'][0]['url'] ?? "",
         viewersCount: json['viewer_count'],
         viewers: viewers,
       );
@@ -70,6 +74,7 @@ class StoryMapper implements EntityMapper<Story, StoryModel> {
       mediaType:
           model.mediaType == MediaConstants.MEDIA_TYPE_IMAGE ? MediaConstants.TYPE_IMAGE : MediaConstants.TYPE_VIDEO,
       mediaUrl: model.mediaUrl,
+      mediaThumbnailUrl: model.mediaThumbnailUrl,
       viewersCount: model.viewersCount,
       viewers: model.viewers,
     );
@@ -84,6 +89,7 @@ class StoryMapper implements EntityMapper<Story, StoryModel> {
           ? MediaConstants.MEDIA_TYPE_IMAGE
           : MediaConstants.MEDIA_TYPE_VIDEO,
       mediaUrl: entity.mediaUrl,
+      mediaThumbnailUrl: entity.mediaThumbnailUrl,
       viewersCount: entity.viewersCount,
       viewers: entity.viewers,
     );

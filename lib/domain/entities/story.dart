@@ -17,8 +17,10 @@ class Story extends Equatable {
   @HiveField(3)
   final String mediaUrl;
   @HiveField(4)
-  final int? viewersCount;
+  final String mediaThumbnailUrl;
   @HiveField(5)
+  final int? viewersCount;
+  @HiveField(6)
   final List<Friend> viewers;
 
   const Story({
@@ -26,6 +28,7 @@ class Story extends Equatable {
     required this.takenAt,
     required this.mediaType,
     required this.mediaUrl,
+    required this.mediaThumbnailUrl,
     required this.viewersCount,
     required this.viewers,
   });
