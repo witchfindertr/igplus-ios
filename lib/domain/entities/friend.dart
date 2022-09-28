@@ -16,6 +16,10 @@ class Friend extends Equatable {
   static const String youHaveUnfollowedBoxKey = "youHaveUnfollowedBoxKey";
   static const String newStoryViewersBoxKey = "newStoryViewersBoxKey";
 
+  // stories
+  static const topStoriesViewersBoxKey = 'topStoriesViewersBoxKey';
+  static const viewersNotFollowingYouBoxKey = 'viewersNotFollowingYouBoxKey';
+
   @HiveField(0)
   final int igUserId;
   @HiveField(1)

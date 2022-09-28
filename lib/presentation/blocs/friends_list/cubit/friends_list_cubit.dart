@@ -7,7 +7,7 @@ import 'package:igplus_ios/domain/usecases/follow_user_use_case.dart';
 import 'package:igplus_ios/domain/usecases/get_friends_from_local_use_case.dart';
 import 'package:igplus_ios/domain/usecases/get_user_use_case.dart';
 import 'package:igplus_ios/domain/usecases/unfollow_user_use_case%20copy.dart';
-import 'package:igplus_ios/presentation/blocs/home/cubit/report_cubit.dart';
+import 'package:igplus_ios/presentation/blocs/home/report/cubit/report_cubit.dart';
 
 part 'friends_list_state.dart';
 

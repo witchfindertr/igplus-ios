@@ -5,7 +5,7 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:go_router/go_router.dart';
 import 'package:igplus_ios/data/failure.dart';
 
-import 'package:igplus_ios/presentation/blocs/home/cubit/report_cubit.dart';
+import 'package:igplus_ios/presentation/blocs/home/report/cubit/report_cubit.dart';
 import 'package:igplus_ios/presentation/resources/colors_manager.dart';
 import 'package:igplus_ios/presentation/resources/theme_manager.dart';
 import 'package:igplus_ios/presentation/views/home/profile_manager.dart';

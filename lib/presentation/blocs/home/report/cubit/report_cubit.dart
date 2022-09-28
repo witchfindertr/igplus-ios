@@ -3,11 +3,11 @@ import 'dart:async';
 import 'package:bloc/bloc.dart';
 import 'package:dartz/dartz.dart';
 import 'package:equatable/equatable.dart';
+import 'package:hive/hive.dart';
 import 'package:igplus_ios/data/failure.dart';
-import 'package:igplus_ios/data/models/media_model.dart';
 import 'package:igplus_ios/domain/entities/account_info.dart';
-import 'package:igplus_ios/domain/entities/friend.dart';
-import 'package:igplus_ios/domain/entities/media.dart';
+import 'package:igplus_ios/domain/entities/stories_user.dart';
+import 'package:igplus_ios/domain/entities/story.dart';
 import 'package:igplus_ios/domain/entities/user.dart';
 import 'package:igplus_ios/domain/repositories/auth/auth_repository.dart';
 import 'package:igplus_ios/domain/usecases/clear_local_data_use_case.dart';
@@ -19,11 +19,10 @@ import 'package:igplus_ios/domain/usecases/get_friends_from_local_use_case.dart'
 import 'package:igplus_ios/domain/usecases/get_report_from_local_use_case.dart';
 import 'package:igplus_ios/domain/usecases/get_user_use_case.dart';
 import 'package:igplus_ios/domain/usecases/save_account_info_to_local_use_case.dart';
-import 'package:igplus_ios/domain/usecases/save_friends_to_local_use_case.dart';
-import 'package:igplus_ios/domain/usecases/save_media_to_local_use_case%20copy.dart';
+import 'package:igplus_ios/domain/usecases/save_media_to_local_use_case.dart';
 import 'package:igplus_ios/domain/usecases/update_report_use_case.dart';
 
-import '../../../../domain/entities/report.dart';
+import 'package:igplus_ios/domain/entities/report.dart';
 
 part 'report_state.dart';
 

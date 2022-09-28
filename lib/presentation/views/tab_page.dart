@@ -2,7 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:igplus_ios/presentation/resources/colors_manager.dart';
 import 'package:igplus_ios/presentation/views/engagement/engagement_page.dart';
 import 'package:igplus_ios/presentation/views/home/home_page.dart';
-import 'package:igplus_ios/presentation/views/insghit/insight_page.dart';
+import 'package:igplus_ios/presentation/views/insight/insight_page.dart';
 import 'package:igplus_ios/presentation/views/settings/settings_page.dart';
 
 class TabPage extends StatelessWidget {

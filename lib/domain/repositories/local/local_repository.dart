@@ -28,8 +28,15 @@ abstract class LocalRepository {
   Future<void> cacheAccountInfo({required AccountInfo accountInfo});
 
   // stories list
-  Either<Failure, List<Story>?> getCachedStoriesList({required String boxKey});
-  Future<void> cacheStoriesList({required List<Story> storiesList, required String boxKey});
+  Either<Failure, List<Story>?> getCachedStoriesList({
+    required String boxKey,
+    required int pageKey,
+    required int pageSize,
+    String? searchTerm,
+    String? type,
+    required String ownerId,
+  });
+  Future<void> cacheStoriesList({required List<Story> storiesList, required String boxKey, required String ownerId});
 
   // stories users list
   Either<Failure, List<StoriesUser>?> getCachedStoriesUsersList({required String boxKey});

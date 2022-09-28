@@ -7,8 +7,8 @@ import 'package:igplus_ios/domain/entities/user.dart';
 import 'package:igplus_ios/domain/usecases/get_media_from_local_use_case.dart';
 import 'package:igplus_ios/domain/usecases/get_user_feed_use_case.dart';
 import 'package:igplus_ios/domain/usecases/get_user_use_case.dart';
-import 'package:igplus_ios/domain/usecases/save_media_to_local_use_case%20copy.dart';
-import 'package:igplus_ios/presentation/blocs/home/cubit/report_cubit.dart';
+import 'package:igplus_ios/domain/usecases/save_media_to_local_use_case.dart';
+import 'package:igplus_ios/presentation/blocs/home/report/cubit/report_cubit.dart';
 
 part 'media_list_state.dart';
 

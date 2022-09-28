@@ -19,8 +19,18 @@ abstract class LocalDataSource {
   AccountInfo? getCachedAccountInfo();
   Future<void> cacheAccountInfo({required AccountInfo accountInfo});
   Future<void> clearAllBoxes();
-  List<Story>? getCachedStoriesList({required String boxKey});
-  Future<void> cacheStoriesList({required List<Story> storiesList, required String boxKey});
+  List<Story>? getCachedStoriesList(
+      {required String boxKey,
+      required int pageKey,
+      required int pageSize,
+      String? searchTerm,
+      String? type,
+      required String ownerId});
+  Future<void> cacheStoriesList({
+    required List<Story> storiesList,
+    required String boxKey,
+    required String ownerId,
+  });
   List<StoriesUser>? getCachedStoriesUsersList({required String boxKey});
   Future<void> cacheStoriesUsersList({required List<StoriesUser> storiesUserList, required String boxKey});
 }
@@ -233,37 +243,42 @@ class LocalDataSourceImp extends LocalDataSource {
 
   // cache stories
   @override
-  Future<void> cacheStoriesList({required List<Story> storiesList, required String boxKey}) async {
-    Box<Story> storiesBox = Hive.box<Story>(boxKey);
-
-    final List<Story> cachedStoriesList = storiesBox.values.toList();
-    final List<Story> newStoriesListToAdd;
-
-    // new stories list to add to the box
-    newStoriesListToAdd = storiesList
-        .where((story) => cachedStoriesList.indexWhere((element) => story.mediaId == element.mediaId) == -1)
-        .toList();
-
-    try {
-      for (var e in newStoriesListToAdd) {
-        storiesBox.add(e);
-      }
-    } catch (e) {
-      print(e);
-    }
+  Future<void> cacheStoriesList(
+      {required List<Story> storiesList, required String boxKey, required String ownerId}) async {
+    // open box
+    Box<StoriesUser> usersStorytoriesBox = Hive.box<StoriesUser>(StoriesUser.boxKey);
+    // get stories user to update
+    final StoriesUser storiesUserToUpdate = usersStorytoriesBox.values.where((element) => element.id == ownerId).first;
+    // update stories list
+    storiesUserToUpdate.stories = storiesList;
+    // save chages to the box
+    usersStorytoriesBox.put(storiesUserToUpdate.id, storiesUserToUpdate);
   }
 
   // get stories from local storage
   @override
-  List<Story>? getCachedStoriesList({required String boxKey}) {
-    Box<Story> storiesBox = Hive.box<Story>(boxKey);
+  List<Story>? getCachedStoriesList(
+      {required String boxKey,
+      String? searchTerm,
+      String? type,
+      int? pageKey,
+      int? pageSize,
+      required String ownerId}) {
+    Box<StoriesUser> usersStorytoriesBox = Hive.box<StoriesUser>(StoriesUser.boxKey);
 
-    List<Story> storiesList;
+    List<Story> storiesList = usersStorytoriesBox.values.where((element) => element.id == ownerId).first.stories;
 
-    if (storiesBox.isEmpty) {
+    if (storiesList.isEmpty) {
       return null;
     } else {
-      storiesList = storiesBox.values.toList();
+      if (type == "mostViewedStories") {
+        // remove stories with null viewers count
+        storiesList = storiesList.where((element) => element.viewersCount != null).toList();
+      }
+      // else if (type == "getStoriesByUser") {
+      // storiesList = storiesList.where((element) => element.ownerId == searchTerm).toList();
+      // }
+
       return storiesList;
     }
   }
@@ -275,7 +290,7 @@ class LocalDataSourceImp extends LocalDataSource {
   // cache stories user
   @override
   Future<void> cacheStoriesUsersList({required List<StoriesUser> storiesUserList, required String boxKey}) async {
-    Box<StoriesUser> usersStorytoriesBox = Hive.box<StoriesUser>(boxKey);
+    Box<StoriesUser> usersStorytoriesBox = Hive.box<StoriesUser>(StoriesUser.boxKey);
 
     final List<StoriesUser> cachedStoriesList = usersStorytoriesBox.values.toList();
     final List<StoriesUser> newStoriesListToAdd;
@@ -287,7 +302,7 @@ class LocalDataSourceImp extends LocalDataSource {
 
     try {
       for (var e in newStoriesListToAdd) {
-        usersStorytoriesBox.add(e);
+        usersStorytoriesBox.put(e.id, e);
       }
     } catch (e) {
       print(e);
@@ -297,7 +312,7 @@ class LocalDataSourceImp extends LocalDataSource {
   // get stories from local storage
   @override
   List<StoriesUser>? getCachedStoriesUsersList({required String boxKey}) {
-    Box<StoriesUser> usersStorytoriesBox = Hive.box<StoriesUser>(boxKey);
+    Box<StoriesUser> usersStorytoriesBox = Hive.box<StoriesUser>(StoriesUser.boxKey);
 
     List<StoriesUser> storiesUserList;
 
@@ -328,30 +343,6 @@ class LocalDataSourceImp extends LocalDataSource {
     await Hive.box<Report>(Report.boxKey).clear();
     await Hive.box<Media>(Media.boxKey).clear();
     await Hive.box<AccountInfo>(AccountInfo.boxKey).clear();
-
-    // friends boxes
-    await Hive.openBox<Friend>(Friend.followersBoxKey);
-    await Hive.openBox<Friend>(Friend.followingsBoxKey);
-    await Hive.openBox<Friend>(Friend.newFollowersBoxKey);
-    await Hive.openBox<Friend>(Friend.lostFollowersBoxKey);
-    await Hive.openBox<Friend>(Friend.whoAdmiresYouBoxKey);
-    await Hive.openBox<Friend>(Friend.notFollowingBackBoxKey);
-    await Hive.openBox<Friend>(Friend.youDontFollowBackBoxKey);
-    await Hive.openBox<Friend>(Friend.youHaveUnfollowedBoxKey);
-    await Hive.openBox<Friend>(Friend.mutualFollowingsBoxKey);
-    await Hive.openBox<Friend>(Friend.newStoryViewersBoxKey);
-
-    // report box
-    await Hive.openBox<Report>(Report.boxKey);
-
-    // media box
-    await Hive.openBox<Media>(Media.boxKey);
-
-    // account info
-    try {
-      await Hive.openBox<AccountInfo>(AccountInfo.boxKey);
-    } catch (e) {
-      print(e);
-    }
+    await Hive.box<StoriesUser>(StoriesUser.boxKey).clear();
   }
 }

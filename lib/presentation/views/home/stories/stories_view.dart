@@ -10,8 +10,8 @@ import 'package:story_view/story_view.dart';
 
 import 'package:timeago/timeago.dart' as timeago;
 
-import '../../../../domain/entities/story.dart';
-import '../../../blocs/stories/cubit/stories_cubit.dart';
+import 'package:igplus_ios/domain/entities/story.dart';
+import 'package:igplus_ios/presentation/blocs/home/stories/cubit/stories_cubit.dart';
 
 class StoriesView extends StatefulWidget {
   const StoriesView({Key? key, required this.storyOwner}) : super(key: key);

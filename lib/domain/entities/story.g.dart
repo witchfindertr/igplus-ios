@@ -21,13 +21,16 @@ class StoryAdapter extends TypeAdapter<Story> {
       takenAt: fields[1] as int,
       mediaType: fields[2] as String,
       mediaUrl: fields[3] as String,
+      mediaThumbnailUrl: fields[4] as String,
+      viewersCount: fields[5] as int?,
+      viewers: (fields[6] as List).cast<Friend>(),
     );
   }
 
   @override
   void write(BinaryWriter writer, Story obj) {
     writer
-      ..writeByte(4)
+      ..writeByte(7)
       ..writeByte(0)
       ..write(obj.mediaId)
       ..writeByte(1)
@@ -35,7 +38,13 @@ class StoryAdapter extends TypeAdapter<Story> {
       ..writeByte(2)
       ..write(obj.mediaType)
       ..writeByte(3)
-      ..write(obj.mediaUrl);
+      ..write(obj.mediaUrl)
+      ..writeByte(4)
+      ..write(obj.mediaThumbnailUrl)
+      ..writeByte(5)
+      ..write(obj.viewersCount)
+      ..writeByte(6)
+      ..write(obj.viewers);
   }
 
   @override
