@@ -41,6 +41,16 @@ class FriendModel extends Equatable {
     );
   }
 
+  // from entity
+  factory FriendModel.fromEntity(Friend entity) {
+    return FriendModel(
+      igUserId: entity.igUserId,
+      username: entity.username,
+      picture: entity.picture,
+      createdOn: entity.createdOn,
+    );
+  }
+
   @override
   // TODO: implement props
   List<Object?> get props => [

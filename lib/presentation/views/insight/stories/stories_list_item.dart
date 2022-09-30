@@ -1,6 +1,7 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import 'package:igplus_ios/domain/entities/story.dart';
 import 'package:igplus_ios/presentation/resources/colors_manager.dart';
 import 'package:igplus_ios/presentation/views/global/images_stack.dart';
@@ -35,7 +36,7 @@ class _StoriesListItemState extends State<StoriesListItem> {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 4),
       child: SizedBox(
-        height: 120.0,
+        height: 220.0,
         child: Card(
           color: ColorsManager.cardBack,
           shape: RoundedRectangleBorder(
@@ -56,8 +57,8 @@ class _StoriesListItemState extends State<StoriesListItem> {
                     color: ColorsManager.appBack,
                   ),
                   imageBuilder: (context, imageProvider) => Container(
-                    width: 110.0,
-                    height: 110.0,
+                    width: 120.0,
+                    height: 220.0,
                     decoration: BoxDecoration(
                       borderRadius: BorderRadius.circular(4),
                       image: DecorationImage(
@@ -67,44 +68,50 @@ class _StoriesListItemState extends State<StoriesListItem> {
                     ),
                   ),
                 ),
-                Column(
-                  mainAxisAlignment: MainAxisAlignment.spaceAround,
-                  children: [
-                    Row(
-                      children: [
-                        Padding(
-                          padding: const EdgeInsets.fromLTRB(8, 8, 16, 8),
-                          child: Column(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            crossAxisAlignment: CrossAxisAlignment.center,
-                            children: [
-                              Text(
-                                NumberFormat.compact().format(widget.story.viewersCount),
-                                style: const TextStyle(
-                                  color: ColorsManager.cardText,
-                                  fontSize: 20,
-                                  fontWeight: FontWeight.w600,
+                GestureDetector(
+                  onTap: () =>
+                      GoRouter.of(context).go('/home/storiesList/${widget.type}/storyViewers/${widget.story.mediaId}'),
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.spaceAround,
+                    children: [
+                      Row(
+                        children: [
+                          Padding(
+                            padding: const EdgeInsets.fromLTRB(8, 8, 16, 8),
+                            child: Column(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              crossAxisAlignment: CrossAxisAlignment.center,
+                              children: [
+                                Text(
+                                  NumberFormat.compact().format(widget.story.viewersCount),
+                                  style: const TextStyle(
+                                    color: ColorsManager.cardText,
+                                    fontSize: 32,
+                                    fontWeight: FontWeight.w600,
+                                  ),
                                 ),
-                              ),
-                              const Text(
-                                'Viewers',
-                                style: TextStyle(
-                                  color: ColorsManager.secondarytextColor,
-                                  fontSize: 10,
-                                  fontWeight: FontWeight.w600,
+                                const Text(
+                                  'Viewers',
+                                  style: TextStyle(
+                                    color: ColorsManager.secondarytextColor,
+                                    fontSize: 12,
+                                  ),
                                 ),
-                              ),
-                            ],
+                              ],
+                            ),
                           ),
-                        ),
-                        const Icon(
-                          FontAwesomeIcons.angleRight,
-                          color: ColorsManager.secondarytextColor,
-                        ),
-                      ],
-                    ),
-                    imageStack(widget.story.viewers.map((e) => e.picture).toList(), widget.story.viewersCount ?? 0),
-                  ],
+                          const Icon(
+                            FontAwesomeIcons.angleRight,
+                            color: ColorsManager.secondarytextColor,
+                            size: 32,
+                          ),
+                        ],
+                      ),
+                      imageStack(
+                          imageList: widget.story.viewers.map((e) => e.picture).toList(),
+                          totalCount: widget.story.viewersCount ?? 0),
+                    ],
+                  ),
                 ),
               ],
             ),
@@ -112,24 +119,5 @@ class _StoriesListItemState extends State<StoriesListItem> {
         ),
       ),
     );
-  }
-
-  void _openProfileLinkOnInsta(String username) async {
-    var url = 'instagram://user?username=$username';
-    Uri uri = Uri.parse(url);
-    try {
-      var rs = await launchUrl(
-        uri,
-      );
-      if (rs == false) {
-        var url = 'https://instagram.com/$username';
-        Uri uri = Uri.parse(url);
-        await launchUrl(
-          uri,
-        );
-      }
-    } catch (e) {
-      throw 'There was a problem to open the url: $url';
-    }
   }
 }

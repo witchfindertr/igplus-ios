@@ -8,6 +8,7 @@ import 'package:igplus_ios/data/failure.dart';
 import 'package:igplus_ios/domain/entities/account_info.dart';
 import 'package:igplus_ios/domain/entities/stories_user.dart';
 import 'package:igplus_ios/domain/entities/story.dart';
+import 'package:igplus_ios/domain/entities/story_viewer.dart';
 import 'package:igplus_ios/domain/entities/user.dart';
 import 'package:igplus_ios/domain/repositories/auth/auth_repository.dart';
 import 'package:igplus_ios/domain/usecases/clear_local_data_use_case.dart';
@@ -59,6 +60,8 @@ class ReportCubit extends Cubit<ReportState> {
 
   void init() async {
     // await clearAllBoxesUseCase.execute();
+    // await Hive.box<StoriesUser>(StoriesUser.boxKey).clear();
+    // await Hive.box<StoryViewer>(StoryViewer.boxKey).clear();
     emit(const ReportInProgress(loadingMessage: "We are loading your data..."));
     // get cached account info from local // TODO - get from local
     final accountInfoEither = await getAccountInfoFromLocalUseCase.execute();

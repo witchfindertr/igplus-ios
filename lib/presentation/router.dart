@@ -4,6 +4,7 @@ import 'package:igplus_ios/domain/entities/stories_user.dart';
 import 'package:igplus_ios/presentation/views/friends_list/friends_list.dart';
 import 'package:igplus_ios/presentation/views/home/stories/stories_view.dart';
 import 'package:igplus_ios/presentation/views/insight/stories/stories_insight_list.dart';
+import 'package:igplus_ios/presentation/views/insight/stories/story_viewers_list/story_viewers_list.dart';
 import 'package:igplus_ios/presentation/views/login/instagram_login_page.dart';
 import 'package:igplus_ios/presentation/views/login/login_page.dart';
 import 'package:igplus_ios/presentation/views/insight/media/media_list.dart';
@@ -56,9 +57,14 @@ GoRouter routes(AppBloc appBloc) {
               builder: (context, state) => MediaList(type: state.params['type'] ?? ""),
             ),
             GoRoute(
-              path: 'storiesList/:type',
-              builder: (context, state) => StoriesInsightList(type: state.params['type'] ?? ""),
-            ),
+                path: 'storiesList/:type',
+                builder: (context, state) => StoriesInsightList(type: state.params['type'] ?? ""),
+                routes: [
+                  GoRoute(
+                    path: 'storyViewers/:mediaId',
+                    builder: (context, state) => StoryViewersList(mediaId: state.params['mediaId'] ?? "", type: ""),
+                  ),
+                ]),
           ]),
     ],
     redirect: (state) {

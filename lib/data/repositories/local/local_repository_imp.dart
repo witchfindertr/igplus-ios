@@ -7,6 +7,7 @@ import 'package:igplus_ios/domain/entities/media.dart';
 import 'package:igplus_ios/domain/entities/report.dart';
 import 'package:igplus_ios/domain/entities/stories_user.dart';
 import 'package:igplus_ios/domain/entities/story.dart';
+import 'package:igplus_ios/domain/entities/story_viewer.dart';
 import 'package:igplus_ios/domain/repositories/local/local_repository.dart';
 
 class LocalRepositoryImpl implements LocalRepository {
@@ -151,6 +152,31 @@ class LocalRepositoryImpl implements LocalRepository {
     try {
       final List<StoriesUser>? cachedStoriesList = localDataSource.getCachedStoriesUsersList(boxKey: boxKey);
       return Right(cachedStoriesList);
+    } catch (e) {
+      return const Left(InvalidParamsFailure("getCachedStoriesUserList catch"));
+    }
+  }
+
+  // stories viewers
+  Future<void> cacheStoryViewersList({required List<StoryViewer> storiesViewersList, required String boxKey}) async {
+    await localDataSource.cacheStoryViewersList(
+      storiesViewersList: storiesViewersList,
+      boxKey: boxKey,
+    );
+  }
+
+  @override
+  Either<Failure, List<StoryViewer>?> getCachedStoryViewersList(
+      {required String boxKey, required String mediaId, int? pageKey, int? pageSize, String? searchTerm}) {
+    try {
+      final List<StoryViewer>? cachedStoriesViewersList = localDataSource.getCachedStoryViewersList(
+        boxKey: boxKey,
+        mediaId: mediaId,
+        pageKey: pageKey,
+        pageSize: pageSize,
+        searchTerm: searchTerm,
+      );
+      return Right(cachedStoriesViewersList);
     } catch (e) {
       return const Left(InvalidParamsFailure("getCachedStoriesUserList catch"));
     }

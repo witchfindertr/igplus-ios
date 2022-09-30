@@ -16,7 +16,9 @@ import 'package:igplus_ios/domain/usecases/follow_user_use_case.dart';
 import 'package:igplus_ios/domain/usecases/get_account_info_from_local_use_case.dart';
 import 'package:igplus_ios/domain/usecases/get_media_from_local_use_case.dart';
 import 'package:igplus_ios/domain/usecases/get_stories_from_local_use_case.dart';
-import 'package:igplus_ios/domain/usecases/get_stories_user_from_local_use_case.dart';
+import 'package:igplus_ios/domain/usecases/get_stories_users_from_local_use_case.dart';
+import 'package:igplus_ios/domain/usecases/get_story_viewers_from_local_use_case.dart';
+import 'package:igplus_ios/domain/usecases/get_story_viewers_use_case.dart';
 import 'package:igplus_ios/domain/usecases/get_user_feed_use_case.dart';
 import 'package:igplus_ios/domain/usecases/get_friends_from_local_use_case.dart';
 import 'package:igplus_ios/domain/usecases/get_report_from_local_use_case.dart';
@@ -35,6 +37,7 @@ import 'package:igplus_ios/presentation/blocs/insight/media_insight/cubit/media_
 import 'package:igplus_ios/presentation/blocs/home/stories/cubit/stories_cubit.dart';
 import 'package:igplus_ios/presentation/blocs/home/user_stories/cubit/user_stories_cubit.dart';
 import 'package:igplus_ios/presentation/blocs/insight/stories_insight/cubit/stories_insight_cubit.dart';
+import 'package:igplus_ios/presentation/blocs/insight/stories_insight/story_viewers/cubit/story_viewers_cubit.dart';
 import '../data/models/story_model.dart';
 import '../data/repositories/firebase/firebase_repository_imp.dart';
 import '../data/repositories/firebase/headers_repository_imp.dart';
@@ -105,6 +108,13 @@ Future<void> init() async {
         getUser: sl(),
         cacheStoriesToLocal: sl(),
       ));
+  sl.registerFactory(() => StoryViewersCubit(
+        getStoryViewersFromLocal: sl(),
+        getStoryViewers: sl(),
+        followUserUseCase: sl(),
+        getUser: sl(),
+        unfollowUserUseCase: sl(),
+      ));
   sl.registerFactory(() => AppBloc(authRepository: sl()));
 
   // Use cases
@@ -133,6 +143,8 @@ Future<void> init() async {
   sl.registerLazySingleton(() => GetStoriesFromLocalUseCase(localRepository: sl()));
   sl.registerLazySingleton(() => CacheStoriesUserToLocalUseCase(localRepository: sl()));
   sl.registerLazySingleton(() => GetStoriesUsersFromLocalUseCase(localRepository: sl()));
+  sl.registerLazySingleton(() => GetStoryViewersUseCase(instagramRepository: sl()));
+  sl.registerLazySingleton(() => GetStoryViewersFromLocalUseCase(localRepository: sl()));
 
   // Repositories
   sl.registerLazySingleton<FirebaseRepository>(() => FirebaseRepositporyImp(firebaseDataSource: sl()));

@@ -37,14 +37,19 @@ class _MediaListItemState extends State<MediaListItem> {
       padding: const EdgeInsets.all(8.0),
       child: Stack(
         children: [
-          CachedNetworkImage(
-            imageUrl: widget.media.url,
-            placeholder: (context, url) => const Center(
-              child: LoadingIndicator(),
-            ),
-            errorWidget: (context, url, error) => const Icon(
-              FontAwesomeIcons.image,
-              color: ColorsManager.appBack,
+          GestureDetector(
+            onTap: () async {
+              // _openProfileLinkOnInsta(widget.media.id.toString());
+            },
+            child: CachedNetworkImage(
+              imageUrl: widget.media.url,
+              placeholder: (context, url) => const Center(
+                child: LoadingIndicator(),
+              ),
+              errorWidget: (context, url, error) => const Icon(
+                FontAwesomeIcons.image,
+                color: ColorsManager.appBack,
+              ),
             ),
           ),
           Container(
@@ -131,22 +136,23 @@ class _MediaListItemState extends State<MediaListItem> {
     );
   }
 
-  void _openProfileLinkOnInsta(String username) async {
-    var url = 'instagram://user?username=$username';
-    Uri uri = Uri.parse(url);
-    try {
-      var rs = await launchUrl(
-        uri,
-      );
-      if (rs == false) {
-        var url = 'https://instagram.com/$username';
-        Uri uri = Uri.parse(url);
-        await launchUrl(
-          uri,
-        );
-      }
-    } catch (e) {
-      throw 'There was a problem to open the url: $url';
-    }
-  }
+  // void _openProfileLinkOnInsta(String mediaId) async {
+  //   // open media
+  //   var url = 'instagram://media?id=$mediaId';
+  //   Uri uri = Uri.parse(url);
+  //   try {
+  //     var rs = await launchUrl(
+  //       uri,
+  //     );
+  //     // if (rs == false) {
+  //     //   var url = 'https://instagram.com/$username';
+  //     //   Uri uri = Uri.parse(url);
+  //     //   await launchUrl(
+  //     //     uri,
+  //     //   );
+  //     // }
+  //   } catch (e) {
+  //     throw 'There was a problem to open the url: $url';
+  //   }
+  // }
 }
