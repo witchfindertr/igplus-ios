@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:go_router/go_router.dart';
 import 'package:igplus_ios/domain/entities/stories_user.dart';
 import 'package:igplus_ios/domain/entities/story.dart';
@@ -25,13 +26,11 @@ class _StoriesInsightListState extends State<StoriesInsightList> {
   static const int _initialPageKey = 0;
   final PagingController<int, Story> _pagingController = PagingController(firstPageKey: _initialPageKey);
   String? _searchTerm;
-  bool _showSearchForm = false;
   late ScrollController _scrollController;
   late FocusNode _searchFocusNode;
 
   @override
   void initState() {
-    // TODO: implement initState
     _pagingController.addPageRequestListener((pageKey) {
       _fetchPage(pageKey);
     });
@@ -68,7 +67,7 @@ class _StoriesInsightListState extends State<StoriesInsightList> {
 
   Future<void> _fetchPage(pageKey) async {
     try {
-      final List<Story>? storiesList = await context.read<StoriesListCubit>().getStoriesListFromLocal(
+      final List<Story>? storiesList = await context.read<StoriesInsightCubit>().getStoriesListFromLocal(
           boxKey: StoriesUser.boxKey,
           pageKey: pageKey,
           pageSize: _pageSize,
@@ -122,25 +121,43 @@ class _StoriesInsightListState extends State<StoriesInsightList> {
               size: 26.0,
             )),
         middle: Text(pageTitle, style: const TextStyle(fontSize: 16, color: Colors.white)),
-        trailing: GestureDetector(
-          onTap: () {
-            if (_showSearchForm == false) {
-              _scrollToTop();
-              try {
-                _searchFocusNode.requestFocus();
-              } catch (e) {
-                // print(e);
-              }
-            }
-            setState(() {
-              _showSearchForm = !_showSearchForm;
-            });
+        trailing: BlocBuilder<StoriesInsightCubit, StoriesInsightState>(
+          builder: (context, state) {
+            return SizedBox(
+                width: 80.0,
+                child: (state is StoriesInsightSuccess)
+                    ? AnimatedSwitcher(
+                        duration: const Duration(milliseconds: 500),
+                        child: GestureDetector(
+                          onTap: () => context.read<StoriesInsightCubit>().init(),
+                          child: Row(
+                            mainAxisSize: MainAxisSize.min,
+                            children: const [
+                              Text("Refresh", style: TextStyle(fontSize: 12, color: ColorsManager.secondarytextColor)),
+                              SizedBox(width: 6.0),
+                              Icon(
+                                FontAwesomeIcons.arrowsRotate,
+                                size: 20.0,
+                                color: ColorsManager.textColor,
+                              ),
+                            ],
+                          ),
+                        ),
+                      )
+                    :
+                    // mini loading
+                    const AnimatedSwitcher(
+                        duration: Duration(milliseconds: 500),
+                        child: SizedBox(
+                          width: 80.0,
+                          height: 4.0,
+                          child: LinearProgressIndicator(
+                            backgroundColor: ColorsManager.appBack,
+                            valueColor: AlwaysStoppedAnimation<Color>(ColorsManager.cardBack),
+                          ),
+                        ),
+                      ));
           },
-          child: const Icon(
-            Icons.search,
-            color: ColorsManager.textColor,
-            size: 26.0,
-          ),
         ),
       ),
       child: MaterialApp(
@@ -148,61 +165,26 @@ class _StoriesInsightListState extends State<StoriesInsightList> {
         theme: appMaterialTheme(),
         home: Scaffold(
           backgroundColor: ColorsManager.appBack,
-          body: BlocBuilder<StoriesListCubit, StoriesListState>(
+          body: BlocBuilder<StoriesInsightCubit, StoriesInsightState>(
             builder: (context, state) {
-              return (_showSearchForm)
-                  ? CustomScrollView(
-                      controller: _scrollController,
-                      slivers: <Widget>[
-                        StoriesSearch(
-                          onChanged: (searchTerm) => _updateSearchTerm(searchTerm),
-                          searchFocusNode: _searchFocusNode,
-                        ),
-                        PagedSliverList<int, Story>(
-                          pagingController: _pagingController,
-                          builderDelegate: PagedChildBuilderDelegate<Story>(
-                            itemBuilder: (context, item, index) => StoriesListItem(
-                              story: item,
-                              index: index,
-                              type: widget.type,
-                            ),
-                          ),
-                        ),
-                      ],
-                    )
-                  : CustomScrollView(
-                      slivers: <Widget>[
-                        PagedSliverList<int, Story>(
-                          pagingController: _pagingController,
-                          builderDelegate: PagedChildBuilderDelegate<Story>(
-                            itemBuilder: (context, item, index) => StoriesListItem(
-                              story: item,
-                              index: index,
-                              type: widget.type,
-                            ),
-                          ),
-                        ),
-                      ],
-                    );
+              return CustomScrollView(
+                slivers: <Widget>[
+                  PagedSliverList<int, Story>(
+                    pagingController: _pagingController,
+                    builderDelegate: PagedChildBuilderDelegate<Story>(
+                      itemBuilder: (context, item, index) => StoriesListItem(
+                        story: item,
+                        index: index,
+                        type: widget.type,
+                      ),
+                    ),
+                  ),
+                ],
+              );
             },
           ),
         ),
       ),
     );
-  }
-
-  void _updateSearchTerm(String searchTerm) {
-    _searchTerm = searchTerm;
-    _pagingController.refresh();
-  }
-
-  void _scrollToTop() {
-    if (_scrollController.hasClients) {
-      _scrollController.animateTo(
-        0,
-        duration: const Duration(milliseconds: 300),
-        curve: Curves.linear,
-      );
-    }
   }
 }

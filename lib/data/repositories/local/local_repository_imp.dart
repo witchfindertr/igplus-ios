@@ -182,6 +182,16 @@ class LocalRepositoryImpl implements LocalRepository {
     }
   }
 
+  // update story viewers count
+  @override
+  Future<void> updateStoryById({required String boxKey, required String mediaId, required int? viewersCount}) async {
+    await localDataSource.updateStoryById(
+      boxKey: boxKey,
+      mediaId: mediaId,
+      viewersCount: viewersCount,
+    );
+  }
+
   // clear all boxes
   @override
   Future<void> clearAllBoxes() async {

@@ -19,11 +19,11 @@ class Story extends Equatable {
   @HiveField(4)
   final String mediaThumbnailUrl;
   @HiveField(5)
-  final int? viewersCount;
+  int? viewersCount;
   @HiveField(6)
   final List<Friend> viewers;
 
-  const Story({
+  Story({
     required this.mediaId,
     required this.takenAt,
     required this.mediaType,

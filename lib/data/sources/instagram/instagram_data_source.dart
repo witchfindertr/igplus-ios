@@ -6,6 +6,7 @@
 
 import 'dart:convert';
 
+import 'package:hive/hive.dart';
 import 'package:igplus_ios/data/models/account_info_model.dart';
 import 'package:http/http.dart' as http;
 import 'package:igplus_ios/data/models/media_model.dart';
@@ -14,7 +15,9 @@ import 'package:igplus_ios/data/models/stories_user.dart';
 import 'package:igplus_ios/data/models/story_viewer_model.dart';
 
 import 'package:igplus_ios/domain/entities/friend.dart';
+import 'package:igplus_ios/domain/entities/stories_user.dart';
 import 'package:igplus_ios/domain/usecases/save_friends_to_local_use_case.dart';
+import 'package:igplus_ios/domain/usecases/update_story_by_id_use_case.dart';
 
 import '../../constants.dart';
 import '../../failure.dart';
@@ -330,14 +333,41 @@ class InstagramDataSourceImp extends InstagramDataSource {
   @override
   Future<List<StoryViewerModel>> getStoryViewers(
       {required String mediaId, required Map<String, String> headers}) async {
-    final response = await client.get(Uri.parse(InstagramUrls.getStoriesViewersList(mediaId)), headers: headers);
+    final response = await client.get(Uri.parse(InstagramUrls.getStoriesViewersList(mediaId, "")), headers: headers);
 
     if (response.statusCode == 200) {
-      final result = jsonDecode(response.body)["viewers"] as List<dynamic>;
-      return result.map((viewer) => StoryViewerModel.fromJson(viewer as Map<String, dynamic>, mediaId)).toList();
+      final body = jsonDecode(response.body);
+      final viewers = body["viewers"] as List<dynamic>;
+      List<StoryViewerModel> storyViewers =
+          viewers.map((viewer) => StoryViewerModel.fromJson(viewer as Map<String, dynamic>, mediaId)).toList();
+      String? nextMaxId = body['next_max_id'];
+      while (nextMaxId != null) {
+        await Future.delayed(const Duration(seconds: 3));
+        nextMaxId = await _loadNextStoryViewersPage(nextMaxId, mediaId, headers, storyViewers);
+      }
+      return storyViewers;
     } else {
-      throw const ServerFailure("Failed to get besties from Instagram");
+      throw const ServerFailure("Failed to get story viewers from Instagram");
     }
+  }
+
+  Future<String?> _loadNextStoryViewersPage(
+      String? nextMaxId, String mediaId, Map<String, String> headers, List<StoryViewerModel> storyViewers) async {
+    String maxIdString = "?max_id=$nextMaxId";
+
+    final response =
+        await client.get(Uri.parse(InstagramUrls.getStoriesViewersList(mediaId, maxIdString)), headers: headers);
+
+    final body = jsonDecode(response.body);
+    final viewers = body["viewers"] as List<dynamic>;
+
+    if (viewers.isNotEmpty) {
+      nextMaxId = body['next_max_id'];
+      final List<StoryViewerModel> newStoryViewers =
+          viewers.map((f) => StoryViewerModel.fromJson(f as Map<String, dynamic>, mediaId)).toList();
+      storyViewers.addAll(newStoryViewers);
+    }
+    return nextMaxId;
   }
 }
 

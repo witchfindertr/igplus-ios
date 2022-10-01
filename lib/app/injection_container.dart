@@ -28,9 +28,11 @@ import 'package:igplus_ios/domain/usecases/save_friends_to_local_use_case.dart';
 import 'package:igplus_ios/domain/usecases/save_media_to_local_use_case.dart';
 import 'package:igplus_ios/domain/usecases/save_stories_to_local_use_case.dart';
 import 'package:igplus_ios/domain/usecases/save_stories_user_to_local_use_case.dart';
+import 'package:igplus_ios/domain/usecases/save_story_viewers_to_local_use_case.dart';
 import 'package:igplus_ios/domain/usecases/sign_up_with_cstom_token_use_case.dart';
 import 'package:igplus_ios/domain/usecases/unfollow_user_use_case%20copy.dart';
 import 'package:igplus_ios/domain/usecases/update_report_use_case.dart';
+import 'package:igplus_ios/domain/usecases/update_story_by_id_use_case.dart';
 import 'package:igplus_ios/presentation/blocs/friends_list/cubit/friends_list_cubit.dart';
 import 'package:igplus_ios/presentation/blocs/home/report/cubit/report_cubit.dart';
 import 'package:igplus_ios/presentation/blocs/insight/media_insight/cubit/media_list_cubit.dart';
@@ -102,11 +104,12 @@ Future<void> init() async {
         cacheMediaToLocal: sl(),
         getUserFeed: sl(),
       ));
-  sl.registerFactory(() => StoriesListCubit(
+  sl.registerFactory(() => StoriesInsightCubit(
         getStoriesFromLocal: sl(),
         getUserFeed: sl(),
         getUser: sl(),
         cacheStoriesToLocal: sl(),
+        getStoriesUseCase: sl(),
       ));
   sl.registerFactory(() => StoryViewersCubit(
         getStoryViewersFromLocal: sl(),
@@ -114,6 +117,7 @@ Future<void> init() async {
         followUserUseCase: sl(),
         getUser: sl(),
         unfollowUserUseCase: sl(),
+        cacheStoryViewersToLocalUseCase: sl(),
       ));
   sl.registerFactory(() => AppBloc(authRepository: sl()));
 
@@ -145,12 +149,14 @@ Future<void> init() async {
   sl.registerLazySingleton(() => GetStoriesUsersFromLocalUseCase(localRepository: sl()));
   sl.registerLazySingleton(() => GetStoryViewersUseCase(instagramRepository: sl()));
   sl.registerLazySingleton(() => GetStoryViewersFromLocalUseCase(localRepository: sl()));
+  sl.registerLazySingleton(() => UpdateStoryByIdUseCase(localRepository: sl()));
+  sl.registerLazySingleton(() => CacheStoryViewersToLocalUseCase(localRepository: sl()));
 
   // Repositories
   sl.registerLazySingleton<FirebaseRepository>(() => FirebaseRepositporyImp(firebaseDataSource: sl()));
 
   sl.registerLazySingleton<InstagramRepository>(
-      () => InstagramRepositoryImp(instagramDataSource: sl(), userStoryMapper: sl(), storyMapper: sl()));
+      () => InstagramRepositoryImp(instagramDataSource: sl(), storyUserMapper: sl(), storyMapper: sl()));
 
   sl.registerLazySingleton<LocalRepository>(() => LocalRepositoryImpl(localDataSource: sl()));
 

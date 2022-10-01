@@ -72,12 +72,14 @@ class _StoryViewersState extends State<StoryViewersList> {
             mediaId: widget.mediaId,
             type: widget.type,
             pageKey: pageKey,
+            pageSize: _pageSize,
+            searchTerm: _searchTerm,
           );
 
       if (storyViewersList == null || storyViewersList.isEmpty) {
         _pagingController.appendLastPage([]);
       } else {
-        final isLastPage = storyViewersList.length < _pageSize;
+        final isLastPage = storyViewersList.length < _pageSize || storyViewersList.length > _pageSize;
         if (isLastPage) {
           _pagingController.appendLastPage(storyViewersList);
         } else {
