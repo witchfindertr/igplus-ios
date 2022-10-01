@@ -4,11 +4,13 @@ import 'package:dartz/dartz.dart';
 import 'package:igplus_ios/data/models/media_model.dart';
 
 import 'package:igplus_ios/data/models/stories_user.dart';
+import 'package:igplus_ios/data/models/story_viewer_model.dart';
 import 'package:igplus_ios/domain/entities/stories_user.dart';
 import 'package:igplus_ios/domain/entities/friend.dart';
 import 'package:igplus_ios/domain/entities/ig_headers.dart';
 import 'package:igplus_ios/domain/entities/media.dart';
 import 'package:igplus_ios/domain/entities/story.dart';
+import 'package:igplus_ios/domain/entities/story_viewer.dart';
 
 import '../../../domain/entities/account_info.dart';
 import '../../../domain/repositories/instagram/instagram_repository.dart';
@@ -168,7 +170,7 @@ class InstagramRepositoryImp extends InstagramRepository {
     }
   }
 
-  // besties friends
+  // User feed media
   @override
   Future<Either<Failure, List<Media>>> getUserFeed({required String userId, required IgHeaders igHeaders}) async {
     try {
@@ -176,6 +178,25 @@ class InstagramRepositoryImp extends InstagramRepository {
       final List<MediaModel> userFeed = await instagramDataSource.getUserFeed(userId: userId, headers: headers);
 
       return Right(userFeed.map((media) => media.toEntity()).toList());
+    } on ServerFailure catch (e) {
+      return Left(ServerFailure(e.message));
+    } on SocketException {
+      return const Left(ConnectionFailure("No internet connection"));
+    } on Exception {
+      return const Left(ServerFailure("Unknown error"));
+    }
+  }
+
+  // story viewers list
+  @override
+  Future<Either<Failure, List<StoryViewer>>> getStoryViewers(
+      {required String mediaId, required IgHeaders igHeaders}) async {
+    try {
+      final Map<String, String> headers = igHeaders.toMap();
+      final List<StoryViewerModel> storyViewers =
+          await instagramDataSource.getStoryViewers(mediaId: mediaId, headers: headers);
+
+      return Right(storyViewers.map((storyViewer) => storyViewer.toEntity()).toList());
     } on ServerFailure catch (e) {
       return Left(ServerFailure(e.message));
     } on SocketException {

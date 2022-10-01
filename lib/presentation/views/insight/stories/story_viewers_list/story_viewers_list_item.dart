@@ -1,0 +1,119 @@
+import 'package:cached_network_image/cached_network_image.dart';
+import 'package:flutter/cupertino.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:igplus_ios/domain/entities/friend.dart';
+import 'package:igplus_ios/domain/entities/story_viewer.dart';
+import 'package:igplus_ios/presentation/blocs/friends_list/cubit/friends_list_cubit.dart';
+import 'package:igplus_ios/presentation/resources/colors_manager.dart';
+import 'package:flutter/material.dart';
+import 'package:igplus_ios/presentation/views/friends_list/follow_unfollow_button.dart';
+import 'package:url_launcher/url_launcher.dart';
+import 'package:timeago/timeago.dart' as timeago;
+import 'package:provider/provider.dart';
+
+/// List item representing a single Character with its photo and name.
+class StoryViewerListItem extends StatefulWidget {
+  const StoryViewerListItem({
+    required this.storyViewer,
+    required this.index,
+    required this.type,
+    Key? key,
+  }) : super(key: key);
+
+  final StoryViewer storyViewer;
+  final int index;
+  final String type;
+
+  @override
+  State<StoryViewerListItem> createState() => _StoryViewerListItemState();
+}
+
+class _StoryViewerListItemState extends State<StoryViewerListItem> {
+  // initShowFollowButton
+  bool showFollowButton = true;
+
+  @override
+  Widget build(BuildContext context) {
+    if (widget.storyViewer.following == true) {
+      showFollowButton = false;
+    }
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: 6, horizontal: 16),
+      child: ListTile(
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(4)),
+        contentPadding: const EdgeInsets.symmetric(horizontal: 12, vertical: 4),
+        tileColor: ColorsManager.cardBack,
+        leading: GestureDetector(
+          onTap: () => _openProfileLinkOnInsta(widget.storyViewer.user.username),
+          child: CircleAvatar(
+            radius: 20,
+            backgroundImage: CachedNetworkImageProvider(
+              widget.storyViewer.user.picture,
+              errorListener: () => const Icon(
+                FontAwesomeIcons.image,
+                color: ColorsManager.appBack,
+              ),
+            ),
+          ),
+        ),
+        title: GestureDetector(
+          onTap: () => _openProfileLinkOnInsta(widget.storyViewer.user.username),
+          child: SizedBox(
+            height: 40.0,
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Flexible(
+                  child: Text(widget.storyViewer.user.username,
+                      overflow: TextOverflow.ellipsis, style: const TextStyle(color: ColorsManager.cardText)),
+                ),
+                const SizedBox(height: 4),
+                Text(timeago.format(widget.storyViewer.user.createdOn),
+                    style: const TextStyle(color: ColorsManager.secondarytextColor, fontSize: 12)),
+              ],
+            ),
+          ),
+        ),
+        trailing: SizedBox(
+          width: 120,
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.end,
+            children: [
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 8),
+                child: Icon(
+                  FontAwesomeIcons.solidHeart,
+                  color: (widget.storyViewer.hasLiked) ? ColorsManager.downColor : ColorsManager.secondarytextColor,
+                  size: 16,
+                ),
+              ),
+              FollowUnfollowButton(
+                igUserId: widget.storyViewer.user.igUserId,
+                showFollow: showFollowButton,
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+
+  void _openProfileLinkOnInsta(String username) async {
+    var url = 'instagram://user?username=$username';
+    Uri uri = Uri.parse(url);
+    try {
+      var rs = await launchUrl(
+        uri,
+      );
+      if (rs == false) {
+        var url = 'https://instagram.com/$username';
+        Uri uri = Uri.parse(url);
+        await launchUrl(
+          uri,
+        );
+      }
+    } catch (e) {
+      throw 'There was a problem to open the url: $url';
+    }
+  }
+}

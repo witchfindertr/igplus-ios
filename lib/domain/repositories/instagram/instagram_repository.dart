@@ -3,6 +3,7 @@ import 'package:igplus_ios/domain/entities/stories_user.dart';
 import 'package:igplus_ios/domain/entities/friend.dart';
 import 'package:igplus_ios/domain/entities/ig_headers.dart';
 import 'package:igplus_ios/domain/entities/media.dart';
+import 'package:igplus_ios/domain/entities/story_viewer.dart';
 
 import '../../../data/failure.dart';
 import '../../entities/account_info.dart';
@@ -50,6 +51,9 @@ abstract class InstagramRepository {
     required IgHeaders igHeaders,
   });
 
-  // besties friends list
+  // user feed media list
   Future<Either<Failure, List<Media>>> getUserFeed({required String userId, required IgHeaders igHeaders});
+
+  // story viewers list
+  Future<Either<Failure, List<StoryViewer>>> getStoryViewers({required String mediaId, required IgHeaders igHeaders});
 }

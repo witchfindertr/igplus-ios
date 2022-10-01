@@ -6,6 +6,7 @@ import 'package:igplus_ios/domain/entities/media.dart';
 import 'package:igplus_ios/domain/entities/report.dart';
 import 'package:igplus_ios/domain/entities/stories_user.dart';
 import 'package:igplus_ios/domain/entities/story.dart';
+import 'package:igplus_ios/domain/entities/story_viewer.dart';
 
 abstract class LocalDataSource {
   Report? getCachedReport();
@@ -31,8 +32,13 @@ abstract class LocalDataSource {
     required String boxKey,
     required String ownerId,
   });
+  // stories users
   List<StoriesUser>? getCachedStoriesUsersList({required String boxKey});
   Future<void> cacheStoriesUsersList({required List<StoriesUser> storiesUserList, required String boxKey});
+  // story viewers
+  Future<void> cacheStoryViewersList({required List<StoryViewer> storiesViewersList, required String boxKey});
+  List<StoryViewer>? getCachedStoryViewersList(
+      {required String boxKey, required String mediaId, int? pageKey, int? pageSize, String? searchTerm});
 }
 
 class LocalDataSourceImp extends LocalDataSource {
@@ -325,6 +331,52 @@ class LocalDataSourceImp extends LocalDataSource {
   }
 
   // ----------------------->
+  // Stories Viewers ------------------>
+  // ----------------------->
+
+  // cache stories viewers
+  @override
+  Future<void> cacheStoryViewersList({required List<StoryViewer> storiesViewersList, required String boxKey}) async {
+    // open box
+    Box<StoryViewer> storiesViewersBox = Hive.box<StoryViewer>(StoryViewer.boxKey);
+    // put viewers in the box
+    for (var e in storiesViewersList) {
+      storiesViewersBox.put(e.id, e);
+    }
+  }
+
+  // get stories viewers from local storage
+  @override
+  List<StoryViewer>? getCachedStoryViewersList(
+      {required String boxKey, required String mediaId, int? pageKey, int? pageSize, String? searchTerm}) {
+    Box<StoryViewer> storyViewersBox = Hive.box<StoryViewer>(StoryViewer.boxKey);
+    List<StoryViewer> storyViewersList;
+    int? startKey;
+    int? endKey;
+    if (pageKey != null && pageSize != null) {
+      startKey = pageKey;
+      endKey = startKey + pageSize;
+      if (endKey > storyViewersBox.length - 1) {
+        endKey = storyViewersBox.length;
+      }
+    }
+
+    if (storyViewersBox.isEmpty) {
+      return null;
+    } else {
+      storyViewersList = storyViewersBox.values.where((element) => element.mediaId == mediaId).toList();
+      if (startKey != null && endKey != null && searchTerm == null) {
+        // paginate
+        storyViewersList = storyViewersList.sublist(startKey, endKey);
+      } else if (searchTerm != null) {
+        // search
+        storyViewersList = storyViewersList.where((c) => c.user.username.toLowerCase().contains(searchTerm)).toList();
+      }
+      return storyViewersList;
+    }
+  }
+
+  // ----------------------->
   // Clear all boxes ------------------>
   // ----------------------->
   @override
@@ -344,5 +396,6 @@ class LocalDataSourceImp extends LocalDataSource {
     await Hive.box<Media>(Media.boxKey).clear();
     await Hive.box<AccountInfo>(AccountInfo.boxKey).clear();
     await Hive.box<StoriesUser>(StoriesUser.boxKey).clear();
+    await Hive.box<StoryViewer>(StoryViewer.boxKey).clear();
   }
 }

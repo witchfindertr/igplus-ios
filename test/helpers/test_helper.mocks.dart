@@ -4,28 +4,29 @@
 
 // ignore_for_file: no_leading_underscores_for_library_prefixes
 import 'dart:async' as _i12;
-import 'dart:convert' as _i29;
-import 'dart:typed_data' as _i30;
+import 'dart:convert' as _i31;
+import 'dart:typed_data' as _i32;
 
 import 'package:cloud_firestore/cloud_firestore.dart' as _i10;
 import 'package:dartz/dartz.dart' as _i2;
 import 'package:firebase_auth/firebase_auth.dart' as _i9;
 import 'package:firebase_auth_platform_interface/firebase_auth_platform_interface.dart'
-    as _i31;
+    as _i33;
 import 'package:firebase_core/firebase_core.dart' as _i8;
 import 'package:http/http.dart' as _i7;
 import 'package:igplus_ios/data/failure.dart' as _i13;
 import 'package:igplus_ios/data/models/account_info_model.dart' as _i3;
-import 'package:igplus_ios/data/models/friend_model.dart' as _i21;
+import 'package:igplus_ios/data/models/friend_model.dart' as _i22;
 import 'package:igplus_ios/data/models/ig_headers_model.dart' as _i5;
-import 'package:igplus_ios/data/models/media_model.dart' as _i24;
-import 'package:igplus_ios/data/models/stories_user.dart' as _i22;
-import 'package:igplus_ios/data/models/story_model.dart' as _i23;
+import 'package:igplus_ios/data/models/media_model.dart' as _i25;
+import 'package:igplus_ios/data/models/stories_user.dart' as _i23;
+import 'package:igplus_ios/data/models/story_model.dart' as _i24;
+import 'package:igplus_ios/data/models/story_viewer_model.dart' as _i26;
 import 'package:igplus_ios/data/models/user_model.dart' as _i4;
 import 'package:igplus_ios/data/sources/firebase/firebase_data_source.dart'
-    as _i27;
+    as _i29;
 import 'package:igplus_ios/data/sources/instagram/instagram_data_source.dart'
-    as _i20;
+    as _i21;
 import 'package:igplus_ios/domain/entities/account_info.dart' as _i14;
 import 'package:igplus_ios/domain/entities/auth_user.dart' as _i6;
 import 'package:igplus_ios/domain/entities/friend.dart' as _i16;
@@ -33,11 +34,12 @@ import 'package:igplus_ios/domain/entities/ig_headers.dart' as _i15;
 import 'package:igplus_ios/domain/entities/media.dart' as _i19;
 import 'package:igplus_ios/domain/entities/stories_user.dart' as _i17;
 import 'package:igplus_ios/domain/entities/story.dart' as _i18;
-import 'package:igplus_ios/domain/entities/user.dart' as _i26;
+import 'package:igplus_ios/domain/entities/story_viewer.dart' as _i20;
+import 'package:igplus_ios/domain/entities/user.dart' as _i28;
 import 'package:igplus_ios/domain/repositories/auth/auth_repository.dart'
-    as _i28;
+    as _i30;
 import 'package:igplus_ios/domain/repositories/firebase/headers_repository.dart'
-    as _i25;
+    as _i27;
 import 'package:igplus_ios/domain/repositories/instagram/instagram_repository.dart'
     as _i11;
 import 'package:mockito/mockito.dart' as _i1;
@@ -269,13 +271,23 @@ class MockInstagramRepository extends _i1.Mock
                           Invocation.method(
                               #getUserFeed, [], {#userId: userId, #igHeaders: igHeaders}))))
           as _i12.Future<_i2.Either<_i13.Failure, List<_i19.Media>>>);
+  @override
+  _i12.Future<_i2.Either<_i13.Failure, List<_i20.StoryViewer>>> getStoryViewers(
+          {String? mediaId, _i15.IgHeaders? igHeaders}) =>
+      (super.noSuchMethod(
+              Invocation.method(
+                  #getStoryViewers, [], {#mediaId: mediaId, #igHeaders: igHeaders}),
+              returnValue: _i12.Future<_i2.Either<_i13.Failure, List<_i20.StoryViewer>>>.value(
+                  _FakeEither_0<_i13.Failure, List<_i20.StoryViewer>>(
+                      this, Invocation.method(#getStoryViewers, [], {#mediaId: mediaId, #igHeaders: igHeaders}))))
+          as _i12.Future<_i2.Either<_i13.Failure, List<_i20.StoryViewer>>>);
 }
 
 /// A class which mocks [InstagramDataSource].
 ///
 /// See the documentation for Mockito's code generation for more information.
 class MockInstagramDataSource extends _i1.Mock
-    implements _i20.InstagramDataSource {
+    implements _i21.InstagramDataSource {
   MockInstagramDataSource() {
     _i1.throwOnMissingStub(this);
   }
@@ -305,7 +317,7 @@ class MockInstagramDataSource extends _i1.Mock
                         #headers: headers
                       })))) as _i12.Future<_i3.AccountInfoModel>);
   @override
-  _i12.Future<List<_i21.FriendModel>> getFollowers(
+  _i12.Future<List<_i22.FriendModel>> getFollowers(
           {String? igUserId,
           Map<String, String>? headers,
           String? maxIdString,
@@ -319,33 +331,33 @@ class MockInstagramDataSource extends _i1.Mock
             #cachedFollowersList: cachedFollowersList,
             #newFollowersNumber: newFollowersNumber
           }),
-          returnValue: _i12.Future<List<_i21.FriendModel>>.value(
-              <_i21.FriendModel>[])) as _i12.Future<List<_i21.FriendModel>>);
+          returnValue: _i12.Future<List<_i22.FriendModel>>.value(
+              <_i22.FriendModel>[])) as _i12.Future<List<_i22.FriendModel>>);
   @override
-  _i12.Future<List<_i21.FriendModel>> getFollowings(
+  _i12.Future<List<_i22.FriendModel>> getFollowings(
           {String? igUserId, Map<String, String>? headers}) =>
       (super.noSuchMethod(
           Invocation.method(
               #getFollowings, [], {#igUserId: igUserId, #headers: headers}),
-          returnValue: _i12.Future<List<_i21.FriendModel>>.value(
-              <_i21.FriendModel>[])) as _i12.Future<List<_i21.FriendModel>>);
+          returnValue: _i12.Future<List<_i22.FriendModel>>.value(
+              <_i22.FriendModel>[])) as _i12.Future<List<_i22.FriendModel>>);
   @override
-  _i12.Future<List<_i22.StoriesUserModel>> getUserStories(
+  _i12.Future<List<_i23.StoriesUserModel>> getUserStories(
           {Map<String, String>? headers}) =>
       (super.noSuchMethod(
               Invocation.method(#getUserStories, [], {#headers: headers}),
-              returnValue: _i12.Future<List<_i22.StoriesUserModel>>.value(
-                  <_i22.StoriesUserModel>[]))
-          as _i12.Future<List<_i22.StoriesUserModel>>);
+              returnValue: _i12.Future<List<_i23.StoriesUserModel>>.value(
+                  <_i23.StoriesUserModel>[]))
+          as _i12.Future<List<_i23.StoriesUserModel>>);
   @override
-  _i12.Future<List<_i23.StoryModel>> getStories(
+  _i12.Future<List<_i24.StoryModel>> getStories(
           {String? userId, Map<String, String>? headers}) =>
       (super.noSuchMethod(
               Invocation.method(
                   #getStories, [], {#userId: userId, #headers: headers}),
               returnValue:
-                  _i12.Future<List<_i23.StoryModel>>.value(<_i23.StoryModel>[]))
-          as _i12.Future<List<_i23.StoryModel>>);
+                  _i12.Future<List<_i24.StoryModel>>.value(<_i24.StoryModel>[]))
+          as _i12.Future<List<_i24.StoryModel>>);
   @override
   _i12.Future<bool> followUser({int? userId, Map<String, String>? headers}) =>
       (super.noSuchMethod(
@@ -359,27 +371,36 @@ class MockInstagramDataSource extends _i1.Mock
               #unfollowUser, [], {#userId: userId, #headers: headers}),
           returnValue: _i12.Future<bool>.value(false)) as _i12.Future<bool>);
   @override
-  _i12.Future<List<_i24.MediaModel>> getUserFeed(
+  _i12.Future<List<_i25.MediaModel>> getUserFeed(
           {String? userId, Map<String, String>? headers}) =>
       (super.noSuchMethod(
               Invocation.method(
                   #getUserFeed, [], {#userId: userId, #headers: headers}),
               returnValue:
-                  _i12.Future<List<_i24.MediaModel>>.value(<_i24.MediaModel>[]))
-          as _i12.Future<List<_i24.MediaModel>>);
+                  _i12.Future<List<_i25.MediaModel>>.value(<_i25.MediaModel>[]))
+          as _i12.Future<List<_i25.MediaModel>>);
+  @override
+  _i12.Future<List<_i26.StoryViewerModel>> getStoryViewers(
+          {String? mediaId, Map<String, String>? headers}) =>
+      (super.noSuchMethod(
+              Invocation.method(
+                  #getStoryViewers, [], {#mediaId: mediaId, #headers: headers}),
+              returnValue: _i12.Future<List<_i26.StoryViewerModel>>.value(
+                  <_i26.StoryViewerModel>[]))
+          as _i12.Future<List<_i26.StoryViewerModel>>);
 }
 
 /// A class which mocks [HeadersRepository].
 ///
 /// See the documentation for Mockito's code generation for more information.
-class MockHeadersRepository extends _i1.Mock implements _i25.HeadersRepository {
+class MockHeadersRepository extends _i1.Mock implements _i27.HeadersRepository {
   MockHeadersRepository() {
     _i1.throwOnMissingStub(this);
   }
 
   @override
   _i12.Future<_i2.Either<_i13.Failure, _i15.IgHeaders>> getHeaders(
-          {_i26.User? currentUser, Map<String, dynamic>? headers}) =>
+          {_i28.User? currentUser, Map<String, dynamic>? headers}) =>
       (super.noSuchMethod(
               Invocation.method(
                   #getHeaders, [], {#currentUser: currentUser, #headers: headers}),
@@ -393,7 +414,7 @@ class MockHeadersRepository extends _i1.Mock implements _i25.HeadersRepository {
 ///
 /// See the documentation for Mockito's code generation for more information.
 class MockFirebaseDataSource extends _i1.Mock
-    implements _i27.FirebaseDataSource {
+    implements _i29.FirebaseDataSource {
   MockFirebaseDataSource() {
     _i1.throwOnMissingStub(this);
   }
@@ -459,7 +480,7 @@ class MockFirebaseDataSource extends _i1.Mock
 /// A class which mocks [AuthRepository].
 ///
 /// See the documentation for Mockito's code generation for more information.
-class MockAuthRepository extends _i1.Mock implements _i28.AuthRepository {
+class MockAuthRepository extends _i1.Mock implements _i30.AuthRepository {
   MockAuthRepository() {
     _i1.throwOnMissingStub(this);
   }
@@ -518,7 +539,7 @@ class MockHttpClient extends _i1.Mock implements _i7.Client {
   _i12.Future<_i7.Response> post(Uri? url,
           {Map<String, String>? headers,
           Object? body,
-          _i29.Encoding? encoding}) =>
+          _i31.Encoding? encoding}) =>
       (super
           .noSuchMethod(Invocation.method(#post, [url], {#headers: headers, #body: body, #encoding: encoding}),
               returnValue: _i12.Future<_i7.Response>.value(_FakeResponse_6(
@@ -534,7 +555,7 @@ class MockHttpClient extends _i1.Mock implements _i7.Client {
   _i12.Future<_i7.Response> put(Uri? url,
           {Map<String, String>? headers,
           Object? body,
-          _i29.Encoding? encoding}) =>
+          _i31.Encoding? encoding}) =>
       (super
           .noSuchMethod(Invocation.method(#put, [url], {#headers: headers, #body: body, #encoding: encoding}),
               returnValue: _i12.Future<_i7.Response>.value(_FakeResponse_6(
@@ -550,7 +571,7 @@ class MockHttpClient extends _i1.Mock implements _i7.Client {
   _i12.Future<_i7.Response> patch(Uri? url,
           {Map<String, String>? headers,
           Object? body,
-          _i29.Encoding? encoding}) =>
+          _i31.Encoding? encoding}) =>
       (super
           .noSuchMethod(Invocation.method(#patch, [url], {#headers: headers, #body: body, #encoding: encoding}),
               returnValue: _i12.Future<_i7.Response>.value(_FakeResponse_6(
@@ -566,7 +587,7 @@ class MockHttpClient extends _i1.Mock implements _i7.Client {
   _i12.Future<_i7.Response> delete(Uri? url,
           {Map<String, String>? headers,
           Object? body,
-          _i29.Encoding? encoding}) =>
+          _i31.Encoding? encoding}) =>
       (super
           .noSuchMethod(Invocation.method(#delete, [url], {#headers: headers, #body: body, #encoding: encoding}),
               returnValue: _i12.Future<_i7.Response>.value(_FakeResponse_6(
@@ -583,12 +604,12 @@ class MockHttpClient extends _i1.Mock implements _i7.Client {
       (super.noSuchMethod(Invocation.method(#read, [url], {#headers: headers}),
           returnValue: _i12.Future<String>.value('')) as _i12.Future<String>);
   @override
-  _i12.Future<_i30.Uint8List> readBytes(Uri? url,
+  _i12.Future<_i32.Uint8List> readBytes(Uri? url,
           {Map<String, String>? headers}) =>
       (super.noSuchMethod(
               Invocation.method(#readBytes, [url], {#headers: headers}),
-              returnValue: _i12.Future<_i30.Uint8List>.value(_i30.Uint8List(0)))
-          as _i12.Future<_i30.Uint8List>);
+              returnValue: _i12.Future<_i32.Uint8List>.value(_i32.Uint8List(0)))
+          as _i12.Future<_i32.Uint8List>);
   @override
   _i12.Future<_i7.StreamedResponse> send(_i7.BaseRequest? request) =>
       (super.noSuchMethod(Invocation.method(#send, [request]),
@@ -794,7 +815,7 @@ class MockFirebaseAuth extends _i1.Mock implements _i9.FirebaseAuth {
                       })))) as _i12.Future<_i9.UserCredential>);
   @override
   _i12.Future<_i9.UserCredential> signInWithAuthProvider(
-          _i31.AuthProvider? provider) =>
+          _i33.AuthProvider? provider) =>
       (super.noSuchMethod(
               Invocation.method(#signInWithAuthProvider, [provider]),
               returnValue: _i12.Future<_i9.UserCredential>.value(
@@ -814,14 +835,14 @@ class MockFirebaseAuth extends _i1.Mock implements _i9.FirebaseAuth {
           as _i12.Future<_i9.ConfirmationResult>);
   @override
   _i12.Future<_i9.UserCredential> signInWithPopup(
-          _i31.AuthProvider? provider) =>
+          _i33.AuthProvider? provider) =>
       (super.noSuchMethod(Invocation.method(#signInWithPopup, [provider]),
               returnValue: _i12.Future<_i9.UserCredential>.value(
                   _FakeUserCredential_10(
                       this, Invocation.method(#signInWithPopup, [provider]))))
           as _i12.Future<_i9.UserCredential>);
   @override
-  _i12.Future<void> signInWithRedirect(_i31.AuthProvider? provider) =>
+  _i12.Future<void> signInWithRedirect(_i33.AuthProvider? provider) =>
       (super.noSuchMethod(Invocation.method(#signInWithRedirect, [provider]),
               returnValue: _i12.Future<void>.value(),
               returnValueForMissingStub: _i12.Future<void>.value())
@@ -921,7 +942,7 @@ class MockFirebaseFirestore extends _i1.Mock implements _i10.FirebaseFirestore {
               returnValueForMissingStub: _i12.Future<void>.value())
           as _i12.Future<void>);
   @override
-  _i10.LoadBundleTask loadBundle(_i30.Uint8List? bundle) =>
+  _i10.LoadBundleTask loadBundle(_i32.Uint8List? bundle) =>
       (super.noSuchMethod(Invocation.method(#loadBundle, [bundle]),
               returnValue: _FakeLoadBundleTask_15(
                   this, Invocation.method(#loadBundle, [bundle])))

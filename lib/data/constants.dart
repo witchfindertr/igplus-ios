@@ -42,6 +42,10 @@ class InstagramUrls {
   // get media likes
   // https://i.instagram.com/api/v1/media/2345678901234567890/likers/
   static String getMediaLikes(String mediaId) => '$baseUrl/media/$mediaId/likers/';
+
+  // get stories viewers list
+  // https://i.instagram.com/api/v1/media/2937243594075523239/list_reel_media_viewer/
+  static String getStoriesViewersList(String mediaId) => '$baseUrl/media/$mediaId/list_reel_media_viewer/';
 }
 
 class FirebaseFunctionsUrls {
