@@ -39,6 +39,7 @@ abstract class LocalDataSource {
   Future<void> cacheStoryViewersList({required List<StoryViewer> storiesViewersList, required String boxKey});
   List<StoryViewer>? getCachedStoryViewersList(
       {required String boxKey, required String mediaId, int? pageKey, int? pageSize, String? searchTerm});
+  Future<void> updateStoryById({required String boxKey, required String mediaId, int? viewersCount});
 }
 
 class LocalDataSourceImp extends LocalDataSource {
@@ -261,6 +262,23 @@ class LocalDataSourceImp extends LocalDataSource {
     usersStorytoriesBox.put(storiesUserToUpdate.id, storiesUserToUpdate);
   }
 
+// update number of story viewers by mediaId
+  @override
+  Future<void> updateStoryById({required String boxKey, required String mediaId, int? viewersCount}) async {
+    // open box
+    Box<StoriesUser> storiesBox = Hive.box<StoriesUser>(boxKey);
+    // get storiesuser where story mediaId = mediaId
+    final StoriesUser storiesUserToUpdate = storiesBox.values
+        .where((element) => element.stories.indexWhere((story) => story.mediaId == mediaId) != -1)
+        .first;
+
+    // update story viewers count
+    storiesUserToUpdate.stories.where((element) => element.mediaId == mediaId).first.viewersCount = viewersCount;
+
+    // save chages to the box
+    storiesBox.put(storiesUserToUpdate.id, storiesUserToUpdate);
+  }
+
   // get stories from local storage
   @override
   List<Story>? getCachedStoriesList(
@@ -281,9 +299,6 @@ class LocalDataSourceImp extends LocalDataSource {
         // remove stories with null viewers count
         storiesList = storiesList.where((element) => element.viewersCount != null).toList();
       }
-      // else if (type == "getStoriesByUser") {
-      // storiesList = storiesList.where((element) => element.ownerId == searchTerm).toList();
-      // }
 
       return storiesList;
     }

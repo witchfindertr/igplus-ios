@@ -22,12 +22,12 @@ import '../../sources/instagram/instagram_data_source.dart';
 
 class InstagramRepositoryImp extends InstagramRepository {
   final InstagramDataSource instagramDataSource;
-  final UserStoryMapper userStoryMapper;
+  final UserStoryMapper storyUserMapper;
   final StoryMapper storyMapper;
 
   InstagramRepositoryImp({
     required this.instagramDataSource,
-    required this.userStoryMapper,
+    required this.storyUserMapper,
     required this.storyMapper,
   });
   @override
@@ -113,7 +113,7 @@ class InstagramRepositoryImp extends InstagramRepository {
     try {
       final Map<String, String> headers = igHeaders.toMap();
       final List<StoriesUserModel> userStoriesModels = await instagramDataSource.getUserStories(headers: headers);
-      return Right(userStoryMapper.mapToEntityList(userStoriesModels));
+      return Right(storyUserMapper.mapToEntityList(userStoriesModels));
     } on ServerFailure catch (e) {
       return Left(ServerFailure(e.message));
     } on SocketException {

@@ -78,6 +78,9 @@ abstract class LocalRepository {
     String? searchTerm,
   });
 
+  // update story
+  Future<void> updateStoryById({required String boxKey, required String mediaId, required int? viewersCount});
+
   // clear all boxes
   Future<void> clearAllBoxes();
 }

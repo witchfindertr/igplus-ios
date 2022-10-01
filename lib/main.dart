@@ -83,7 +83,7 @@ void main() async {
         BlocProvider<MediaListCubit>(create: (_) => di.sl<MediaListCubit>()),
         BlocProvider<UserStoriesCubit>(create: (_) => di.sl<UserStoriesCubit>()),
         BlocProvider<StoriesCubit>(create: (_) => di.sl<StoriesCubit>()),
-        BlocProvider<StoriesListCubit>(create: (_) => di.sl<StoriesListCubit>()),
+        BlocProvider<StoriesInsightCubit>(create: (_) => di.sl<StoriesInsightCubit>()),
         BlocProvider<StoryViewersCubit>(create: (_) => di.sl<StoryViewersCubit>()),
         BlocProvider<AppBloc>(create: (_) => di.sl<AppBloc>()),
       ],

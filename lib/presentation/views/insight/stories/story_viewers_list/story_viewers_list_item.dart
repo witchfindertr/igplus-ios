@@ -45,16 +45,36 @@ class _StoryViewerListItemState extends State<StoryViewerListItem> {
         tileColor: ColorsManager.cardBack,
         leading: GestureDetector(
           onTap: () => _openProfileLinkOnInsta(widget.storyViewer.user.username),
-          child: CircleAvatar(
-            radius: 20,
-            backgroundImage: CachedNetworkImageProvider(
-              widget.storyViewer.user.picture,
-              errorListener: () => const Icon(
-                FontAwesomeIcons.image,
-                color: ColorsManager.appBack,
+          child: Stack(children: [
+            CircleAvatar(
+              radius: 20,
+              backgroundImage: CachedNetworkImageProvider(
+                widget.storyViewer.user.picture,
+                errorListener: () => const Icon(
+                  FontAwesomeIcons.image,
+                  color: ColorsManager.appBack,
+                ),
               ),
             ),
-          ),
+            (widget.storyViewer.hasLiked)
+                ? const Positioned(
+                    bottom: 0,
+                    right: 0,
+                    child: Icon(
+                      // shadow
+                      shadows: [
+                        Shadow(
+                          blurRadius: 4.0,
+                          color: Color.fromARGB(255, 255, 255, 255),
+                          offset: Offset(0.0, 0.0),
+                        ),
+                      ],
+                      FontAwesomeIcons.solidHeart,
+                      color: Colors.red,
+                      size: 16,
+                    ))
+                : const SizedBox.shrink()
+          ]),
         ),
         title: GestureDetector(
           onTap: () => _openProfileLinkOnInsta(widget.storyViewer.user.username),
@@ -74,25 +94,9 @@ class _StoryViewerListItemState extends State<StoryViewerListItem> {
             ),
           ),
         ),
-        trailing: SizedBox(
-          width: 120,
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.end,
-            children: [
-              Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 8),
-                child: Icon(
-                  FontAwesomeIcons.solidHeart,
-                  color: (widget.storyViewer.hasLiked) ? ColorsManager.downColor : ColorsManager.secondarytextColor,
-                  size: 16,
-                ),
-              ),
-              FollowUnfollowButton(
-                igUserId: widget.storyViewer.user.igUserId,
-                showFollow: showFollowButton,
-              ),
-            ],
-          ),
+        trailing: FollowUnfollowButton(
+          igUserId: widget.storyViewer.user.igUserId,
+          showFollow: showFollowButton,
         ),
       ),
     );
