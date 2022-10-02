@@ -9,7 +9,7 @@ class GetStoryViewersFromLocalUseCase {
 
   Future<Either<Failure, List<StoryViewer>?>> execute({
     required String boxKey,
-    required String mediaId,
+    String? mediaId,
     int? pageKey,
     int? pageSize,
     String? searchTerm,

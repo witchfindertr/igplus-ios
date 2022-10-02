@@ -38,7 +38,7 @@ abstract class LocalDataSource {
   // story viewers
   Future<void> cacheStoryViewersList({required List<StoryViewer> storiesViewersList, required String boxKey});
   List<StoryViewer>? getCachedStoryViewersList(
-      {required String boxKey, required String mediaId, int? pageKey, int? pageSize, String? searchTerm});
+      {required String boxKey, String? mediaId, int? pageKey, int? pageSize, String? searchTerm});
   Future<void> updateStoryById({required String boxKey, required String mediaId, int? viewersCount});
 }
 
@@ -363,7 +363,7 @@ class LocalDataSourceImp extends LocalDataSource {
   // get stories viewers from local storage
   @override
   List<StoryViewer>? getCachedStoryViewersList(
-      {required String boxKey, required String mediaId, int? pageKey, int? pageSize, String? searchTerm}) {
+      {required String boxKey, String? mediaId, int? pageKey, int? pageSize, String? searchTerm}) {
     Box<StoryViewer> storyViewersBox = Hive.box<StoryViewer>(StoryViewer.boxKey);
     List<StoryViewer> storyViewersList;
     int? startKey;
@@ -379,13 +379,17 @@ class LocalDataSourceImp extends LocalDataSource {
     if (storyViewersBox.isEmpty) {
       return null;
     } else {
-      storyViewersList = storyViewersBox.values.where((element) => element.mediaId == mediaId).toList();
-      if (startKey != null && endKey != null && searchTerm == null) {
-        // paginate
-        storyViewersList = storyViewersList.sublist(startKey, endKey);
-      } else if (searchTerm != null) {
-        // search
-        storyViewersList = storyViewersList.where((c) => c.user.username.toLowerCase().contains(searchTerm)).toList();
+      if (mediaId != null) {
+        storyViewersList = storyViewersBox.values.where((element) => element.mediaId == mediaId).toList();
+        if (startKey != null && endKey != null && searchTerm == null) {
+          // paginate
+          storyViewersList = storyViewersList.sublist(startKey, endKey);
+        } else if (searchTerm != null) {
+          // search
+          storyViewersList = storyViewersList.where((c) => c.user.username.toLowerCase().contains(searchTerm)).toList();
+        }
+      } else {
+        storyViewersList = storyViewersBox.values.toList();
       }
       return storyViewersList;
     }

@@ -2,28 +2,25 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
-import 'package:igplus_ios/domain/entities/story_viewer.dart';
+import 'package:igplus_ios/domain/entities/stories_top_viewers.dart';
 import 'package:igplus_ios/presentation/blocs/insight/stories_insight/story_viewers/cubit/story_viewers_cubit.dart';
 import 'package:igplus_ios/presentation/resources/colors_manager.dart';
 import 'package:igplus_ios/presentation/resources/theme_manager.dart';
 import 'package:igplus_ios/presentation/views/friends_list/friend_search.dart';
-import 'package:igplus_ios/presentation/views/insight/stories/story_viewers_list/story_viewers_list_item.dart';
+import 'package:igplus_ios/presentation/views/insight/stories/top_viewers_list/stories_top_viewers_list_item.dart';
 import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
 
-class StoryViewersList extends StatefulWidget {
-  const StoryViewersList({Key? key, required this.type, this.mediaId}) : super(key: key);
-
-  final String type;
-  final String? mediaId;
+class StoriesTopViewersList extends StatefulWidget {
+  const StoriesTopViewersList({Key? key}) : super(key: key);
 
   @override
-  State<StoryViewersList> createState() => _StoryViewersState();
+  State<StoriesTopViewersList> createState() => _StoriesTopViewersState();
 }
 
-class _StoryViewersState extends State<StoryViewersList> {
+class _StoriesTopViewersState extends State<StoriesTopViewersList> {
   static const _pageSize = 15;
   static const int _initialPageKey = 0;
-  final PagingController<int, StoryViewer> _pagingController = PagingController(firstPageKey: _initialPageKey);
+  final PagingController<int, StoriesTopViewer> _pagingController = PagingController(firstPageKey: _initialPageKey);
   String? _searchTerm;
   bool _showSearchForm = false;
   late ScrollController _scrollController;
@@ -31,7 +28,6 @@ class _StoryViewersState extends State<StoryViewersList> {
 
   @override
   void initState() {
-    // TODO: implement initState
     _pagingController.addPageRequestListener((pageKey) {
       _fetchPage(pageKey);
     });
@@ -68,25 +64,18 @@ class _StoryViewersState extends State<StoryViewersList> {
 
   Future<void> _fetchPage(pageKey) async {
     try {
-      if (widget.mediaId != null) {
-        final List<StoryViewer>? storyViewersList = await context.read<StoryViewersCubit>().getStoryViewersList(
-              mediaId: widget.mediaId!,
-              type: widget.type,
-              pageKey: pageKey,
-              pageSize: _pageSize,
-              searchTerm: _searchTerm,
-            );
+      final List<StoriesTopViewer>? topStoriesViewers;
+      topStoriesViewers = await context.read<StoryViewersCubit>().getTopViewersList();
 
-        if (storyViewersList == null || storyViewersList.isEmpty) {
-          _pagingController.appendLastPage([]);
+      if (topStoriesViewers == null || topStoriesViewers.isEmpty) {
+        _pagingController.appendLastPage([]);
+      } else {
+        final isLastPage = topStoriesViewers.length < _pageSize || topStoriesViewers.length > _pageSize;
+        if (isLastPage) {
+          _pagingController.appendLastPage(topStoriesViewers);
         } else {
-          final isLastPage = storyViewersList.length < _pageSize || storyViewersList.length > _pageSize;
-          if (isLastPage) {
-            _pagingController.appendLastPage(storyViewersList);
-          } else {
-            final nextPageKey = pageKey + storyViewersList.length;
-            _pagingController.appendPage(storyViewersList, nextPageKey);
-          }
+          final nextPageKey = pageKey + topStoriesViewers.length;
+          _pagingController.appendPage(topStoriesViewers, nextPageKey);
         }
       }
     } catch (error) {
@@ -96,21 +85,6 @@ class _StoryViewersState extends State<StoryViewersList> {
 
   @override
   Widget build(BuildContext context) {
-    final String pageTitle;
-    switch (widget.type) {
-      case "mostViewedStories":
-        pageTitle = "Most Viewed Stories";
-        break;
-      case "topStoriesViewers":
-        pageTitle = "Top Viewers";
-        break;
-      case "viewersNotFollowingYou":
-        pageTitle = "Viewers Not Following You";
-        break;
-      default:
-        pageTitle = "";
-        break;
-    }
     return CupertinoPageScaffold(
       navigationBar: CupertinoNavigationBar(
         backgroundColor: ColorsManager.appBack,
@@ -121,7 +95,7 @@ class _StoryViewersState extends State<StoryViewersList> {
               color: Colors.white,
               size: 26.0,
             )),
-        middle: Text(pageTitle, style: const TextStyle(fontSize: 16, color: Colors.white)),
+        middle: const Text("Top Viewers", style: TextStyle(fontSize: 16, color: Colors.white)),
         trailing: GestureDetector(
           onTap: () {
             if (_showSearchForm == false) {
@@ -158,14 +132,13 @@ class _StoryViewersState extends State<StoryViewersList> {
                           onChanged: (searchTerm) => _updateSearchTerm(searchTerm),
                           searchFocusNode: _searchFocusNode,
                         ),
-                        PagedSliverList<int, StoryViewer>(
+                        PagedSliverList<int, StoriesTopViewer>(
                           pagingController: _pagingController,
-                          builderDelegate: PagedChildBuilderDelegate<StoryViewer>(
+                          builderDelegate: PagedChildBuilderDelegate<StoriesTopViewer>(
                             animateTransitions: true,
-                            itemBuilder: (context, item, index) => StoryViewerListItem(
-                              storyViewer: item,
+                            itemBuilder: (context, item, index) => StoriesTopViewersListItem(
+                              storiesTopViewer: item,
                               index: index,
-                              type: widget.type,
                             ),
                           ),
                         )
@@ -174,14 +147,13 @@ class _StoryViewersState extends State<StoryViewersList> {
                   : CustomScrollView(
                       controller: _scrollController,
                       slivers: <Widget>[
-                        PagedSliverList<int, StoryViewer>(
+                        PagedSliverList<int, StoriesTopViewer>(
                           pagingController: _pagingController,
-                          builderDelegate: PagedChildBuilderDelegate<StoryViewer>(
+                          builderDelegate: PagedChildBuilderDelegate<StoriesTopViewer>(
                             animateTransitions: true,
-                            itemBuilder: (context, item, index) => StoryViewerListItem(
-                              storyViewer: item,
+                            itemBuilder: (context, item, index) => StoriesTopViewersListItem(
+                              storiesTopViewer: item,
                               index: index,
-                              type: widget.type,
                             ),
                           ),
                         ),

@@ -167,7 +167,7 @@ class LocalRepositoryImpl implements LocalRepository {
 
   @override
   Either<Failure, List<StoryViewer>?> getCachedStoryViewersList(
-      {required String boxKey, required String mediaId, int? pageKey, int? pageSize, String? searchTerm}) {
+      {required String boxKey, String? mediaId, int? pageKey, int? pageSize, String? searchTerm}) {
     try {
       final List<StoryViewer>? cachedStoriesViewersList = localDataSource.getCachedStoryViewersList(
         boxKey: boxKey,
