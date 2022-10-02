@@ -1,6 +1,8 @@
 import 'package:bloc/bloc.dart';
 import 'package:dartz/dartz.dart';
 import 'package:equatable/equatable.dart';
+import 'package:igplus_ios/data/models/stories_top_viewer_model.dart';
+import 'package:igplus_ios/domain/entities/stories_top_viewers.dart';
 import 'package:igplus_ios/domain/entities/story_viewer.dart';
 import 'package:igplus_ios/domain/usecases/follow_user_use_case.dart';
 import 'package:igplus_ios/domain/usecases/get_story_viewers_from_local_use_case.dart';
@@ -134,6 +136,51 @@ class StoryViewersCubit extends Cubit<StoryViewersState> {
       } else {
         return true;
       }
+    }
+  }
+
+  // get top viewers list
+  Future<List<StoriesTopViewer>?> getTopViewersList() async {
+    final failureOrStoryViewersList = await getStoryViewersFromLocal.execute(
+      boxKey: StoryViewer.boxKey,
+      pageKey: 0,
+      pageSize: 10,
+      searchTerm: null,
+    );
+    if (failureOrStoryViewersList.isLeft()) {
+      return null;
+    } else {
+      List<StoryViewer> storyViewersList = (failureOrStoryViewersList as Right).value;
+      Map<String, List<StoryViewer>> topViewersMap = {};
+      for (var storyViewer in storyViewersList) {
+        if (topViewersMap.containsKey(storyViewer.id.split('_')[2])) {
+          topViewersMap[storyViewer.id.split('_')[2]]!.add(storyViewer);
+        } else {
+          topViewersMap[storyViewer.id.split('_')[2]] = [storyViewer];
+        }
+      }
+
+      List<StoriesTopViewer> storiesTopViewersList = [];
+      for (var value in topViewersMap.values) {
+        storiesTopViewersList.add(StoriesTopViewerModel.fromJson(value).toEntity());
+      }
+
+      return storiesTopViewersList;
+    }
+  }
+
+  // get viewers not following you back
+  Future<List<StoryViewer>?> getViewersNotFollowingYouBack() async {
+    final failureOrStoryViewersList = await getStoryViewersFromLocal.execute(
+      boxKey: StoryViewer.boxKey,
+      pageKey: 0,
+      pageSize: 10,
+      searchTerm: null,
+    );
+    if (failureOrStoryViewersList.isLeft()) {
+      return null;
+    } else {
+      return (failureOrStoryViewersList as Right).value;
     }
   }
 }

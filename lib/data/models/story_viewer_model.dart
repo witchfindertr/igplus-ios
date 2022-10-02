@@ -1,5 +1,4 @@
 import 'package:igplus_ios/data/models/friend_model.dart';
-import 'package:igplus_ios/domain/entities/friend.dart';
 import 'package:igplus_ios/domain/entities/story_viewer.dart';
 
 class StoryViewerModel {
@@ -21,7 +20,7 @@ class StoryViewerModel {
 
   factory StoryViewerModel.fromJson(Map<String, dynamic> json, String mediaId) {
     return StoryViewerModel(
-      id: json['user']['pk'].toString(),
+      id: "${mediaId}_${json['user']['pk']}",
       mediaId: mediaId,
       hasLiked: json['has_liked'],
       followedBy: json['user']['friendship_status']['followed_by'],

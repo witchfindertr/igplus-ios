@@ -3,11 +3,12 @@ import 'package:igplus_ios/app/bloc/app_bloc.dart';
 import 'package:igplus_ios/domain/entities/stories_user.dart';
 import 'package:igplus_ios/presentation/views/friends_list/friends_list.dart';
 import 'package:igplus_ios/presentation/views/home/stories/stories_view.dart';
-import 'package:igplus_ios/presentation/views/insight/stories/stories_insight_list.dart';
+import 'package:igplus_ios/presentation/views/insight/stories/stories_list/stories_insight_list.dart';
 import 'package:igplus_ios/presentation/views/insight/stories/story_viewers_list/story_viewers_list.dart';
+import 'package:igplus_ios/presentation/views/insight/stories/top_viewers_list/stories_top_viewers_list.dart';
 import 'package:igplus_ios/presentation/views/login/instagram_login_page.dart';
 import 'package:igplus_ios/presentation/views/login/login_page.dart';
-import 'package:igplus_ios/presentation/views/insight/media/media_list.dart';
+import 'package:igplus_ios/presentation/views/insight/media/media_list/media_list.dart';
 import 'package:igplus_ios/presentation/views/tab_page.dart';
 
 GoRouter routes(AppBloc appBloc) {
@@ -55,6 +56,10 @@ GoRouter routes(AppBloc appBloc) {
             GoRoute(
               path: 'mediaList/:type',
               builder: (context, state) => MediaList(type: state.params['type'] ?? ""),
+            ),
+            GoRoute(
+              path: 'storiesTopViewersList',
+              builder: (context, state) => StoriesTopViewersList(),
             ),
             GoRoute(
                 path: 'storiesList/:type',

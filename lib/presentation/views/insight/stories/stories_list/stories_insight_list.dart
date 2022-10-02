@@ -8,8 +8,7 @@ import 'package:igplus_ios/domain/entities/story.dart';
 import 'package:igplus_ios/presentation/blocs/insight/stories_insight/cubit/stories_insight_cubit.dart';
 import 'package:igplus_ios/presentation/resources/colors_manager.dart';
 import 'package:igplus_ios/presentation/resources/theme_manager.dart';
-import 'package:igplus_ios/presentation/views/insight/stories/stories_list_item.dart';
-import 'package:igplus_ios/presentation/views/insight/stories/stories_search.dart';
+import 'package:igplus_ios/presentation/views/insight/stories/stories_list/stories_insight_list_item.dart';
 import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
 
 class StoriesInsightList extends StatefulWidget {
@@ -24,7 +23,7 @@ class StoriesInsightList extends StatefulWidget {
 class _StoriesInsightListState extends State<StoriesInsightList> {
   static const _pageSize = 30;
   static const int _initialPageKey = 0;
-  final PagingController<int, Story> _pagingController = PagingController(firstPageKey: _initialPageKey);
+  PagingController<int, Story> _pagingController = PagingController(firstPageKey: _initialPageKey);
   String? _searchTerm;
   late ScrollController _scrollController;
   late FocusNode _searchFocusNode;
@@ -73,6 +72,8 @@ class _StoriesInsightListState extends State<StoriesInsightList> {
           pageSize: _pageSize,
           searchTerm: _searchTerm,
           type: widget.type);
+
+      _pagingController = PagingController(firstPageKey: _initialPageKey);
 
       if (storiesList == null || storiesList.isEmpty) {
         _pagingController.appendLastPage([]);
@@ -172,7 +173,7 @@ class _StoriesInsightListState extends State<StoriesInsightList> {
                   PagedSliverList<int, Story>(
                     pagingController: _pagingController,
                     builderDelegate: PagedChildBuilderDelegate<Story>(
-                      itemBuilder: (context, item, index) => StoriesListItem(
+                      itemBuilder: (context, item, index) => StoriesInsightListItem(
                         story: item,
                         index: index,
                         type: widget.type,

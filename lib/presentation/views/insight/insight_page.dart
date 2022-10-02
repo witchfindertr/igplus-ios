@@ -5,7 +5,7 @@ import 'package:igplus_ios/presentation/blocs/insight/media_insight/cubit/media_
 import 'package:igplus_ios/presentation/views/global/info_card.dart';
 import 'package:igplus_ios/presentation/views/global/section_title.dart';
 import 'package:igplus_ios/presentation/views/insight/media/media_card_list.dart';
-import 'package:igplus_ios/presentation/views/insight/stories_card_list.dart';
+import 'package:igplus_ios/presentation/views/insight/stories/stories_card_list.dart';
 
 class InsightPage extends StatelessWidget {
   const InsightPage({Key? key}) : super(key: key);

@@ -72,7 +72,7 @@ abstract class LocalRepository {
   });
   Either<Failure, List<StoryViewer>?> getCachedStoryViewersList({
     required String boxKey,
-    required String mediaId,
+    String? mediaId,
     int? pageKey,
     int? pageSize,
     String? searchTerm,

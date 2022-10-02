@@ -2,8 +2,8 @@ import 'dart:async';
 import 'package:rxdart/rxdart.dart';
 import 'package:flutter/material.dart';
 
-class StoriesSearch extends StatefulWidget {
-  const StoriesSearch({
+class StoriesTopViewersSearch extends StatefulWidget {
+  const StoriesTopViewersSearch({
     Key? key,
     this.onChanged,
     this.debounceTime,
@@ -14,10 +14,10 @@ class StoriesSearch extends StatefulWidget {
   final FocusNode? searchFocusNode;
 
   @override
-  _StoriesSearchState createState() => _StoriesSearchState();
+  _StoriesTopViewersSearchState createState() => _StoriesTopViewersSearchState();
 }
 
-class _StoriesSearchState extends State<StoriesSearch> {
+class _StoriesTopViewersSearchState extends State<StoriesTopViewersSearch> {
   final StreamController<String> _textChangeStreamController = StreamController();
   late StreamSubscription _textChangesSubscription;
 
@@ -46,7 +46,7 @@ class _StoriesSearchState extends State<StoriesSearch> {
             focusNode: widget.searchFocusNode,
             decoration: const InputDecoration(
               prefixIcon: Icon(Icons.search),
-              labelText: 'Keyword in your post',
+              labelText: 'Friend Name',
             ),
             onChanged: _textChangeStreamController.add,
           ),

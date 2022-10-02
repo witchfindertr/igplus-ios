@@ -7,12 +7,10 @@ import 'package:igplus_ios/presentation/resources/colors_manager.dart';
 import 'package:igplus_ios/presentation/views/global/images_stack.dart';
 import 'package:igplus_ios/presentation/views/global/loading_indicator.dart';
 import 'package:intl/intl.dart';
-import 'package:url_launcher/url_launcher.dart';
-import 'package:flutter_image_stack/flutter_image_stack.dart';
 
 /// List item representing a single Character with its photo and name.
-class StoriesListItem extends StatefulWidget {
-  const StoriesListItem({
+class StoriesInsightListItem extends StatefulWidget {
+  const StoriesInsightListItem({
     required this.story,
     required this.index,
     required this.type,
@@ -24,10 +22,10 @@ class StoriesListItem extends StatefulWidget {
   final String type;
 
   @override
-  State<StoriesListItem> createState() => _StoriesListItemState();
+  State<StoriesInsightListItem> createState() => _StoriesInsightListItemState();
 }
 
-class _StoriesListItemState extends State<StoriesListItem> {
+class _StoriesInsightListItemState extends State<StoriesInsightListItem> {
   // initShowFollowButton
   bool showFollowButton = true;
 

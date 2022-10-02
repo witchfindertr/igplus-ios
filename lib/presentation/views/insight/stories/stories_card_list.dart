@@ -38,7 +38,15 @@ class StoriesCardList extends StatelessWidget {
           return Center(child: Text(state.message, style: const TextStyle(color: ColorsManager.downColor)));
         } else if (state is MediaListSuccess) {
           return GestureDetector(
-            onTap: () => GoRouter.of(context).go('/home/storiesList/$type'),
+            onTap: () {
+              if (type == "mostViewedStories") {
+                return GoRouter.of(context).go('/home/storiesList/$type');
+              } else if (type == "topStoriesViewers") {
+                return GoRouter.of(context).go('/home/storiesTopViewersList');
+              } else if (type == "viewersNotFollowingYou") {
+                return GoRouter.of(context).go('/home/storyViewers/$type');
+              }
+            },
             child: Card(
               color: ColorsManager.cardBack,
               elevation: 1,
