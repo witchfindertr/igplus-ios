@@ -73,8 +73,6 @@ class _StoriesInsightListState extends State<StoriesInsightList> {
           searchTerm: _searchTerm,
           type: widget.type);
 
-      _pagingController = PagingController(firstPageKey: _initialPageKey);
-
       if (storiesList == null || storiesList.isEmpty) {
         _pagingController.appendLastPage([]);
       } else {

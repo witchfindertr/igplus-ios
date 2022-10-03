@@ -34,7 +34,7 @@ abstract class InstagramRepository {
   });
 
   // getstories
-  Future<Either<Failure, List<Story>>> getStories({
+  Future<Either<Failure, List<Story?>>> getStories({
     required String userId,
     required IgHeaders igHeaders,
   });

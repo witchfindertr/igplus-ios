@@ -101,12 +101,6 @@ class _StoryViewersState extends State<StoryViewersList> {
       case "mostViewedStories":
         pageTitle = "Most Viewed Stories";
         break;
-      case "topStoriesViewers":
-        pageTitle = "Top Viewers";
-        break;
-      case "viewersNotFollowingYou":
-        pageTitle = "Viewers Not Following You";
-        break;
       default:
         pageTitle = "";
         break;

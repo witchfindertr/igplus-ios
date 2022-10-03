@@ -1,8 +1,8 @@
 import 'package:bloc/bloc.dart';
 import 'package:dartz/dartz.dart';
 import 'package:equatable/equatable.dart';
-import 'package:igplus_ios/data/models/stories_top_viewer_model.dart';
-import 'package:igplus_ios/domain/entities/stories_top_viewers.dart';
+import 'package:igplus_ios/data/models/stories_viewer_model.dart';
+import 'package:igplus_ios/domain/entities/stories_viewers.dart';
 import 'package:igplus_ios/domain/entities/story_viewer.dart';
 import 'package:igplus_ios/domain/usecases/follow_user_use_case.dart';
 import 'package:igplus_ios/domain/usecases/get_story_viewers_from_local_use_case.dart';
@@ -140,14 +140,14 @@ class StoryViewersCubit extends Cubit<StoryViewersState> {
   }
 
   // get top viewers list
-  Future<List<StoriesTopViewer>?> getTopViewersList() async {
+  Future<List<StoriesViewer>?> getTopViewersList() async {
     final failureOrStoryViewersList = await getStoryViewersFromLocal.execute(
       boxKey: StoryViewer.boxKey,
       pageKey: 0,
       pageSize: 10,
       searchTerm: null,
     );
-    if (failureOrStoryViewersList.isLeft()) {
+    if (failureOrStoryViewersList.isLeft() || (failureOrStoryViewersList as Right).value == null) {
       return null;
     } else {
       List<StoryViewer> storyViewersList = (failureOrStoryViewersList as Right).value;
@@ -160,27 +160,50 @@ class StoryViewersCubit extends Cubit<StoryViewersState> {
         }
       }
 
-      List<StoriesTopViewer> storiesTopViewersList = [];
+      List<StoriesViewer> storiesTopViewersList = [];
       for (var value in topViewersMap.values) {
-        storiesTopViewersList.add(StoriesTopViewerModel.fromJson(value).toEntity());
+        storiesTopViewersList.add(StoriesViewerModel.fromJson(value).toEntity());
       }
+
+      // sort by number of stories viewed
+      storiesTopViewersList.sort((a, b) => b.viewsCount.compareTo(a.viewsCount));
 
       return storiesTopViewersList;
     }
   }
 
   // get viewers not following you back
-  Future<List<StoryViewer>?> getViewersNotFollowingYouBack() async {
+  Future<List<StoriesViewer>?> getViewersNotFollowingYouBack() async {
     final failureOrStoryViewersList = await getStoryViewersFromLocal.execute(
       boxKey: StoryViewer.boxKey,
       pageKey: 0,
       pageSize: 10,
       searchTerm: null,
     );
-    if (failureOrStoryViewersList.isLeft()) {
+    if (failureOrStoryViewersList.isLeft() || (failureOrStoryViewersList as Right).value == null) {
       return null;
     } else {
-      return (failureOrStoryViewersList as Right).value;
+      List<StoryViewer> storyViewersList = (failureOrStoryViewersList as Right).value;
+      Map<String, List<StoryViewer>> viewersNotFollowingYou = {};
+      for (var storyViewer in storyViewersList) {
+        if (storyViewer.followedBy == false) {
+          if (viewersNotFollowingYou.containsKey(storyViewer.id.split('_')[2])) {
+            viewersNotFollowingYou[storyViewer.id.split('_')[2]]!.add(storyViewer);
+          } else {
+            viewersNotFollowingYou[storyViewer.id.split('_')[2]] = [storyViewer];
+          }
+        }
+      }
+
+      List<StoriesViewer> storiesTopViewersList = [];
+      for (var value in viewersNotFollowingYou.values) {
+        storiesTopViewersList.add(StoriesViewerModel.fromJson(value).toEntity());
+      }
+
+      // sort by number of stories viewed
+      storiesTopViewersList.sort((a, b) => b.viewsCount.compareTo(a.viewsCount));
+
+      return storiesTopViewersList;
     }
   }
 }

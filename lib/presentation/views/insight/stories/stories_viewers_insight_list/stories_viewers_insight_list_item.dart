@@ -2,32 +2,32 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:igplus_ios/domain/entities/friend.dart';
-import 'package:igplus_ios/domain/entities/stories_top_viewers.dart';
+import 'package:igplus_ios/domain/entities/stories_viewers.dart';
 import 'package:igplus_ios/domain/entities/story_viewer.dart';
 import 'package:igplus_ios/presentation/blocs/friends_list/cubit/friends_list_cubit.dart';
 import 'package:igplus_ios/presentation/resources/colors_manager.dart';
 import 'package:flutter/material.dart';
-import 'package:igplus_ios/presentation/views/friends_list/follow_unfollow_button.dart';
+import 'package:igplus_ios/presentation/views/global/follow_unfollow_button.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:timeago/timeago.dart' as timeago;
 import 'package:provider/provider.dart';
 
 /// List item representing a single Character with its photo and name.
-class StoriesTopViewersListItem extends StatefulWidget {
-  const StoriesTopViewersListItem({
+class StoriesViewersInsightListItem extends StatefulWidget {
+  const StoriesViewersInsightListItem({
     required this.storiesTopViewer,
     required this.index,
     Key? key,
   }) : super(key: key);
 
-  final StoriesTopViewer storiesTopViewer;
+  final StoriesViewer storiesTopViewer;
   final int index;
 
   @override
-  State<StoriesTopViewersListItem> createState() => _StoriesTopViewersListItemState();
+  State<StoriesViewersInsightListItem> createState() => _StoriesViewersInsightListItemState();
 }
 
-class _StoriesTopViewersListItemState extends State<StoriesTopViewersListItem> {
+class _StoriesViewersInsightListItemState extends State<StoriesViewersInsightListItem> {
   // initShowFollowButton
   bool showFollowButton = true;
 

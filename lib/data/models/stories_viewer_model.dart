@@ -1,8 +1,8 @@
 import 'package:igplus_ios/domain/entities/friend.dart';
-import 'package:igplus_ios/domain/entities/stories_top_viewers.dart';
+import 'package:igplus_ios/domain/entities/stories_viewers.dart';
 import 'package:igplus_ios/domain/entities/story_viewer.dart';
 
-class StoriesTopViewerModel {
+class StoriesViewerModel {
   final String id;
   final int viewsCount;
   final bool hasLiked;
@@ -11,7 +11,7 @@ class StoriesTopViewerModel {
   final List<String> mediaIdsList;
   final Friend user;
 
-  StoriesTopViewerModel({
+  StoriesViewerModel({
     required this.id,
     required this.viewsCount,
     required this.hasLiked,
@@ -21,12 +21,12 @@ class StoriesTopViewerModel {
     required this.user,
   });
 
-  factory StoriesTopViewerModel.fromJson(List<StoryViewer> storyViewers) {
+  factory StoriesViewerModel.fromJson(List<StoryViewer> storyViewers) {
     List<String> mediaIdsList = [];
     for (var element in storyViewers) {
       mediaIdsList.add(element.mediaId);
     }
-    return StoriesTopViewerModel(
+    return StoriesViewerModel(
       id: storyViewers.first.id.split('_')[2].toString(),
       viewsCount: storyViewers.length,
       hasLiked: storyViewers.first.hasLiked,
@@ -49,8 +49,8 @@ class StoriesTopViewerModel {
     };
   }
 
-  StoriesTopViewer toEntity() {
-    return StoriesTopViewer(
+  StoriesViewer toEntity() {
+    return StoriesViewer(
       id: id,
       viewsCount: viewsCount,
       hasLiked: hasLiked,

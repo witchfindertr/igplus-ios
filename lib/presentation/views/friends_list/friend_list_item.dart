@@ -5,7 +5,7 @@ import 'package:igplus_ios/domain/entities/friend.dart';
 import 'package:igplus_ios/presentation/blocs/friends_list/cubit/friends_list_cubit.dart';
 import 'package:igplus_ios/presentation/resources/colors_manager.dart';
 import 'package:flutter/material.dart';
-import 'package:igplus_ios/presentation/views/friends_list/follow_unfollow_button.dart';
+import 'package:igplus_ios/presentation/views/global/follow_unfollow_button.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:timeago/timeago.dart' as timeago;
 import 'package:provider/provider.dart';

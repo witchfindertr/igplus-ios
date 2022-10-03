@@ -1,7 +1,7 @@
 import 'package:igplus_ios/domain/entities/friend.dart';
 import 'package:igplus_ios/domain/entities/story_viewer.dart';
 
-class StoriesTopViewer {
+class StoriesViewer {
   final String id;
   final int viewsCount;
   final bool hasLiked;
@@ -10,7 +10,7 @@ class StoriesTopViewer {
   final List<String> mediaIdsList;
   final Friend user;
 
-  StoriesTopViewer({
+  StoriesViewer({
     required this.id,
     required this.viewsCount,
     required this.hasLiked,

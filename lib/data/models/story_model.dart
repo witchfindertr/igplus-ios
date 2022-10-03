@@ -95,8 +95,9 @@ class StoryMapper implements EntityMapper<Story, StoryModel> {
     );
   }
 
-  List<Story> mapToEntityList(List<StoryModel> modelList) {
-    return modelList.map((model) => mapToEntity(model)).toList();
+  List<Story?> mapToEntityList(List<StoryModel?> modelList) {
+    if (modelList.isEmpty) return [];
+    return modelList.map((model) => mapToEntity(model!)).toList();
   }
 
   List<StoryModel> mapToModelList(List<Story> entityList) {

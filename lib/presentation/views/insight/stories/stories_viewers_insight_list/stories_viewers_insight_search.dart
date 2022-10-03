@@ -2,8 +2,8 @@ import 'dart:async';
 import 'package:rxdart/rxdart.dart';
 import 'package:flutter/material.dart';
 
-class StoriesTopViewersSearch extends StatefulWidget {
-  const StoriesTopViewersSearch({
+class StoriesViewersInsightSearch extends StatefulWidget {
+  const StoriesViewersInsightSearch({
     Key? key,
     this.onChanged,
     this.debounceTime,
@@ -14,10 +14,10 @@ class StoriesTopViewersSearch extends StatefulWidget {
   final FocusNode? searchFocusNode;
 
   @override
-  _StoriesTopViewersSearchState createState() => _StoriesTopViewersSearchState();
+  _StoriesViewersInsightSearchState createState() => _StoriesViewersInsightSearchState();
 }
 
-class _StoriesTopViewersSearchState extends State<StoriesTopViewersSearch> {
+class _StoriesViewersInsightSearchState extends State<StoriesViewersInsightSearch> {
   final StreamController<String> _textChangeStreamController = StreamController();
   late StreamSubscription _textChangesSubscription;
 
