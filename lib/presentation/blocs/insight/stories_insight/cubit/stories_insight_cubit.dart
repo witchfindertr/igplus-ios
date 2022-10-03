@@ -77,13 +77,14 @@ class StoriesInsightCubit extends Cubit<StoriesInsightState> {
     // get user info
     final failureOrCurrentUser = await getUser.execute();
     if (failureOrCurrentUser.isLeft()) {
-      final failure = (failureOrCurrentUser as Left).value;
+      emit(const StoriesListFailure(message: 'Failed to get user info'));
+      return null;
     } else {
       currentUser = (failureOrCurrentUser as Right).value;
     }
 
     // get stories list from instagram and save result to local
-    final Either<Failure, List<Story>?> userFeedEither =
+    final Either<Failure, List<Story?>> userFeedEither =
         await getStoriesUseCase.execute(storyOwnerId: currentUser.igUserId, igHeaders: currentUser.igHeaders);
     if (userFeedEither.isRight()) {
       final List<Story> storiesList = (userFeedEither as Right).value;
@@ -97,6 +98,7 @@ class StoriesInsightCubit extends Cubit<StoriesInsightState> {
     } else {
       final stories = (userFeedEither as Right).value;
       if (stories != null) {
+        emit(StoriesInsightSuccess(storiesList: stories, pageKey: 0));
         return stories;
       } else {
         return null;
@@ -122,12 +124,13 @@ class StoriesInsightCubit extends Cubit<StoriesInsightState> {
         searchTerm: searchTerm,
         type: type,
         ownerId: currentUser.igUserId);
-    if (failureOrStories == null || failureOrStories.isLeft()) {
+    if (failureOrStories.isLeft()) {
       emit(const StoriesListFailure(message: 'Failed to get stories'));
       return null;
     } else {
       final stories = (failureOrStories as Right).value;
       if (stories != null) {
+        emit(StoriesInsightSuccess(storiesList: stories, pageKey: 0));
         return stories;
       } else {
         return null;

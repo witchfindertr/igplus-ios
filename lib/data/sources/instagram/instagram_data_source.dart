@@ -36,7 +36,7 @@ abstract class InstagramDataSource {
   });
   Future<List<FriendModel>> getFollowings({required String igUserId, required Map<String, String> headers});
   Future<List<StoriesUserModel>> getUserStories({required Map<String, String> headers});
-  Future<List<StoryModel>> getStories({required String userId, required Map<String, String> headers});
+  Future<List<StoryModel?>> getStories({required String userId, required Map<String, String> headers});
   Future<bool> followUser({required int userId, required Map<String, String> headers});
   Future<bool> unfollowUser({required int userId, required Map<String, String> headers});
   Future<List<MediaModel>> getUserFeed({required String userId, required Map<String, String> headers});
@@ -273,11 +273,15 @@ class InstagramDataSourceImp extends InstagramDataSource {
   }
 
   @override
-  Future<List<StoryModel>> getStories({required String userId, required Map<String, String> headers}) async {
+  Future<List<StoryModel?>> getStories({required String userId, required Map<String, String> headers}) async {
     final response = await client.get(Uri.parse(InstagramUrls.getStories(userId: userId)), headers: headers);
 
     if (response.statusCode == 200) {
-      final result = jsonDecode(response.body)["reels_media"][0]['items'] as List<dynamic>;
+      final body = jsonDecode(response.body);
+      if (body["reels_media"].isEmpty) {
+        return [];
+      }
+      final result = body["reels_media"][0]['items'] as List<dynamic>;
       return result.map((story) => StoryModel.fromJson(story as Map<String, dynamic>)).toList();
     } else {
       throw const ServerFailure("Failed to get active stories from Instagram");

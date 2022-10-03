@@ -10,7 +10,7 @@ class GetStoriesUseCase {
 
   GetStoriesUseCase({required this.instagramRepository});
 
-  Future<Either<Failure, List<Story>>> execute({required String storyOwnerId, required IgHeaders igHeaders}) async {
+  Future<Either<Failure, List<Story?>>> execute({required String storyOwnerId, required IgHeaders igHeaders}) async {
     return await instagramRepository.getStories(userId: storyOwnerId, igHeaders: igHeaders);
   }
 }

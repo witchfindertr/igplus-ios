@@ -124,11 +124,15 @@ class InstagramRepositoryImp extends InstagramRepository {
   }
 
   @override
-  Future<Either<Failure, List<Story>>> getStories({required String userId, required IgHeaders igHeaders}) async {
+  Future<Either<Failure, List<Story?>>> getStories({required String userId, required IgHeaders igHeaders}) async {
     try {
       final Map<String, String> headers = igHeaders.toMap();
-      final List<StoryModel> storiesModels = await instagramDataSource.getStories(userId: userId, headers: headers);
-      return Right(storyMapper.mapToEntityList(storiesModels));
+      final List<StoryModel?> storiesModels = await instagramDataSource.getStories(userId: userId, headers: headers);
+      if (!storiesModels.isEmpty) {
+        return Right(storyMapper.mapToEntityList(storiesModels));
+      } else {
+        return const Left(ServerFailure("No stories"));
+      }
     } on ServerFailure catch (e) {
       return Left(ServerFailure(e.message));
     } on SocketException {
