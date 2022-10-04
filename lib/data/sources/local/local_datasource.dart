@@ -386,19 +386,21 @@ class LocalDataSourceImp extends LocalDataSource {
     List<StoryViewer> storyViewersList;
     int? startKey;
     int? endKey;
-    if (pageKey != null && pageSize != null) {
-      startKey = pageKey;
-      endKey = startKey + pageSize;
-      if (endKey > storyViewersBox.length - 1) {
-        endKey = storyViewersBox.length;
-      }
-    }
 
     if (storyViewersBox.isEmpty) {
       return null;
     } else {
       if (mediaId != null) {
         storyViewersList = storyViewersBox.values.where((element) => element.mediaId == mediaId).toList();
+
+        if (pageKey != null && pageSize != null) {
+          startKey = pageKey;
+          endKey = startKey + pageSize;
+          if (endKey > storyViewersList.length - 1) {
+            endKey = storyViewersList.length;
+          }
+        }
+
         if (startKey != null && endKey != null && searchTerm == null) {
           // paginate
           storyViewersList = storyViewersList.sublist(startKey, endKey);
