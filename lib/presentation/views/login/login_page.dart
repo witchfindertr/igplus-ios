@@ -2,6 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
+import 'package:igplus_ios/presentation/blocs/home/report/cubit/report_cubit.dart';
 import 'package:igplus_ios/presentation/blocs/login/cubit/instagram_auth_cubit.dart';
 import 'package:igplus_ios/presentation/resources/colors_manager.dart';
 
@@ -31,6 +32,7 @@ class _LoginPageState extends State<LoginPage> {
             listener: (context, state) {
               if (state is InstagramAuthSuccess) {
                 ScaffoldMessenger.of(context).removeCurrentSnackBar();
+                context.read<ReportCubit>().init();
                 GoRouter.of(context).goNamed('home');
               }
               if (state is InstagramAuthFailure) {
