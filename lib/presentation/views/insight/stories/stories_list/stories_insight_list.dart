@@ -66,7 +66,7 @@ class _StoriesInsightListState extends State<StoriesInsightList> {
 
   Future<void> _fetchPage(pageKey) async {
     try {
-      final List<Story>? storiesList = await context.read<StoriesInsightCubit>().getStoriesListFromLocal(
+      final List<Story>? storiesList = await context.read<StoriesInsightCubit>().init(
           boxKey: StoriesUser.boxKey,
           pageKey: pageKey,
           pageSize: _pageSize,
@@ -128,7 +128,12 @@ class _StoriesInsightListState extends State<StoriesInsightList> {
                     ? AnimatedSwitcher(
                         duration: const Duration(milliseconds: 500),
                         child: GestureDetector(
-                          onTap: () => context.read<StoriesInsightCubit>().init(),
+                          onTap: () => context.read<StoriesInsightCubit>().init(
+                              boxKey: StoriesUser.boxKey,
+                              pageKey: 0,
+                              pageSize: _pageSize,
+                              searchTerm: _searchTerm,
+                              type: widget.type),
                           child: Row(
                             mainAxisSize: MainAxisSize.min,
                             children: const [

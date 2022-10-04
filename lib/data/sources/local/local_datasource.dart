@@ -254,12 +254,30 @@ class LocalDataSourceImp extends LocalDataSource {
       {required List<Story> storiesList, required String boxKey, required String ownerId}) async {
     // open box
     Box<StoriesUser> usersStorytoriesBox = Hive.box<StoriesUser>(StoriesUser.boxKey);
-    // get stories user to update
-    final StoriesUser storiesUserToUpdate = usersStorytoriesBox.values.where((element) => element.id == ownerId).first;
-    // update stories list
-    storiesUserToUpdate.stories = storiesList;
-    // save chages to the box
-    usersStorytoriesBox.put(storiesUserToUpdate.id, storiesUserToUpdate);
+    // get story user to update
+    final storiesUsersToUpdate = usersStorytoriesBox.values.where((element) => element.id == ownerId);
+    if (storiesUsersToUpdate.isNotEmpty) {
+      final StoriesUser storiesUserToUpdate = storiesUsersToUpdate.first;
+      // update stories list
+      storiesUserToUpdate.stories = storiesList;
+      // save chages to the box
+      usersStorytoriesBox.put(storiesUserToUpdate.id, storiesUserToUpdate);
+    } else {
+      // story not found in the box. we must add it
+      // get current user id
+      AccountInfo? accountInfo = getCachedAccountInfo();
+      if (accountInfo != null) {
+        final StoriesUser storiesUser = StoriesUser(
+          id: ownerId,
+          stories: storiesList,
+          expiringAt: DateTime.now().add(const Duration(days: 1)).millisecondsSinceEpoch,
+          latestReelMedia: 0,
+          seen: 0,
+          owner: StoryOwner(id: ownerId, username: accountInfo.username, profilePicUrl: accountInfo.picture),
+        );
+        usersStorytoriesBox.put(storiesUser.id, storiesUser);
+      }
+    }
   }
 
 // update number of story viewers by mediaId

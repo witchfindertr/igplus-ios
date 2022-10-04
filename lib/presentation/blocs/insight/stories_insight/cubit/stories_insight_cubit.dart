@@ -26,13 +26,12 @@ class StoriesInsightCubit extends Cubit<StoriesInsightState> {
     required this.getUser,
     required this.cacheStoriesToLocal,
     required this.getStoriesUseCase,
-  }) : super(StoriesListInitial()) {
-    init();
-  }
+  }) : super(StoriesListInitial());
 
   final int pageSize = 10;
 
-  void init() async {
+  Future<List<Story>?> init(
+      {required String boxKey, required int pageKey, required int pageSize, String? searchTerm, String? type}) async {
     emit(StoriesListLoading());
 
     late User currentUser;
@@ -43,6 +42,7 @@ class StoriesInsightCubit extends Cubit<StoriesInsightState> {
     //   pageKey: 0,
     //   pageSize: pageSize,
     //   type: "mostViewedStories",
+    //   currentUser: currentUser,
     // );
     // if (storiesList != null) {
     //   emit(StoriesListSuccess(storiesList: storiesList, pageKey: 0));
@@ -50,39 +50,42 @@ class StoriesInsightCubit extends Cubit<StoriesInsightState> {
     // get user info
     final failureOrCurrentUser = await getUser.execute();
     if (failureOrCurrentUser.isLeft()) {
-      final failure = (failureOrCurrentUser as Left).value;
+      emit(const StoriesListFailure(message: 'Failed to get user info'));
     } else {
       currentUser = (failureOrCurrentUser as Right).value;
     }
     // get stories from instagram
-    List<Story>? storiesList = await getStoriesListFromInstagram(
-      dataName: StoriesUser.boxKey,
-      pageKey: 0,
-      pageSize: pageSize,
-    );
-    if (storiesList != null) {
-      emit(StoriesInsightSuccess(storiesList: storiesList, pageKey: 0));
-      // cache new media list to local
-      cacheStoriesToLocal.execute(boxKey: StoriesUser.boxKey, storiesList: storiesList, ownerId: currentUser.igUserId);
-    } else {
+    try {
+      List<Story>? storiesList = await getStoriesListFromInstagram(
+        dataName: StoriesUser.boxKey,
+        pageKey: 0,
+        pageSize: pageSize,
+        currentUser: currentUser,
+      );
+      if (storiesList != null) {
+        emit(StoriesInsightSuccess(storiesList: storiesList, pageKey: 0));
+        // cache new media list to local
+        cacheStoriesToLocal.execute(
+            boxKey: StoriesUser.boxKey, storiesList: storiesList, ownerId: currentUser.igUserId);
+        return storiesList;
+      } else {
+        emit(const StoriesListFailure(message: 'Failed to get stories list from instagram'));
+        return null;
+      }
+    } catch (e) {
       emit(const StoriesListFailure(message: 'Failed to get stories list from instagram'));
+      return null;
     }
-    // }
   }
 
   // get stories list from instagram
   Future<List<Story>?> getStoriesListFromInstagram(
-      {required String dataName, required int pageKey, required int pageSize, String? searchTerm, String? type}) async {
-    late User currentUser;
-    // get user info
-    final failureOrCurrentUser = await getUser.execute();
-    if (failureOrCurrentUser.isLeft()) {
-      emit(const StoriesListFailure(message: 'Failed to get user info'));
-      return null;
-    } else {
-      currentUser = (failureOrCurrentUser as Right).value;
-    }
-
+      {required String dataName,
+      required int pageKey,
+      required int pageSize,
+      String? searchTerm,
+      String? type,
+      required User currentUser}) async {
     // get stories list from instagram and save result to local
     final Either<Failure, List<Story?>> userFeedEither =
         await getStoriesUseCase.execute(storyOwnerId: currentUser.igUserId, igHeaders: currentUser.igHeaders);
@@ -91,11 +94,7 @@ class StoriesInsightCubit extends Cubit<StoriesInsightState> {
       // cach stories on local
       await cacheStoriesToLocal.execute(
           boxKey: StoriesUser.boxKey, storiesList: storiesList, ownerId: currentUser.igUserId);
-    }
-    if (userFeedEither.isLeft()) {
-      emit(const StoriesListFailure(message: 'Failed to get stories'));
-      return null;
-    } else {
+
       final stories = (userFeedEither as Right).value;
       if (stories != null) {
         emit(StoriesInsightSuccess(storiesList: stories, pageKey: 0));
@@ -104,19 +103,20 @@ class StoriesInsightCubit extends Cubit<StoriesInsightState> {
         return null;
       }
     }
+    if (userFeedEither.isLeft()) {
+      emit(const StoriesListFailure(message: 'Failed to get stories'));
+      return null;
+    }
   }
 
   // get cached stories from local
   Future<List<Story>?> getStoriesListFromLocal(
-      {required String boxKey, required int pageKey, required int pageSize, String? searchTerm, String? type}) async {
-    late User currentUser;
-    // get user info
-    final failureOrCurrentUser = await getUser.execute();
-    if (failureOrCurrentUser.isLeft()) {
-      final failure = (failureOrCurrentUser as Left).value;
-    } else {
-      currentUser = (failureOrCurrentUser as Right).value;
-    }
+      {required String boxKey,
+      required int pageKey,
+      required int pageSize,
+      String? searchTerm,
+      String? type,
+      required User currentUser}) async {
     final failureOrStories = await getStoriesFromLocal.execute(
         boxKey: boxKey,
         pageKey: pageKey,

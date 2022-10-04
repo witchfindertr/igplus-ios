@@ -39,7 +39,7 @@ class StoryModel extends Equatable {
         takenAt: json['taken_at'],
         mediaType: json['media_type'],
         mediaUrl: json['image_versions2']['candidates'][0]['url'],
-        mediaThumbnailUrl: json['image_versions2']['candidates'][0]['url'] ?? "",
+        mediaThumbnailUrl: json['image_versions2']['candidates'][3]['url'] ?? "",
         viewersCount: json['viewer_count'],
         viewers: viewers,
       );
@@ -50,8 +50,8 @@ class StoryModel extends Equatable {
         mediaId: json['id'].toString(),
         takenAt: json['taken_at'],
         mediaType: json['media_type'],
-        mediaUrl: json['video_versions'][0]['url'],
-        mediaThumbnailUrl: json['image_versions2']['candidates'][0]['url'] ?? "",
+        mediaUrl: json['video_versions'][0]['url'] ?? json['image_versions2']['candidates'][0]['url'],
+        mediaThumbnailUrl: json['image_versions2']['candidates'][3]['url'] ?? "",
         viewersCount: json['viewer_count'],
         viewers: viewers,
       );

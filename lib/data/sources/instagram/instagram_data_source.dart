@@ -282,7 +282,8 @@ class InstagramDataSourceImp extends InstagramDataSource {
         return [];
       }
       final result = body["reels_media"][0]['items'] as List<dynamic>;
-      return result.map((story) => StoryModel.fromJson(story as Map<String, dynamic>)).toList();
+      final storiesList = result.map((story) => StoryModel.fromJson(story as Map<String, dynamic>)).toList();
+      return storiesList;
     } else {
       throw const ServerFailure("Failed to get active stories from Instagram");
     }
