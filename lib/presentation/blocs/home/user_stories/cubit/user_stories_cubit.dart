@@ -50,7 +50,7 @@ class UserStoriesCubit extends Cubit<UserStoriesState> {
           emit(UserStoriesLoaded(userStories: storiesUsersList));
 
           // cache stories user to local
-          cacheStoriesUsersToLocal.execute(storiesUserList: storiesUsersList, dataName: StoriesUser.boxKey);
+          cacheStoriesUsersToLocal.execute(storiesUserList: storiesUsersList, boxKey: StoriesUser.boxKey);
           // cache stories list to local
           for (StoriesUser storiesUser in storiesUsersList) {
             cacheStoriesToLocal.execute(

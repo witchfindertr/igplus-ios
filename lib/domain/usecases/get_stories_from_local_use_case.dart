@@ -6,7 +6,7 @@ import 'package:dartz/dartz.dart';
 class GetStoriesFromLocalUseCase {
   final LocalRepository localRepository;
   GetStoriesFromLocalUseCase({required this.localRepository});
-// dataName: dataName, pageKey: pageKey, pageSize: pageSize, searchTerm: searchTerm, type: type)
+// boxKey: boxKey, pageKey: pageKey, pageSize: pageSize, searchTerm: searchTerm, type: type)
   Future<Either<Failure, List<Story>?>> execute({
     required String boxKey,
     required int pageKey,

@@ -69,7 +69,7 @@ class _MediaListState extends State<MediaList> {
   Future<void> _fetchPage(pageKey) async {
     try {
       final List<Media>? mediaList = await context.read<MediaListCubit>().getMediaListFromLocal(
-          dataName: Media.boxKey, pageKey: pageKey, pageSize: _pageSize, searchTerm: _searchTerm, type: widget.type);
+          boxKey: Media.boxKey, pageKey: pageKey, pageSize: _pageSize, searchTerm: _searchTerm, type: widget.type);
 
       if (mediaList == null || mediaList.isEmpty) {
         _pagingController.appendLastPage([]);

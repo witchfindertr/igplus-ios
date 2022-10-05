@@ -41,7 +41,9 @@ class StoriesCardList extends StatelessWidget {
             onTap: () {
               if (type == "mostViewedStories") {
                 return GoRouter.of(context).go('/home/storiesList/$type');
-              } else if (type == "topStoriesViewers" || type == "viewersNotFollowingYou") {
+              } else if (type == "topStoriesViewers" ||
+                  type == "viewersNotFollowingYou" ||
+                  type == "viewersYouDontFollow") {
                 return GoRouter.of(context).go('/home/storiesViewersInsight/$type');
               }
             },

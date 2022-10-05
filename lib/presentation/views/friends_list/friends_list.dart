@@ -69,7 +69,7 @@ class _FriendsListState extends State<FriendsList> {
     try {
       final List<Friend>? friendsList = await context
           .read<FriendsListCubit>()
-          .getFriendsList(dataName: widget.type, pageKey: pageKey, pageSize: _pageSize, searchTerm: _searchTerm);
+          .getFriendsList(boxKey: widget.type, pageKey: pageKey, pageSize: _pageSize, searchTerm: _searchTerm);
 
       if (friendsList == null || friendsList.isEmpty) {
         _pagingController.appendLastPage([]);

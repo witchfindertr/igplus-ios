@@ -49,7 +49,7 @@ class StoryViewersCubit extends Cubit<StoryViewersState> {
       emit(StoryViewersSuccess(storyViewersList: storyViewersList, pageKey: pageKey));
       return storyViewersList;
     } else {
-      storyViewersList = await _getStoryViewersListFromInstagram(mediaId: mediaId);
+      storyViewersList = await getStoryViewersListFromInstagram(mediaId: mediaId);
       // save story viewers list to local
       if (storyViewersList != null) {
         await cacheStoryViewersToLocalUseCase.execute(storiesViewersList: storyViewersList, boxKey: StoryViewer.boxKey);
@@ -87,7 +87,7 @@ class StoryViewersCubit extends Cubit<StoryViewersState> {
   }
 
   // get story viewers list from instagram
-  Future<List<StoryViewer>?> _getStoryViewersListFromInstagram({required String mediaId}) async {
+  Future<List<StoryViewer>?> getStoryViewersListFromInstagram({required String mediaId}) async {
     emit(StoryViewersLoading());
     // get header
     final failureOrCurrentUser = await getUser.execute();
@@ -187,6 +187,41 @@ class StoryViewersCubit extends Cubit<StoryViewersState> {
       Map<String, List<StoryViewer>> viewersNotFollowingYou = {};
       for (var storyViewer in storyViewersList) {
         if (storyViewer.followedBy == false) {
+          if (viewersNotFollowingYou.containsKey(storyViewer.id.split('_')[2])) {
+            viewersNotFollowingYou[storyViewer.id.split('_')[2]]!.add(storyViewer);
+          } else {
+            viewersNotFollowingYou[storyViewer.id.split('_')[2]] = [storyViewer];
+          }
+        }
+      }
+
+      List<StoriesViewer> storiesTopViewersList = [];
+      for (var value in viewersNotFollowingYou.values) {
+        storiesTopViewersList.add(StoriesViewerModel.fromJson(value).toEntity());
+      }
+
+      // sort by number of stories viewed
+      storiesTopViewersList.sort((a, b) => b.viewsCount.compareTo(a.viewsCount));
+
+      return storiesTopViewersList;
+    }
+  }
+
+  // get viewers you don't follow
+  Future<List<StoriesViewer>?> getViewersYouDontFollow() async {
+    final failureOrStoryViewersList = await getStoryViewersFromLocal.execute(
+      boxKey: StoryViewer.boxKey,
+      pageKey: 0,
+      pageSize: 10,
+      searchTerm: null,
+    );
+    if (failureOrStoryViewersList.isLeft() || (failureOrStoryViewersList as Right).value == null) {
+      return null;
+    } else {
+      List<StoryViewer> storyViewersList = (failureOrStoryViewersList as Right).value;
+      Map<String, List<StoryViewer>> viewersNotFollowingYou = {};
+      for (var storyViewer in storyViewersList) {
+        if (storyViewer.following == false) {
           if (viewersNotFollowingYou.containsKey(storyViewer.id.split('_')[2])) {
             viewersNotFollowingYou[storyViewer.id.split('_')[2]]!.add(storyViewer);
           } else {

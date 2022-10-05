@@ -8,26 +8,26 @@ class GetFriendsFromLocalUseCase {
   GetFriendsFromLocalUseCase({required this.localRepository});
 
   Future<Either<Failure, List<Friend>?>?> execute(
-      {required String dataName, int? pageKey, int? pageSize, String? searchTerm}) async {
-    if (dataName == "followings") {
+      {required String boxKey, int? pageKey, int? pageSize, String? searchTerm}) async {
+    if (boxKey == "followings") {
       return localRepository.getCachedFriendsList(
           boxKey: Friend.followingsBoxKey, pageKey: pageKey, pageSize: pageSize, searchTerm: searchTerm);
-    } else if (dataName == "newFollowers") {
+    } else if (boxKey == "newFollowers") {
       return localRepository.getCachedFriendsList(
           boxKey: Friend.newFollowersBoxKey, pageKey: pageKey, pageSize: pageSize, searchTerm: searchTerm);
-    } else if (dataName == "lostFollowers") {
+    } else if (boxKey == "lostFollowers") {
       return localRepository.getCachedFriendsList(
           boxKey: Friend.lostFollowersBoxKey, pageKey: pageKey, pageSize: pageSize, searchTerm: searchTerm);
-    } else if (dataName == "notFollowingBack") {
+    } else if (boxKey == "notFollowingBack") {
       return localRepository.getCachedFriendsList(
           boxKey: Friend.notFollowingBackBoxKey, pageKey: pageKey, pageSize: pageSize, searchTerm: searchTerm);
-    } else if (dataName == "youDontFollowBack") {
+    } else if (boxKey == "youDontFollowBack") {
       return localRepository.getCachedFriendsList(
           boxKey: Friend.youDontFollowBackBoxKey, pageKey: pageKey, pageSize: pageSize, searchTerm: searchTerm);
-    } else if (dataName == "youHaveUnfollowed") {
+    } else if (boxKey == "youHaveUnfollowed") {
       return localRepository.getCachedFriendsList(
           boxKey: Friend.youHaveUnfollowedBoxKey, pageKey: pageKey, pageSize: pageSize, searchTerm: searchTerm);
-    } else if (dataName == "mutualFollowings") {
+    } else if (boxKey == "mutualFollowings") {
       return localRepository.getCachedFriendsList(
           boxKey: Friend.mutualFollowingsBoxKey, pageKey: pageKey, pageSize: pageSize, searchTerm: searchTerm);
     }

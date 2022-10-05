@@ -207,7 +207,7 @@ class InstagramDataSourceImp extends InstagramDataSource {
           users.map((f) => FriendModel.fromJson(f as Map<String, dynamic>)).toList();
       // // save new friends list to local
       // cacheFriendsToLocalUseCase.execute(
-      //     dataName: "followers", friendsList: newFriendsList.map((e) => e.toEntity()).toList());
+      //     boxKey: "followers", friendsList: newFriendsList.map((e) => e.toEntity()).toList());
       friendsList.addAll(newFriendsList);
     }
     return nextMaxId;
