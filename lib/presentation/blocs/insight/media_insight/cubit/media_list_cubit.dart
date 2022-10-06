@@ -32,7 +32,7 @@ class MediaListCubit extends Cubit<MediaListState> {
     emit(MediaListLoading());
     // get media list from local
     getMediaListFromLocal(
-      dataName: Media.boxKey,
+      boxKey: Media.boxKey,
       pageKey: 0,
       pageSize: pageSize,
     ).then((value) {
@@ -41,14 +41,14 @@ class MediaListCubit extends Cubit<MediaListState> {
       } else {
         // get media from instagram
         getMediaListFromInstagram(
-          dataName: Media.boxKey,
+          boxKey: Media.boxKey,
           pageKey: 0,
           pageSize: pageSize,
         ).then((value) {
           if (value != null) {
             emit(MediaListSuccess(mediaList: value, pageKey: 0));
             // cache new medai list to local
-            cacheMediaToLocal.execute(dataName: Media.boxKey, mediaList: value);
+            cacheMediaToLocal.execute(boxKey: Media.boxKey, mediaList: value);
           } else {
             emit(const MediaListFailure(message: 'Failed to get media list from instagram'));
           }
@@ -59,7 +59,7 @@ class MediaListCubit extends Cubit<MediaListState> {
 
   // get user feed from instagram
   Future<List<Media>?> getMediaListFromInstagram(
-      {required String dataName, required int pageKey, required int pageSize, String? searchTerm, String? type}) async {
+      {required String boxKey, required int pageKey, required int pageSize, String? searchTerm, String? type}) async {
     late User currentUser;
     // get user info
     final failureOrCurrentUser = await getUser.execute();
@@ -75,7 +75,7 @@ class MediaListCubit extends Cubit<MediaListState> {
     if (userFeedEither.isRight()) {
       final List<Media> mediaList = (userFeedEither as Right).value;
       // cach media on local
-      await cacheMediaToLocal.execute(dataName: Media.boxKey, mediaList: mediaList);
+      await cacheMediaToLocal.execute(boxKey: Media.boxKey, mediaList: mediaList);
 
       // get top likers
       // List<Map<int, int>> likersLikeCount = [];
@@ -110,9 +110,9 @@ class MediaListCubit extends Cubit<MediaListState> {
 
   // get cached media from local
   Future<List<Media>?> getMediaListFromLocal(
-      {required String dataName, required int pageKey, required int pageSize, String? searchTerm, String? type}) async {
+      {required String boxKey, required int pageKey, required int pageSize, String? searchTerm, String? type}) async {
     final failureOrMedia = await getMediaFromLocal.execute(
-        dataName: dataName, pageKey: pageKey, pageSize: pageSize, searchTerm: searchTerm, type: type);
+        boxKey: boxKey, pageKey: pageKey, pageSize: pageSize, searchTerm: searchTerm, type: type);
     if (failureOrMedia == null || failureOrMedia.isLeft()) {
       emit(const MediaListFailure(message: 'Failed to get media'));
       return null;

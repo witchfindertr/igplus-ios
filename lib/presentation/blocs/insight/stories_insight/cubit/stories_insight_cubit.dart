@@ -33,14 +33,7 @@ class StoriesInsightCubit extends Cubit<StoriesInsightState> {
       {required String boxKey, required int pageKey, required int pageSize, String? searchTerm, String? type}) async {
     emit(StoriesListLoading());
 
-    late User currentUser;
-    // get user info
-    final failureOrCurrentUser = await getUser.execute();
-    if (failureOrCurrentUser.isLeft()) {
-      emit(const StoriesListFailure(message: 'Failed to get user info'));
-    } else {
-      currentUser = (failureOrCurrentUser as Right).value;
-    }
+    User currentUser = await getCurrentUser();
 
     // get stories list from local
     List<Story>? storiesList = await getStoriesListFromLocal(
@@ -57,7 +50,7 @@ class StoriesInsightCubit extends Cubit<StoriesInsightState> {
       // get stories from instagram
       try {
         List<Story>? storiesList = await getStoriesListFromInstagram(
-          dataName: StoriesUser.boxKey,
+          boxKey: StoriesUser.boxKey,
           pageKey: 0,
           pageSize: pageSize,
           currentUser: currentUser,
@@ -79,9 +72,21 @@ class StoriesInsightCubit extends Cubit<StoriesInsightState> {
     }
   }
 
+  Future<User> getCurrentUser() async {
+    late User currentUser;
+    // get user info
+    final failureOrCurrentUser = await getUser.execute();
+    if (failureOrCurrentUser.isLeft()) {
+      emit(const StoriesListFailure(message: 'Failed to get user info'));
+    } else {
+      currentUser = (failureOrCurrentUser as Right).value;
+    }
+    return currentUser;
+  }
+
   // get stories list from instagram
   Future<List<Story>?> getStoriesListFromInstagram(
-      {required String dataName,
+      {required String boxKey,
       required int pageKey,
       required int pageSize,
       String? searchTerm,

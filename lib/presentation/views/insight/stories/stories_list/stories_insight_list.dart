@@ -5,6 +5,7 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:go_router/go_router.dart';
 import 'package:igplus_ios/domain/entities/stories_user.dart';
 import 'package:igplus_ios/domain/entities/story.dart';
+import 'package:igplus_ios/domain/entities/user.dart';
 import 'package:igplus_ios/presentation/blocs/insight/stories_insight/cubit/stories_insight_cubit.dart';
 import 'package:igplus_ios/presentation/resources/colors_manager.dart';
 import 'package:igplus_ios/presentation/resources/theme_manager.dart';
@@ -27,9 +28,12 @@ class _StoriesInsightListState extends State<StoriesInsightList> {
   String? _searchTerm;
   late ScrollController _scrollController;
   late FocusNode _searchFocusNode;
+  late User currentUser;
 
   @override
   void initState() {
+    // get current user
+
     _pagingController.addPageRequestListener((pageKey) {
       _fetchPage(pageKey);
     });
@@ -128,12 +132,18 @@ class _StoriesInsightListState extends State<StoriesInsightList> {
                     ? AnimatedSwitcher(
                         duration: const Duration(milliseconds: 500),
                         child: GestureDetector(
-                          onTap: () => context.read<StoriesInsightCubit>().init(
-                              boxKey: StoriesUser.boxKey,
-                              pageKey: 0,
-                              pageSize: _pageSize,
-                              searchTerm: _searchTerm,
-                              type: widget.type),
+                          onTap: () async {
+                            currentUser = await context.read<StoriesInsightCubit>().getCurrentUser();
+                            if (mounted) {
+                              context.read<StoriesInsightCubit>().getStoriesListFromInstagram(
+                                  boxKey: StoriesUser.boxKey,
+                                  pageKey: 0,
+                                  pageSize: _pageSize,
+                                  searchTerm: _searchTerm,
+                                  type: widget.type,
+                                  currentUser: currentUser);
+                            }
+                          },
                           child: Row(
                             mainAxisSize: MainAxisSize.min,
                             children: const [

@@ -3,6 +3,7 @@ import 'package:igplus_ios/data/failure.dart';
 import 'package:igplus_ios/domain/entities/account_info.dart';
 import 'package:igplus_ios/domain/entities/friend.dart';
 import 'package:igplus_ios/domain/entities/media.dart';
+import 'package:igplus_ios/domain/entities/media_liker.dart';
 import 'package:igplus_ios/domain/entities/report.dart';
 import 'package:igplus_ios/domain/entities/stories_user.dart';
 import 'package:igplus_ios/domain/entities/story.dart';
@@ -80,6 +81,11 @@ abstract class LocalRepository {
 
   // update story
   Future<void> updateStoryById({required String boxKey, required String mediaId, required int? viewersCount});
+
+  // media likers
+  Future<void> cacheMediaLikersList({required List<MediaLiker> mediaLikersList, required String boxKey});
+  Either<Failure, List<MediaLiker>?> getCachedMediaLikersList(
+      {required String boxKey, int? mediaId, int? pageKey, int? pageSize, String? searchTerm});
 
   // clear all boxes
   Future<void> clearAllBoxes();

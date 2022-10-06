@@ -21,13 +21,16 @@ class FriendAdapter extends TypeAdapter<Friend> {
       username: fields[1] as String,
       picture: fields[2] as String,
       createdOn: fields[3] as DateTime,
+      hasBlockedMe: fields[4] as bool?,
+      hasRequestedMe: fields[5] as bool?,
+      requestedByMe: fields[6] as bool?,
     );
   }
 
   @override
   void write(BinaryWriter writer, Friend obj) {
     writer
-      ..writeByte(4)
+      ..writeByte(7)
       ..writeByte(0)
       ..write(obj.igUserId)
       ..writeByte(1)
@@ -35,7 +38,13 @@ class FriendAdapter extends TypeAdapter<Friend> {
       ..writeByte(2)
       ..write(obj.picture)
       ..writeByte(3)
-      ..write(obj.createdOn);
+      ..write(obj.createdOn)
+      ..writeByte(4)
+      ..write(obj.hasBlockedMe)
+      ..writeByte(5)
+      ..write(obj.hasRequestedMe)
+      ..writeByte(6)
+      ..write(obj.requestedByMe);
   }
 
   @override

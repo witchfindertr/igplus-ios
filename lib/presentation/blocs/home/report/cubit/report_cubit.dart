@@ -6,6 +6,7 @@ import 'package:equatable/equatable.dart';
 import 'package:hive/hive.dart';
 import 'package:igplus_ios/data/failure.dart';
 import 'package:igplus_ios/domain/entities/account_info.dart';
+import 'package:igplus_ios/domain/entities/media.dart';
 import 'package:igplus_ios/domain/entities/stories_user.dart';
 import 'package:igplus_ios/domain/entities/story.dart';
 import 'package:igplus_ios/domain/entities/story_viewer.dart';
@@ -60,6 +61,7 @@ class ReportCubit extends Cubit<ReportState> {
 
   void init() async {
     // await clearAllBoxesUseCase.execute();
+    // await Hive.box<Media>(Media.boxKey).clear();
     // await Hive.box<StoriesUser>(StoriesUser.boxKey).clear();
     // await Hive.box<StoryViewer>(StoryViewer.boxKey).clear();
     emit(const ReportInProgress(loadingMessage: "We are loading your data..."));

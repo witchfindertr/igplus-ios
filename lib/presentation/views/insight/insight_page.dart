@@ -55,10 +55,16 @@ class InsightPage extends StatelessWidget {
         "type": "topStoriesViewers",
       },
       {
-        "title": "Viewers not following you",
-        "subTitle": "Find the viewers who are not following you",
+        "title": "Not following you",
+        "subTitle": "viewers who are not following you",
         "context": context,
         "type": "viewersNotFollowingYou",
+      },
+      {
+        "title": "You don't follow",
+        "subTitle": "Viewers you don't follow",
+        "context": context,
+        "type": "viewersYouDontFollow",
       }
     ];
     return CupertinoPageScaffold(

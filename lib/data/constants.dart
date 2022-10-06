@@ -44,9 +44,13 @@ class InstagramUrls {
   static String getMediaLikes(String mediaId) => '$baseUrl/media/$mediaId/likers/';
 
   // get stories viewers list
-  // https://i.instagram.com/api/v1/media/2937243594075523239/list_reel_media_viewer/
+  // https://i.instagram.com/api/v1/media/2239382964760680751/list_reel_media_viewer/
   static String getStoriesViewersList(String mediaId, String maxId) =>
       '$baseUrl/media/$mediaId/list_reel_media_viewer/$maxId';
+
+  // get media likers list
+  // https://i.instagram.com/api/v1/media/2239382964760680751/likers/
+  static String getMediaLikersList(int mediaId, String maxId) => '$baseUrl/media/$mediaId/likers/$maxId';
 }
 
 class FirebaseFunctionsUrls {

@@ -67,7 +67,9 @@ class _StoriesViewersInsightState extends State<StoriesViewersInsightList> {
   Future<void> _fetchPage(pageKey) async {
     try {
       final List<StoriesViewer>? topStoriesViewers;
-      if (widget.type == "viewersNotFollowingYou") {
+      if (widget.type == "viewersYouDontFollow") {
+        topStoriesViewers = await context.read<StoryViewersCubit>().getViewersYouDontFollow();
+      } else if (widget.type == "viewersNotFollowingYou") {
         topStoriesViewers = await context.read<StoryViewersCubit>().getViewersNotFollowingYouBack();
       } else if (widget.type == "topStoriesViewers") {
         topStoriesViewers = await context.read<StoryViewersCubit>().getTopViewersList();
@@ -100,6 +102,9 @@ class _StoriesViewersInsightState extends State<StoriesViewersInsightList> {
         break;
       case "viewersNotFollowingYou":
         pageTitle = "Viewers Not Following You";
+        break;
+      case "viewersYouDontFollow":
+        pageTitle = "Viewers You Don't Follow";
         break;
       default:
         pageTitle = "";

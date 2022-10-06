@@ -2,27 +2,28 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
-import 'package:igplus_ios/domain/entities/friend.dart';
-import 'package:igplus_ios/presentation/blocs/friends_list/cubit/friends_list_cubit.dart';
+import 'package:igplus_ios/domain/entities/media_liker.dart';
+import 'package:igplus_ios/domain/entities/media_likers.dart';
+import 'package:igplus_ios/presentation/blocs/engagement/media_likers/cubit/media_likers_cubit.dart';
 import 'package:igplus_ios/presentation/resources/colors_manager.dart';
 import 'package:igplus_ios/presentation/resources/theme_manager.dart';
-import 'package:igplus_ios/presentation/views/friends_list/friend_list_item.dart';
-import 'package:igplus_ios/presentation/views/friends_list/friend_search.dart';
+import 'package:igplus_ios/presentation/views/engagement/media_likers/media_likers_list_item.dart';
+import 'package:igplus_ios/presentation/views/engagement/media_likers/media_likers_search.dart';
 import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
 
-class FriendsList extends StatefulWidget {
-  const FriendsList({Key? key, required this.type}) : super(key: key);
+class MediaLikersList extends StatefulWidget {
+  const MediaLikersList({Key? key, required this.type}) : super(key: key);
 
   final String type;
 
   @override
-  State<FriendsList> createState() => _FriendsListState();
+  State<MediaLikersList> createState() => _MediaLikersListState();
 }
 
-class _FriendsListState extends State<FriendsList> {
+class _MediaLikersListState extends State<MediaLikersList> {
   static const _pageSize = 15;
   static const int _initialPageKey = 0;
-  final PagingController<int, Friend> _pagingController = PagingController(firstPageKey: _initialPageKey);
+  final PagingController<int, MediaLikers> _pagingController = PagingController(firstPageKey: _initialPageKey);
   String? _searchTerm;
   bool _showSearchForm = false;
   late ScrollController _scrollController;
@@ -30,7 +31,6 @@ class _FriendsListState extends State<FriendsList> {
 
   @override
   void initState() {
-    // TODO: implement initState
     _pagingController.addPageRequestListener((pageKey) {
       _fetchPage(pageKey);
     });
@@ -67,19 +67,20 @@ class _FriendsListState extends State<FriendsList> {
 
   Future<void> _fetchPage(pageKey) async {
     try {
-      final List<Friend>? friendsList = await context
-          .read<FriendsListCubit>()
-          .getFriendsList(boxKey: widget.type, pageKey: pageKey, pageSize: _pageSize, searchTerm: _searchTerm);
+      late List<MediaLikers>? mediaLikersList;
+      mediaLikersList = await context
+          .read<MediaLikersCubit>()
+          .getMostLikesUsers(boxKey: MediaLiker.boxKey, pageKey: pageKey, pageSize: _pageSize, searchTerm: _searchTerm);
 
-      if (friendsList == null || friendsList.isEmpty) {
+      if (mediaLikersList == null || mediaLikersList.isEmpty) {
         _pagingController.appendLastPage([]);
       } else {
-        final isLastPage = friendsList.length < _pageSize;
+        final isLastPage = mediaLikersList.length < _pageSize;
         if (isLastPage) {
-          _pagingController.appendLastPage(friendsList);
+          _pagingController.appendLastPage(mediaLikersList);
         } else {
-          final nextPageKey = pageKey + friendsList.length;
-          _pagingController.appendPage(friendsList, nextPageKey);
+          final nextPageKey = pageKey + mediaLikersList.length;
+          _pagingController.appendPage(mediaLikersList, nextPageKey);
         }
       }
     } catch (error) {
@@ -91,23 +92,8 @@ class _FriendsListState extends State<FriendsList> {
   Widget build(BuildContext context) {
     final String pageTitle;
     switch (widget.type) {
-      case "notFollowingBack":
-        pageTitle = "Didn't Following You Back";
-        break;
-      case "youDontFollowBack":
-        pageTitle = "You Don't Follow Back";
-        break;
-      case "newFollowers":
-        pageTitle = "New Followers";
-        break;
-      case "lostFollowers":
-        pageTitle = "Lost Followers";
-        break;
-      case "youHaveUnfollowed":
-        pageTitle = "You Have Unfollowed";
-        break;
-      case "mutualFollowings":
-        pageTitle = "Mutual Followings";
+      case "mostLikes":
+        pageTitle = "Most Likes";
         break;
       default:
         pageTitle = "";
@@ -150,22 +136,22 @@ class _FriendsListState extends State<FriendsList> {
         theme: appMaterialTheme(),
         home: Scaffold(
           backgroundColor: ColorsManager.appBack,
-          body: BlocBuilder<FriendsListCubit, FriendsListState>(
+          body: BlocBuilder<MediaLikersCubit, MediaLikersState>(
             builder: (context, state) {
               return (_showSearchForm)
                   ? CustomScrollView(
                       controller: _scrollController,
                       slivers: <Widget>[
-                        FriendSearch(
+                        MediaLikersSearch(
                           onChanged: (searchTerm) => _updateSearchTerm(searchTerm),
                           searchFocusNode: _searchFocusNode,
                         ),
-                        PagedSliverList<int, Friend>(
+                        PagedSliverList<int, MediaLikers>(
                           pagingController: _pagingController,
-                          builderDelegate: PagedChildBuilderDelegate<Friend>(
+                          builderDelegate: PagedChildBuilderDelegate<MediaLikers>(
                             animateTransitions: true,
-                            itemBuilder: (context, item, index) => FriendListItem(
-                              friend: item,
+                            itemBuilder: (context, item, index) => MediaLikersListItem(
+                              mediaLikers: item,
                               index: index,
                               type: widget.type,
                             ),
@@ -176,12 +162,12 @@ class _FriendsListState extends State<FriendsList> {
                   : CustomScrollView(
                       controller: _scrollController,
                       slivers: <Widget>[
-                        PagedSliverList<int, Friend>(
+                        PagedSliverList<int, MediaLikers>(
                           pagingController: _pagingController,
-                          builderDelegate: PagedChildBuilderDelegate<Friend>(
+                          builderDelegate: PagedChildBuilderDelegate<MediaLikers>(
                             animateTransitions: true,
-                            itemBuilder: (context, item, index) => FriendListItem(
-                              friend: item,
+                            itemBuilder: (context, item, index) => MediaLikersListItem(
+                              mediaLikers: item,
                               index: index,
                               type: widget.type,
                             ),

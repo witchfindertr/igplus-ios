@@ -5,7 +5,7 @@ class CacheStoriesUserToLocalUseCase {
   final LocalRepository localRepository;
   CacheStoriesUserToLocalUseCase({required this.localRepository});
 
-  Future<void> execute({required String dataName, required List<StoriesUser> storiesUserList}) async {
+  Future<void> execute({required String boxKey, required List<StoriesUser> storiesUserList}) async {
     return localRepository.cacheStoriesUsersList(boxKey: StoriesUser.boxKey, storiesUserList: storiesUserList);
   }
 }

@@ -1,6 +1,7 @@
 import 'package:go_router/go_router.dart';
 import 'package:igplus_ios/app/bloc/app_bloc.dart';
 import 'package:igplus_ios/domain/entities/stories_user.dart';
+import 'package:igplus_ios/presentation/views/engagement/media_likers/media_likers_list.dart';
 import 'package:igplus_ios/presentation/views/friends_list/friends_list.dart';
 import 'package:igplus_ios/presentation/views/home/stories/stories_view.dart';
 import 'package:igplus_ios/presentation/views/insight/stories/stories_list/stories_insight_list.dart';
@@ -70,6 +71,9 @@ GoRouter routes(AppBloc appBloc) {
                     builder: (context, state) => StoryViewersList(mediaId: state.params['mediaId'] ?? "", type: ""),
                   ),
                 ]),
+            GoRoute(
+                path: 'engagement/:type',
+                builder: (context, state) => MediaLikersList(type: state.params['type'] ?? "")),
           ]),
     ],
     redirect: (state) {

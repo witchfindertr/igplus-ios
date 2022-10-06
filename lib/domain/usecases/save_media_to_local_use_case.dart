@@ -5,7 +5,7 @@ class CacheMediaToLocalUseCase {
   final LocalRepository localRepository;
   CacheMediaToLocalUseCase({required this.localRepository});
 
-  Future<void> execute({required String dataName, required List<Media> mediaList}) async {
+  Future<void> execute({required String boxKey, required List<Media> mediaList}) async {
     return localRepository.cacheMediaList(boxKey: Media.boxKey, mediaList: mediaList);
   }
 }

@@ -22,9 +22,9 @@ class FriendsListCubit extends Cubit<FriendsListState> {
       : super(FriendsListInitial());
 
   Future<List<Friend>?> getFriendsList(
-      {required String dataName, required int pageKey, required int pageSize, String? searchTerm}) async {
-    final failureOrFriends = await getFriendsFromLocal.execute(
-        dataName: dataName, pageKey: pageKey, pageSize: pageSize, searchTerm: searchTerm);
+      {required String boxKey, required int pageKey, required int pageSize, String? searchTerm}) async {
+    final failureOrFriends =
+        await getFriendsFromLocal.execute(boxKey: boxKey, pageKey: pageKey, pageSize: pageSize, searchTerm: searchTerm);
     if (failureOrFriends == null || failureOrFriends.isLeft()) {
       emit(const FriendsListFailure(message: 'Failed to get friends'));
       return null;

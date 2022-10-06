@@ -1,4 +1,5 @@
 import 'package:dartz/dartz.dart';
+import 'package:igplus_ios/domain/entities/media_liker.dart';
 import 'package:igplus_ios/domain/entities/stories_user.dart';
 import 'package:igplus_ios/domain/entities/friend.dart';
 import 'package:igplus_ios/domain/entities/ig_headers.dart';
@@ -56,4 +57,7 @@ abstract class InstagramRepository {
 
   // story viewers list
   Future<Either<Failure, List<StoryViewer>>> getStoryViewers({required String mediaId, required IgHeaders igHeaders});
+
+  // get media likers
+  Future<Either<Failure, List<MediaLiker>>> getMediaLikers({required int mediaId, required IgHeaders igHeaders});
 }

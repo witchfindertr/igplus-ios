@@ -5,26 +5,26 @@ class CacheFriendsToLocalUseCase {
   final LocalRepository localRepository;
   CacheFriendsToLocalUseCase({required this.localRepository});
 
-  Future<void> execute({required String dataName, required List<Friend> friendsList}) async {
-    if (dataName == "followers") {
+  Future<void> execute({required String boxKey, required List<Friend> friendsList}) async {
+    if (boxKey == "followers") {
       return localRepository.cacheFriendsList(boxKey: Friend.followersBoxKey, friendsList: friendsList);
-    } else if (dataName == "followings") {
+    } else if (boxKey == "followings") {
       return localRepository.cacheFriendsList(boxKey: Friend.followingsBoxKey, friendsList: friendsList);
-    } else if (dataName == "newFollowers") {
+    } else if (boxKey == "newFollowers") {
       return localRepository.cacheFriendsList(boxKey: Friend.newFollowersBoxKey, friendsList: friendsList);
-    } else if (dataName == "lostFollowers") {
+    } else if (boxKey == "lostFollowers") {
       return localRepository.cacheFriendsList(boxKey: Friend.lostFollowersBoxKey, friendsList: friendsList);
-    } else if (dataName == "notFollowingBack") {
+    } else if (boxKey == "notFollowingBack") {
       return localRepository.cacheFriendsList(boxKey: Friend.notFollowingBackBoxKey, friendsList: friendsList);
-    } else if (dataName == "youDontFollowBack") {
+    } else if (boxKey == "youDontFollowBack") {
       return localRepository.cacheFriendsList(boxKey: Friend.youDontFollowBackBoxKey, friendsList: friendsList);
-    } else if (dataName == "youHaveUnfollowed") {
+    } else if (boxKey == "youHaveUnfollowed") {
       return localRepository.cacheFriendsList(boxKey: Friend.youHaveUnfollowedBoxKey, friendsList: friendsList);
-    } else if (dataName == "mutualFollowings") {
+    } else if (boxKey == "mutualFollowings") {
       return localRepository.cacheFriendsList(boxKey: Friend.mutualFollowingsBoxKey, friendsList: friendsList);
-    } else if (dataName == "whoAdmiresYou") {
+    } else if (boxKey == "whoAdmiresYou") {
       return localRepository.cacheFriendsList(boxKey: Friend.whoAdmiresYouBoxKey, friendsList: friendsList);
-    } else if (dataName == "newStoryViewers") {
+    } else if (boxKey == "newStoryViewers") {
       return localRepository.cacheFriendsList(boxKey: Friend.newStoryViewersBoxKey, friendsList: friendsList);
     }
   }

@@ -6,12 +6,19 @@ class FriendModel extends Equatable {
   final int igUserId;
   final String username;
   final String picture;
+
   final DateTime createdOn;
+  final bool? hasBlockedMe;
+  final bool? hasRequestedMe;
+  final bool? requestedByMe;
   const FriendModel({
     required this.igUserId,
     required this.username,
     required this.picture,
     required this.createdOn,
+    this.hasBlockedMe,
+    this.hasRequestedMe,
+    this.requestedByMe,
   });
 
   factory FriendModel.fromJson(Map<String, dynamic> json) {
@@ -20,6 +27,9 @@ class FriendModel extends Equatable {
       username: json['username'],
       picture: json['profile_pic_url'],
       createdOn: DateTime.now(),
+      hasBlockedMe: json['has_blocked_viewer'],
+      hasRequestedMe: json['has_requested_viewer'],
+      requestedByMe: json['requested_by_viewer'],
     );
   }
 
@@ -29,6 +39,9 @@ class FriendModel extends Equatable {
       username: friend.username,
       picture: friend.picture,
       createdOn: friend.createdOn,
+      hasBlockedMe: friend.hasBlockedMe,
+      hasRequestedMe: friend.hasRequestedMe,
+      requestedByMe: friend.requestedByMe,
     );
   }
 
@@ -38,6 +51,9 @@ class FriendModel extends Equatable {
       username: username,
       picture: picture,
       createdOn: createdOn,
+      hasBlockedMe: hasBlockedMe,
+      hasRequestedMe: hasRequestedMe,
+      requestedByMe: requestedByMe,
     );
   }
 
@@ -48,15 +64,20 @@ class FriendModel extends Equatable {
       username: entity.username,
       picture: entity.picture,
       createdOn: entity.createdOn,
+      hasBlockedMe: entity.hasBlockedMe,
+      hasRequestedMe: entity.hasRequestedMe,
+      requestedByMe: entity.requestedByMe,
     );
   }
 
   @override
-  // TODO: implement props
   List<Object?> get props => [
         igUserId,
         username,
         picture,
         createdOn,
+        hasBlockedMe,
+        hasRequestedMe,
+        requestedByMe,
       ];
 }
