@@ -38,7 +38,13 @@ class InfoCardList extends StatelessWidget {
           return Center(child: Text(state.message, style: const TextStyle(color: ColorsManager.downColor)));
         } else if (state is MediaListSuccess) {
           return GestureDetector(
-            onTap: () => GoRouter.of(context).go('/home/mediaList/$type'),
+            onTap: () {
+              if (type == "mostLikes") {
+                GoRouter.of(context).go('/home/engagement/$type');
+              } else {
+                GoRouter.of(context).go('/home/mediaList/$type');
+              }
+            },
             child: Card(
               color: ColorsManager.cardBack,
               elevation: 1,

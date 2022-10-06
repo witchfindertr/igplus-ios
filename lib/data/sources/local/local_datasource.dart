@@ -3,6 +3,7 @@ import 'package:igplus_ios/domain/entities/account_info.dart';
 import 'package:igplus_ios/domain/entities/friend.dart';
 import 'package:http/http.dart' as http;
 import 'package:igplus_ios/domain/entities/media.dart';
+import 'package:igplus_ios/domain/entities/media_liker.dart';
 import 'package:igplus_ios/domain/entities/report.dart';
 import 'package:igplus_ios/domain/entities/stories_user.dart';
 import 'package:igplus_ios/domain/entities/story.dart';
@@ -40,6 +41,9 @@ abstract class LocalDataSource {
   List<StoryViewer>? getCachedStoryViewersList(
       {required String boxKey, String? mediaId, int? pageKey, int? pageSize, String? searchTerm});
   Future<void> updateStoryById({required String boxKey, required String mediaId, int? viewersCount});
+  Future<void> cacheMediaLikersList({required List<MediaLiker> mediaLikersList, required String boxKey});
+  List<MediaLiker>? getCachedMediaLikersList(
+      {required String boxKey, int? mediaId, int? pageKey, int? pageSize, String? searchTerm});
 }
 
 class LocalDataSourceImp extends LocalDataSource {
@@ -416,6 +420,57 @@ class LocalDataSourceImp extends LocalDataSource {
   }
 
   // ----------------------->
+  // Media likers list ------------------>
+  // ----------------------->
+  // cache media likers list
+  @override
+  Future<void> cacheMediaLikersList({required List<MediaLiker> mediaLikersList, required String boxKey}) async {
+    // open box
+    Box<MediaLiker> mediaLikersBox = Hive.box<MediaLiker>(MediaLiker.boxKey);
+    // put likers in the box
+    for (var e in mediaLikersList) {
+      mediaLikersBox.put(e.id, e);
+    }
+  }
+
+  // get media likers list from local storage
+  @override
+  List<MediaLiker>? getCachedMediaLikersList(
+      {required String boxKey, int? mediaId, int? pageKey, int? pageSize, String? searchTerm}) {
+    Box<MediaLiker> mediaLikersBox = Hive.box<MediaLiker>(MediaLiker.boxKey);
+    List<MediaLiker> mediaLikersList;
+    int? startKey;
+    int? endKey;
+
+    if (mediaLikersBox.isEmpty) {
+      return null;
+    } else {
+      if (mediaId != null) {
+        mediaLikersList = mediaLikersBox.values.where((element) => element.mediaId == mediaId).toList();
+
+        if (pageKey != null && pageSize != null) {
+          startKey = pageKey;
+          endKey = startKey + pageSize;
+          if (endKey > mediaLikersList.length - 1) {
+            endKey = mediaLikersList.length;
+          }
+        }
+
+        if (startKey != null && endKey != null && searchTerm == null) {
+          // paginate
+          mediaLikersList = mediaLikersList.sublist(startKey, endKey);
+        } else if (searchTerm != null) {
+          // search
+          mediaLikersList = mediaLikersList.where((c) => c.user.username.toLowerCase().contains(searchTerm)).toList();
+        }
+      } else {
+        mediaLikersList = mediaLikersBox.values.toList();
+      }
+      return mediaLikersList;
+    }
+  }
+
+  // ----------------------->
   // Clear all boxes ------------------>
   // ----------------------->
   @override
@@ -436,5 +491,6 @@ class LocalDataSourceImp extends LocalDataSource {
     await Hive.box<AccountInfo>(AccountInfo.boxKey).clear();
     await Hive.box<StoriesUser>(StoriesUser.boxKey).clear();
     await Hive.box<StoryViewer>(StoryViewer.boxKey).clear();
+    await Hive.box<MediaLiker>(MediaLiker.boxKey).clear();
   }
 }

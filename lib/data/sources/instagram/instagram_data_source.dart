@@ -10,6 +10,7 @@ import 'package:hive/hive.dart';
 import 'package:igplus_ios/data/models/account_info_model.dart';
 import 'package:http/http.dart' as http;
 import 'package:igplus_ios/data/models/media_model.dart';
+import 'package:igplus_ios/data/models/media_liker_model.dart';
 
 import 'package:igplus_ios/data/models/stories_user.dart';
 import 'package:igplus_ios/data/models/story_viewer_model.dart';
@@ -41,6 +42,7 @@ abstract class InstagramDataSource {
   Future<bool> unfollowUser({required int userId, required Map<String, String> headers});
   Future<List<MediaModel>> getUserFeed({required String userId, required Map<String, String> headers});
   Future<List<StoryViewerModel>> getStoryViewers({required String mediaId, required Map<String, String> headers});
+  Future<List<MediaLikerModel>> getMediaLikers({required int mediaId, required Map<String, String> headers});
 }
 
 class InstagramDataSourceImp extends InstagramDataSource {
@@ -371,6 +373,47 @@ class InstagramDataSourceImp extends InstagramDataSource {
       final List<StoryViewerModel> newStoryViewers =
           viewers.map((f) => StoryViewerModel.fromJson(f as Map<String, dynamic>, mediaId)).toList();
       storyViewers.addAll(newStoryViewers);
+    }
+    return nextMaxId;
+  }
+
+  // get media likers list
+  @override
+  Future<List<MediaLikerModel>> getMediaLikers({required int mediaId, required Map<String, String> headers}) async {
+    final response = await client.get(Uri.parse(InstagramUrls.getMediaLikersList(mediaId, "")), headers: headers);
+
+    if (response.statusCode == 200) {
+      final body = jsonDecode(response.body);
+      final usersJson = body["users"] as List<dynamic>;
+      List<MediaLikerModel> mediaLikers =
+          usersJson.map((userJson) => MediaLikerModel.fromJson(userJson as Map<String, dynamic>, mediaId)).toList();
+      String? nextMaxId = body['next_max_id'];
+      while (nextMaxId != null) {
+        await Future.delayed(const Duration(seconds: 3));
+        nextMaxId = await _loadNextPostLikersPage(nextMaxId, mediaId, headers, mediaLikers);
+      }
+      return mediaLikers;
+    } else if (response.statusCode == 400) {
+      throw const ServerFailure("Media not found");
+    } else {
+      throw const ServerFailure("Failed to get media likers from Instagram");
+    }
+  }
+
+  Future<String?> _loadNextPostLikersPage(
+      String? nextMaxId, int mediaId, Map<String, String> headers, List<MediaLikerModel> mediaLikers) async {
+    String maxIdString = "?max_id=$nextMaxId";
+
+    final response =
+        await client.get(Uri.parse(InstagramUrls.getMediaLikersList(mediaId, maxIdString)), headers: headers);
+
+    final body = jsonDecode(response.body);
+    final usersJson = body["users"] as List<dynamic>;
+    if (usersJson.isNotEmpty) {
+      nextMaxId = body['next_max_id'];
+      final List<MediaLikerModel> newPostLikers =
+          usersJson.map((u) => MediaLikerModel.fromJson(u as Map<String, dynamic>, mediaId)).toList();
+      mediaLikers.addAll(newPostLikers);
     }
     return nextMaxId;
   }

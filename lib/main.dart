@@ -10,10 +10,12 @@ import 'package:igplus_ios/app/bloc/app_bloc.dart';
 import 'package:igplus_ios/domain/entities/account_info.dart';
 import 'package:igplus_ios/domain/entities/friend.dart';
 import 'package:igplus_ios/domain/entities/media.dart';
+import 'package:igplus_ios/domain/entities/media_liker.dart';
 import 'package:igplus_ios/domain/entities/report.dart';
 import 'package:igplus_ios/domain/entities/stories_user.dart';
 import 'package:igplus_ios/domain/entities/story.dart';
 import 'package:igplus_ios/domain/entities/story_viewer.dart';
+import 'package:igplus_ios/presentation/blocs/engagement/media_likers/cubit/media_likers_cubit.dart';
 import 'package:igplus_ios/presentation/blocs/friends_list/cubit/friends_list_cubit.dart';
 import 'package:igplus_ios/presentation/blocs/home/report/cubit/report_cubit.dart';
 import 'package:igplus_ios/presentation/blocs/insight/stories_insight/cubit/stories_insight_cubit.dart';
@@ -42,6 +44,7 @@ void main() async {
   Hive.registerAdapter(StoryOwnerAdapter());
   Hive.registerAdapter(StoriesUserAdapter());
   Hive.registerAdapter(StoryViewerAdapter());
+  Hive.registerAdapter(MediaLikerAdapter());
 
   // loading the <key,values> pair from the local storage into memory
   try {
@@ -66,6 +69,8 @@ void main() async {
     await Hive.openBox<StoriesUser>(StoriesUser.boxKey);
     // stories viewers box
     await Hive.openBox<StoryViewer>(StoryViewer.boxKey);
+    // media likers box
+    await Hive.openBox<MediaLiker>(MediaLiker.boxKey);
   } catch (e) {
     debugPrint(e.toString());
   }
@@ -85,6 +90,7 @@ void main() async {
         BlocProvider<StoriesCubit>(create: (_) => di.sl<StoriesCubit>()),
         BlocProvider<StoriesInsightCubit>(create: (_) => di.sl<StoriesInsightCubit>()),
         BlocProvider<StoryViewersCubit>(create: (_) => di.sl<StoryViewersCubit>()),
+        BlocProvider<MediaLikersCubit>(create: (_) => di.sl<MediaLikersCubit>()),
         BlocProvider<AppBloc>(create: (_) => di.sl<AppBloc>()),
       ],
       child: const App(),
