@@ -1,5 +1,4 @@
 import 'dart:async';
-import 'dart:developer';
 
 import 'dart:io';
 
@@ -16,7 +15,7 @@ import 'package:webview_flutter/webview_flutter.dart';
 import 'package:http/http.dart' as http;
 
 class InstagramLoginPage extends StatefulWidget {
-  InstagramLoginPage({
+  const InstagramLoginPage({
     Key? key,
     this.updateInstagramAccount = false,
   }) : super(key: key);
