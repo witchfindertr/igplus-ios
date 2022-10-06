@@ -3,10 +3,12 @@ import 'package:dartz/dartz.dart';
 import 'package:equatable/equatable.dart';
 import 'package:igplus_ios/data/failure.dart';
 import 'package:igplus_ios/data/models/media_likers_model.dart';
+import 'package:igplus_ios/domain/entities/friend.dart';
 import 'package:igplus_ios/domain/entities/media.dart';
 import 'package:igplus_ios/domain/entities/media_liker.dart';
 import 'package:igplus_ios/domain/entities/media_likers.dart';
 import 'package:igplus_ios/domain/entities/user.dart';
+import 'package:igplus_ios/domain/usecases/get_friends_from_local_use_case.dart';
 import 'package:igplus_ios/domain/usecases/get_media_from_local_use_case.dart';
 import 'package:igplus_ios/domain/usecases/get_media_likers_from_local_use_case.dart';
 import 'package:igplus_ios/domain/usecases/get_media_likers_use_case.dart';
@@ -21,6 +23,7 @@ class MediaLikersCubit extends Cubit<MediaLikersState> {
   final GetMediaFromLocalUseCase getMediaFromLocalUseCase;
   final CacheMediaLikersToLocalUseCase cacheMediaLikersToLocalUseCase;
   final GetMediaLikersFromLocalUseCase getMediaLikersFromLocalUseCase;
+  final GetFriendsFromLocalUseCase getFriendsFromLocalUseCase;
   final GetUserUseCase getUser;
   MediaLikersCubit({
     required this.getMediaLikersUseCase,
@@ -28,6 +31,7 @@ class MediaLikersCubit extends Cubit<MediaLikersState> {
     required this.getMediaFromLocalUseCase,
     required this.cacheMediaLikersToLocalUseCase,
     required this.getMediaLikersFromLocalUseCase,
+    required this.getFriendsFromLocalUseCase,
   }) : super(MediaLikersInitial());
 
   Future<List<MediaLiker>?> init({
@@ -117,10 +121,34 @@ class MediaLikersCubit extends Cubit<MediaLikersState> {
         }
       }
 
+      // get followers list
+      List<Friend> followersList = [];
+      Either<Failure, List<Friend>?>? friendsListOfFailure =
+          await getFriendsFromLocalUseCase.execute(boxKey: "followers", pageKey: 0, pageSize: 1000);
+      if (friendsListOfFailure != null && friendsListOfFailure.isRight()) {
+        followersList = friendsListOfFailure.getOrElse(() => null) ?? [];
+      }
+      // get following list
+      List<Friend> followingList = [];
+      Either<Failure, List<Friend>?>? followingListOfFailure =
+          await getFriendsFromLocalUseCase.execute(boxKey: "followings", pageKey: 0, pageSize: 1000);
+      if (followingListOfFailure != null && followingListOfFailure.isRight()) {
+        followingList = followingListOfFailure.getOrElse(() => null) ?? [];
+      }
+
       // format MedialLiker List to MediaLikers
       List<MediaLikers> mediaLikers = [];
       mediaLikersMap.forEach((key, value) {
-        mediaLikers.add(MediaLikersModel.fromMediaLiker(value, key).toEntity());
+        // check if user is following me
+        bool following = false;
+        bool followedBy = false;
+        if (followersList.indexWhere((element) => element.igUserId == int.parse(key)) != -1) {
+          followedBy = true;
+        }
+        if (followingList.indexWhere((element) => element.igUserId == int.parse(key)) != -1) {
+          following = true;
+        }
+        mediaLikers.add(MediaLikersModel.fromMediaLiker(value, key, followedBy, following).toEntity());
       });
 
       // sort by likesCout

@@ -129,6 +129,7 @@ Future<void> init() async {
         getMediaFromLocalUseCase: sl(),
         cacheMediaLikersToLocalUseCase: sl(),
         getMediaLikersFromLocalUseCase: sl(),
+        getFriendsFromLocalUseCase: sl(),
       ));
   sl.registerFactory(() => AppBloc(authRepository: sl()));
 

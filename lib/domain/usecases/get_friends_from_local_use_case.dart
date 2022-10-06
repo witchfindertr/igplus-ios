@@ -9,6 +9,9 @@ class GetFriendsFromLocalUseCase {
 
   Future<Either<Failure, List<Friend>?>?> execute(
       {required String boxKey, int? pageKey, int? pageSize, String? searchTerm}) async {
+    if (boxKey == "followers") {
+      return localRepository.getCachedFriendsList(boxKey: Friend.followersBoxKey);
+    }
     if (boxKey == "followings") {
       return localRepository.getCachedFriendsList(
           boxKey: Friend.followingsBoxKey, pageKey: pageKey, pageSize: pageSize, searchTerm: searchTerm);
@@ -32,7 +35,6 @@ class GetFriendsFromLocalUseCase {
           boxKey: Friend.mutualFollowingsBoxKey, pageKey: pageKey, pageSize: pageSize, searchTerm: searchTerm);
     }
 
-    // return followers list
-    return localRepository.getCachedFriendsList(boxKey: Friend.followersBoxKey);
+    return throw Exception("Invalid boxKey");
   }
 }

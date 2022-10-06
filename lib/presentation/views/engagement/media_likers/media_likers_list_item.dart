@@ -30,11 +30,6 @@ class _MediaLikersListItemState extends State<MediaLikersListItem> {
 
   @override
   Widget build(BuildContext context) {
-    if (widget.type == 'notFollowingBack') {
-      showFollowButton = false;
-    } else if (widget.type == 'mutualFollowings') {
-      showFollowButton = false;
-    }
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 6, horizontal: 16),
       child: ListTile(
@@ -66,15 +61,40 @@ class _MediaLikersListItemState extends State<MediaLikersListItem> {
                       overflow: TextOverflow.ellipsis, style: const TextStyle(color: ColorsManager.cardText)),
                 ),
                 const SizedBox(height: 4),
-                Text('${widget.mediaLikers.likesCount} likes',
+                Text((widget.mediaLikers.likesCount > 1) ? '${widget.mediaLikers.likesCount} likes' : '1 like',
                     style: const TextStyle(color: ColorsManager.secondarytextColor, fontSize: 12)),
               ],
             ),
           ),
         ),
-        trailing: FollowUnfollowButton(
-          igUserId: widget.mediaLikers.mediaLikerList.first.user.igUserId,
-          showFollow: showFollowButton,
+        trailing: SizedBox(
+          width: 78,
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.center,
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              FollowUnfollowButton(
+                igUserId: widget.mediaLikers.mediaLikerList.first.user.igUserId,
+                showFollow: (widget.mediaLikers.following) ? false : true,
+              ),
+              const SizedBox(height: 4),
+              (widget.mediaLikers.followedBy)
+                  ? Row(
+                      children: const [
+                        Icon(FontAwesomeIcons.squareCheck, color: ColorsManager.upColor, size: 8),
+                        SizedBox(width: 4),
+                        Text("Following you", style: TextStyle(color: ColorsManager.secondarytextColor, fontSize: 10)),
+                      ],
+                    )
+                  : Row(
+                      children: const [
+                        Icon(FontAwesomeIcons.xmark, color: ColorsManager.downColor, size: 8),
+                        SizedBox(width: 4),
+                        Text("Not following", style: TextStyle(color: ColorsManager.secondarytextColor, fontSize: 10)),
+                      ],
+                    ),
+            ],
+          ),
         ),
       ),
     );
