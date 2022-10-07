@@ -98,7 +98,6 @@ class UpdateReportUseCase {
     await localRepository.cacheFriendsList(friendsList: mutualFollowings, boxKey: Friend.mutualFollowingsBoxKey);
 
     // new followers and lost followers
-    // TODO: check if is there a better way to do this
     List<Friend> newFollowersList = [];
     List<Friend> lostFollowersList = [];
     if (cachedFollowers != null) {
@@ -225,10 +224,6 @@ class UpdateReportUseCase {
     final Report report = Report(
       followers: accountInfo.followers,
       followings: accountInfo.followings,
-      // photo: accountInfo.photo,
-      // video: accountInfo.video,
-      // totalLikes: accountInfo.totalLikes,
-      // totalComments: accountInfo.totalComments,
       notFollowingBack: notFollowingBackChanges,
       youDontFollowBack: youDontFollowBackChanges,
       mutualFollowings: mutualFollowingsChanges,

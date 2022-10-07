@@ -1,3 +1,5 @@
+import 'dart:ffi';
+
 import 'package:hive/hive.dart';
 import 'package:igplus_ios/domain/entities/account_info.dart';
 import 'package:igplus_ios/domain/entities/friend.dart';
@@ -445,27 +447,32 @@ class LocalDataSourceImp extends LocalDataSource {
     if (mediaLikersBox.isEmpty) {
       return null;
     } else {
+      // get mediaLikersList
       if (mediaId != null) {
         mediaLikersList = mediaLikersBox.values.where((element) => element.mediaId == mediaId).toList();
-
-        if (pageKey != null && pageSize != null) {
-          startKey = pageKey;
-          endKey = startKey + pageSize;
-          if (endKey > mediaLikersList.length - 1) {
-            endKey = mediaLikersList.length;
-          }
-        }
-
-        if (startKey != null && endKey != null && searchTerm == null) {
-          // paginate
-          mediaLikersList = mediaLikersList.sublist(startKey, endKey);
-        } else if (searchTerm != null) {
-          // search
-          mediaLikersList = mediaLikersList.where((c) => c.user.username.toLowerCase().contains(searchTerm)).toList();
-        }
       } else {
         mediaLikersList = mediaLikersBox.values.toList();
       }
+
+      // generate start and end keys
+      // if (pageKey != null && pageSize != null) {
+      //   startKey = pageKey;
+      //   endKey = startKey + pageSize;
+      //   if (endKey > mediaLikersList.length - 1) {
+      //     endKey = mediaLikersList.length;
+      //   }
+      // }
+
+      // paginate
+      // if (startKey != null && endKey != null) {
+      //   mediaLikersList = mediaLikersList.sublist(startKey, endKey);
+      // }
+
+      // search
+      if (searchTerm != null) {
+        mediaLikersList = mediaLikersList.where((c) => c.user.username.toLowerCase().contains(searchTerm)).toList();
+      }
+
       return mediaLikersList;
     }
   }

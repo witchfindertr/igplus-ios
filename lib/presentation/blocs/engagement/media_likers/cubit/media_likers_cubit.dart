@@ -99,7 +99,7 @@ class MediaLikersCubit extends Cubit<MediaLikersState> {
 
   // get users with most likes
   Future<List<MediaLikers>?> getMostLikesUsers(
-      {required String boxKey, int pageKey = 0, required int pageSize, String? searchTerm}) async {
+      {required String boxKey, required int pageKey, required int pageSize, String? searchTerm}) async {
     emit(MediaLikersLoading());
     List<MediaLiker> mediaLikersList = [];
 
@@ -151,8 +151,18 @@ class MediaLikersCubit extends Cubit<MediaLikersState> {
         mediaLikers.add(MediaLikersModel.fromMediaLiker(value, key, followedBy, following).toEntity());
       });
 
-      // sort by likesCout
+      // sort by likesCount
       mediaLikers.sort((a, b) => b.likesCount.compareTo(a.likesCount));
+
+      // paginate
+      int? startKey;
+      int? endKey;
+      startKey = pageKey;
+      endKey = startKey + pageSize;
+      if (endKey > mediaLikers.length - 1) {
+        endKey = mediaLikers.length;
+      }
+      mediaLikers = mediaLikers.sublist(startKey, endKey);
 
       return mediaLikers;
     }
