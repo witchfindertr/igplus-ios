@@ -1,11 +1,13 @@
 import 'dart:io';
 
 import 'package:dartz/dartz.dart';
+import 'package:igplus_ios/data/models/media_commenter_model.dart';
 import 'package:igplus_ios/data/models/media_liker_model.dart';
 import 'package:igplus_ios/data/models/media_model.dart';
 
 import 'package:igplus_ios/data/models/stories_user.dart';
 import 'package:igplus_ios/data/models/story_viewer_model.dart';
+import 'package:igplus_ios/domain/entities/media_commenter.dart';
 import 'package:igplus_ios/domain/entities/media_liker.dart';
 import 'package:igplus_ios/domain/entities/stories_user.dart';
 import 'package:igplus_ios/domain/entities/friend.dart';
@@ -221,6 +223,25 @@ class InstagramRepositoryImp extends InstagramRepository {
           await instagramDataSource.getMediaLikers(mediaId: mediaId, headers: headers);
 
       return Right(mediaLikers.map((mediaLiker) => mediaLiker.toEntity()).toList());
+    } on ServerFailure catch (e) {
+      return Left(ServerFailure(e.message));
+    } on SocketException {
+      return const Left(ConnectionFailure("No internet connection"));
+    } on Exception {
+      return const Left(ServerFailure("Unknown error"));
+    }
+  }
+
+  // get media commenters list
+  @override
+  Future<Either<Failure, List<MediaCommenter>>> getMediaCommenters(
+      {required int mediaId, required IgHeaders igHeaders}) async {
+    try {
+      final Map<String, String> headers = igHeaders.toMap();
+      final List<MediaCommenterModel> mediaCommenters =
+          await instagramDataSource.getMediaCommenters(mediaId: mediaId, headers: headers);
+
+      return Right(mediaCommenters.map((mediaCommenter) => mediaCommenter.toEntity()).toList());
     } on ServerFailure catch (e) {
       return Left(ServerFailure(e.message));
     } on SocketException {

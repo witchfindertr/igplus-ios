@@ -5,6 +5,7 @@ import 'package:igplus_ios/domain/entities/account_info.dart';
 import 'package:igplus_ios/domain/entities/friend.dart';
 import 'package:http/http.dart' as http;
 import 'package:igplus_ios/domain/entities/media.dart';
+import 'package:igplus_ios/domain/entities/media_commenter.dart';
 import 'package:igplus_ios/domain/entities/media_liker.dart';
 import 'package:igplus_ios/domain/entities/report.dart';
 import 'package:igplus_ios/domain/entities/stories_user.dart';
@@ -45,6 +46,9 @@ abstract class LocalDataSource {
   Future<void> updateStoryById({required String boxKey, required String mediaId, int? viewersCount});
   Future<void> cacheMediaLikersList({required List<MediaLiker> mediaLikersList, required String boxKey});
   List<MediaLiker>? getCachedMediaLikersList(
+      {required String boxKey, int? mediaId, int? pageKey, int? pageSize, String? searchTerm});
+  Future<void> cacheMediaCommentersList({required List<MediaCommenter> mediaCommentersList, required String boxKey});
+  List<MediaCommenter>? getCachedMediaCommentersList(
       {required String boxKey, int? mediaId, int? pageKey, int? pageSize, String? searchTerm});
 }
 
@@ -441,8 +445,6 @@ class LocalDataSourceImp extends LocalDataSource {
       {required String boxKey, int? mediaId, int? pageKey, int? pageSize, String? searchTerm}) {
     Box<MediaLiker> mediaLikersBox = Hive.box<MediaLiker>(MediaLiker.boxKey);
     List<MediaLiker> mediaLikersList;
-    int? startKey;
-    int? endKey;
 
     if (mediaLikersBox.isEmpty) {
       return null;
@@ -454,26 +456,54 @@ class LocalDataSourceImp extends LocalDataSource {
         mediaLikersList = mediaLikersBox.values.toList();
       }
 
-      // generate start and end keys
-      // if (pageKey != null && pageSize != null) {
-      //   startKey = pageKey;
-      //   endKey = startKey + pageSize;
-      //   if (endKey > mediaLikersList.length - 1) {
-      //     endKey = mediaLikersList.length;
-      //   }
-      // }
-
-      // paginate
-      // if (startKey != null && endKey != null) {
-      //   mediaLikersList = mediaLikersList.sublist(startKey, endKey);
-      // }
-
       // search
       if (searchTerm != null) {
         mediaLikersList = mediaLikersList.where((c) => c.user.username.toLowerCase().contains(searchTerm)).toList();
       }
 
       return mediaLikersList;
+    }
+  }
+
+  // ----------------------->
+  // Media commenters list ------------------>
+  // ----------------------->
+  // cache media commenters list
+  @override
+  Future<void> cacheMediaCommentersList(
+      {required List<MediaCommenter> mediaCommentersList, required String boxKey}) async {
+    // open box
+    Box<MediaCommenter> mediaCommentersBox = Hive.box<MediaCommenter>(MediaCommenter.boxKey);
+    // put commenters in the box
+    for (var e in mediaCommentersList) {
+      mediaCommentersBox.put(e.id, e);
+    }
+  }
+
+  // get media commenters list from local storage
+  @override
+  List<MediaCommenter>? getCachedMediaCommentersList(
+      {required String boxKey, int? mediaId, int? pageKey, int? pageSize, String? searchTerm}) {
+    Box<MediaCommenter> mediaCommentersBox = Hive.box<MediaCommenter>(MediaCommenter.boxKey);
+    List<MediaCommenter> mediaCommentersList;
+
+    if (mediaCommentersBox.isEmpty) {
+      return null;
+    } else {
+      // get mediaCommentersList
+      if (mediaId != null) {
+        mediaCommentersList = mediaCommentersBox.values.where((element) => element.mediaId == mediaId).toList();
+      } else {
+        mediaCommentersList = mediaCommentersBox.values.toList();
+      }
+
+      // search
+      if (searchTerm != null) {
+        mediaCommentersList =
+            mediaCommentersList.where((c) => c.user.username.toLowerCase().contains(searchTerm)).toList();
+      }
+
+      return mediaCommentersList;
     }
   }
 

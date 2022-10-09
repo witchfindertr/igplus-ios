@@ -51,6 +51,10 @@ class InstagramUrls {
   // get media likers list
   // https://i.instagram.com/api/v1/media/2239382964760680751/likers/
   static String getMediaLikersList(int mediaId, String maxId) => '$baseUrl/media/$mediaId/likers/$maxId';
+
+  // get media commenters list
+  // https://i.instagram.com/api/v1/media/1240154202345427631/comments/?min_id={"cached_comments_cursor": "18260117113107927", "bifilter_token": "KH0BFADIAFgAQAAwACAAGAAQAAgACAAIAKz09y2bwk_8PP35H_vN9d_r-_0It387efmehH1JzTtZw-Y9GdEdZBd09u1puucoTrOfPB29i08_7uv71_X_v___225__271f_r_f_-__UfVwKM59fyyTH2yl3RSQqPzoqwAWAgCgAA="}
+  static String getMediaCommentersList(int mediaId, String maxId) => '$baseUrl/media/$mediaId/comments/$maxId';
 }
 
 class FirebaseFunctionsUrls {
