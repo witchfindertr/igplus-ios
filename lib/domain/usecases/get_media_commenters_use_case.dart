@@ -9,7 +9,7 @@ class GetMediaCommentersUseCase {
 
   GetMediaCommentersUseCase({required this.instagramRepository});
 
-  Future<Either<Failure, List<MediaCommenter>>> execute({required int mediaId, required IgHeaders igHeaders}) async {
+  Future<Either<Failure, List<MediaCommenter>>> execute({required String mediaId, required IgHeaders igHeaders}) async {
     return instagramRepository.getMediaCommenters(mediaId: mediaId, igHeaders: igHeaders);
   }
 }

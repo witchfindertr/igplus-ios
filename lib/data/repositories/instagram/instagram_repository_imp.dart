@@ -216,7 +216,8 @@ class InstagramRepositoryImp extends InstagramRepository {
 
   // get media likers list
   @override
-  Future<Either<Failure, List<MediaLiker>>> getMediaLikers({required int mediaId, required IgHeaders igHeaders}) async {
+  Future<Either<Failure, List<MediaLiker>>> getMediaLikers(
+      {required String mediaId, required IgHeaders igHeaders}) async {
     try {
       final Map<String, String> headers = igHeaders.toMap();
       final List<MediaLikerModel> mediaLikers =
@@ -235,7 +236,7 @@ class InstagramRepositoryImp extends InstagramRepository {
   // get media commenters list
   @override
   Future<Either<Failure, List<MediaCommenter>>> getMediaCommenters(
-      {required int mediaId, required IgHeaders igHeaders}) async {
+      {required String mediaId, required IgHeaders igHeaders}) async {
     try {
       final Map<String, String> headers = igHeaders.toMap();
       final List<MediaCommenterModel> mediaCommenters =

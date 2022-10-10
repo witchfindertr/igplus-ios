@@ -186,7 +186,6 @@ class LocalDataSourceImp extends LocalDataSource {
   List<Media>? getCachedMediaList(
       {required String boxKey, int? pageKey, int? pageSize, String? searchTerm, String? type}) {
     Box<Media> mediaBox = Hive.box<Media>(boxKey);
-    // Hive.box<Media>(Media.boxKey).clear();
 
     List<Media> mediaList;
     int? startKey;
@@ -205,7 +204,7 @@ class LocalDataSourceImp extends LocalDataSource {
       if (startKey != null && endKey != null) {
         mediaList = mediaBox.values.toList().sublist(startKey, endKey);
 
-        //  search keyword
+        // search keyword
         if (searchTerm != null) {
           mediaList = mediaBox.values.where((c) => c.text.toLowerCase().contains(searchTerm)).toList();
         }

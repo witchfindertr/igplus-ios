@@ -8,7 +8,7 @@ part of 'media_commenter.dart';
 
 class MediaCommenterAdapter extends TypeAdapter<MediaCommenter> {
   @override
-  final int typeId = 9;
+  final int typeId = 10;
 
   @override
   MediaCommenter read(BinaryReader reader) {
@@ -18,7 +18,7 @@ class MediaCommenterAdapter extends TypeAdapter<MediaCommenter> {
     };
     return MediaCommenter(
       id: fields[0] as String,
-      mediaId: fields[1] as int,
+      mediaId: fields[1] as String,
       user: fields[2] as Friend,
     );
   }

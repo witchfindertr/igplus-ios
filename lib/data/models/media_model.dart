@@ -3,7 +3,7 @@ import 'package:igplus_ios/domain/entities/friend.dart';
 import 'package:igplus_ios/domain/entities/media.dart';
 
 class MediaModel {
-  final int id;
+  final String id;
   final String text;
   final int mediaType;
   final String code;
@@ -30,7 +30,7 @@ class MediaModel {
   });
 
   factory MediaModel.fromJson(Map<String, dynamic> json) {
-    int id = int.parse(json['pk']);
+    String id = json['pk'];
     int mediaType = json['media_type'];
     // media image url
     String mediaUrl = "";

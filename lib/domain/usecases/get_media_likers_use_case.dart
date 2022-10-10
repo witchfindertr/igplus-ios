@@ -9,7 +9,7 @@ class GetMediaLikersUseCase {
 
   GetMediaLikersUseCase({required this.instagramRepository});
 
-  Future<Either<Failure, List<MediaLiker>>> execute({required int mediaId, required IgHeaders igHeaders}) async {
+  Future<Either<Failure, List<MediaLiker>>> execute({required String mediaId, required IgHeaders igHeaders}) async {
     return instagramRepository.getMediaLikers(mediaId: mediaId, igHeaders: igHeaders);
   }
 }

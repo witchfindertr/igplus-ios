@@ -10,7 +10,7 @@ class MediaLiker {
   @HiveField(0)
   final String id;
   @HiveField(1)
-  final int mediaId;
+  final String mediaId;
   @HiveField(2)
   final Friend user;
 

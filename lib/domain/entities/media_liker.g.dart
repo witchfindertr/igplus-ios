@@ -18,7 +18,7 @@ class MediaLikerAdapter extends TypeAdapter<MediaLiker> {
     };
     return MediaLiker(
       id: fields[0] as String,
-      mediaId: fields[1] as int,
+      mediaId: fields[1] as String,
       user: fields[2] as Friend,
     );
   }

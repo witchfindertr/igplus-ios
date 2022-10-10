@@ -55,7 +55,7 @@ class MediaCommentersCubit extends Cubit<MediaCommentersState> {
     if (mediaCommentersList.isEmpty) {
       // get media list from local
       Either<Failure, List<Media>?>? mediaListOrFailure =
-          await getMediaFromLocalUseCase.execute(boxKey: MediaCommenter.boxKey, pageKey: 0, pageSize: 100);
+          await getMediaFromLocalUseCase.execute(boxKey: Media.boxKey, pageKey: 0, pageSize: 100);
 
       if (mediaListOrFailure != null && mediaListOrFailure.isRight()) {
         mediaList = mediaListOrFailure.getOrElse(() => null) ?? [];
@@ -80,7 +80,7 @@ class MediaCommentersCubit extends Cubit<MediaCommentersState> {
     return null;
   }
 
-  Future<List<MediaCommenter>?> getMediaCommenters({required int mediaId, required String boxKey}) async {
+  Future<List<MediaCommenter>?> getMediaCommenters({required String mediaId, required String boxKey}) async {
     emit(MediaCommentersLoading());
     // get header current user header
     User currentUser = await getCurrentUser();

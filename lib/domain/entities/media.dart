@@ -9,7 +9,7 @@ class Media extends Equatable {
   static const String boxKey = "mediaBoxKey";
 
   @HiveField(0)
-  final int id;
+  final String id;
   @HiveField(1)
   final String text;
   @HiveField(2)

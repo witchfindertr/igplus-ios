@@ -60,9 +60,9 @@ abstract class InstagramRepository {
   Future<Either<Failure, List<StoryViewer>>> getStoryViewers({required String mediaId, required IgHeaders igHeaders});
 
   // get media likers
-  Future<Either<Failure, List<MediaLiker>>> getMediaLikers({required int mediaId, required IgHeaders igHeaders});
+  Future<Either<Failure, List<MediaLiker>>> getMediaLikers({required String mediaId, required IgHeaders igHeaders});
 
   // get media commenters list
   Future<Either<Failure, List<MediaCommenter>>> getMediaCommenters(
-      {required int mediaId, required IgHeaders igHeaders});
+      {required String mediaId, required IgHeaders igHeaders});
 }

@@ -3,7 +3,7 @@ import 'package:igplus_ios/domain/entities/media_commenter.dart';
 
 class MediaCommenterModel {
   final String id;
-  final int mediaId;
+  final String mediaId;
   final int commentLikeCount;
   final int childCommentCount;
   final int createdAt;
@@ -26,11 +26,11 @@ class MediaCommenterModel {
     return MediaCommenterModel(
       id: "${mediaId}_${json['pk']}",
       mediaId: mediaId,
-      commentLikeCount: json['comment_like_count'],
-      childCommentCount: json['child_comment_count'],
+      commentLikeCount: json['comment_like_count'] ?? 0,
+      childCommentCount: json['child_comment_count'] ?? 0,
       createdAt: json['created_at'],
       text: json['text'],
-      hasLikedComment: json['has_liked_comment'],
+      hasLikedComment: json['has_liked_comment'] ?? false,
       user: FriendModel.fromJson(json['user']),
     );
   }

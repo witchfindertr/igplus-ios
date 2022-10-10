@@ -12,8 +12,10 @@ import 'package:igplus_ios/domain/usecases/get_friends_from_local_use_case.dart'
 import 'package:igplus_ios/domain/usecases/get_media_from_local_use_case.dart';
 import 'package:igplus_ios/domain/usecases/get_media_likers_from_local_use_case.dart';
 import 'package:igplus_ios/domain/usecases/get_media_likers_use_case.dart';
+import 'package:igplus_ios/domain/usecases/get_user_feed_use_case.dart';
 import 'package:igplus_ios/domain/usecases/get_user_use_case.dart';
 import 'package:igplus_ios/domain/usecases/save_media_likers_to_local_use_case.dart';
+import 'package:igplus_ios/domain/usecases/save_media_to_local_use_case.dart';
 import 'package:igplus_ios/presentation/views/insight/media/media_list/media_list.dart';
 
 part 'media_likers_state.dart';
@@ -25,6 +27,8 @@ class MediaLikersCubit extends Cubit<MediaLikersState> {
   final GetMediaLikersFromLocalUseCase getMediaLikersFromLocalUseCase;
   final GetFriendsFromLocalUseCase getFriendsFromLocalUseCase;
   final GetUserUseCase getUser;
+  final CacheMediaToLocalUseCase cacheMediaToLocal;
+  final GetUserFeedUseCase getUserFeed;
   MediaLikersCubit({
     required this.getMediaLikersUseCase,
     required this.getUser,
@@ -32,6 +36,8 @@ class MediaLikersCubit extends Cubit<MediaLikersState> {
     required this.cacheMediaLikersToLocalUseCase,
     required this.getMediaLikersFromLocalUseCase,
     required this.getFriendsFromLocalUseCase,
+    required this.cacheMediaToLocal,
+    required this.getUserFeed,
   }) : super(MediaLikersInitial());
 
   Future<List<MediaLiker>?> init({
@@ -56,7 +62,7 @@ class MediaLikersCubit extends Cubit<MediaLikersState> {
     if (mediaLikersList.isEmpty) {
       // get media list from local
       Either<Failure, List<Media>?>? mediaListOrFailure =
-          await getMediaFromLocalUseCase.execute(boxKey: MediaLiker.boxKey, pageKey: 0, pageSize: 100);
+          await getMediaFromLocalUseCase.execute(boxKey: Media.boxKey, pageKey: 0, pageSize: 100);
 
       if (mediaListOrFailure != null && mediaListOrFailure.isRight()) {
         mediaList = mediaListOrFailure.getOrElse(() => null) ?? [];
@@ -74,12 +80,15 @@ class MediaLikersCubit extends Cubit<MediaLikersState> {
         }
         emit(MediaLikersSuccess(mediaLikers: mediaLikersList, pageKey: 0));
         return mediaLikersList;
+      } else {
+        emit(const MediaLikersFailure(message: "We can't load media list, try again later"));
+        return null;
       }
     }
     return null;
   }
 
-  Future<List<MediaLiker>?> getMediaLikers({required int mediaId, required String boxKey}) async {
+  Future<List<MediaLiker>?> getMediaLikers({required String mediaId, required String boxKey}) async {
     emit(MediaLikersLoading());
     // get header current user header
     User currentUser = await getCurrentUser();
