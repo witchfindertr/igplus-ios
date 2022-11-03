@@ -18,23 +18,27 @@ class LineChartSample extends StatefulWidget {
 class _LineChartSampleState extends State<LineChartSample> {
   @override
   Widget build(BuildContext context) {
-    return Column(
-      children: [
-        const SectionTitle(title: "Followers tracking", icon: FontAwesomeIcons.chartLine),
-        Container(
-          constraints: const BoxConstraints(
-            maxHeight: 180.0,
-          ),
-          padding: const EdgeInsets.all(24.0),
-          child: Chart(
-            layers: layers(widget.chartData),
-            padding: const EdgeInsets.symmetric(horizontal: 30.0).copyWith(
-              bottom: 12.0,
+    try {
+      return Column(
+        children: [
+          const SectionTitle(title: "Followers tracking", icon: FontAwesomeIcons.chartLine),
+          Container(
+            constraints: const BoxConstraints(
+              maxHeight: 180.0,
+            ),
+            padding: const EdgeInsets.all(24.0),
+            child: Chart(
+              layers: layers(widget.chartData),
+              padding: const EdgeInsets.symmetric(horizontal: 30.0).copyWith(
+                bottom: 12.0,
+              ),
             ),
           ),
-        ),
-      ],
-    );
+        ],
+      );
+    } catch (e) {
+      return Container();
+    }
   }
 
   List<ChartLayer> layers(List<ChartData> chartData) {

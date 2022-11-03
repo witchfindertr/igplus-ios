@@ -23,7 +23,7 @@ class FriendModel extends Equatable {
 
   factory FriendModel.fromJson(Map<String, dynamic> json) {
     return FriendModel(
-      igUserId: json['pk'], //
+      igUserId: int.parse(json['pk'].toString()), //
       username: json['username'],
       picture: json['profile_pic_url'],
       createdOn: DateTime.now(),

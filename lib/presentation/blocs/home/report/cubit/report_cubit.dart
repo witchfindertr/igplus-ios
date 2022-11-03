@@ -7,6 +7,8 @@ import 'package:hive/hive.dart';
 import 'package:igplus_ios/data/failure.dart';
 import 'package:igplus_ios/domain/entities/account_info.dart';
 import 'package:igplus_ios/domain/entities/media.dart';
+import 'package:igplus_ios/domain/entities/media_commenter.dart';
+import 'package:igplus_ios/domain/entities/media_commenters.dart';
 import 'package:igplus_ios/domain/entities/stories_user.dart';
 import 'package:igplus_ios/domain/entities/story.dart';
 import 'package:igplus_ios/domain/entities/story_viewer.dart';
@@ -25,6 +27,7 @@ import 'package:igplus_ios/domain/usecases/save_media_to_local_use_case.dart';
 import 'package:igplus_ios/domain/usecases/update_report_use_case.dart';
 
 import 'package:igplus_ios/domain/entities/report.dart';
+import 'package:igplus_ios/presentation/views/engagement/media_commenters/media_commenters_list.dart';
 
 part 'report_state.dart';
 
@@ -64,6 +67,7 @@ class ReportCubit extends Cubit<ReportState> {
     // await Hive.box<Media>(Media.boxKey).clear();
     // await Hive.box<StoriesUser>(StoriesUser.boxKey).clear();
     // await Hive.box<StoryViewer>(StoryViewer.boxKey).clear();
+    // await Hive.box<MediaCommenter>(MediaCommenter.boxKey).clear();
     emit(const ReportInProgress(loadingMessage: "We are loading your data..."));
     // get cached account info from local // TODO - get from local
     final accountInfoEither = await getAccountInfoFromLocalUseCase.execute();

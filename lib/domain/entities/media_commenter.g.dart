@@ -1,22 +1,22 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
 
-part of 'media_liker.dart';
+part of 'media_commenter.dart';
 
 // **************************************************************************
 // TypeAdapterGenerator
 // **************************************************************************
 
-class MediaLikerAdapter extends TypeAdapter<MediaLiker> {
+class MediaCommenterAdapter extends TypeAdapter<MediaCommenter> {
   @override
-  final int typeId = 9;
+  final int typeId = 10;
 
   @override
-  MediaLiker read(BinaryReader reader) {
+  MediaCommenter read(BinaryReader reader) {
     final numOfFields = reader.readByte();
     final fields = <int, dynamic>{
       for (int i = 0; i < numOfFields; i++) reader.readByte(): reader.read(),
     };
-    return MediaLiker(
+    return MediaCommenter(
       id: fields[0] as String,
       mediaId: fields[1] as String,
       user: fields[2] as Friend,
@@ -24,7 +24,7 @@ class MediaLikerAdapter extends TypeAdapter<MediaLiker> {
   }
 
   @override
-  void write(BinaryWriter writer, MediaLiker obj) {
+  void write(BinaryWriter writer, MediaCommenter obj) {
     writer
       ..writeByte(3)
       ..writeByte(0)
@@ -41,7 +41,7 @@ class MediaLikerAdapter extends TypeAdapter<MediaLiker> {
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
-      other is MediaLikerAdapter &&
+      other is MediaCommenterAdapter &&
           runtimeType == other.runtimeType &&
           typeId == other.typeId;
 }

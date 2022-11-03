@@ -5,6 +5,7 @@ import 'package:igplus_ios/domain/entities/account_info.dart';
 import 'package:igplus_ios/domain/entities/friend.dart';
 import 'package:http/http.dart' as http;
 import 'package:igplus_ios/domain/entities/media.dart';
+import 'package:igplus_ios/domain/entities/media_commenter.dart';
 import 'package:igplus_ios/domain/entities/media_liker.dart';
 import 'package:igplus_ios/domain/entities/report.dart';
 import 'package:igplus_ios/domain/entities/stories_user.dart';
@@ -45,6 +46,9 @@ abstract class LocalDataSource {
   Future<void> updateStoryById({required String boxKey, required String mediaId, int? viewersCount});
   Future<void> cacheMediaLikersList({required List<MediaLiker> mediaLikersList, required String boxKey});
   List<MediaLiker>? getCachedMediaLikersList(
+      {required String boxKey, int? mediaId, int? pageKey, int? pageSize, String? searchTerm});
+  Future<void> cacheMediaCommentersList({required List<MediaCommenter> mediaCommentersList, required String boxKey});
+  List<MediaCommenter>? getCachedMediaCommentersList(
       {required String boxKey, int? mediaId, int? pageKey, int? pageSize, String? searchTerm});
 }
 
@@ -182,7 +186,6 @@ class LocalDataSourceImp extends LocalDataSource {
   List<Media>? getCachedMediaList(
       {required String boxKey, int? pageKey, int? pageSize, String? searchTerm, String? type}) {
     Box<Media> mediaBox = Hive.box<Media>(boxKey);
-    // Hive.box<Media>(Media.boxKey).clear();
 
     List<Media> mediaList;
     int? startKey;
@@ -201,7 +204,7 @@ class LocalDataSourceImp extends LocalDataSource {
       if (startKey != null && endKey != null) {
         mediaList = mediaBox.values.toList().sublist(startKey, endKey);
 
-        //  search keyword
+        // search keyword
         if (searchTerm != null) {
           mediaList = mediaBox.values.where((c) => c.text.toLowerCase().contains(searchTerm)).toList();
         }
@@ -315,14 +318,26 @@ class LocalDataSourceImp extends LocalDataSource {
     Box<StoriesUser> usersStorytoriesBox = Hive.box<StoriesUser>(StoriesUser.boxKey);
 
     List<Story> storiesList = usersStorytoriesBox.values.where((element) => element.id == ownerId).first.stories;
-
+    List<Story> expiredStoriesList;
     if (storiesList.isEmpty) {
       return null;
     } else {
+      // get expired stories lsit
+      int expireDate = (DateTime.now().subtract(const Duration(days: 1)).millisecondsSinceEpoch / 1000).floor();
+      expiredStoriesList = storiesList.where((element) => element.takenAt < expireDate).toList();
+
+      // remove expired stories from the list
+      for (var element in expiredStoriesList) {
+        storiesList.remove(element);
+      }
+
       if (type == "mostViewedStories") {
         // remove stories with null viewers count
         storiesList = storiesList.where((element) => element.viewersCount != null).toList();
       }
+
+      // remove stories with takenAt greater than 24 hours
+      storiesList = storiesList.where((element) => element.takenAt > expireDate).toList();
 
       return storiesList;
     }
@@ -360,11 +375,23 @@ class LocalDataSourceImp extends LocalDataSource {
     Box<StoriesUser> usersStorytoriesBox = Hive.box<StoriesUser>(StoriesUser.boxKey);
 
     List<StoriesUser> storiesUserList;
+    List<StoriesUser> expiredStoriesUserList;
 
     if (usersStorytoriesBox.isEmpty) {
       return null;
     } else {
-      storiesUserList = usersStorytoriesBox.values.toList();
+      // expired storiesUser list
+      int expireDate = (DateTime.now().millisecondsSinceEpoch / 1000).floor();
+
+      expiredStoriesUserList = usersStorytoriesBox.values.where((element) => element.expiringAt < expireDate).toList();
+
+      // remove expired storiesUser from the box
+      for (var e in expiredStoriesUserList) {
+        usersStorytoriesBox.delete(e.id);
+      }
+
+      // storiesUser where expiringAt > now
+      storiesUserList = usersStorytoriesBox.values.where((element) => element.expiringAt >= expireDate).toList();
       return storiesUserList;
     }
   }
@@ -441,8 +468,6 @@ class LocalDataSourceImp extends LocalDataSource {
       {required String boxKey, int? mediaId, int? pageKey, int? pageSize, String? searchTerm}) {
     Box<MediaLiker> mediaLikersBox = Hive.box<MediaLiker>(MediaLiker.boxKey);
     List<MediaLiker> mediaLikersList;
-    int? startKey;
-    int? endKey;
 
     if (mediaLikersBox.isEmpty) {
       return null;
@@ -454,26 +479,54 @@ class LocalDataSourceImp extends LocalDataSource {
         mediaLikersList = mediaLikersBox.values.toList();
       }
 
-      // generate start and end keys
-      // if (pageKey != null && pageSize != null) {
-      //   startKey = pageKey;
-      //   endKey = startKey + pageSize;
-      //   if (endKey > mediaLikersList.length - 1) {
-      //     endKey = mediaLikersList.length;
-      //   }
-      // }
-
-      // paginate
-      // if (startKey != null && endKey != null) {
-      //   mediaLikersList = mediaLikersList.sublist(startKey, endKey);
-      // }
-
       // search
       if (searchTerm != null) {
         mediaLikersList = mediaLikersList.where((c) => c.user.username.toLowerCase().contains(searchTerm)).toList();
       }
 
       return mediaLikersList;
+    }
+  }
+
+  // ----------------------->
+  // Media commenters list ------------------>
+  // ----------------------->
+  // cache media commenters list
+  @override
+  Future<void> cacheMediaCommentersList(
+      {required List<MediaCommenter> mediaCommentersList, required String boxKey}) async {
+    // open box
+    Box<MediaCommenter> mediaCommentersBox = Hive.box<MediaCommenter>(MediaCommenter.boxKey);
+    // put commenters in the box
+    for (var e in mediaCommentersList) {
+      mediaCommentersBox.put(e.id, e);
+    }
+  }
+
+  // get media commenters list from local storage
+  @override
+  List<MediaCommenter>? getCachedMediaCommentersList(
+      {required String boxKey, int? mediaId, int? pageKey, int? pageSize, String? searchTerm}) {
+    Box<MediaCommenter> mediaCommentersBox = Hive.box<MediaCommenter>(MediaCommenter.boxKey);
+    List<MediaCommenter> mediaCommentersList;
+
+    if (mediaCommentersBox.isEmpty) {
+      return null;
+    } else {
+      // get mediaCommentersList
+      if (mediaId != null) {
+        mediaCommentersList = mediaCommentersBox.values.where((element) => element.mediaId == mediaId).toList();
+      } else {
+        mediaCommentersList = mediaCommentersBox.values.toList();
+      }
+
+      // search
+      if (searchTerm != null) {
+        mediaCommentersList =
+            mediaCommentersList.where((c) => c.user.username.toLowerCase().contains(searchTerm)).toList();
+      }
+
+      return mediaCommentersList;
     }
   }
 

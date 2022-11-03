@@ -3,7 +3,7 @@ import 'package:igplus_ios/domain/entities/media_liker.dart';
 
 class MediaLikerModel {
   final String id;
-  final int mediaId;
+  final String mediaId;
   final FriendModel user;
 
   MediaLikerModel({

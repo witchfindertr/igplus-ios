@@ -17,7 +17,7 @@ class MediaAdapter extends TypeAdapter<Media> {
       for (int i = 0; i < numOfFields; i++) reader.readByte(): reader.read(),
     };
     return Media(
-      id: fields[0] as int,
+      id: fields[0] as String,
       text: fields[1] as String,
       mediaType: fields[2] as int,
       code: fields[3] as String,

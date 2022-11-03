@@ -4,6 +4,7 @@ import 'package:igplus_ios/data/sources/local/local_datasource.dart';
 import 'package:igplus_ios/domain/entities/account_info.dart';
 import 'package:igplus_ios/domain/entities/friend.dart';
 import 'package:igplus_ios/domain/entities/media.dart';
+import 'package:igplus_ios/domain/entities/media_commenter.dart';
 import 'package:igplus_ios/domain/entities/media_liker.dart';
 import 'package:igplus_ios/domain/entities/report.dart';
 import 'package:igplus_ios/domain/entities/stories_user.dart';
@@ -216,6 +217,33 @@ class LocalRepositoryImpl implements LocalRepository {
       return Right(cachedMediaLikersList);
     } catch (e) {
       return const Left(InvalidParamsFailure("getCachedMediaLikersList catch"));
+    }
+  }
+
+  // Media commenters list
+  @override
+  Future<void> cacheMediaCommentersList(
+      {required List<MediaCommenter> mediaCommentersList, required String boxKey}) async {
+    await localDataSource.cacheMediaCommentersList(
+      mediaCommentersList: mediaCommentersList,
+      boxKey: boxKey,
+    );
+  }
+
+  @override
+  Either<Failure, List<MediaCommenter>?> getCachedMediaCommentersList(
+      {required String boxKey, int? mediaId, int? pageKey, int? pageSize, String? searchTerm}) {
+    try {
+      final List<MediaCommenter>? cachedMediaCommentersList = localDataSource.getCachedMediaCommentersList(
+        boxKey: boxKey,
+        mediaId: mediaId,
+        pageKey: pageKey,
+        pageSize: pageSize,
+        searchTerm: searchTerm,
+      );
+      return Right(cachedMediaCommentersList);
+    } catch (e) {
+      return const Left(InvalidParamsFailure("getCachedMediaCommentersList catch"));
     }
   }
 

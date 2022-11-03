@@ -26,7 +26,6 @@ class _StoriesViewState extends State<StoriesView> {
   final StoryController controller = StoryController();
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
     context.read<StoriesCubit>().init(storyOwner: widget.storyOwner);
   }
@@ -44,7 +43,23 @@ class _StoriesViewState extends State<StoriesView> {
         builder: (context, state) {
           if (state is StoriesLoaded) {
             List<Story?> stories = state.stories;
-
+            if (stories.isEmpty) {
+              return Center(
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    const Text("Can't find any stories"),
+                    TextButton(
+                      onPressed: () {
+                        context.go('/home');
+                      },
+                      child: const Text("Go back"),
+                    )
+                  ],
+                ),
+              );
+            }
             final List<StoryItem> storyItems = stories.map((story) {
               if (story != null && story.mediaType == MediaConstants.TYPE_IMAGE) {
                 return StoryItem.pageImage(

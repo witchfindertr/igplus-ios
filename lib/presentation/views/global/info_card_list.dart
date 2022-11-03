@@ -39,7 +39,7 @@ class InfoCardList extends StatelessWidget {
         } else if (state is MediaListSuccess) {
           return GestureDetector(
             onTap: () {
-              if (type == "mostLikes") {
+              if (type == "mostLikes" || type == "mostComments" || type == "mostLikesAndComments") {
                 GoRouter.of(context).go('/home/engagement/$type');
               } else {
                 GoRouter.of(context).go('/home/mediaList/$type');

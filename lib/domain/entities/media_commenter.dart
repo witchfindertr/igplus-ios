@@ -1,11 +1,11 @@
 import 'package:hive/hive.dart';
 import 'package:igplus_ios/domain/entities/friend.dart';
 
-part 'media_liker.g.dart';
+part 'media_commenter.g.dart';
 
-@HiveType(typeId: 9)
-class MediaLiker {
-  static const boxKey = 'mediaLikersBoxKey';
+@HiveType(typeId: 10)
+class MediaCommenter {
+  static const boxKey = 'mediaCommentersBoxKey';
 
   @HiveField(0)
   final String id;
@@ -14,7 +14,7 @@ class MediaLiker {
   @HiveField(2)
   final Friend user;
 
-  MediaLiker({
+  MediaCommenter({
     required this.id,
     required this.mediaId,
     required this.user,

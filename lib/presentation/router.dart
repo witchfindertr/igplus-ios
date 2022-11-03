@@ -1,6 +1,7 @@
 import 'package:go_router/go_router.dart';
 import 'package:igplus_ios/app/bloc/app_bloc.dart';
 import 'package:igplus_ios/domain/entities/stories_user.dart';
+import 'package:igplus_ios/presentation/views/engagement/media_commenters/media_commenters_list.dart';
 import 'package:igplus_ios/presentation/views/engagement/media_likers/media_likers_list.dart';
 import 'package:igplus_ios/presentation/views/friends_list/friends_list.dart';
 import 'package:igplus_ios/presentation/views/home/stories/stories_view.dart';
@@ -73,7 +74,14 @@ GoRouter routes(AppBloc appBloc) {
                 ]),
             GoRoute(
                 path: 'engagement/:type',
-                builder: (context, state) => MediaLikersList(type: state.params['type'] ?? "")),
+                builder: (context, state) {
+                  if (state.params['type'] == 'mostLikes') {
+                    return MediaLikersList(type: state.params['type'] ?? "");
+                  } else if (state.params['type'] == 'mostComments') {
+                    return MediaCommentersList(type: state.params['type'] ?? "");
+                  }
+                  return MediaLikersList(type: state.params['type'] ?? "");
+                }),
           ]),
     ],
     redirect: (state) {

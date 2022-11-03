@@ -9,6 +9,7 @@ import 'dart:convert';
 import 'package:hive/hive.dart';
 import 'package:igplus_ios/data/models/account_info_model.dart';
 import 'package:http/http.dart' as http;
+import 'package:igplus_ios/data/models/media_commenter_model.dart';
 import 'package:igplus_ios/data/models/media_model.dart';
 import 'package:igplus_ios/data/models/media_liker_model.dart';
 
@@ -42,7 +43,8 @@ abstract class InstagramDataSource {
   Future<bool> unfollowUser({required int userId, required Map<String, String> headers});
   Future<List<MediaModel>> getUserFeed({required String userId, required Map<String, String> headers});
   Future<List<StoryViewerModel>> getStoryViewers({required String mediaId, required Map<String, String> headers});
-  Future<List<MediaLikerModel>> getMediaLikers({required int mediaId, required Map<String, String> headers});
+  Future<List<MediaLikerModel>> getMediaLikers({required String mediaId, required Map<String, String> headers});
+  Future<List<MediaCommenterModel>> getMediaCommenters({required String mediaId, required Map<String, String> headers});
 }
 
 class InstagramDataSourceImp extends InstagramDataSource {
@@ -201,7 +203,7 @@ class InstagramDataSourceImp extends InstagramDataSource {
     final response = await client.get(Uri.parse(InstagramUrls.getFollowers(igUserId, maxIdString)), headers: headers);
 
     final rs = jsonDecode(response.body);
-    final List<dynamic> users = rs['users'];
+    final List<dynamic> users = rs['users'] ?? [];
 
     if (users.isNotEmpty) {
       nextMaxId = rs['next_max_id'];
@@ -379,7 +381,7 @@ class InstagramDataSourceImp extends InstagramDataSource {
 
   // get media likers list
   @override
-  Future<List<MediaLikerModel>> getMediaLikers({required int mediaId, required Map<String, String> headers}) async {
+  Future<List<MediaLikerModel>> getMediaLikers({required String mediaId, required Map<String, String> headers}) async {
     final response = await client.get(Uri.parse(InstagramUrls.getMediaLikersList(mediaId, "")), headers: headers);
 
     if (response.statusCode == 200) {
@@ -401,7 +403,7 @@ class InstagramDataSourceImp extends InstagramDataSource {
   }
 
   Future<String?> _loadNextPostLikersPage(
-      String? nextMaxId, int mediaId, Map<String, String> headers, List<MediaLikerModel> mediaLikers) async {
+      String? nextMaxId, String mediaId, Map<String, String> headers, List<MediaLikerModel> mediaLikers) async {
     String maxIdString = "?max_id=$nextMaxId";
 
     final response =
@@ -414,6 +416,48 @@ class InstagramDataSourceImp extends InstagramDataSource {
       final List<MediaLikerModel> newPostLikers =
           usersJson.map((u) => MediaLikerModel.fromJson(u as Map<String, dynamic>, mediaId)).toList();
       mediaLikers.addAll(newPostLikers);
+    }
+    return nextMaxId;
+  }
+
+  // get media commenters list
+  @override
+  Future<List<MediaCommenterModel>> getMediaCommenters(
+      {required String mediaId, required Map<String, String> headers}) async {
+    final response = await client.get(Uri.parse(InstagramUrls.getMediaCommentersList(mediaId, "")), headers: headers);
+
+    if (response.statusCode == 200) {
+      final body = jsonDecode(response.body);
+      final comments = body["comments"] as List<dynamic>;
+      List<MediaCommenterModel> mediaCommenters =
+          comments.map((comment) => MediaCommenterModel.fromJson(comment as Map<String, dynamic>, mediaId)).toList();
+      String? nextMaxId = body['next_max_id'];
+      while (nextMaxId != null) {
+        await Future.delayed(const Duration(seconds: 3));
+        nextMaxId = await _loadNextPostCommentersPage(nextMaxId, mediaId, headers, mediaCommenters);
+      }
+      return mediaCommenters;
+    } else if (response.statusCode == 400) {
+      throw const ServerFailure("Media not found");
+    } else {
+      throw const ServerFailure("Failed to get media commenters from Instagram");
+    }
+  }
+
+  Future<String?> _loadNextPostCommentersPage(
+      String? nextMaxId, String mediaId, Map<String, String> headers, List<MediaCommenterModel> mediaCommenters) async {
+    String maxIdString = "?max_id=$nextMaxId";
+
+    final response =
+        await client.get(Uri.parse(InstagramUrls.getMediaLikersList(mediaId, maxIdString)), headers: headers);
+
+    final body = jsonDecode(response.body);
+    final usersJson = body["users"] as List<dynamic>;
+    if (usersJson.isNotEmpty) {
+      nextMaxId = body['next_max_id'];
+      final List<MediaCommenterModel> newPostLikers =
+          usersJson.map((u) => MediaCommenterModel.fromJson(u as Map<String, dynamic>, mediaId)).toList();
+      mediaCommenters.addAll(newPostLikers);
     }
     return nextMaxId;
   }

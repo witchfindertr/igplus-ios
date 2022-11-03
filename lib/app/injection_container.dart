@@ -14,6 +14,8 @@ import 'package:igplus_ios/domain/repositories/local/local_repository.dart';
 import 'package:igplus_ios/domain/usecases/clear_local_data_use_case.dart';
 import 'package:igplus_ios/domain/usecases/follow_user_use_case.dart';
 import 'package:igplus_ios/domain/usecases/get_account_info_from_local_use_case.dart';
+import 'package:igplus_ios/domain/usecases/get_media_commenters_from_local_use_case.dart';
+import 'package:igplus_ios/domain/usecases/get_media_commenters_use_case.dart';
 import 'package:igplus_ios/domain/usecases/get_media_from_local_use_case.dart';
 import 'package:igplus_ios/domain/usecases/get_media_likers_from_local_use_case.dart';
 import 'package:igplus_ios/domain/usecases/get_media_likers_use_case.dart';
@@ -27,6 +29,7 @@ import 'package:igplus_ios/domain/usecases/get_report_from_local_use_case.dart';
 import 'package:igplus_ios/domain/usecases/get_stories_users_use_case.dart';
 import 'package:igplus_ios/domain/usecases/save_account_info_to_local_use_case.dart';
 import 'package:igplus_ios/domain/usecases/save_friends_to_local_use_case.dart';
+import 'package:igplus_ios/domain/usecases/save_media_commenters_to_local_use_case.dart';
 import 'package:igplus_ios/domain/usecases/save_media_likers_to_local_use_case.dart';
 import 'package:igplus_ios/domain/usecases/save_media_to_local_use_case.dart';
 import 'package:igplus_ios/domain/usecases/save_stories_to_local_use_case.dart';
@@ -36,6 +39,7 @@ import 'package:igplus_ios/domain/usecases/sign_up_with_cstom_token_use_case.dar
 import 'package:igplus_ios/domain/usecases/unfollow_user_use_case%20copy.dart';
 import 'package:igplus_ios/domain/usecases/update_report_use_case.dart';
 import 'package:igplus_ios/domain/usecases/update_story_by_id_use_case.dart';
+import 'package:igplus_ios/presentation/blocs/engagement/media_commeters/cubit/media_commenters_cubit.dart';
 import 'package:igplus_ios/presentation/blocs/engagement/media_likers/cubit/media_likers_cubit.dart';
 import 'package:igplus_ios/presentation/blocs/friends_list/cubit/friends_list_cubit.dart';
 import 'package:igplus_ios/presentation/blocs/home/report/cubit/report_cubit.dart';
@@ -130,8 +134,18 @@ Future<void> init() async {
         cacheMediaLikersToLocalUseCase: sl(),
         getMediaLikersFromLocalUseCase: sl(),
         getFriendsFromLocalUseCase: sl(),
+        getUserFeed: sl(),
+        cacheMediaToLocal: sl(),
       ));
   sl.registerFactory(() => AppBloc(authRepository: sl()));
+  sl.registerFactory(() => MediaCommentersCubit(
+        getUser: sl(),
+        getMediaFromLocalUseCase: sl(),
+        getFriendsFromLocalUseCase: sl(),
+        getMediaCommentersUseCase: sl(),
+        cacheMediaCommentersToLocalUseCase: sl(),
+        getMediaCommentersFromLocalUseCase: sl(),
+      ));
 
   // Use cases
   sl.registerLazySingleton(() => GetAccountInfoUseCase(instagramRepository: sl()));
@@ -166,17 +180,16 @@ Future<void> init() async {
   sl.registerLazySingleton(() => GetMediaLikersUseCase(instagramRepository: sl()));
   sl.registerLazySingleton(() => CacheMediaLikersToLocalUseCase(localRepository: sl()));
   sl.registerLazySingleton(() => GetMediaLikersFromLocalUseCase(localRepository: sl()));
+  sl.registerLazySingleton(() => GetMediaCommentersUseCase(instagramRepository: sl()));
+  sl.registerLazySingleton(() => CacheMediaCommentersToLocalUseCase(localRepository: sl()));
+  sl.registerLazySingleton(() => GetMediaCommentersFromLocalUseCase(localRepository: sl()));
 
   // Repositories
   sl.registerLazySingleton<FirebaseRepository>(() => FirebaseRepositporyImp(firebaseDataSource: sl()));
-
   sl.registerLazySingleton<InstagramRepository>(
       () => InstagramRepositoryImp(instagramDataSource: sl(), storyUserMapper: sl(), storyMapper: sl()));
-
   sl.registerLazySingleton<LocalRepository>(() => LocalRepositoryImpl(localDataSource: sl()));
-
   sl.registerLazySingleton<HeadersRepository>(() => HeadersRepositoryImp(firebaseDataSource: sl()));
-
   sl.registerLazySingleton<AuthRepository>(() => AuthRepositoryImp(firebaseDataSource: sl()));
 
   // Data sources

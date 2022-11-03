@@ -8,7 +8,6 @@ import 'package:igplus_ios/domain/usecases/get_media_from_local_use_case.dart';
 import 'package:igplus_ios/domain/usecases/get_user_feed_use_case.dart';
 import 'package:igplus_ios/domain/usecases/get_user_use_case.dart';
 import 'package:igplus_ios/domain/usecases/save_media_to_local_use_case.dart';
-import 'package:igplus_ios/presentation/blocs/home/report/cubit/report_cubit.dart';
 
 part 'media_list_state.dart';
 
@@ -28,33 +27,33 @@ class MediaListCubit extends Cubit<MediaListState> {
 
   final int pageSize = 10;
 
-  void init() {
+  Future<void> init() async {
     emit(MediaListLoading());
     // get media list from local
-    getMediaListFromLocal(
+    final mediaList = await getMediaListFromLocal(
       boxKey: Media.boxKey,
       pageKey: 0,
       pageSize: pageSize,
-    ).then((value) {
-      if (value != null) {
-        emit(MediaListSuccess(mediaList: value, pageKey: 0));
+    );
+
+    if (mediaList != null) {
+      emit(MediaListSuccess(mediaList: mediaList, pageKey: 0));
+    } else {
+      // get media from instagram
+      final mediaList = await getMediaListFromInstagram(
+        boxKey: Media.boxKey,
+        pageKey: 0,
+        pageSize: pageSize,
+      );
+
+      if (mediaList != null) {
+        emit(MediaListSuccess(mediaList: mediaList, pageKey: 0));
+        // cache new medai list to local
+        cacheMediaToLocal.execute(boxKey: Media.boxKey, mediaList: mediaList);
       } else {
-        // get media from instagram
-        getMediaListFromInstagram(
-          boxKey: Media.boxKey,
-          pageKey: 0,
-          pageSize: pageSize,
-        ).then((value) {
-          if (value != null) {
-            emit(MediaListSuccess(mediaList: value, pageKey: 0));
-            // cache new medai list to local
-            cacheMediaToLocal.execute(boxKey: Media.boxKey, mediaList: value);
-          } else {
-            emit(const MediaListFailure(message: 'Failed to get media list from instagram'));
-          }
-        });
+        emit(const MediaListFailure(message: 'Failed to get media list from instagram'));
       }
-    });
+    }
   }
 
   // get user feed from instagram
@@ -64,7 +63,7 @@ class MediaListCubit extends Cubit<MediaListState> {
     // get user info
     final failureOrCurrentUser = await getUser.execute();
     if (failureOrCurrentUser.isLeft()) {
-      final failure = (failureOrCurrentUser as Left).value;
+      return null;
     } else {
       currentUser = (failureOrCurrentUser as Right).value;
     }
@@ -76,24 +75,6 @@ class MediaListCubit extends Cubit<MediaListState> {
       final List<Media> mediaList = (userFeedEither as Right).value;
       // cach media on local
       await cacheMediaToLocal.execute(boxKey: Media.boxKey, mediaList: mediaList);
-
-      // get top likers
-      // List<Map<int, int>> likersLikeCount = [];
-      // for (Media media in mediaList) {
-      //   for (Friend liker in media.topLikers) {
-      //     if (likersLikeCount.isEmpty) {
-      //       likersLikeCount.add({liker.igUserId: 1});
-      //     } else {
-      //       for (var likeCount in likersLikeCount) {
-      //         if (likeCount.containsKey(liker.igUserId)) {
-      //           likeCount[liker.igUserId] = likeCount[liker.igUserId]! + 1;
-      //         } else {
-      //           likeCount[liker.igUserId] = 1;
-      //         }
-      //       }
-      //     }
-      //   }
-      // }
     }
     if (userFeedEither.isLeft()) {
       emit(const MediaListFailure(message: 'Failed to get media'));
