@@ -41,7 +41,7 @@ class ReportData extends StatelessWidget {
                 picture: accountInfo.picture,
               ),
             ),
-            // LineChartSample(chartData: report!.followersChartData),
+            // (report != null) ? LineChartSample(chartData: report!.followersChartData) : Container(),
             Padding(
               padding: const EdgeInsets.fromLTRB(8.0, 0.0, 8.0, 0.0),
               child: Row(

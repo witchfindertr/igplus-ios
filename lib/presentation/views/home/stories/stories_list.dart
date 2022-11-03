@@ -47,6 +47,29 @@ class _StoriesListState extends State<StoriesList> {
                 ),
               ));
             } else if (state is UserStoriesLoaded) {
+              if (state.userStories.isEmpty) {
+                return Center(
+                  child: SizedBox(
+                    width: MediaQuery.of(context).size.width,
+                    height: 82.00,
+                    child: Center(
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: const [
+                          Icon(
+                            FontAwesomeIcons.triangleExclamation,
+                            color: ColorsManager.secondarytextColor,
+                            size: 10.0,
+                          ),
+                          SizedBox(width: 8.00),
+                          Text("No stories available",
+                              style: TextStyle(color: ColorsManager.secondarytextColor, fontSize: 10.00)),
+                        ],
+                      ),
+                    ),
+                  ),
+                );
+              }
               return SizedBox(
                 height: 82.00,
                 child: ListView.builder(

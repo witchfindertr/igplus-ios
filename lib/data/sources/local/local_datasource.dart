@@ -318,14 +318,26 @@ class LocalDataSourceImp extends LocalDataSource {
     Box<StoriesUser> usersStorytoriesBox = Hive.box<StoriesUser>(StoriesUser.boxKey);
 
     List<Story> storiesList = usersStorytoriesBox.values.where((element) => element.id == ownerId).first.stories;
-
+    List<Story> expiredStoriesList;
     if (storiesList.isEmpty) {
       return null;
     } else {
+      // get expired stories lsit
+      int expireDate = (DateTime.now().subtract(const Duration(days: 1)).millisecondsSinceEpoch / 1000).floor();
+      expiredStoriesList = storiesList.where((element) => element.takenAt < expireDate).toList();
+
+      // remove expired stories from the list
+      for (var element in expiredStoriesList) {
+        storiesList.remove(element);
+      }
+
       if (type == "mostViewedStories") {
         // remove stories with null viewers count
         storiesList = storiesList.where((element) => element.viewersCount != null).toList();
       }
+
+      // remove stories with takenAt greater than 24 hours
+      storiesList = storiesList.where((element) => element.takenAt > expireDate).toList();
 
       return storiesList;
     }
@@ -363,11 +375,23 @@ class LocalDataSourceImp extends LocalDataSource {
     Box<StoriesUser> usersStorytoriesBox = Hive.box<StoriesUser>(StoriesUser.boxKey);
 
     List<StoriesUser> storiesUserList;
+    List<StoriesUser> expiredStoriesUserList;
 
     if (usersStorytoriesBox.isEmpty) {
       return null;
     } else {
-      storiesUserList = usersStorytoriesBox.values.toList();
+      // expired storiesUser list
+      int expireDate = (DateTime.now().millisecondsSinceEpoch / 1000).floor();
+
+      expiredStoriesUserList = usersStorytoriesBox.values.where((element) => element.expiringAt < expireDate).toList();
+
+      // remove expired storiesUser from the box
+      for (var e in expiredStoriesUserList) {
+        usersStorytoriesBox.delete(e.id);
+      }
+
+      // storiesUser where expiringAt > now
+      storiesUserList = usersStorytoriesBox.values.where((element) => element.expiringAt >= expireDate).toList();
       return storiesUserList;
     }
   }
