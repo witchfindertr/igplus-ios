@@ -16,7 +16,6 @@ import 'package:igplus_ios/domain/usecases/get_user_feed_use_case.dart';
 import 'package:igplus_ios/domain/usecases/get_user_use_case.dart';
 import 'package:igplus_ios/domain/usecases/save_media_likers_to_local_use_case.dart';
 import 'package:igplus_ios/domain/usecases/save_media_to_local_use_case.dart';
-import 'package:igplus_ios/presentation/views/insight/media/media_list/media_list.dart';
 
 part 'media_likers_state.dart';
 
@@ -121,62 +120,68 @@ class MediaLikersCubit extends Cubit<MediaLikersState> {
       emit(MediaLikersSuccess(mediaLikers: mediaLikersList, pageKey: 0));
 
       // group by user id
-      Map<String, List<MediaLiker>> mediaLikersMap = {};
-      for (var mediaLiker in mediaLikersList) {
-        if (mediaLikersMap.containsKey(mediaLiker.user.igUserId.toString())) {
-          mediaLikersMap[mediaLiker.user.igUserId.toString()]!.add(mediaLiker);
-        } else {
-          mediaLikersMap[mediaLiker.user.igUserId.toString()] = [mediaLiker];
-        }
-      }
-
-      // get followers list
-      List<Friend> followersList = [];
-      Either<Failure, List<Friend>?>? friendsListOfFailure =
-          await getFriendsFromLocalUseCase.execute(boxKey: "followers", pageKey: 0, pageSize: 1000);
-      if (friendsListOfFailure != null && friendsListOfFailure.isRight()) {
-        followersList = friendsListOfFailure.getOrElse(() => null) ?? [];
-      }
-      // get following list
-      List<Friend> followingList = [];
-      Either<Failure, List<Friend>?>? followingListOfFailure =
-          await getFriendsFromLocalUseCase.execute(boxKey: "followings", pageKey: 0, pageSize: 1000);
-      if (followingListOfFailure != null && followingListOfFailure.isRight()) {
-        followingList = followingListOfFailure.getOrElse(() => null) ?? [];
-      }
-
-      // format MedialLiker List to MediaLikers
-      List<MediaLikers> mediaLikers = [];
-      mediaLikersMap.forEach((key, value) {
-        // check if user is following me
-        bool following = false;
-        bool followedBy = false;
-        if (followersList.indexWhere((element) => element.igUserId == int.parse(key)) != -1) {
-          followedBy = true;
-        }
-        if (followingList.indexWhere((element) => element.igUserId == int.parse(key)) != -1) {
-          following = true;
-        }
-        mediaLikers.add(MediaLikersModel.fromMediaLiker(value, key, followedBy, following).toEntity());
-      });
-
-      // sort by likesCount
-      mediaLikers.sort((a, b) => b.likesCount.compareTo(a.likesCount));
-
-      // paginate
-      int? startKey;
-      int? endKey;
-      startKey = pageKey;
-      endKey = startKey + pageSize;
-      if (endKey > mediaLikers.length - 1) {
-        endKey = mediaLikers.length;
-      }
-      mediaLikers = mediaLikers.sublist(startKey, endKey);
-
-      return mediaLikers;
+      return await getMostLikesFromMediaLikes(mediaLikersList, pageKey, pageSize);
     }
 
     return null;
+  }
+
+  Future<List<MediaLikers>> getMostLikesFromMediaLikes(
+      List<MediaLiker> mediaLikersList, int pageKey, int pageSize) async {
+    // group by user id
+    Map<String, List<MediaLiker>> mediaLikersMap = {};
+    for (var mediaLiker in mediaLikersList) {
+      if (mediaLikersMap.containsKey(mediaLiker.user.igUserId.toString())) {
+        mediaLikersMap[mediaLiker.user.igUserId.toString()]!.add(mediaLiker);
+      } else {
+        mediaLikersMap[mediaLiker.user.igUserId.toString()] = [mediaLiker];
+      }
+    }
+
+    // get followers list
+    List<Friend> followersList = [];
+    Either<Failure, List<Friend>?>? friendsListOfFailure =
+        await getFriendsFromLocalUseCase.execute(boxKey: "followers", pageKey: 0, pageSize: 10000);
+    if (friendsListOfFailure != null && friendsListOfFailure.isRight()) {
+      followersList = friendsListOfFailure.getOrElse(() => null) ?? [];
+    }
+    // get following list
+    List<Friend> followingList = [];
+    Either<Failure, List<Friend>?>? followingListOfFailure =
+        await getFriendsFromLocalUseCase.execute(boxKey: "followings", pageKey: 0, pageSize: 10000);
+    if (followingListOfFailure != null && followingListOfFailure.isRight()) {
+      followingList = followingListOfFailure.getOrElse(() => null) ?? [];
+    }
+
+    // format MedialLiker List to MediaLikers
+    List<MediaLikers> mediaLikers = [];
+    mediaLikersMap.forEach((key, value) {
+      // check if user is following me
+      bool following = false;
+      bool followedBy = false;
+      if (followersList.indexWhere((element) => element.igUserId == int.parse(key)) != -1) {
+        followedBy = true;
+      }
+      if (followingList.indexWhere((element) => element.igUserId == int.parse(key)) != -1) {
+        following = true;
+      }
+      mediaLikers.add(MediaLikersModel.fromMediaLiker(value, key, followedBy, following).toEntity());
+    });
+
+    // sort by likesCount
+    mediaLikers.sort((a, b) => b.likesCount.compareTo(a.likesCount));
+
+    // paginate
+    int? startKey;
+    int? endKey;
+    startKey = pageKey;
+    endKey = startKey + pageSize;
+    if (endKey > mediaLikers.length - 1) {
+      endKey = mediaLikers.length;
+    }
+    mediaLikers = mediaLikers.sublist(startKey, endKey);
+
+    return mediaLikers;
   }
 
   Future<User> getCurrentUser() async {

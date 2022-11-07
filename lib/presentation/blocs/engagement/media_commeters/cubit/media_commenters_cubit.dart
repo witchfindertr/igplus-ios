@@ -113,62 +113,68 @@ class MediaCommentersCubit extends Cubit<MediaCommentersState> {
       emit(MediaCommentersSuccess(mediaCommenters: mediaCommentersList, pageKey: 0));
 
       // group by user id
-      Map<String, List<MediaCommenter>> mediaCommentersMap = {};
-      for (var mediaCommenter in mediaCommentersList) {
-        if (mediaCommentersMap.containsKey(mediaCommenter.user.igUserId.toString())) {
-          mediaCommentersMap[mediaCommenter.user.igUserId.toString()]!.add(mediaCommenter);
-        } else {
-          mediaCommentersMap[mediaCommenter.user.igUserId.toString()] = [mediaCommenter];
-        }
-      }
-
-      // get followers list
-      List<Friend> followersList = [];
-      Either<Failure, List<Friend>?>? friendsListOfFailure =
-          await getFriendsFromLocalUseCase.execute(boxKey: "followers", pageKey: 0, pageSize: 1000);
-      if (friendsListOfFailure != null && friendsListOfFailure.isRight()) {
-        followersList = friendsListOfFailure.getOrElse(() => null) ?? [];
-      }
-      // get following list
-      List<Friend> followingList = [];
-      Either<Failure, List<Friend>?>? followingListOfFailure =
-          await getFriendsFromLocalUseCase.execute(boxKey: "followings", pageKey: 0, pageSize: 1000);
-      if (followingListOfFailure != null && followingListOfFailure.isRight()) {
-        followingList = followingListOfFailure.getOrElse(() => null) ?? [];
-      }
-
-      // format MedialCommenter List to MediaCommenters
-      List<MediaCommenters> mediaCommenters = [];
-      mediaCommentersMap.forEach((key, value) {
-        // check if user is following me
-        bool following = false;
-        bool followedBy = false;
-        if (followersList.indexWhere((element) => element.igUserId == int.parse(key)) != -1) {
-          followedBy = true;
-        }
-        if (followingList.indexWhere((element) => element.igUserId == int.parse(key)) != -1) {
-          following = true;
-        }
-        mediaCommenters.add(MediaCommentersModel.fromMediaCommenter(value, key, followedBy, following).toEntity());
-      });
-
-      // sort by commentsCount
-      mediaCommenters.sort((a, b) => b.commentsCount.compareTo(a.commentsCount));
-
-      // paginate
-      int? startKey;
-      int? endKey;
-      startKey = pageKey;
-      endKey = startKey + pageSize;
-      if (endKey > mediaCommenters.length - 1) {
-        endKey = mediaCommenters.length;
-      }
-      mediaCommenters = mediaCommenters.sublist(startKey, endKey);
-
-      return mediaCommenters;
+      return await getMostCommentsFromMediaComments(mediaCommentersList, pageKey, pageSize);
     }
 
     return null;
+  }
+
+  Future<List<MediaCommenters>> getMostCommentsFromMediaComments(
+      List<MediaCommenter> mediaCommentersList, int pageKey, int pageSize) async {
+    // group by user id
+    Map<String, List<MediaCommenter>> mediaCommentersMap = {};
+    for (var mediaCommenter in mediaCommentersList) {
+      if (mediaCommentersMap.containsKey(mediaCommenter.user.igUserId.toString())) {
+        mediaCommentersMap[mediaCommenter.user.igUserId.toString()]!.add(mediaCommenter);
+      } else {
+        mediaCommentersMap[mediaCommenter.user.igUserId.toString()] = [mediaCommenter];
+      }
+    }
+
+    // get followers list
+    List<Friend> followersList = [];
+    Either<Failure, List<Friend>?>? friendsListOfFailure =
+        await getFriendsFromLocalUseCase.execute(boxKey: "followers", pageKey: 0, pageSize: 10000);
+    if (friendsListOfFailure != null && friendsListOfFailure.isRight()) {
+      followersList = friendsListOfFailure.getOrElse(() => null) ?? [];
+    }
+    // get following list
+    List<Friend> followingList = [];
+    Either<Failure, List<Friend>?>? followingListOfFailure =
+        await getFriendsFromLocalUseCase.execute(boxKey: "followings", pageKey: 0, pageSize: 10000);
+    if (followingListOfFailure != null && followingListOfFailure.isRight()) {
+      followingList = followingListOfFailure.getOrElse(() => null) ?? [];
+    }
+
+    // format MedialCommenter List to MediaCommenters
+    List<MediaCommenters> mediaCommenters = [];
+    mediaCommentersMap.forEach((key, value) {
+      // check if user is following me
+      bool following = false;
+      bool followedBy = false;
+      if (followersList.indexWhere((element) => element.igUserId == int.parse(key)) != -1) {
+        followedBy = true;
+      }
+      if (followingList.indexWhere((element) => element.igUserId == int.parse(key)) != -1) {
+        following = true;
+      }
+      mediaCommenters.add(MediaCommentersModel.fromMediaCommenter(value, key, followedBy, following).toEntity());
+    });
+
+    // sort by commentsCount
+    mediaCommenters.sort((a, b) => b.commentsCount.compareTo(a.commentsCount));
+
+    // paginate
+    int? startKey;
+    int? endKey;
+    startKey = pageKey;
+    endKey = startKey + pageSize;
+    if (endKey > mediaCommenters.length - 1) {
+      endKey = mediaCommenters.length;
+    }
+    mediaCommenters = mediaCommenters.sublist(startKey, endKey);
+
+    return mediaCommenters;
   }
 
   Future<User> getCurrentUser() async {

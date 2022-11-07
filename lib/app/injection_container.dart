@@ -155,7 +155,13 @@ Future<void> init() async {
   sl.registerLazySingleton(() => UpdateUserUseCase(instagramRepository: sl(), firebaseRepository: sl()));
   sl.registerLazySingleton(() => GetUserUseCase(firebaseRepository: sl()));
   sl.registerLazySingleton(() => GetFriendsFromLocalUseCase(localRepository: sl()));
-  sl.registerLazySingleton(() => UpdateReportUseCase(instagramRepository: sl(), localRepository: sl()));
+  sl.registerLazySingleton(() => UpdateReportUseCase(
+        instagramRepository: sl(),
+        localRepository: sl(),
+        getMediaLikersFromLocalUseCase: sl(),
+        getMediaCommentersFromLocalUseCase: sl(),
+        getFriendsFromLocalUseCase: sl(),
+      ));
   sl.registerLazySingleton(() => GetStoriesUsersUseCase(instagramRepository: sl()));
   sl.registerLazySingleton(() => GetReportFromLocalUseCase(localRepository: sl()));
   sl.registerLazySingleton(() => GetStoriesUseCase(instagramRepository: sl()));

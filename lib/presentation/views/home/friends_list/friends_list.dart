@@ -6,8 +6,8 @@ import 'package:igplus_ios/domain/entities/friend.dart';
 import 'package:igplus_ios/presentation/blocs/friends_list/cubit/friends_list_cubit.dart';
 import 'package:igplus_ios/presentation/resources/colors_manager.dart';
 import 'package:igplus_ios/presentation/resources/theme_manager.dart';
-import 'package:igplus_ios/presentation/views/friends_list/friend_list_item.dart';
-import 'package:igplus_ios/presentation/views/friends_list/friend_search.dart';
+import 'package:igplus_ios/presentation/views/home/friends_list/friend_list_item.dart';
+import 'package:igplus_ios/presentation/views/home/friends_list/friend_search.dart';
 import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
 
 class FriendsList extends StatefulWidget {
@@ -30,7 +30,6 @@ class _FriendsListState extends State<FriendsList> {
 
   @override
   void initState() {
-    // TODO: implement initState
     _pagingController.addPageRequestListener((pageKey) {
       _fetchPage(pageKey);
     });
@@ -108,6 +107,9 @@ class _FriendsListState extends State<FriendsList> {
         break;
       case "mutualFollowings":
         pageTitle = "Mutual Followings";
+        break;
+      case "whoAdmiresYou":
+        pageTitle = "Who Admires You";
         break;
       default:
         pageTitle = "";

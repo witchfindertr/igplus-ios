@@ -9,7 +9,7 @@ class GetMediaLikersFromLocalUseCase {
   GetMediaLikersFromLocalUseCase({required this.localRepository});
 
   Either<Failure, List<MediaLiker>?> execute(
-      {int? mediaId, required String boxKey, required int pageKey, required int pageSize, String? searchTerm}) {
+      {String? mediaId, required String boxKey, required int pageKey, required int pageSize, String? searchTerm}) {
     try {
       final mediaLikers = localRepository.getCachedMediaLikersList(
           mediaId: mediaId, boxKey: boxKey, pageKey: pageKey, pageSize: pageSize, searchTerm: searchTerm);

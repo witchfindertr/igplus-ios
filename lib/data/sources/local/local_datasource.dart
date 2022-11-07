@@ -46,7 +46,7 @@ abstract class LocalDataSource {
   Future<void> updateStoryById({required String boxKey, required String mediaId, int? viewersCount});
   Future<void> cacheMediaLikersList({required List<MediaLiker> mediaLikersList, required String boxKey});
   List<MediaLiker>? getCachedMediaLikersList(
-      {required String boxKey, int? mediaId, int? pageKey, int? pageSize, String? searchTerm});
+      {required String boxKey, String? mediaId, int? pageKey, int? pageSize, String? searchTerm});
   Future<void> cacheMediaCommentersList({required List<MediaCommenter> mediaCommentersList, required String boxKey});
   List<MediaCommenter>? getCachedMediaCommentersList(
       {required String boxKey, int? mediaId, int? pageKey, int? pageSize, String? searchTerm});
@@ -463,9 +463,10 @@ class LocalDataSourceImp extends LocalDataSource {
   }
 
   // get media likers list from local storage
+  //TODO: to be uptimized (add limit and offset)
   @override
   List<MediaLiker>? getCachedMediaLikersList(
-      {required String boxKey, int? mediaId, int? pageKey, int? pageSize, String? searchTerm}) {
+      {required String boxKey, String? mediaId, int? pageKey, int? pageSize, String? searchTerm}) {
     Box<MediaLiker> mediaLikersBox = Hive.box<MediaLiker>(MediaLiker.boxKey);
     List<MediaLiker> mediaLikersList;
 

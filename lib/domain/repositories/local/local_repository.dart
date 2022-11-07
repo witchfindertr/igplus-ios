@@ -86,7 +86,7 @@ abstract class LocalRepository {
   // media likers
   Future<void> cacheMediaLikersList({required List<MediaLiker> mediaLikersList, required String boxKey});
   Either<Failure, List<MediaLiker>?> getCachedMediaLikersList(
-      {required String boxKey, int? mediaId, int? pageKey, int? pageSize, String? searchTerm});
+      {required String boxKey, String? mediaId, int? pageKey, int? pageSize, String? searchTerm});
 
   // media commenters
   Future<void> cacheMediaCommentersList({required List<MediaCommenter> mediaCommentersList, required String boxKey});
