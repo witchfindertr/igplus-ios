@@ -3,15 +3,9 @@ import 'dart:async';
 import 'package:bloc/bloc.dart';
 import 'package:dartz/dartz.dart';
 import 'package:equatable/equatable.dart';
-import 'package:hive/hive.dart';
 import 'package:igplus_ios/data/failure.dart';
 import 'package:igplus_ios/domain/entities/account_info.dart';
-import 'package:igplus_ios/domain/entities/media.dart';
-import 'package:igplus_ios/domain/entities/media_commenter.dart';
-import 'package:igplus_ios/domain/entities/media_commenters.dart';
-import 'package:igplus_ios/domain/entities/stories_user.dart';
-import 'package:igplus_ios/domain/entities/story.dart';
-import 'package:igplus_ios/domain/entities/story_viewer.dart';
+import 'package:igplus_ios/domain/entities/likes_and_comments.dart';
 import 'package:igplus_ios/domain/entities/user.dart';
 import 'package:igplus_ios/domain/repositories/auth/auth_repository.dart';
 import 'package:igplus_ios/domain/usecases/clear_local_data_use_case.dart';
@@ -22,12 +16,12 @@ import 'package:igplus_ios/domain/usecases/get_user_feed_use_case.dart';
 import 'package:igplus_ios/domain/usecases/get_friends_from_local_use_case.dart';
 import 'package:igplus_ios/domain/usecases/get_report_from_local_use_case.dart';
 import 'package:igplus_ios/domain/usecases/get_user_use_case.dart';
+import 'package:igplus_ios/domain/usecases/get_who_admires_you_from_local_use_case.dart';
 import 'package:igplus_ios/domain/usecases/save_account_info_to_local_use_case.dart';
 import 'package:igplus_ios/domain/usecases/save_media_to_local_use_case.dart';
 import 'package:igplus_ios/domain/usecases/update_report_use_case.dart';
 
 import 'package:igplus_ios/domain/entities/report.dart';
-import 'package:igplus_ios/presentation/views/engagement/media_commenters/media_commenters_list.dart';
 
 part 'report_state.dart';
 
@@ -43,6 +37,7 @@ class ReportCubit extends Cubit<ReportState> {
   final CacheAccountInfoToLocalUseCase cacheAccountInfoToLocalUseCase;
   final ClearAllBoxesUseCase clearAllBoxesUseCase;
   final AuthRepository authRepository;
+  final GetWhoAdmiresYouFromLocalUseCase getWhoAdmiresYouFromLocalUseCase;
   late final StreamSubscription authSubscription;
   ReportCubit({
     required this.updateReport,
@@ -56,6 +51,7 @@ class ReportCubit extends Cubit<ReportState> {
     required this.cacheAccountInfoToLocalUseCase,
     required this.clearAllBoxesUseCase,
     required this.authRepository,
+    required this.getWhoAdmiresYouFromLocalUseCase,
   }) : super(ReportInitial()) {
     authSubscription = authRepository.authUser.listen((user) {
       init();

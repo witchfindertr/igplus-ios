@@ -6,7 +6,7 @@ import 'package:igplus_ios/domain/entities/story_viewer.dart';
 import 'package:igplus_ios/presentation/blocs/insight/stories_insight/story_viewers/cubit/story_viewers_cubit.dart';
 import 'package:igplus_ios/presentation/resources/colors_manager.dart';
 import 'package:igplus_ios/presentation/resources/theme_manager.dart';
-import 'package:igplus_ios/presentation/views/friends_list/friend_search.dart';
+import 'package:igplus_ios/presentation/views/home/friends_list/friend_search.dart';
 import 'package:igplus_ios/presentation/views/insight/stories/story_viewers_list/story_viewers_list_item.dart';
 import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
 

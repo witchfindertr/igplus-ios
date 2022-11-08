@@ -3,8 +3,9 @@ import 'package:igplus_ios/app/bloc/app_bloc.dart';
 import 'package:igplus_ios/domain/entities/stories_user.dart';
 import 'package:igplus_ios/presentation/views/engagement/media_commenters/media_commenters_list.dart';
 import 'package:igplus_ios/presentation/views/engagement/media_likers/media_likers_list.dart';
-import 'package:igplus_ios/presentation/views/friends_list/friends_list.dart';
+import 'package:igplus_ios/presentation/views/home/friends_list/friends_list.dart';
 import 'package:igplus_ios/presentation/views/home/stories/stories_view.dart';
+import 'package:igplus_ios/presentation/views/home/who_admires_you/who_admires_you_list.dart';
 import 'package:igplus_ios/presentation/views/insight/stories/stories_list/stories_insight_list.dart';
 import 'package:igplus_ios/presentation/views/insight/stories/story_viewers_list/story_viewers_list.dart';
 import 'package:igplus_ios/presentation/views/insight/stories/stories_viewers_insight_list/stories_viewers_insight_list.dart';
@@ -52,6 +53,10 @@ GoRouter routes(AppBloc appBloc) {
               builder: (context, state) => FriendsList(type: state.params['type'] ?? ""),
             ),
             GoRoute(
+              path: 'whoAdmiresYou',
+              builder: (context, state) => const WhoAdmiresYouList(type: "whoAdmiresYou"),
+            ),
+            GoRoute(
               path: 'storiesView',
               builder: (context, state) => StoriesView(storyOwner: state.extra! as StoryOwner),
             ),
@@ -75,10 +80,10 @@ GoRouter routes(AppBloc appBloc) {
             GoRoute(
                 path: 'engagement/:type',
                 builder: (context, state) {
-                  if (state.params['type'] == 'mostLikes') {
-                    return MediaLikersList(type: state.params['type'] ?? "");
-                  } else if (state.params['type'] == 'mostComments') {
-                    return MediaCommentersList(type: state.params['type'] ?? "");
+                  if (state.params['type'] == 'mostComments' ||
+                      state.params['type'] == 'commentersNotFollow' ||
+                      state.params['type'] == 'leastCommentsGiven') {
+                    return MediaCommentersList(type: state.params['type']!);
                   }
                   return MediaLikersList(type: state.params['type'] ?? "");
                 }),

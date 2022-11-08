@@ -22,8 +22,6 @@ class CacheFriendsToLocalUseCase {
       return localRepository.cacheFriendsList(boxKey: Friend.youHaveUnfollowedBoxKey, friendsList: friendsList);
     } else if (boxKey == "mutualFollowings") {
       return localRepository.cacheFriendsList(boxKey: Friend.mutualFollowingsBoxKey, friendsList: friendsList);
-    } else if (boxKey == "whoAdmiresYou") {
-      return localRepository.cacheFriendsList(boxKey: Friend.whoAdmiresYouBoxKey, friendsList: friendsList);
     } else if (boxKey == "newStoryViewers") {
       return localRepository.cacheFriendsList(boxKey: Friend.newStoryViewersBoxKey, friendsList: friendsList);
     }

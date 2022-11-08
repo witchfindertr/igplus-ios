@@ -9,7 +9,6 @@ class Friend extends Equatable {
   static const String followingsBoxKey = "followingsBoxKey";
   static const String newFollowersBoxKey = "newFollowersBoxKey";
   static const String lostFollowersBoxKey = "lostFollowersBoxKey";
-  static const String whoAdmiresYouBoxKey = "whoAdmiresYouBoxKey";
   static const String notFollowingBackBoxKey = "notFollowingBackBoxKey";
   static const String youDontFollowBackBoxKey = "youDontFollowBackBoxKey";
   static const String mutualFollowingsBoxKey = "mutualFollowingsBoxKey";

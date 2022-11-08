@@ -4,6 +4,7 @@ import 'package:hive/hive.dart';
 import 'package:igplus_ios/domain/entities/account_info.dart';
 import 'package:igplus_ios/domain/entities/friend.dart';
 import 'package:http/http.dart' as http;
+import 'package:igplus_ios/domain/entities/likes_and_comments.dart';
 import 'package:igplus_ios/domain/entities/media.dart';
 import 'package:igplus_ios/domain/entities/media_commenter.dart';
 import 'package:igplus_ios/domain/entities/media_liker.dart';
@@ -46,10 +47,13 @@ abstract class LocalDataSource {
   Future<void> updateStoryById({required String boxKey, required String mediaId, int? viewersCount});
   Future<void> cacheMediaLikersList({required List<MediaLiker> mediaLikersList, required String boxKey});
   List<MediaLiker>? getCachedMediaLikersList(
-      {required String boxKey, int? mediaId, int? pageKey, int? pageSize, String? searchTerm});
+      {required String boxKey, String? mediaId, int? pageKey, int? pageSize, String? searchTerm});
   Future<void> cacheMediaCommentersList({required List<MediaCommenter> mediaCommentersList, required String boxKey});
   List<MediaCommenter>? getCachedMediaCommentersList(
       {required String boxKey, int? mediaId, int? pageKey, int? pageSize, String? searchTerm});
+  Future<void> cacheWhoAdmiresYouList({required List<LikesAndComments> whoAdmiresYouList, required String boxKey});
+  List<LikesAndComments>? getCachedWhoAdmiresYouList(
+      {required String boxKey, int? pageKey, int? pageSize, String? searchTerm});
 }
 
 class LocalDataSourceImp extends LocalDataSource {
@@ -463,9 +467,10 @@ class LocalDataSourceImp extends LocalDataSource {
   }
 
   // get media likers list from local storage
+  //TODO: to be uptimized (add limit and offset)
   @override
   List<MediaLiker>? getCachedMediaLikersList(
-      {required String boxKey, int? mediaId, int? pageKey, int? pageSize, String? searchTerm}) {
+      {required String boxKey, String? mediaId, int? pageKey, int? pageSize, String? searchTerm}) {
     Box<MediaLiker> mediaLikersBox = Hive.box<MediaLiker>(MediaLiker.boxKey);
     List<MediaLiker> mediaLikersList;
 
@@ -531,6 +536,44 @@ class LocalDataSourceImp extends LocalDataSource {
   }
 
   // ----------------------->
+  // WhoAdmiresYou Stats List ------------------>
+  // ----------------------->
+  // cache WhoAdmiresYou list
+  @override
+  Future<void> cacheWhoAdmiresYouList(
+      {required List<LikesAndComments> whoAdmiresYouList, required String boxKey}) async {
+    // open box
+    Box<LikesAndComments> whoAdmiresYouBox = Hive.box<LikesAndComments>(boxKey);
+    // put WhoAdmiresYou in the box
+    int count = 0;
+    for (var e in whoAdmiresYouList) {
+      count++;
+      await whoAdmiresYouBox.put(count, e);
+    }
+  }
+
+  // get WhoAdmiresYou from local storage
+  @override
+  List<LikesAndComments>? getCachedWhoAdmiresYouList(
+      {required String boxKey, int? pageKey, int? pageSize, String? searchTerm}) {
+    Box<LikesAndComments> whoAdmiresYouBox = Hive.box<LikesAndComments>(boxKey);
+    List<LikesAndComments> whoAdmiresYouList;
+
+    if (whoAdmiresYouBox.isEmpty) {
+      return null;
+    } else {
+      whoAdmiresYouList = whoAdmiresYouBox.values.toList();
+
+      // search
+      if (searchTerm != null) {
+        whoAdmiresYouList = whoAdmiresYouList.where((c) => c.user.username.toLowerCase().contains(searchTerm)).toList();
+      }
+
+      return whoAdmiresYouList;
+    }
+  }
+
+  // ----------------------->
   // Clear all boxes ------------------>
   // ----------------------->
   @override
@@ -539,7 +582,6 @@ class LocalDataSourceImp extends LocalDataSource {
     await Hive.box<Friend>(Friend.followingsBoxKey).clear();
     await Hive.box<Friend>(Friend.newFollowersBoxKey).clear();
     await Hive.box<Friend>(Friend.lostFollowersBoxKey).clear();
-    await Hive.box<Friend>(Friend.whoAdmiresYouBoxKey).clear();
     await Hive.box<Friend>(Friend.notFollowingBackBoxKey).clear();
     await Hive.box<Friend>(Friend.youDontFollowBackBoxKey).clear();
     await Hive.box<Friend>(Friend.mutualFollowingsBoxKey).clear();
@@ -552,5 +594,7 @@ class LocalDataSourceImp extends LocalDataSource {
     await Hive.box<StoriesUser>(StoriesUser.boxKey).clear();
     await Hive.box<StoryViewer>(StoryViewer.boxKey).clear();
     await Hive.box<MediaLiker>(MediaLiker.boxKey).clear();
+    await Hive.box<MediaCommenter>(MediaCommenter.boxKey).clear();
+    await Hive.box<LikesAndComments>(LikesAndComments.boxKey).clear();
   }
 }

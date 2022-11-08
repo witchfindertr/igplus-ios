@@ -2,27 +2,27 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
-import 'package:igplus_ios/domain/entities/stories_viewers.dart';
-import 'package:igplus_ios/presentation/blocs/insight/stories_insight/story_viewers/cubit/story_viewers_cubit.dart';
+import 'package:igplus_ios/domain/entities/friend.dart';
+import 'package:igplus_ios/presentation/blocs/friends_list/cubit/friends_list_cubit.dart';
 import 'package:igplus_ios/presentation/resources/colors_manager.dart';
 import 'package:igplus_ios/presentation/resources/theme_manager.dart';
+import 'package:igplus_ios/presentation/views/home/friends_list/friend_list_item.dart';
 import 'package:igplus_ios/presentation/views/home/friends_list/friend_search.dart';
-import 'package:igplus_ios/presentation/views/insight/stories/stories_viewers_insight_list/stories_viewers_insight_list_item.dart';
 import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
 
-class StoriesViewersInsightList extends StatefulWidget {
-  const StoriesViewersInsightList({Key? key, required this.type}) : super(key: key);
+class FriendsList extends StatefulWidget {
+  const FriendsList({Key? key, required this.type}) : super(key: key);
 
   final String type;
 
   @override
-  State<StoriesViewersInsightList> createState() => _StoriesViewersInsightState();
+  State<FriendsList> createState() => _FriendsListState();
 }
 
-class _StoriesViewersInsightState extends State<StoriesViewersInsightList> {
+class _FriendsListState extends State<FriendsList> {
   static const _pageSize = 15;
   static const int _initialPageKey = 0;
-  final PagingController<int, StoriesViewer> _pagingController = PagingController(firstPageKey: _initialPageKey);
+  final PagingController<int, Friend> _pagingController = PagingController(firstPageKey: _initialPageKey);
   String? _searchTerm;
   bool _showSearchForm = false;
   late ScrollController _scrollController;
@@ -66,26 +66,19 @@ class _StoriesViewersInsightState extends State<StoriesViewersInsightList> {
 
   Future<void> _fetchPage(pageKey) async {
     try {
-      final List<StoriesViewer>? topStoriesViewers;
-      if (widget.type == "viewersYouDontFollow") {
-        topStoriesViewers = await context.read<StoryViewersCubit>().getViewersYouDontFollow();
-      } else if (widget.type == "viewersNotFollowingYou") {
-        topStoriesViewers = await context.read<StoryViewersCubit>().getViewersNotFollowingYouBack();
-      } else if (widget.type == "topStoriesViewers") {
-        topStoriesViewers = await context.read<StoryViewersCubit>().getTopViewersList();
-      } else {
-        topStoriesViewers = null;
-      }
+      final List<Friend>? friendsList = await context
+          .read<FriendsListCubit>()
+          .getFriendsList(boxKey: widget.type, pageKey: pageKey, pageSize: _pageSize, searchTerm: _searchTerm);
 
-      if (topStoriesViewers == null || topStoriesViewers.isEmpty) {
+      if (friendsList == null || friendsList.isEmpty) {
         _pagingController.appendLastPage([]);
       } else {
-        final isLastPage = topStoriesViewers.length < _pageSize || topStoriesViewers.length > _pageSize;
+        final isLastPage = friendsList.length < _pageSize;
         if (isLastPage) {
-          _pagingController.appendLastPage(topStoriesViewers);
+          _pagingController.appendLastPage(friendsList);
         } else {
-          final nextPageKey = pageKey + topStoriesViewers.length;
-          _pagingController.appendPage(topStoriesViewers, nextPageKey);
+          final nextPageKey = pageKey + friendsList.length;
+          _pagingController.appendPage(friendsList, nextPageKey);
         }
       }
     } catch (error) {
@@ -97,15 +90,25 @@ class _StoriesViewersInsightState extends State<StoriesViewersInsightList> {
   Widget build(BuildContext context) {
     final String pageTitle;
     switch (widget.type) {
-      case "topStoriesViewers":
-        pageTitle = "Top Viewers";
+      case "notFollowingBack":
+        pageTitle = "Didn't Following You Back";
         break;
-      case "viewersNotFollowingYou":
-        pageTitle = "Viewers Not Following You";
+      case "youDontFollowBack":
+        pageTitle = "You Don't Follow Back";
         break;
-      case "viewersYouDontFollow":
-        pageTitle = "Viewers You Don't Follow";
+      case "newFollowers":
+        pageTitle = "New Followers";
         break;
+      case "lostFollowers":
+        pageTitle = "Lost Followers";
+        break;
+      case "youHaveUnfollowed":
+        pageTitle = "You Have Unfollowed";
+        break;
+      case "mutualFollowings":
+        pageTitle = "Mutual Followings";
+        break;
+
       default:
         pageTitle = "";
         break;
@@ -147,7 +150,7 @@ class _StoriesViewersInsightState extends State<StoriesViewersInsightList> {
         theme: appMaterialTheme(),
         home: Scaffold(
           backgroundColor: ColorsManager.appBack,
-          body: BlocBuilder<StoryViewersCubit, StoryViewersState>(
+          body: BlocBuilder<FriendsListCubit, FriendsListState>(
             builder: (context, state) {
               return (_showSearchForm)
                   ? CustomScrollView(
@@ -157,13 +160,14 @@ class _StoriesViewersInsightState extends State<StoriesViewersInsightList> {
                           onChanged: (searchTerm) => _updateSearchTerm(searchTerm),
                           searchFocusNode: _searchFocusNode,
                         ),
-                        PagedSliverList<int, StoriesViewer>(
+                        PagedSliverList<int, Friend>(
                           pagingController: _pagingController,
-                          builderDelegate: PagedChildBuilderDelegate<StoriesViewer>(
+                          builderDelegate: PagedChildBuilderDelegate<Friend>(
                             animateTransitions: true,
-                            itemBuilder: (context, item, index) => StoriesViewersInsightListItem(
-                              storiesTopViewer: item,
+                            itemBuilder: (context, item, index) => FriendListItem(
+                              friend: item,
                               index: index,
+                              type: widget.type,
                             ),
                           ),
                         )
@@ -172,13 +176,14 @@ class _StoriesViewersInsightState extends State<StoriesViewersInsightList> {
                   : CustomScrollView(
                       controller: _scrollController,
                       slivers: <Widget>[
-                        PagedSliverList<int, StoriesViewer>(
+                        PagedSliverList<int, Friend>(
                           pagingController: _pagingController,
-                          builderDelegate: PagedChildBuilderDelegate<StoriesViewer>(
+                          builderDelegate: PagedChildBuilderDelegate<Friend>(
                             animateTransitions: true,
-                            itemBuilder: (context, item, index) => StoriesViewersInsightListItem(
-                              storiesTopViewer: item,
+                            itemBuilder: (context, item, index) => FriendListItem(
+                              friend: item,
                               index: index,
+                              type: widget.type,
                             ),
                           ),
                         ),

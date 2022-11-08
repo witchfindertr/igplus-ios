@@ -3,6 +3,7 @@ import 'package:igplus_ios/data/failure.dart';
 import 'package:igplus_ios/data/sources/local/local_datasource.dart';
 import 'package:igplus_ios/domain/entities/account_info.dart';
 import 'package:igplus_ios/domain/entities/friend.dart';
+import 'package:igplus_ios/domain/entities/likes_and_comments.dart';
 import 'package:igplus_ios/domain/entities/media.dart';
 import 'package:igplus_ios/domain/entities/media_commenter.dart';
 import 'package:igplus_ios/domain/entities/media_liker.dart';
@@ -205,7 +206,7 @@ class LocalRepositoryImpl implements LocalRepository {
 
   @override
   Either<Failure, List<MediaLiker>?> getCachedMediaLikersList(
-      {required String boxKey, int? mediaId, int? pageKey, int? pageSize, String? searchTerm}) {
+      {required String boxKey, String? mediaId, int? pageKey, int? pageSize, String? searchTerm}) {
     try {
       final List<MediaLiker>? cachedMediaLikersList = localDataSource.getCachedMediaLikersList(
         boxKey: boxKey,
@@ -244,6 +245,28 @@ class LocalRepositoryImpl implements LocalRepository {
       return Right(cachedMediaCommentersList);
     } catch (e) {
       return const Left(InvalidParamsFailure("getCachedMediaCommentersList catch"));
+    }
+  }
+
+  // WhoAdmiresYou list
+  @override
+  Future<void> cacheWhoAdmiresYouList(
+      {required List<LikesAndComments> whoAdmiresYouList, required String boxKey}) async {
+    await localDataSource.cacheWhoAdmiresYouList(
+      whoAdmiresYouList: whoAdmiresYouList,
+      boxKey: boxKey,
+    );
+  }
+
+  @override
+  Either<Failure, List<LikesAndComments>?> getCachedWhoAdmiresYouList(
+      {required String boxKey, int? pageKey, int? pageSize, String? searchTerm}) {
+    try {
+      final List<LikesAndComments>? cachedWhoAdmiresYouList =
+          localDataSource.getCachedWhoAdmiresYouList(boxKey: boxKey);
+      return Right(cachedWhoAdmiresYouList);
+    } catch (e) {
+      return const Left(InvalidParamsFailure("getCachedWhoAdmiresYouList catch"));
     }
   }
 

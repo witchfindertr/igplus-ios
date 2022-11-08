@@ -35,13 +35,14 @@ class ReportAdapter extends TypeAdapter<Report> {
       notFollowingBackCycle: fields[15] as int,
       youDontFollowBackCycle: fields[16] as int,
       mutualFollowingsCycle: fields[17] as int,
+      whoAdmiresYou: (fields[18] as List).cast<LikesAndComments>(),
     );
   }
 
   @override
   void write(BinaryWriter writer, Report obj) {
     writer
-      ..writeByte(18)
+      ..writeByte(19)
       ..writeByte(0)
       ..write(obj.followers)
       ..writeByte(1)
@@ -77,7 +78,9 @@ class ReportAdapter extends TypeAdapter<Report> {
       ..writeByte(16)
       ..write(obj.youDontFollowBackCycle)
       ..writeByte(17)
-      ..write(obj.mutualFollowingsCycle);
+      ..write(obj.mutualFollowingsCycle)
+      ..writeByte(18)
+      ..write(obj.whoAdmiresYou);
   }
 
   @override

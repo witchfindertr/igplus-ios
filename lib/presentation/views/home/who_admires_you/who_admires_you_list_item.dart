@@ -1,30 +1,29 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:igplus_ios/domain/entities/media_likers.dart';
+import 'package:igplus_ios/domain/entities/likes_and_comments.dart';
 import 'package:igplus_ios/presentation/resources/colors_manager.dart';
 import 'package:flutter/material.dart';
 import 'package:igplus_ios/presentation/views/global/follow_unfollow_button.dart';
 import 'package:url_launcher/url_launcher.dart';
-import 'package:timeago/timeago.dart' as timeago;
 
 /// List item representing a single Character with its photo and name.
-class MediaLikersListItem extends StatefulWidget {
-  const MediaLikersListItem({
-    required this.mediaLikers,
+class WhoAdmiresYouListItem extends StatefulWidget {
+  const WhoAdmiresYouListItem({
+    required this.whoAdmiresYou,
     required this.index,
     required this.type,
     Key? key,
   }) : super(key: key);
 
-  final MediaLikers mediaLikers;
+  final LikesAndComments whoAdmiresYou;
   final int index;
   final String type;
 
   @override
-  State<MediaLikersListItem> createState() => _MediaLikersListItemState();
+  State<WhoAdmiresYouListItem> createState() => _WhoAdmiresYouListItemState();
 }
 
-class _MediaLikersListItemState extends State<MediaLikersListItem> {
+class _WhoAdmiresYouListItemState extends State<WhoAdmiresYouListItem> {
   // initShowFollowButton
   bool showFollowButton = true;
 
@@ -37,11 +36,11 @@ class _MediaLikersListItemState extends State<MediaLikersListItem> {
         contentPadding: const EdgeInsets.symmetric(horizontal: 12, vertical: 4),
         tileColor: ColorsManager.cardBack,
         leading: GestureDetector(
-          onTap: () => _openProfileLinkOnInsta(widget.mediaLikers.mediaLikerList.first.user.username),
+          onTap: () => _openProfileLinkOnInsta(widget.whoAdmiresYou.user.username),
           child: CircleAvatar(
             radius: 20,
             backgroundImage: CachedNetworkImageProvider(
-              widget.mediaLikers.mediaLikerList.first.user.picture,
+              widget.whoAdmiresYou.user.picture,
               errorListener: () => const Icon(
                 FontAwesomeIcons.image,
                 color: ColorsManager.appBack,
@@ -50,25 +49,42 @@ class _MediaLikersListItemState extends State<MediaLikersListItem> {
           ),
         ),
         title: GestureDetector(
-          onTap: () => _openProfileLinkOnInsta(widget.mediaLikers.mediaLikerList.first.user.username),
-          child: SizedBox(
-            height: 40.0,
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Flexible(
-                  child: Text(widget.mediaLikers.mediaLikerList.first.user.username,
-                      overflow: TextOverflow.ellipsis, style: const TextStyle(color: ColorsManager.cardText)),
-                ),
-                const SizedBox(height: 4),
-                Text(
-                    (widget.mediaLikers.likesCount == 0)
-                        ? 'no likes'
-                        : (widget.mediaLikers.likesCount == 1)
-                            ? '1 like'
-                            : '${widget.mediaLikers.likesCount} likes',
-                    style: const TextStyle(color: ColorsManager.secondarytextColor, fontSize: 12)),
-              ],
+          onTap: () => _openProfileLinkOnInsta(widget.whoAdmiresYou.user.username),
+          child: Padding(
+            padding: const EdgeInsets.only(top: 8.0),
+            child: SizedBox(
+              height: 40.0,
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Flexible(
+                    child: Text(widget.whoAdmiresYou.user.username,
+                        overflow: TextOverflow.ellipsis, style: const TextStyle(color: ColorsManager.cardText)),
+                  ),
+                  const SizedBox(height: 4),
+                  Row(
+                    children: [
+                      Text(widget.whoAdmiresYou.likesCount.toString(),
+                          overflow: TextOverflow.ellipsis,
+                          style: const TextStyle(color: ColorsManager.secondarytextColor, fontSize: 12)),
+                      const SizedBox(width: 4),
+                      const Icon(FontAwesomeIcons.thumbsUp, color: ColorsManager.secondarytextColor, size: 12),
+                      const SizedBox(width: 8),
+                      Text(widget.whoAdmiresYou.commentsCount.toString(),
+                          overflow: TextOverflow.ellipsis,
+                          style: const TextStyle(color: ColorsManager.secondarytextColor, fontSize: 12)),
+                      const SizedBox(width: 4),
+                      const Icon(FontAwesomeIcons.comment, color: ColorsManager.secondarytextColor, size: 12),
+                      const SizedBox(width: 8),
+                      Text(
+                          (widget.whoAdmiresYou.total > 1)
+                              ? '${widget.whoAdmiresYou.total} Points'
+                              : '${widget.whoAdmiresYou.total} Point',
+                          style: const TextStyle(color: ColorsManager.secondarytextColor, fontSize: 12)),
+                    ],
+                  ),
+                ],
+              ),
             ),
           ),
         ),
@@ -79,11 +95,11 @@ class _MediaLikersListItemState extends State<MediaLikersListItem> {
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               FollowUnfollowButton(
-                igUserId: widget.mediaLikers.mediaLikerList.first.user.igUserId,
-                showFollow: (widget.mediaLikers.following) ? false : true,
+                igUserId: widget.whoAdmiresYou.user.igUserId,
+                showFollow: (widget.whoAdmiresYou.following) ? false : true,
               ),
               const SizedBox(height: 4),
-              (widget.mediaLikers.followedBy)
+              (widget.whoAdmiresYou.followedBy)
                   ? Row(
                       children: const [
                         Icon(FontAwesomeIcons.squareCheck, color: ColorsManager.upColor, size: 8),

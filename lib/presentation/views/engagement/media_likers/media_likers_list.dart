@@ -68,9 +68,17 @@ class _MediaLikersListState extends State<MediaLikersList> {
   Future<void> _fetchPage(pageKey) async {
     try {
       late List<MediaLikers>? mediaLikersList;
-      mediaLikersList = await context
-          .read<MediaLikersCubit>()
-          .getMostLikesUsers(boxKey: MediaLiker.boxKey, pageKey: pageKey, pageSize: _pageSize, searchTerm: _searchTerm);
+
+      if (widget.type == "likersNotFollow") {
+        mediaLikersList = await context.read<MediaLikersCubit>().getLikesUsersButNotFollow(
+            boxKey: MediaLiker.boxKey, pageKey: pageKey, pageSize: _pageSize, searchTerm: _searchTerm);
+      } else if (widget.type == "leastLikesGiven") {
+        mediaLikersList = await context.read<MediaLikersCubit>().getMostLikesUsers(
+            boxKey: MediaLiker.boxKey, pageKey: pageKey, pageSize: _pageSize, searchTerm: _searchTerm, reverse: true);
+      } else {
+        mediaLikersList = await context.read<MediaLikersCubit>().getMostLikesUsers(
+            boxKey: MediaLiker.boxKey, pageKey: pageKey, pageSize: _pageSize, searchTerm: _searchTerm);
+      }
 
       if (mediaLikersList == null || mediaLikersList.isEmpty) {
         _pagingController.appendLastPage([]);

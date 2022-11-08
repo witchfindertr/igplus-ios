@@ -1,5 +1,6 @@
 import 'package:equatable/equatable.dart';
 import 'package:hive_flutter/adapters.dart';
+import 'package:igplus_ios/domain/entities/likes_and_comments.dart';
 
 part 'report.g.dart';
 
@@ -47,6 +48,8 @@ class Report extends Equatable {
   int youDontFollowBackCycle;
   @HiveField(17)
   int mutualFollowingsCycle;
+  @HiveField(18)
+  List<LikesAndComments> whoAdmiresYou;
 
   Report({
     required this.followers,
@@ -71,6 +74,7 @@ class Report extends Equatable {
     required this.notFollowingBackCycle,
     required this.youDontFollowBackCycle,
     required this.mutualFollowingsCycle,
+    required this.whoAdmiresYou,
   });
 
   @override
