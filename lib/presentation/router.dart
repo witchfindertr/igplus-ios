@@ -80,10 +80,8 @@ GoRouter routes(AppBloc appBloc) {
             GoRoute(
                 path: 'engagement/:type',
                 builder: (context, state) {
-                  if (state.params['type'] == 'mostLikes') {
-                    return MediaLikersList(type: state.params['type'] ?? "");
-                  } else if (state.params['type'] == 'mostComments') {
-                    return MediaCommentersList(type: state.params['type'] ?? "");
+                  if (state.params['type'] == 'mostComments' || state.params['type'] == 'commentersNotFollow') {
+                    return MediaCommentersList(type: state.params['type']!);
                   }
                   return MediaLikersList(type: state.params['type'] ?? "");
                 }),

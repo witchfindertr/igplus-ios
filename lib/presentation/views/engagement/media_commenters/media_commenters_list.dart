@@ -68,8 +68,13 @@ class _MediaCommentersListState extends State<MediaCommentersList> {
   Future<void> _fetchPage(pageKey) async {
     try {
       late List<MediaCommenters>? mediaCommentersList;
-      mediaCommentersList = await context.read<MediaCommentersCubit>().getMostCommentsUsers(
-          boxKey: MediaCommenter.boxKey, pageKey: pageKey, pageSize: _pageSize, searchTerm: _searchTerm);
+      if (widget.type == "commentersNotFollow") {
+        mediaCommentersList = await context.read<MediaCommentersCubit>().getCommentsUsersButNotFollow(
+            boxKey: MediaCommenter.boxKey, pageKey: pageKey, pageSize: _pageSize, searchTerm: _searchTerm);
+      } else {
+        mediaCommentersList = await context.read<MediaCommentersCubit>().getMostCommentsUsers(
+            boxKey: MediaCommenter.boxKey, pageKey: pageKey, pageSize: _pageSize, searchTerm: _searchTerm);
+      }
 
       if (mediaCommentersList == null || mediaCommentersList.isEmpty) {
         _pagingController.appendLastPage([]);

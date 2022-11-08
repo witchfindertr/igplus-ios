@@ -88,15 +88,6 @@ class _WhoAdmiresYouListState extends State<WhoAdmiresYouList> {
 
   @override
   Widget build(BuildContext context) {
-    final String pageTitle;
-    switch (widget.type) {
-      case "mostLikes":
-        pageTitle = "Most Likes";
-        break;
-      default:
-        pageTitle = "";
-        break;
-    }
     return CupertinoPageScaffold(
       navigationBar: CupertinoNavigationBar(
         backgroundColor: ColorsManager.appBack,
@@ -107,7 +98,7 @@ class _WhoAdmiresYouListState extends State<WhoAdmiresYouList> {
               color: Colors.white,
               size: 26.0,
             )),
-        middle: Text(pageTitle, style: const TextStyle(fontSize: 16, color: Colors.white)),
+        middle: const Text("Who Admires You", style: TextStyle(fontSize: 16, color: Colors.white)),
         trailing: GestureDetector(
           onTap: () {
             if (_showSearchForm == false) {

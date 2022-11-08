@@ -88,9 +88,11 @@ class _StoriesViewersInsightListItemState extends State<StoriesViewersInsightLis
                 ),
                 const SizedBox(height: 4),
                 Text(
-                  (widget.storiesTopViewer.viewsCount > 1)
-                      ? '${widget.storiesTopViewer.viewsCount} stories viewed'
-                      : '${widget.storiesTopViewer.viewsCount} story viewed',
+                  (widget.storiesTopViewer.viewsCount == 0)
+                      ? 'No views'
+                      : (widget.storiesTopViewer.viewsCount == 1)
+                          ? '1 view'
+                          : '${widget.storiesTopViewer.viewsCount} views',
                   style: const TextStyle(
                     color: ColorsManager.secondarytextColor,
                     fontSize: 12,

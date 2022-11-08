@@ -144,9 +144,11 @@ class UpdateReportUseCase {
     }
 
     // get friends who admires you
-    final List<LikesAndComments> whoAdmiresYouList = await getWhoAdmiresYou();
+    List<LikesAndComments> whoAdmiresYouList = await getWhoAdmiresYou();
     // save whoAdmiresYouList to local
     await localRepository.cacheWhoAdmiresYouList(whoAdmiresYouList: whoAdmiresYouList, boxKey: LikesAndComments.boxKey);
+    // get friends who you admire
+    whoAdmiresYouList = whoAdmiresYouList.where((element) => element.total > 2 && element.followedBy == true).toList();
 
     // initialize chart data
     String today =
@@ -375,18 +377,14 @@ class UpdateReportUseCase {
       bool isCommenter = false;
       for (var mediaCommenter in mediaCommenters) {
         if (mediaLiker.mediaLikerList.first.user.igUserId == mediaCommenter.mediaCommenterList.first.user.igUserId) {
-          if (mediaLiker.likesCount + mediaCommenter.commentsCount > 0) {
-            totalLikesAndComments
-                .add(LikesAndCommentsModel.fromMediaLikersAndCommenters(mediaLiker, mediaCommenter).toEntity());
-            isCommenter = true;
-            break;
-          }
+          totalLikesAndComments
+              .add(LikesAndCommentsModel.fromMediaLikersAndCommenters(mediaLiker, mediaCommenter).toEntity());
+          isCommenter = true;
+          break;
         }
       }
       if (!isCommenter) {
-        if (mediaLiker.likesCount > 0) {
-          totalLikesAndComments.add(LikesAndCommentsModel.fromMediaLikersAndCommenters(mediaLiker, null).toEntity());
-        }
+        totalLikesAndComments.add(LikesAndCommentsModel.fromMediaLikersAndCommenters(mediaLiker, null).toEntity());
       }
     }
 

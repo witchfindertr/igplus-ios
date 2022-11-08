@@ -61,9 +61,11 @@ class _MediaCommentersListItemState extends State<MediaCommentersListItem> {
                 ),
                 const SizedBox(height: 4),
                 Text(
-                    (widget.mediaCommenters.commentsCount > 1)
-                        ? '${widget.mediaCommenters.commentsCount} Comments'
-                        : '1 Comment',
+                    (widget.mediaCommenters.commentsCount == 0)
+                        ? 'no comments'
+                        : (widget.mediaCommenters.commentsCount == 1)
+                            ? '1 comment'
+                            : '${widget.mediaCommenters.commentsCount} comments',
                     style: const TextStyle(color: ColorsManager.secondarytextColor, fontSize: 12)),
               ],
             ),

@@ -27,21 +27,23 @@ class EngagementPage extends StatelessWidget {
         "context": context,
         "type": "mostComments",
       },
-      {
-        "title": "Most Likes & Commented",
-        "context": context,
-        "type": "mostLikesAndComments",
-      }
+      // {
+      //   "title": "Most Likes & Commented",
+      //   "context": context,
+      //   "type": "mostLikesAndComments",
+      // }
     ];
 
     List<Map> missedConnections = [
       {
-        "title": "Users engaged, but didn't follow",
-        "context": context,
-      },
-      {
         "title": "Users liked me, but didn't follow",
         "context": context,
+        "type": "likersNotFollow",
+      },
+      {
+        "title": "Users commented, but didn't follow",
+        "context": context,
+        "type": "commentersNotFollow",
       },
     ];
 
@@ -50,17 +52,20 @@ class EngagementPage extends StatelessWidget {
         "title": "Least likes given",
         "subTitle": "Find freinds with the least likes given",
         "context": context,
+        "type": "leastLikesGiven",
       },
       {
         "title": "Least comments left",
         "subTitle": "Find freinds with the least comments left",
         "context": context,
+        "type": "leastCommentsGiven",
       },
-      {
-        "title": "No comments, no likes",
-        "subTitle": "Find freinds with no comments or likes",
-        "context": context,
-      }
+      // {
+      //   "title": "No comments, no likes",
+      //   "subTitle": "Find freinds with no comments or likes",
+      //   "context": context,
+      //   "type": "noLikesOrComments",
+      // }
     ];
 
     return CupertinoPageScaffold(
@@ -88,8 +93,11 @@ class EngagementPage extends StatelessWidget {
                 title: "Ghost Followers",
                 icon: FontAwesomeIcons.ghost,
               ),
-              InfoCardList(
-                cards: ghostFollowers,
+              Padding(
+                padding: const EdgeInsets.only(bottom: 10.0),
+                child: InfoCardList(
+                  cards: ghostFollowers,
+                ),
               ),
             ],
           ),
@@ -103,7 +111,7 @@ class EngagementPage extends StatelessWidget {
     await BlocProvider.of<MediaListCubit>(context).init();
     // get likers data
     await BlocProvider.of<MediaLikersCubit>(context).init(boxKey: MediaLiker.boxKey, pageKey: 0, pageSize: 15);
-    // await 3 seconds
+    // wait 3 seconds
     await Future.delayed(const Duration(seconds: 3));
     // get commenters data
     await BlocProvider.of<MediaCommentersCubit>(context).init(boxKey: MediaCommenter.boxKey, pageKey: 0, pageSize: 15);

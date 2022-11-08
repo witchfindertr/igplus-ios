@@ -111,7 +111,11 @@ class MediaLikersCubit extends Cubit<MediaLikersState> {
 
   // get users with most likes
   Future<List<MediaLikers>?> getMostLikesUsers(
-      {required String boxKey, required int pageKey, required int pageSize, String? searchTerm}) async {
+      {required String boxKey,
+      required int pageKey,
+      required int pageSize,
+      String? searchTerm,
+      bool reverse = false}) async {
     emit(MediaLikersLoading());
     List<MediaLiker> mediaLikersList = [];
 
@@ -124,14 +128,52 @@ class MediaLikersCubit extends Cubit<MediaLikersState> {
       emit(MediaLikersSuccess(mediaLikers: mediaLikersList, pageKey: 0));
 
       // group by user id
-      return await getMostLikesFromMediaLikes(mediaLikersList, pageKey, pageSize);
+      return await getMostLikesFromMediaLikes(mediaLikersList, pageKey, pageSize, reverse);
+    }
+
+    return null;
+  }
+
+  // get users liked media but didn't follow you
+  Future<List<MediaLikers>?> getLikesUsersButNotFollow(
+      {required String boxKey, required int pageKey, required int pageSize, String? searchTerm}) async {
+    emit(MediaLikersLoading());
+    List<MediaLiker> mediaLikerList = [];
+    List<MediaLikers> mediaLikersList = [];
+
+    // get media likers from local
+    final mediaLikersFromLocal = getMediaLikersFromLocalUseCase.execute(
+        boxKey: MediaLiker.boxKey, pageKey: pageKey, pageSize: pageSize, searchTerm: searchTerm);
+
+    if (mediaLikersFromLocal.isRight() && mediaLikersFromLocal.getOrElse(() => null) != null) {
+      mediaLikerList = mediaLikersFromLocal.getOrElse(() => null)!;
+      // delete media likers that follow you
+      mediaLikerList = await deleteMediaLikersThatFollowYou(mediaLikerList);
+
+      // group by user id
+      mediaLikersList = await getMostLikesFromMediaLikes(mediaLikerList, pageKey, pageSize, false);
+
+      // sort by likesCount
+      mediaLikersList.sort((a, b) => b.likesCount.compareTo(a.likesCount));
+
+      // paginate
+      int? startKey;
+      int? endKey;
+      startKey = pageKey;
+      endKey = startKey + pageSize;
+      if (endKey > mediaLikersList.length - 1) {
+        endKey = mediaLikersList.length;
+      }
+      mediaLikersList = mediaLikersList.sublist(startKey, endKey);
+      emit(MediaLikersSuccess(mediaLikers: mediaLikerList, pageKey: 0));
+      return mediaLikersList;
     }
 
     return null;
   }
 
   Future<List<MediaLikers>> getMostLikesFromMediaLikes(
-      List<MediaLiker> mediaLikersList, int pageKey, int pageSize) async {
+      List<MediaLiker> mediaLikersList, int pageKey, int pageSize, bool reverse) async {
     // group by user id
     Map<String, List<MediaLiker>> mediaLikersMap = {};
     for (var mediaLiker in mediaLikersList) {
@@ -173,7 +215,11 @@ class MediaLikersCubit extends Cubit<MediaLikersState> {
     });
 
     // sort by likesCount
-    mediaLikers.sort((a, b) => b.likesCount.compareTo(a.likesCount));
+    if (reverse) {
+      mediaLikers.sort((a, b) => a.likesCount.compareTo(b.likesCount));
+    } else {
+      mediaLikers.sort((a, b) => b.likesCount.compareTo(a.likesCount));
+    }
 
     // paginate
     int? startKey;
@@ -200,6 +246,10 @@ class MediaLikersCubit extends Cubit<MediaLikersState> {
       mostLikesAndComments = (failureOrWhoAdmiresYouListFromLocal as Right).value;
     }
 
+    // get users who admires you
+    mostLikesAndComments =
+        mostLikesAndComments.where((element) => (element.total > 2 && element.followedBy == true)).toList();
+
     return mostLikesAndComments;
   }
 
@@ -213,5 +263,22 @@ class MediaLikersCubit extends Cubit<MediaLikersState> {
       currentUser = (failureOrCurrentUser as Right).value;
     }
     return currentUser;
+  }
+
+  Future<List<MediaLiker>> deleteMediaLikersThatFollowYou(List<MediaLiker> mediaLikersList) async {
+    // get followers list
+    List<Friend> followersList = [];
+    Either<Failure, List<Friend>?>? friendsListOfFailure =
+        await getFriendsFromLocalUseCase.execute(boxKey: "followers", pageKey: 0, pageSize: 10000);
+
+    if (friendsListOfFailure != null && friendsListOfFailure.isRight()) {
+      followersList = friendsListOfFailure.getOrElse(() => null) ?? [];
+    }
+
+    // delete media likers that follow you
+    mediaLikersList
+        .removeWhere((element) => followersList.indexWhere((friend) => friend.igUserId == element.user.igUserId) != -1);
+
+    return mediaLikersList;
   }
 }

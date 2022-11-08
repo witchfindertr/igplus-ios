@@ -119,6 +119,46 @@ class MediaCommentersCubit extends Cubit<MediaCommentersState> {
     return null;
   }
 
+  // get users comments where user is not friend
+  Future<List<MediaCommenters>?> getCommentsUsersButNotFollow(
+      {required String boxKey, required int pageKey, required int pageSize, String? searchTerm}) async {
+    emit(MediaCommentersLoading());
+    List<MediaCommenter> mediaCommenterList = [];
+    List<MediaCommenters> mediaCommentersList = [];
+
+    // get media commenters from local
+    final mediaCommentersFromLocal = getMediaCommentersFromLocalUseCase.execute(
+        boxKey: MediaCommenter.boxKey, pageKey: pageKey, pageSize: pageSize, searchTerm: searchTerm);
+
+    if (mediaCommentersFromLocal.isRight() && mediaCommentersFromLocal.getOrElse(() => null) != null) {
+      mediaCommenterList = mediaCommentersFromLocal.getOrElse(() => null)!;
+
+      mediaCommenterList = await deleteMediaCommentersThatFollowYou(mediaCommenterList);
+
+      // group by user id
+      mediaCommentersList = await getMostCommentsFromMediaComments(mediaCommenterList, pageKey, pageSize);
+
+      // sort by likesCount
+      mediaCommentersList.sort((a, b) => b.commentsCount.compareTo(a.commentsCount));
+
+      // paginate
+      int? startKey;
+      int? endKey;
+      startKey = pageKey;
+      endKey = startKey + pageSize;
+      if (endKey > mediaCommentersList.length - 1) {
+        endKey = mediaCommentersList.length;
+      }
+      mediaCommentersList = mediaCommentersList.sublist(startKey, endKey);
+
+      emit(MediaCommentersSuccess(mediaCommenters: mediaCommenterList, pageKey: 0));
+
+      return mediaCommentersList;
+    }
+
+    return null;
+  }
+
   Future<List<MediaCommenters>> getMostCommentsFromMediaComments(
       List<MediaCommenter> mediaCommentersList, int pageKey, int pageSize) async {
     // group by user id
@@ -187,5 +227,22 @@ class MediaCommentersCubit extends Cubit<MediaCommentersState> {
       currentUser = (failureOrCurrentUser as Right).value;
     }
     return currentUser;
+  }
+
+  Future<List<MediaCommenter>> deleteMediaCommentersThatFollowYou(List<MediaCommenter> mediaLikersList) async {
+    // get followers list
+    List<Friend> followersList = [];
+    Either<Failure, List<Friend>?>? friendsListOfFailure =
+        await getFriendsFromLocalUseCase.execute(boxKey: "followers", pageKey: 0, pageSize: 10000);
+
+    if (friendsListOfFailure != null && friendsListOfFailure.isRight()) {
+      followersList = friendsListOfFailure.getOrElse(() => null) ?? [];
+    }
+
+    // delete media likers that follow you
+    mediaLikersList
+        .removeWhere((element) => followersList.indexWhere((friend) => friend.igUserId == element.user.igUserId) != -1);
+
+    return mediaLikersList;
   }
 }

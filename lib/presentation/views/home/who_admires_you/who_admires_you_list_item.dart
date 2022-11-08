@@ -1,12 +1,10 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:igplus_ios/domain/entities/likes_and_comments.dart';
-import 'package:igplus_ios/domain/entities/media_likers.dart';
 import 'package:igplus_ios/presentation/resources/colors_manager.dart';
 import 'package:flutter/material.dart';
 import 'package:igplus_ios/presentation/views/global/follow_unfollow_button.dart';
 import 'package:url_launcher/url_launcher.dart';
-import 'package:timeago/timeago.dart' as timeago;
 
 /// List item representing a single Character with its photo and name.
 class WhoAdmiresYouListItem extends StatefulWidget {
@@ -52,22 +50,41 @@ class _WhoAdmiresYouListItemState extends State<WhoAdmiresYouListItem> {
         ),
         title: GestureDetector(
           onTap: () => _openProfileLinkOnInsta(widget.whoAdmiresYou.user.username),
-          child: SizedBox(
-            height: 40.0,
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Flexible(
-                  child: Text(widget.whoAdmiresYou.user.username,
-                      overflow: TextOverflow.ellipsis, style: const TextStyle(color: ColorsManager.cardText)),
-                ),
-                const SizedBox(height: 4),
-                Text(
-                    (widget.whoAdmiresYou.total > 1)
-                        ? '${widget.whoAdmiresYou.total} Points'
-                        : '${widget.whoAdmiresYou.total} Point',
-                    style: const TextStyle(color: ColorsManager.secondarytextColor, fontSize: 12)),
-              ],
+          child: Padding(
+            padding: const EdgeInsets.only(top: 8.0),
+            child: SizedBox(
+              height: 40.0,
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Flexible(
+                    child: Text(widget.whoAdmiresYou.user.username,
+                        overflow: TextOverflow.ellipsis, style: const TextStyle(color: ColorsManager.cardText)),
+                  ),
+                  const SizedBox(height: 4),
+                  Row(
+                    children: [
+                      Text(widget.whoAdmiresYou.likesCount.toString(),
+                          overflow: TextOverflow.ellipsis,
+                          style: const TextStyle(color: ColorsManager.secondarytextColor, fontSize: 12)),
+                      const SizedBox(width: 4),
+                      const Icon(FontAwesomeIcons.thumbsUp, color: ColorsManager.secondarytextColor, size: 12),
+                      const SizedBox(width: 8),
+                      Text(widget.whoAdmiresYou.commentsCount.toString(),
+                          overflow: TextOverflow.ellipsis,
+                          style: const TextStyle(color: ColorsManager.secondarytextColor, fontSize: 12)),
+                      const SizedBox(width: 4),
+                      const Icon(FontAwesomeIcons.comment, color: ColorsManager.secondarytextColor, size: 12),
+                      const SizedBox(width: 8),
+                      Text(
+                          (widget.whoAdmiresYou.total > 1)
+                              ? '${widget.whoAdmiresYou.total} Points'
+                              : '${widget.whoAdmiresYou.total} Point',
+                          style: const TextStyle(color: ColorsManager.secondarytextColor, fontSize: 12)),
+                    ],
+                  ),
+                ],
+              ),
             ),
           ),
         ),

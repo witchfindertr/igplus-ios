@@ -61,7 +61,12 @@ class _MediaLikersListItemState extends State<MediaLikersListItem> {
                       overflow: TextOverflow.ellipsis, style: const TextStyle(color: ColorsManager.cardText)),
                 ),
                 const SizedBox(height: 4),
-                Text((widget.mediaLikers.likesCount > 1) ? '${widget.mediaLikers.likesCount} likes' : '1 like',
+                Text(
+                    (widget.mediaLikers.likesCount == 0)
+                        ? 'no likes'
+                        : (widget.mediaLikers.likesCount == 1)
+                            ? '1 like'
+                            : '${widget.mediaLikers.likesCount} likes',
                     style: const TextStyle(color: ColorsManager.secondarytextColor, fontSize: 12)),
               ],
             ),

@@ -139,14 +139,6 @@ class ReportCubit extends Cubit<ReportState> {
             emit(ReportSuccess(report: report, accountInfo: accountInfo));
           }
         } else {
-          // get whoAdmiresYou from local
-          // final failureOrWhoAdmiresYouListFromLocal =
-          //     getWhoAdmiresYouFromLocalUseCase.execute(boxKey: LikesAndComments.boxKey, pageKey: 0, pageSize: 26);
-          // if (failureOrWhoAdmiresYouListFromLocal.isRight() &&
-          //     (failureOrWhoAdmiresYouListFromLocal as Right).value != null) {
-          //   final whoAdmiresYouListFromLocal = (failureOrWhoAdmiresYouListFromLocal as Right).value;
-          // }
-
           // get report from local
           final report = (failureOrReport as Right).value;
           if (failureOrReport.isLeft()) {
