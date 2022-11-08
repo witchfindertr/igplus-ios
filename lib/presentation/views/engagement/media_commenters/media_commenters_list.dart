@@ -71,6 +71,13 @@ class _MediaCommentersListState extends State<MediaCommentersList> {
       if (widget.type == "commentersNotFollow") {
         mediaCommentersList = await context.read<MediaCommentersCubit>().getCommentsUsersButNotFollow(
             boxKey: MediaCommenter.boxKey, pageKey: pageKey, pageSize: _pageSize, searchTerm: _searchTerm);
+      } else if (widget.type == "leastCommentsGiven") {
+        mediaCommentersList = await context.read<MediaCommentersCubit>().getMostCommentsUsers(
+            boxKey: MediaCommenter.boxKey,
+            pageKey: pageKey,
+            pageSize: _pageSize,
+            searchTerm: _searchTerm,
+            reverse: true);
       } else {
         mediaCommentersList = await context.read<MediaCommentersCubit>().getMostCommentsUsers(
             boxKey: MediaCommenter.boxKey, pageKey: pageKey, pageSize: _pageSize, searchTerm: _searchTerm);

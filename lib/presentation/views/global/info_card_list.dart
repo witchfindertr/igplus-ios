@@ -45,7 +45,7 @@ class InfoCardList extends StatelessWidget {
                   type == "likersNotFollow" ||
                   type == "commentersNotFollow" ||
                   type == "leastLikesGiven" ||
-                  type == "leastCommentsLeft" ||
+                  type == "leastCommentsGiven" ||
                   type == "noLikesOrComments") {
                 GoRouter.of(context).go('/home/engagement/$type');
               } else {

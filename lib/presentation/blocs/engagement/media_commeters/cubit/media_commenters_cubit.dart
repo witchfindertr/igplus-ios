@@ -100,7 +100,11 @@ class MediaCommentersCubit extends Cubit<MediaCommentersState> {
 
   // get users with most comments
   Future<List<MediaCommenters>?> getMostCommentsUsers(
-      {required String boxKey, required int pageKey, required int pageSize, String? searchTerm}) async {
+      {required String boxKey,
+      required int pageKey,
+      required int pageSize,
+      String? searchTerm,
+      bool reverse = false}) async {
     emit(MediaCommentersLoading());
     List<MediaCommenter> mediaCommentersList = [];
 
@@ -113,7 +117,7 @@ class MediaCommentersCubit extends Cubit<MediaCommentersState> {
       emit(MediaCommentersSuccess(mediaCommenters: mediaCommentersList, pageKey: 0));
 
       // group by user id
-      return await getMostCommentsFromMediaComments(mediaCommentersList, pageKey, pageSize);
+      return await getMostCommentsFromMediaComments(mediaCommentersList, pageKey, pageSize, reverse);
     }
 
     return null;
@@ -136,7 +140,7 @@ class MediaCommentersCubit extends Cubit<MediaCommentersState> {
       mediaCommenterList = await deleteMediaCommentersThatFollowYou(mediaCommenterList);
 
       // group by user id
-      mediaCommentersList = await getMostCommentsFromMediaComments(mediaCommenterList, pageKey, pageSize);
+      mediaCommentersList = await getMostCommentsFromMediaComments(mediaCommenterList, pageKey, pageSize, false);
 
       // sort by likesCount
       mediaCommentersList.sort((a, b) => b.commentsCount.compareTo(a.commentsCount));
@@ -160,7 +164,7 @@ class MediaCommentersCubit extends Cubit<MediaCommentersState> {
   }
 
   Future<List<MediaCommenters>> getMostCommentsFromMediaComments(
-      List<MediaCommenter> mediaCommentersList, int pageKey, int pageSize) async {
+      List<MediaCommenter> mediaCommentersList, int pageKey, int pageSize, bool reverse) async {
     // group by user id
     Map<String, List<MediaCommenter>> mediaCommentersMap = {};
     for (var mediaCommenter in mediaCommentersList) {
@@ -202,7 +206,11 @@ class MediaCommentersCubit extends Cubit<MediaCommentersState> {
     });
 
     // sort by commentsCount
-    mediaCommenters.sort((a, b) => b.commentsCount.compareTo(a.commentsCount));
+    if (reverse) {
+      mediaCommenters.sort((a, b) => a.commentsCount.compareTo(b.commentsCount));
+    } else {
+      mediaCommenters.sort((a, b) => b.commentsCount.compareTo(a.commentsCount));
+    }
 
     // paginate
     int? startKey;
