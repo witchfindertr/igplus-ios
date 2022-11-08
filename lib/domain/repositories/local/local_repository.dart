@@ -2,6 +2,7 @@ import 'package:dartz/dartz.dart';
 import 'package:igplus_ios/data/failure.dart';
 import 'package:igplus_ios/domain/entities/account_info.dart';
 import 'package:igplus_ios/domain/entities/friend.dart';
+import 'package:igplus_ios/domain/entities/likes_and_comments.dart';
 import 'package:igplus_ios/domain/entities/media.dart';
 import 'package:igplus_ios/domain/entities/media_commenter.dart';
 import 'package:igplus_ios/domain/entities/media_liker.dart';
@@ -92,6 +93,11 @@ abstract class LocalRepository {
   Future<void> cacheMediaCommentersList({required List<MediaCommenter> mediaCommentersList, required String boxKey});
   Either<Failure, List<MediaCommenter>?> getCachedMediaCommentersList(
       {required String boxKey, int? mediaId, int? pageKey, int? pageSize, String? searchTerm});
+
+  // WhoAdmiresYou
+  Future<void> cacheWhoAdmiresYouList({required List<LikesAndComments> whoAdmiresYouList, required String boxKey});
+  Either<Failure, List<LikesAndComments>?> getCachedWhoAdmiresYouList(
+      {required String boxKey, int? pageKey, int? pageSize, String? searchTerm});
 
   // clear all boxes
   Future<void> clearAllBoxes();

@@ -3,6 +3,7 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:go_router/go_router.dart';
 import 'package:igplus_ios/app/extensions/media_query_values.dart';
 import 'package:igplus_ios/presentation/resources/colors_manager.dart';
+import 'package:igplus_ios/presentation/views/global/images_stack.dart';
 import 'package:intl/intl.dart';
 
 class InfoCard extends StatelessWidget {
@@ -14,6 +15,7 @@ class InfoCard extends StatelessWidget {
   final int? style;
   final String type;
   final int newFriends;
+  final List<String>? imagesStack;
   const InfoCard({
     Key? key,
     required this.title,
@@ -24,6 +26,7 @@ class InfoCard extends StatelessWidget {
     this.style,
     required this.type,
     required this.newFriends,
+    this.imagesStack,
   }) : super(key: key);
 
   @override
@@ -31,7 +34,11 @@ class InfoCard extends StatelessWidget {
     if (style == 1) {
       return GestureDetector(
         onTap: () {
-          GoRouter.of(context).go('/home/friendsList/$type');
+          if (type == "whoAdmiresYou") {
+            context.go('/home/whoAdmiresYou');
+          } else {
+            GoRouter.of(context).go('/home/friendsList/$type');
+          }
         },
         child: Card(
           color: ColorsManager.cardBack,
@@ -44,80 +51,45 @@ class InfoCard extends StatelessWidget {
               children: [
                 Container(
                   alignment: Alignment.centerLeft,
-                  width: context.width / 1.4,
+                  width: context.width / 1.1,
                   child: Padding(
-                    padding: const EdgeInsets.fromLTRB(4.0, 14.0, 4.0, 12.0),
+                    padding: const EdgeInsets.all(12.0),
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        Padding(
-                          padding: const EdgeInsets.fromLTRB(0, 10, 8, 10),
-                          child: Container(
-                            alignment: Alignment.centerLeft,
-                            width: 60.0,
-                            height: 60.0,
-                            decoration: const BoxDecoration(
-                              border: Border.fromBorderSide(BorderSide(color: ColorsManager.textColor, width: 2)),
-                              shape: BoxShape.circle,
-                              image: DecorationImage(
-                                fit: BoxFit.fill,
-                                image: AssetImage("assets/images/brahimaito.jpg"),
-                              ),
-                            ),
-                          ),
-                        ),
                         Flexible(
                           child: Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
-                              Text(title, style: const TextStyle(fontSize: 16, color: ColorsManager.textColor)),
-                              Text(subTitle ?? "",
-                                  overflow: TextOverflow.ellipsis,
-                                  style: const TextStyle(fontSize: 14, color: ColorsManager.secondarytextColor)),
+                              Row(
+                                children: [
+                                  Padding(
+                                    padding: const EdgeInsets.fromLTRB(4, 4, 12, 4),
+                                    child: Icon(icon, color: ColorsManager.secondarytextColor, size: 40),
+                                  ),
+                                  Column(
+                                    crossAxisAlignment: CrossAxisAlignment.start,
+                                    children: [
+                                      Text(title, style: const TextStyle(fontSize: 16, color: ColorsManager.textColor)),
+                                      Text(subTitle ?? "",
+                                          overflow: TextOverflow.ellipsis,
+                                          style:
+                                              const TextStyle(fontSize: 14, color: ColorsManager.secondarytextColor)),
+                                    ],
+                                  ),
+                                ],
+                              ),
+                              Row(
+                                mainAxisAlignment: MainAxisAlignment.end,
+                                children: [
+                                  Padding(
+                                    padding: const EdgeInsets.all(8.0),
+                                    child: imageStack(imageList: imagesStack!, totalCount: count),
+                                  ),
+                                ],
+                              ),
                             ],
                           ),
-                        ),
-                      ],
-                    ),
-                  ),
-                ),
-                Container(
-                  alignment: Alignment.center,
-                  width: context.width / 5,
-                  child: Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 10),
-                    child: Column(
-                      children: [
-                        (newFriends != 0)
-                            ? Padding(
-                                padding: const EdgeInsets.all(8.0),
-                                child: Row(
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  children: [
-                                    const Icon(FontAwesomeIcons.arrowUp,
-                                        size: 14,
-                                        color: ColorsManager.primaryColor,
-                                        shadows: [
-                                          Shadow(
-                                            blurRadius: 20.0,
-                                            color: ColorsManager.primaryColor,
-                                            offset: Offset(0.0, 0.0),
-                                          ),
-                                        ]),
-                                    Text(newFriends.toString(),
-                                        style: const TextStyle(
-                                            fontSize: 16,
-                                            color: ColorsManager.primaryColor,
-                                            fontWeight: FontWeight.bold)),
-                                  ],
-                                ),
-                              )
-                            : const SizedBox.shrink(),
-                        Text(
-                          NumberFormat.compact().format(count),
-                          style: const TextStyle(
-                              fontSize: 20, color: ColorsManager.textColor, fontWeight: FontWeight.bold),
-                          textAlign: TextAlign.center,
                         ),
                       ],
                     ),

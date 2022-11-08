@@ -1,4 +1,3 @@
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -9,6 +8,7 @@ import 'package:igplus_ios/app/app.dart';
 import 'package:igplus_ios/app/bloc/app_bloc.dart';
 import 'package:igplus_ios/domain/entities/account_info.dart';
 import 'package:igplus_ios/domain/entities/friend.dart';
+import 'package:igplus_ios/domain/entities/likes_and_comments.dart';
 import 'package:igplus_ios/domain/entities/media.dart';
 import 'package:igplus_ios/domain/entities/media_commenter.dart';
 import 'package:igplus_ios/domain/entities/media_liker.dart';
@@ -48,6 +48,7 @@ void main() async {
   Hive.registerAdapter(StoryViewerAdapter());
   Hive.registerAdapter(MediaLikerAdapter());
   Hive.registerAdapter(MediaCommenterAdapter());
+  Hive.registerAdapter(LikesAndCommentsAdapter());
 
   // loading the <key,values> pair from the local storage into memory
   try {
@@ -56,7 +57,6 @@ void main() async {
     await Hive.openBox<Friend>(Friend.followingsBoxKey);
     await Hive.openBox<Friend>(Friend.newFollowersBoxKey);
     await Hive.openBox<Friend>(Friend.lostFollowersBoxKey);
-    await Hive.openBox<Friend>(Friend.whoAdmiresYouBoxKey);
     await Hive.openBox<Friend>(Friend.notFollowingBackBoxKey);
     await Hive.openBox<Friend>(Friend.youDontFollowBackBoxKey);
     await Hive.openBox<Friend>(Friend.youHaveUnfollowedBoxKey);
@@ -76,6 +76,8 @@ void main() async {
     await Hive.openBox<MediaLiker>(MediaLiker.boxKey);
     // media commenters box
     await Hive.openBox<MediaCommenter>(MediaCommenter.boxKey);
+    // who admires you box
+    await Hive.openBox<LikesAndComments>(LikesAndComments.boxKey);
   } catch (e) {
     debugPrint(e.toString());
   }

@@ -5,6 +5,7 @@ import 'package:igplus_ios/presentation/views/engagement/media_commenters/media_
 import 'package:igplus_ios/presentation/views/engagement/media_likers/media_likers_list.dart';
 import 'package:igplus_ios/presentation/views/home/friends_list/friends_list.dart';
 import 'package:igplus_ios/presentation/views/home/stories/stories_view.dart';
+import 'package:igplus_ios/presentation/views/home/who_admires_you/who_admires_you_list.dart';
 import 'package:igplus_ios/presentation/views/insight/stories/stories_list/stories_insight_list.dart';
 import 'package:igplus_ios/presentation/views/insight/stories/story_viewers_list/story_viewers_list.dart';
 import 'package:igplus_ios/presentation/views/insight/stories/stories_viewers_insight_list/stories_viewers_insight_list.dart';
@@ -50,6 +51,10 @@ GoRouter routes(AppBloc appBloc) {
             GoRoute(
               path: 'friendsList/:type',
               builder: (context, state) => FriendsList(type: state.params['type'] ?? ""),
+            ),
+            GoRoute(
+              path: 'whoAdmiresYou',
+              builder: (context, state) => const WhoAdmiresYouList(type: "whoAdmiresYou"),
             ),
             GoRoute(
               path: 'storiesView',

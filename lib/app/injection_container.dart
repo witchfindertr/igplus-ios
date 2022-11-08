@@ -27,6 +27,7 @@ import 'package:igplus_ios/domain/usecases/get_user_feed_use_case.dart';
 import 'package:igplus_ios/domain/usecases/get_friends_from_local_use_case.dart';
 import 'package:igplus_ios/domain/usecases/get_report_from_local_use_case.dart';
 import 'package:igplus_ios/domain/usecases/get_stories_users_use_case.dart';
+import 'package:igplus_ios/domain/usecases/get_who_admires_you_from_local_use_case.dart';
 import 'package:igplus_ios/domain/usecases/save_account_info_to_local_use_case.dart';
 import 'package:igplus_ios/domain/usecases/save_friends_to_local_use_case.dart';
 import 'package:igplus_ios/domain/usecases/save_media_commenters_to_local_use_case.dart';
@@ -89,6 +90,7 @@ Future<void> init() async {
         cacheAccountInfoToLocalUseCase: sl(),
         clearAllBoxesUseCase: sl(),
         authRepository: sl(),
+        getWhoAdmiresYouFromLocalUseCase: sl(),
       ));
 
   sl.registerFactory(() =>
@@ -136,6 +138,7 @@ Future<void> init() async {
         getFriendsFromLocalUseCase: sl(),
         getUserFeed: sl(),
         cacheMediaToLocal: sl(),
+        getWhoAdmiresYouFromLocalUseCase: sl(),
       ));
   sl.registerFactory(() => AppBloc(authRepository: sl()));
   sl.registerFactory(() => MediaCommentersCubit(
@@ -189,6 +192,7 @@ Future<void> init() async {
   sl.registerLazySingleton(() => GetMediaCommentersUseCase(instagramRepository: sl()));
   sl.registerLazySingleton(() => CacheMediaCommentersToLocalUseCase(localRepository: sl()));
   sl.registerLazySingleton(() => GetMediaCommentersFromLocalUseCase(localRepository: sl()));
+  sl.registerLazySingleton(() => GetWhoAdmiresYouFromLocalUseCase(localRepository: sl()));
 
   // Repositories
   sl.registerLazySingleton<FirebaseRepository>(() => FirebaseRepositporyImp(firebaseDataSource: sl()));

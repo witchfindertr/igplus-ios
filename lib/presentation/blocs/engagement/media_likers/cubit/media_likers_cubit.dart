@@ -4,6 +4,7 @@ import 'package:equatable/equatable.dart';
 import 'package:igplus_ios/data/failure.dart';
 import 'package:igplus_ios/data/models/media_likers_model.dart';
 import 'package:igplus_ios/domain/entities/friend.dart';
+import 'package:igplus_ios/domain/entities/likes_and_comments.dart';
 import 'package:igplus_ios/domain/entities/media.dart';
 import 'package:igplus_ios/domain/entities/media_liker.dart';
 import 'package:igplus_ios/domain/entities/media_likers.dart';
@@ -14,6 +15,7 @@ import 'package:igplus_ios/domain/usecases/get_media_likers_from_local_use_case.
 import 'package:igplus_ios/domain/usecases/get_media_likers_use_case.dart';
 import 'package:igplus_ios/domain/usecases/get_user_feed_use_case.dart';
 import 'package:igplus_ios/domain/usecases/get_user_use_case.dart';
+import 'package:igplus_ios/domain/usecases/get_who_admires_you_from_local_use_case.dart';
 import 'package:igplus_ios/domain/usecases/save_media_likers_to_local_use_case.dart';
 import 'package:igplus_ios/domain/usecases/save_media_to_local_use_case.dart';
 
@@ -28,6 +30,7 @@ class MediaLikersCubit extends Cubit<MediaLikersState> {
   final GetUserUseCase getUser;
   final CacheMediaToLocalUseCase cacheMediaToLocal;
   final GetUserFeedUseCase getUserFeed;
+  final GetWhoAdmiresYouFromLocalUseCase getWhoAdmiresYouFromLocalUseCase;
   MediaLikersCubit({
     required this.getMediaLikersUseCase,
     required this.getUser,
@@ -37,6 +40,7 @@ class MediaLikersCubit extends Cubit<MediaLikersState> {
     required this.getFriendsFromLocalUseCase,
     required this.cacheMediaToLocal,
     required this.getUserFeed,
+    required this.getWhoAdmiresYouFromLocalUseCase,
   }) : super(MediaLikersInitial());
 
   Future<List<MediaLiker>?> init({
@@ -182,6 +186,21 @@ class MediaLikersCubit extends Cubit<MediaLikersState> {
     mediaLikers = mediaLikers.sublist(startKey, endKey);
 
     return mediaLikers;
+  }
+
+  // get users with most likes and comments from local
+  Future<List<LikesAndComments>?> getMostLikesAndCommentsUsers(
+      {required String boxKey, required int pageKey, required int pageSize, String? searchTerm}) async {
+    emit(MediaLikersLoading());
+    List<LikesAndComments> mostLikesAndComments = [];
+
+    final failureOrWhoAdmiresYouListFromLocal =
+        getWhoAdmiresYouFromLocalUseCase.execute(boxKey: LikesAndComments.boxKey, pageKey: 0, pageSize: 26);
+    if (failureOrWhoAdmiresYouListFromLocal.isRight() && (failureOrWhoAdmiresYouListFromLocal as Right).value != null) {
+      mostLikesAndComments = (failureOrWhoAdmiresYouListFromLocal as Right).value;
+    }
+
+    return mostLikesAndComments;
   }
 
   Future<User> getCurrentUser() async {

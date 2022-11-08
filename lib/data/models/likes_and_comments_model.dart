@@ -5,8 +5,20 @@ import 'package:igplus_ios/domain/entities/media_likers.dart';
 
 class LikesAndCommentsModel {
   final int total;
+  final int likesCount;
+  final int commentsCount;
+  final bool followedBy; // followed me
+  final bool following; // i follow
   final Friend user;
-  LikesAndCommentsModel({required this.total, required this.user});
+
+  LikesAndCommentsModel({
+    required this.total,
+    required this.user,
+    required this.followedBy,
+    required this.following,
+    required this.likesCount,
+    required this.commentsCount,
+  });
 
   factory LikesAndCommentsModel.fromMediaLikersAndCommenters(
       MediaLikers mediaLikers, MediaCommenters? mediaCommenters) {
@@ -20,6 +32,10 @@ class LikesAndCommentsModel {
 
     return LikesAndCommentsModel(
       total: total,
+      likesCount: mediaLikers.likesCount,
+      commentsCount: mediaCommenters != null ? mediaCommenters.commentsCount : 0,
+      followedBy: mediaLikers.followedBy,
+      following: mediaLikers.following,
       user: mediaLikers.mediaLikerList.first.user,
     );
   }
@@ -28,6 +44,10 @@ class LikesAndCommentsModel {
   LikesAndComments toEntity() {
     return LikesAndComments(
       total: total,
+      likesCount: likesCount,
+      commentsCount: commentsCount,
+      followedBy: followedBy,
+      following: following,
       user: user,
     );
   }

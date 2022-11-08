@@ -76,19 +76,27 @@ class ReportData extends StatelessWidget {
                 ],
               ),
             ),
-            Padding(
-              padding: const EdgeInsets.fromLTRB(8.0, 0.0, 8.0, 0.0),
-              child: InfoCard(
-                title: "Who Admires You",
-                subTitle: "Find out who's intersted in you",
-                icon: FontAwesomeIcons.solidHeart,
-                count: 0,
-                context: context,
-                style: 1,
-                type: "whoAdmiresYou",
-                newFriends: 0,
-              ),
-            ),
+            (report != null)
+                ? Padding(
+                    padding: const EdgeInsets.fromLTRB(8.0, 0.0, 8.0, 0.0),
+                    child: InfoCard(
+                      title: "Who Admires You",
+                      subTitle: "Find out who's intersted in you",
+                      icon: FontAwesomeIcons.heartPulse,
+                      count: report!.whoAdmiresYou.length,
+                      context: context,
+                      style: 1,
+                      type: "whoAdmiresYou",
+                      newFriends: 0,
+                      imagesStack: [
+                        report!.whoAdmiresYou[0].user.picture,
+                        report!.whoAdmiresYou[1].user.picture,
+                        report!.whoAdmiresYou[2].user.picture,
+                        report!.whoAdmiresYou[3].user.picture,
+                      ],
+                    ),
+                  )
+                : Container(),
             const StoriesList(),
             const SectionTitle(title: "Important stats", icon: FontAwesomeIcons.chartSimple),
             Padding(
