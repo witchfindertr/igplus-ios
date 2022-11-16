@@ -88,12 +88,7 @@ class ReportData extends StatelessWidget {
                       style: 1,
                       type: "whoAdmiresYou",
                       newFriends: 0,
-                      imagesStack: [
-                        report!.whoAdmiresYou[0].user.picture,
-                        report!.whoAdmiresYou[1].user.picture,
-                        report!.whoAdmiresYou[2].user.picture,
-                        report!.whoAdmiresYou[3].user.picture,
-                      ],
+                      imagesStack: report!.whoAdmiresYou.map((e) => e.user.picture).toList(),
                     ),
                   )
                 : Container(),
