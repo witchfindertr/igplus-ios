@@ -1,7 +1,7 @@
 import 'package:equatable/equatable.dart';
-import 'package:igplus_ios/data/models/story_model.dart';
-import 'package:igplus_ios/domain/entities/entity_mapper.dart';
-import 'package:igplus_ios/domain/entities/stories_user.dart';
+import 'package:igshark/data/models/story_model.dart';
+import 'package:igshark/domain/entities/entity_mapper.dart';
+import 'package:igshark/domain/entities/stories_user.dart';
 
 class StoriesUserModel extends Equatable {
   final String ownerId;

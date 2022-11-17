@@ -1,20 +1,20 @@
 import 'dart:io';
 
 import 'package:dartz/dartz.dart';
-import 'package:igplus_ios/data/models/media_commenter_model.dart';
-import 'package:igplus_ios/data/models/media_liker_model.dart';
-import 'package:igplus_ios/data/models/media_model.dart';
+import 'package:igshark/data/models/media_commenter_model.dart';
+import 'package:igshark/data/models/media_liker_model.dart';
+import 'package:igshark/data/models/media_model.dart';
 
-import 'package:igplus_ios/data/models/stories_user.dart';
-import 'package:igplus_ios/data/models/story_viewer_model.dart';
-import 'package:igplus_ios/domain/entities/media_commenter.dart';
-import 'package:igplus_ios/domain/entities/media_liker.dart';
-import 'package:igplus_ios/domain/entities/stories_user.dart';
-import 'package:igplus_ios/domain/entities/friend.dart';
-import 'package:igplus_ios/domain/entities/ig_headers.dart';
-import 'package:igplus_ios/domain/entities/media.dart';
-import 'package:igplus_ios/domain/entities/story.dart';
-import 'package:igplus_ios/domain/entities/story_viewer.dart';
+import 'package:igshark/data/models/stories_user.dart';
+import 'package:igshark/data/models/story_viewer_model.dart';
+import 'package:igshark/domain/entities/media_commenter.dart';
+import 'package:igshark/domain/entities/media_liker.dart';
+import 'package:igshark/domain/entities/stories_user.dart';
+import 'package:igshark/domain/entities/friend.dart';
+import 'package:igshark/domain/entities/ig_headers.dart';
+import 'package:igshark/domain/entities/media.dart';
+import 'package:igshark/domain/entities/story.dart';
+import 'package:igshark/domain/entities/story_viewer.dart';
 
 import '../../../domain/entities/account_info.dart';
 import '../../../domain/repositories/instagram/instagram_repository.dart';

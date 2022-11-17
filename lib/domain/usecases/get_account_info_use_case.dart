@@ -1,7 +1,7 @@
-import 'package:igplus_ios/data/failure.dart';
-import 'package:igplus_ios/domain/entities/account_info.dart';
-import 'package:igplus_ios/domain/entities/ig_headers.dart';
-import 'package:igplus_ios/domain/repositories/instagram/instagram_repository.dart';
+import 'package:igshark/data/failure.dart';
+import 'package:igshark/domain/entities/account_info.dart';
+import 'package:igshark/domain/entities/ig_headers.dart';
+import 'package:igshark/domain/repositories/instagram/instagram_repository.dart';
 import 'package:dartz/dartz.dart';
 
 class GetAccountInfoUseCase {

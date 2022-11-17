@@ -1,9 +1,9 @@
 import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:igplus_ios/domain/entities/report.dart';
-import 'package:igplus_ios/presentation/resources/colors_manager.dart';
-import 'package:igplus_ios/presentation/views/global/section_title.dart';
+import 'package:igshark/domain/entities/report.dart';
+import 'package:igshark/presentation/resources/colors_manager.dart';
+import 'package:igshark/presentation/views/global/section_title.dart';
 import 'package:mrx_charts/mrx_charts.dart';
 import 'package:intl/intl.dart';
 

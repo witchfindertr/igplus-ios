@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:igplus_ios/presentation/resources/colors_manager.dart';
-import 'package:igplus_ios/presentation/views/global/loading_indicator.dart';
+import 'package:igshark/presentation/resources/colors_manager.dart';
+import 'package:igshark/presentation/views/global/loading_indicator.dart';
 
 class LoadingCard extends StatelessWidget {
   final String title;

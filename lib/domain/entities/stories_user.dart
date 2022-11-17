@@ -1,6 +1,6 @@
 import 'package:equatable/equatable.dart';
 import 'package:hive/hive.dart';
-import 'package:igplus_ios/domain/entities/story.dart';
+import 'package:igshark/domain/entities/story.dart';
 
 part 'stories_user.g.dart';
 

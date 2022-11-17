@@ -1,6 +1,6 @@
 import 'package:equatable/equatable.dart';
-import 'package:igplus_ios/data/models/friend_model.dart';
-import 'package:igplus_ios/domain/entities/friend.dart';
+import 'package:igshark/data/models/friend_model.dart';
+import 'package:igshark/domain/entities/friend.dart';
 
 import '../../app/constants/media_constants.dart';
 import '../../domain/entities/entity_mapper.dart';

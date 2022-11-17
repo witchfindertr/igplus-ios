@@ -3,25 +3,25 @@ import 'dart:async';
 import 'package:bloc/bloc.dart';
 import 'package:dartz/dartz.dart';
 import 'package:equatable/equatable.dart';
-import 'package:igplus_ios/data/failure.dart';
-import 'package:igplus_ios/domain/entities/account_info.dart';
-import 'package:igplus_ios/domain/entities/likes_and_comments.dart';
-import 'package:igplus_ios/domain/entities/user.dart';
-import 'package:igplus_ios/domain/repositories/auth/auth_repository.dart';
-import 'package:igplus_ios/domain/usecases/clear_local_data_use_case.dart';
-import 'package:igplus_ios/domain/usecases/get_account_info_from_local_use_case.dart';
+import 'package:igshark/data/failure.dart';
+import 'package:igshark/domain/entities/account_info.dart';
+import 'package:igshark/domain/entities/likes_and_comments.dart';
+import 'package:igshark/domain/entities/user.dart';
+import 'package:igshark/domain/repositories/auth/auth_repository.dart';
+import 'package:igshark/domain/usecases/clear_local_data_use_case.dart';
+import 'package:igshark/domain/usecases/get_account_info_from_local_use_case.dart';
 
-import 'package:igplus_ios/domain/usecases/get_account_info_use_case.dart';
-import 'package:igplus_ios/domain/usecases/get_user_feed_use_case.dart';
-import 'package:igplus_ios/domain/usecases/get_friends_from_local_use_case.dart';
-import 'package:igplus_ios/domain/usecases/get_report_from_local_use_case.dart';
-import 'package:igplus_ios/domain/usecases/get_user_use_case.dart';
-import 'package:igplus_ios/domain/usecases/get_who_admires_you_from_local_use_case.dart';
-import 'package:igplus_ios/domain/usecases/save_account_info_to_local_use_case.dart';
-import 'package:igplus_ios/domain/usecases/save_media_to_local_use_case.dart';
-import 'package:igplus_ios/domain/usecases/update_report_use_case.dart';
+import 'package:igshark/domain/usecases/get_account_info_use_case.dart';
+import 'package:igshark/domain/usecases/get_user_feed_use_case.dart';
+import 'package:igshark/domain/usecases/get_friends_from_local_use_case.dart';
+import 'package:igshark/domain/usecases/get_report_from_local_use_case.dart';
+import 'package:igshark/domain/usecases/get_user_use_case.dart';
+import 'package:igshark/domain/usecases/get_who_admires_you_from_local_use_case.dart';
+import 'package:igshark/domain/usecases/save_account_info_to_local_use_case.dart';
+import 'package:igshark/domain/usecases/save_media_to_local_use_case.dart';
+import 'package:igshark/domain/usecases/update_report_use_case.dart';
 
-import 'package:igplus_ios/domain/entities/report.dart';
+import 'package:igshark/domain/entities/report.dart';
 
 part 'report_state.dart';
 

@@ -4,28 +4,29 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:hive_flutter/hive_flutter.dart';
-import 'package:igplus_ios/app/app.dart';
-import 'package:igplus_ios/app/bloc/app_bloc.dart';
-import 'package:igplus_ios/domain/entities/account_info.dart';
-import 'package:igplus_ios/domain/entities/friend.dart';
-import 'package:igplus_ios/domain/entities/likes_and_comments.dart';
-import 'package:igplus_ios/domain/entities/media.dart';
-import 'package:igplus_ios/domain/entities/media_commenter.dart';
-import 'package:igplus_ios/domain/entities/media_liker.dart';
-import 'package:igplus_ios/domain/entities/report.dart';
-import 'package:igplus_ios/domain/entities/stories_user.dart';
-import 'package:igplus_ios/domain/entities/story.dart';
-import 'package:igplus_ios/domain/entities/story_viewer.dart';
-import 'package:igplus_ios/presentation/blocs/engagement/media_commeters/cubit/media_commenters_cubit.dart';
-import 'package:igplus_ios/presentation/blocs/engagement/media_likers/cubit/media_likers_cubit.dart';
-import 'package:igplus_ios/presentation/blocs/friends_list/cubit/friends_list_cubit.dart';
-import 'package:igplus_ios/presentation/blocs/home/report/cubit/report_cubit.dart';
-import 'package:igplus_ios/presentation/blocs/insight/stories_insight/cubit/stories_insight_cubit.dart';
-import 'package:igplus_ios/presentation/blocs/insight/stories_insight/story_viewers/cubit/story_viewers_cubit.dart';
-import 'package:igplus_ios/presentation/blocs/login/cubit/instagram_auth_cubit.dart';
-import 'package:igplus_ios/presentation/blocs/insight/media_insight/cubit/media_list_cubit.dart';
-import 'package:igplus_ios/presentation/blocs/home/stories/cubit/stories_cubit.dart';
-import 'package:igplus_ios/presentation/blocs/home/user_stories/cubit/user_stories_cubit.dart';
+import 'package:igshark/app/app.dart';
+import 'package:igshark/app/bloc/app_bloc.dart';
+import 'package:igshark/domain/entities/account_info.dart';
+import 'package:igshark/domain/entities/friend.dart';
+import 'package:igshark/domain/entities/likes_and_comments.dart';
+import 'package:igshark/domain/entities/media.dart';
+import 'package:igshark/domain/entities/media_commenter.dart';
+import 'package:igshark/domain/entities/media_liker.dart';
+import 'package:igshark/domain/entities/report.dart';
+import 'package:igshark/domain/entities/stories_user.dart';
+import 'package:igshark/domain/entities/story.dart';
+import 'package:igshark/domain/entities/story_viewer.dart';
+import 'package:igshark/presentation/blocs/engagement/media_commeters/cubit/media_commenters_cubit.dart';
+import 'package:igshark/presentation/blocs/engagement/media_likers/cubit/media_likers_cubit.dart';
+import 'package:igshark/presentation/blocs/friends_list/cubit/friends_list_cubit.dart';
+import 'package:igshark/presentation/blocs/home/report/cubit/report_cubit.dart';
+import 'package:igshark/presentation/blocs/insight/stories_insight/cubit/stories_insight_cubit.dart';
+import 'package:igshark/presentation/blocs/insight/stories_insight/story_viewers/cubit/story_viewers_cubit.dart';
+import 'package:igshark/presentation/blocs/login/cubit/instagram_auth_cubit.dart';
+import 'package:igshark/presentation/blocs/insight/media_insight/cubit/media_list_cubit.dart';
+import 'package:igshark/presentation/blocs/home/stories/cubit/stories_cubit.dart';
+import 'package:igshark/presentation/blocs/home/user_stories/cubit/user_stories_cubit.dart';
+import 'package:purchases_flutter/purchases_flutter.dart';
 import 'app/bloc_observer.dart';
 import 'app/injection_container.dart' as di;
 
@@ -81,6 +82,9 @@ void main() async {
   } catch (e) {
     debugPrint(e.toString());
   }
+
+  // inapp purchase configuration
+  await Purchases.configure(PurchasesConfiguration("appl_QivdadMnvjMBVqgSUzWqhEoYSlL"));
 
   await di.init();
   Bloc.observer = AppBlocObserver();

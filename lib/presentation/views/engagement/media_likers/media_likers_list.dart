@@ -2,13 +2,13 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
-import 'package:igplus_ios/domain/entities/media_liker.dart';
-import 'package:igplus_ios/domain/entities/media_likers.dart';
-import 'package:igplus_ios/presentation/blocs/engagement/media_likers/cubit/media_likers_cubit.dart';
-import 'package:igplus_ios/presentation/resources/colors_manager.dart';
-import 'package:igplus_ios/presentation/resources/theme_manager.dart';
-import 'package:igplus_ios/presentation/views/engagement/media_likers/media_likers_list_item.dart';
-import 'package:igplus_ios/presentation/views/engagement/media_likers/media_likers_search.dart';
+import 'package:igshark/domain/entities/media_liker.dart';
+import 'package:igshark/domain/entities/media_likers.dart';
+import 'package:igshark/presentation/blocs/engagement/media_likers/cubit/media_likers_cubit.dart';
+import 'package:igshark/presentation/resources/colors_manager.dart';
+import 'package:igshark/presentation/resources/theme_manager.dart';
+import 'package:igshark/presentation/views/engagement/media_likers/media_likers_list_item.dart';
+import 'package:igshark/presentation/views/engagement/media_likers/media_likers_search.dart';
 import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
 
 class MediaLikersList extends StatefulWidget {

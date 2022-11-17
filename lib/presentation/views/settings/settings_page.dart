@@ -2,32 +2,32 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:go_router/go_router.dart';
-import 'package:igplus_ios/presentation/resources/colors_manager.dart';
-import 'package:igplus_ios/presentation/views/global/info_card_list.dart';
-import 'package:igplus_ios/presentation/views/global/section_title.dart';
+import 'package:igshark/presentation/resources/colors_manager.dart';
+import 'package:igshark/presentation/views/global/info_card_list.dart';
+import 'package:igshark/presentation/views/global/section_title.dart';
 
 class SettingPage extends StatelessWidget {
   const SettingPage({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    List<Map> AppSettings1 = [
-      {
-        "title": "Likes this app? Rate us",
-        "context": context,
-      },
-      {
-        "title": "Reset App Data",
-        "subTitle": "This will reset all the data stored in the app",
-        "context": context,
-      },
+    List<Map> appSettings1 = [
+      // {
+      //   "title": "Likes this app? Rate us",
+      //   "context": context,
+      // },
+      // {
+      //   "title": "Reset App Data",
+      //   "subTitle": "This will reset all the data stored in the app",
+      //   "context": context,
+      // },
       {
         "title": "Report a bug or suggest a feature",
         "context": context,
       }
     ];
 
-    List<Map> AppSettings2 = [
+    List<Map> appSettings2 = [
       {
         "title": "Restore Purchase",
         "context": context,
@@ -38,7 +38,7 @@ class SettingPage extends StatelessWidget {
       }
     ];
 
-    List<Map> AppSettings3 = [
+    List<Map> appSettings3 = [
       {
         "title": "Term of Use",
         "context": context,
@@ -60,19 +60,19 @@ class SettingPage extends StatelessWidget {
                 icon: FontAwesomeIcons.gear,
               ),
               InfoCardList(
-                cards: AppSettings1,
+                cards: appSettings1,
               ),
               const SizedBox(
                 height: 8,
               ),
               InfoCardList(
-                cards: AppSettings2,
+                cards: appSettings2,
               ),
               const SizedBox(
                 height: 8,
               ),
               InfoCardList(
-                cards: AppSettings3,
+                cards: appSettings3,
               ),
               const Divider(
                 height: 10,

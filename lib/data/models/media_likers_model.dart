@@ -1,5 +1,5 @@
-import 'package:igplus_ios/domain/entities/media_liker.dart';
-import 'package:igplus_ios/domain/entities/media_likers.dart';
+import 'package:igshark/domain/entities/media_liker.dart';
+import 'package:igshark/domain/entities/media_likers.dart';
 
 class MediaLikersModel {
   final String id;

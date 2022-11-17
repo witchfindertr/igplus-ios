@@ -1,4 +1,4 @@
-import 'package:igplus_ios/domain/entities/friend.dart';
+import 'package:igshark/domain/entities/friend.dart';
 import 'package:hive/hive.dart';
 
 part 'story_viewer.g.dart';

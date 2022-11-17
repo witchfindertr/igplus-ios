@@ -3,9 +3,9 @@ import 'dart:io';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:igplus_ios/data/constants.dart';
-import 'package:igplus_ios/data/models/ig_headers_model.dart';
-import 'package:igplus_ios/data/sources/firebase/firebase_data_source.dart';
+import 'package:igshark/data/constants.dart';
+import 'package:igshark/data/models/ig_headers_model.dart';
+import 'package:igshark/data/sources/firebase/firebase_data_source.dart';
 import 'package:mockito/mockito.dart';
 
 import '../../../helpers/json_reader.dart';

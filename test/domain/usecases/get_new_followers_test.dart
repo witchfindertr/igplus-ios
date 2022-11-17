@@ -1,8 +1,8 @@
 // import 'package:dartz/dartz.dart';
 // import 'package:flutter_test/flutter_test.dart';
-// import 'package:igplus_ios/domain/entities/friend.dart';
-// import 'package:igplus_ios/domain/entities/ig_headers.dart';
-// import 'package:igplus_ios/domain/usecases/get_new_followers_use_case.dart';
+// import 'package:igshark/domain/entities/friend.dart';
+// import 'package:igshark/domain/entities/ig_headers.dart';
+// import 'package:igshark/domain/usecases/get_new_followers_use_case.dart';
 // import 'package:mockito/mockito.dart';
 
 // import '../../helpers/test_helper.mocks.dart';

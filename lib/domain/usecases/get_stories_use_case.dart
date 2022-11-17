@@ -1,5 +1,5 @@
 import 'package:dartz/dartz.dart';
-import 'package:igplus_ios/domain/repositories/instagram/instagram_repository.dart';
+import 'package:igshark/domain/repositories/instagram/instagram_repository.dart';
 
 import '../../data/failure.dart';
 import '../entities/ig_headers.dart';

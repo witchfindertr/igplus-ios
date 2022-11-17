@@ -1,5 +1,5 @@
-import 'package:igplus_ios/domain/entities/account_info.dart';
-import 'package:igplus_ios/domain/repositories/local/local_repository.dart';
+import 'package:igshark/domain/entities/account_info.dart';
+import 'package:igshark/domain/repositories/local/local_repository.dart';
 
 class CacheAccountInfoToLocalUseCase {
   final LocalRepository localRepository;

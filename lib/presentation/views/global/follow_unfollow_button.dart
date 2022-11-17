@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:igplus_ios/presentation/blocs/friends_list/cubit/friends_list_cubit.dart';
-import 'package:igplus_ios/presentation/resources/colors_manager.dart';
-import 'package:igplus_ios/presentation/views/global/loading_indicator.dart';
+import 'package:igshark/presentation/blocs/friends_list/cubit/friends_list_cubit.dart';
+import 'package:igshark/presentation/resources/colors_manager.dart';
+import 'package:igshark/presentation/views/global/loading_indicator.dart';
 import 'package:provider/provider.dart';
 
 class FollowUnfollowButton extends StatefulWidget {

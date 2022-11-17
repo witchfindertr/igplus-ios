@@ -2,11 +2,11 @@
 // import 'dart:io';
 
 // import 'package:flutter_test/flutter_test.dart';
-// import 'package:igplus_ios/data/constants.dart';
-// import 'package:igplus_ios/data/failure.dart';
-// import 'package:igplus_ios/data/models/account_info_model.dart';
-// import 'package:igplus_ios/data/sources/instagram/instagram_data_source.dart';
-// import 'package:igplus_ios/domain/entities/ig_headers.dart';
+// import 'package:igshark/data/constants.dart';
+// import 'package:igshark/data/failure.dart';
+// import 'package:igshark/data/models/account_info_model.dart';
+// import 'package:igshark/data/sources/instagram/instagram_data_source.dart';
+// import 'package:igshark/domain/entities/ig_headers.dart';
 // import 'package:mockito/mockito.dart';
 
 // import '../../../helpers/json_reader.dart';

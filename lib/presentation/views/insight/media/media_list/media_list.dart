@@ -2,12 +2,12 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
-import 'package:igplus_ios/domain/entities/media.dart';
-import 'package:igplus_ios/presentation/blocs/insight/media_insight/cubit/media_list_cubit.dart';
-import 'package:igplus_ios/presentation/resources/colors_manager.dart';
-import 'package:igplus_ios/presentation/resources/theme_manager.dart';
-import 'package:igplus_ios/presentation/views/insight/media/media_list/media_list_item.dart';
-import 'package:igplus_ios/presentation/views/insight/media/media_list/media_search.dart';
+import 'package:igshark/domain/entities/media.dart';
+import 'package:igshark/presentation/blocs/insight/media_insight/cubit/media_list_cubit.dart';
+import 'package:igshark/presentation/resources/colors_manager.dart';
+import 'package:igshark/presentation/resources/theme_manager.dart';
+import 'package:igshark/presentation/views/insight/media/media_list/media_list_item.dart';
+import 'package:igshark/presentation/views/insight/media/media_list/media_search.dart';
 import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
 import 'package:url_launcher/url_launcher.dart';
 

@@ -31,10 +31,46 @@
               "client_type": 3
             },
             {
-              "client_id": "1018818071963-vmb43039u099m7uu0qno9ccjqo35j16i.apps.googleusercontent.com",
+              "client_id": "1018818071963-3i5mq037vigiujfh61ra8lg4ncks2l3s.apps.googleusercontent.com",
               "client_type": 2,
               "ios_info": {
-                "bundle_id": "com.aitoapps.igplus"
+                "bundle_id": "com.aitoapps.igshark"
+              }
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1018818071963:android:41dcbd668295891c06e53e",
+        "android_client_info": {
+          "package_name": "com.aitoapps.igshark"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "1018818071963-7pkceovorh0rmmna2jrj3jvu72s68vc6.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyA4U3zJtgvRO2T3g9OUa5a3Rbjcl8spd_A"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "1018818071963-7pkceovorh0rmmna2jrj3jvu72s68vc6.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "1018818071963-3i5mq037vigiujfh61ra8lg4ncks2l3s.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.aitoapps.igshark"
               }
             }
           ]

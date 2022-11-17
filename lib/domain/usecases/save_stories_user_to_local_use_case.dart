@@ -1,5 +1,5 @@
-import 'package:igplus_ios/domain/entities/stories_user.dart';
-import 'package:igplus_ios/domain/repositories/local/local_repository.dart';
+import 'package:igshark/domain/entities/stories_user.dart';
+import 'package:igshark/domain/repositories/local/local_repository.dart';
 
 class CacheStoriesUserToLocalUseCase {
   final LocalRepository localRepository;

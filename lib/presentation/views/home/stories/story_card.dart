@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
-import 'package:igplus_ios/domain/entities/stories_user.dart';
+import 'package:igshark/domain/entities/stories_user.dart';
 
-import 'package:igplus_ios/presentation/resources/colors_manager.dart';
+import 'package:igshark/presentation/resources/colors_manager.dart';
 
 class StoryCard extends StatelessWidget {
   final StoriesUser userStory;

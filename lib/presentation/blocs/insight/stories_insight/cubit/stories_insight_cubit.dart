@@ -1,15 +1,15 @@
 import 'package:bloc/bloc.dart';
 import 'package:dartz/dartz.dart';
 import 'package:equatable/equatable.dart';
-import 'package:igplus_ios/data/failure.dart';
-import 'package:igplus_ios/domain/entities/stories_user.dart';
-import 'package:igplus_ios/domain/entities/story.dart';
-import 'package:igplus_ios/domain/entities/user.dart';
-import 'package:igplus_ios/domain/usecases/get_stories_from_local_use_case.dart';
-import 'package:igplus_ios/domain/usecases/get_stories_use_case.dart';
-import 'package:igplus_ios/domain/usecases/get_user_feed_use_case.dart';
-import 'package:igplus_ios/domain/usecases/get_user_use_case.dart';
-import 'package:igplus_ios/domain/usecases/save_stories_to_local_use_case.dart';
+import 'package:igshark/data/failure.dart';
+import 'package:igshark/domain/entities/stories_user.dart';
+import 'package:igshark/domain/entities/story.dart';
+import 'package:igshark/domain/entities/user.dart';
+import 'package:igshark/domain/usecases/get_stories_from_local_use_case.dart';
+import 'package:igshark/domain/usecases/get_stories_use_case.dart';
+import 'package:igshark/domain/usecases/get_user_feed_use_case.dart';
+import 'package:igshark/domain/usecases/get_user_use_case.dart';
+import 'package:igshark/domain/usecases/save_stories_to_local_use_case.dart';
 
 part 'stories_insight_state.dart';
 

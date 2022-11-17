@@ -1,13 +1,13 @@
 import 'package:bloc/bloc.dart';
 import 'package:dartz/dartz.dart';
 import 'package:equatable/equatable.dart';
-import 'package:igplus_ios/data/failure.dart';
-import 'package:igplus_ios/domain/entities/media.dart';
-import 'package:igplus_ios/domain/entities/user.dart';
-import 'package:igplus_ios/domain/usecases/get_media_from_local_use_case.dart';
-import 'package:igplus_ios/domain/usecases/get_user_feed_use_case.dart';
-import 'package:igplus_ios/domain/usecases/get_user_use_case.dart';
-import 'package:igplus_ios/domain/usecases/save_media_to_local_use_case.dart';
+import 'package:igshark/data/failure.dart';
+import 'package:igshark/domain/entities/media.dart';
+import 'package:igshark/domain/entities/user.dart';
+import 'package:igshark/domain/usecases/get_media_from_local_use_case.dart';
+import 'package:igshark/domain/usecases/get_user_feed_use_case.dart';
+import 'package:igshark/domain/usecases/get_user_use_case.dart';
+import 'package:igshark/domain/usecases/save_media_to_local_use_case.dart';
 
 part 'media_list_state.dart';
 

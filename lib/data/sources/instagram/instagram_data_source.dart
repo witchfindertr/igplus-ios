@@ -7,19 +7,19 @@
 import 'dart:convert';
 
 import 'package:hive/hive.dart';
-import 'package:igplus_ios/data/models/account_info_model.dart';
+import 'package:igshark/data/models/account_info_model.dart';
 import 'package:http/http.dart' as http;
-import 'package:igplus_ios/data/models/media_commenter_model.dart';
-import 'package:igplus_ios/data/models/media_model.dart';
-import 'package:igplus_ios/data/models/media_liker_model.dart';
+import 'package:igshark/data/models/media_commenter_model.dart';
+import 'package:igshark/data/models/media_model.dart';
+import 'package:igshark/data/models/media_liker_model.dart';
 
-import 'package:igplus_ios/data/models/stories_user.dart';
-import 'package:igplus_ios/data/models/story_viewer_model.dart';
+import 'package:igshark/data/models/stories_user.dart';
+import 'package:igshark/data/models/story_viewer_model.dart';
 
-import 'package:igplus_ios/domain/entities/friend.dart';
-import 'package:igplus_ios/domain/entities/stories_user.dart';
-import 'package:igplus_ios/domain/usecases/save_friends_to_local_use_case.dart';
-import 'package:igplus_ios/domain/usecases/update_story_by_id_use_case.dart';
+import 'package:igshark/domain/entities/friend.dart';
+import 'package:igshark/domain/entities/stories_user.dart';
+import 'package:igshark/domain/usecases/save_friends_to_local_use_case.dart';
+import 'package:igshark/domain/usecases/update_story_by_id_use_case.dart';
 
 import '../../constants.dart';
 import '../../failure.dart';
@@ -69,7 +69,12 @@ class InstagramDataSourceImp extends InstagramDataSource {
       //{"message":"checkpoint_required","checkpoint_url":"https://i.instagram.com/challenge/?next=/api/v1/users/23689336944/info/","lock":true,"flow_render_type":0,"status":"fail"}
       throw const InstagramSessionFailure("checkpoint required");
     } else {
-      throw const ServerFailure("Failed to get account info by ID");
+      // final jsonResponse = json.decode(response.body);
+      // if (jsonResponse['message'].isNotEmpty) {
+      //   throw InstagramSessionFailure(jsonResponse['message']);
+      // } else {
+      throw const InstagramSessionFailure("get account info by IDInstagram session expired");
+      // }
     }
   }
 

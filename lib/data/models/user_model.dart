@@ -1,5 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:igplus_ios/data/models/ig_headers_model.dart';
+import 'package:igshark/data/models/ig_headers_model.dart';
 
 import '../../domain/entities/user.dart';
 

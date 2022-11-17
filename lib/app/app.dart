@@ -1,8 +1,8 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:igplus_ios/presentation/router.dart';
-import 'package:igplus_ios/presentation/resources/theme_manager.dart';
+import 'package:igshark/presentation/router.dart';
+import 'package:igshark/presentation/resources/theme_manager.dart';
 
 import 'bloc/app_bloc.dart';
 

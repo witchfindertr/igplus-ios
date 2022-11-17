@@ -1,11 +1,11 @@
 import 'package:dartz/dartz.dart';
-import 'package:igplus_ios/domain/entities/media_commenter.dart';
-import 'package:igplus_ios/domain/entities/media_liker.dart';
-import 'package:igplus_ios/domain/entities/stories_user.dart';
-import 'package:igplus_ios/domain/entities/friend.dart';
-import 'package:igplus_ios/domain/entities/ig_headers.dart';
-import 'package:igplus_ios/domain/entities/media.dart';
-import 'package:igplus_ios/domain/entities/story_viewer.dart';
+import 'package:igshark/domain/entities/media_commenter.dart';
+import 'package:igshark/domain/entities/media_liker.dart';
+import 'package:igshark/domain/entities/stories_user.dart';
+import 'package:igshark/domain/entities/friend.dart';
+import 'package:igshark/domain/entities/ig_headers.dart';
+import 'package:igshark/domain/entities/media.dart';
+import 'package:igshark/domain/entities/story_viewer.dart';
 
 import '../../../data/failure.dart';
 import '../../entities/account_info.dart';

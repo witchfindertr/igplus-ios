@@ -1,7 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
-import 'package:igplus_ios/presentation/resources/colors_manager.dart';
+import 'package:igshark/presentation/resources/colors_manager.dart';
 
 CupertinoThemeData appTheme() {
   return const CupertinoThemeData(

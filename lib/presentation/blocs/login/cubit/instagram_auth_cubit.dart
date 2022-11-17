@@ -2,16 +2,16 @@ import 'package:bloc/bloc.dart';
 import 'package:dartz/dartz.dart';
 import 'package:equatable/equatable.dart';
 
-import 'package:igplus_ios/data/failure.dart';
-import 'package:igplus_ios/domain/entities/account_info.dart';
-import 'package:igplus_ios/domain/entities/ig_headers.dart';
-import 'package:igplus_ios/domain/usecases/authorize_user.dart';
-import 'package:igplus_ios/domain/usecases/creat_user_use_case.dart';
-import 'package:igplus_ios/domain/usecases/get_account_info_use_case.dart';
-import 'package:igplus_ios/domain/usecases/get_headers_use_case.dart';
-import 'package:igplus_ios/domain/usecases/get_user_use_case.dart';
-import 'package:igplus_ios/domain/usecases/sign_up_with_cstom_token_use_case.dart';
-import 'package:igplus_ios/domain/usecases/update_user_use_case.dart';
+import 'package:igshark/data/failure.dart';
+import 'package:igshark/domain/entities/account_info.dart';
+import 'package:igshark/domain/entities/ig_headers.dart';
+import 'package:igshark/domain/usecases/authorize_user.dart';
+import 'package:igshark/domain/usecases/creat_user_use_case.dart';
+import 'package:igshark/domain/usecases/get_account_info_use_case.dart';
+import 'package:igshark/domain/usecases/get_headers_use_case.dart';
+import 'package:igshark/domain/usecases/get_user_use_case.dart';
+import 'package:igshark/domain/usecases/sign_up_with_cstom_token_use_case.dart';
+import 'package:igshark/domain/usecases/update_user_use_case.dart';
 
 import '../../../../domain/entities/user.dart';
 
