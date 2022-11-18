@@ -2,7 +2,6 @@ import 'dart:developer';
 
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
-import 'package:igshark/domain/entities/subscription_pack.dart';
 import 'package:purchases_flutter/purchases_flutter.dart';
 
 part 'subscription_state.dart';
@@ -20,23 +19,17 @@ class SubscriptionCubit extends Cubit<SubscriptionState> {
       if (offerings.current != null) {
         List<Package> packages = offerings.current!.availablePackages;
         inspect(packages);
-        emit(SubscriptionLoaded(packages));
+        emit(SubscriptionLoaded(packages: packages));
       }
     } catch (e) {
       emit(SubscriptionFailure(e.toString()));
     }
   }
 
-  // make purchase
-  Future<void> makePurchase(Package packageId) async {
-    emit(SubscriptionLoading());
-    try {
-      final purchaserInfo = await Purchases.purchasePackage(packageId);
-      inspect(purchaserInfo);
-      // emit(SubscriptionLoaded(subscriptionPack));
-    } catch (e) {
-      emit(SubscriptionFailure(e.toString()));
-    }
+  // check if user is subscribed
+  Future<bool> checkSubscription() async {
+    final purchaserInfo = await Purchases.getCustomerInfo();
+    return purchaserInfo.entitlements.all['premium']!.isActive;
   }
 
   // restore purchase

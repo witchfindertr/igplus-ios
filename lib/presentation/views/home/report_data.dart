@@ -1,7 +1,9 @@
 import 'package:flutter/cupertino.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:igshark/domain/entities/account_info.dart';
 import 'package:igshark/domain/entities/report.dart';
+import 'package:igshark/presentation/blocs/paywall/subscription/cubit/subscription_cubit.dart';
 import 'package:igshark/presentation/resources/colors_manager.dart';
 import 'package:igshark/presentation/views/global/info_card.dart';
 import 'package:igshark/presentation/views/global/loading_card.dart';
@@ -25,6 +27,7 @@ class ReportData extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     // String loadingMessage = "we are loading your data";
+    bool isPremium = false;
     return CupertinoScrollbar(
       thickness: 0,
       child: Stack(alignment: Alignment.center, children: [

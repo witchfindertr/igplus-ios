@@ -5,6 +5,7 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:go_router/go_router.dart';
 import 'package:igshark/app/constants/media_constants.dart';
 import 'package:igshark/domain/entities/stories_user.dart';
+import 'package:igshark/presentation/resources/colors_manager.dart';
 import 'package:igshark/presentation/views/global/loading_indicator.dart';
 import 'package:story_view/story_view.dart';
 
@@ -49,12 +50,12 @@ class _StoriesViewState extends State<StoriesView> {
                   mainAxisAlignment: MainAxisAlignment.center,
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
-                    const Text("Can't find any stories"),
+                    const Text("Can't find any stories", style: TextStyle(color: ColorsManager.primaryColor)),
                     TextButton(
                       onPressed: () {
                         context.go('/home');
                       },
-                      child: const Text("Go back"),
+                      child: const Text("Go back", style: TextStyle(color: ColorsManager.primaryColor)),
                     )
                   ],
                 ),
