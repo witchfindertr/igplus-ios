@@ -1,11 +1,11 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:igplus_ios/presentation/blocs/insight/media_insight/cubit/media_list_cubit.dart';
-import 'package:igplus_ios/presentation/views/global/info_card.dart';
-import 'package:igplus_ios/presentation/views/global/section_title.dart';
-import 'package:igplus_ios/presentation/views/insight/media/media_card_list.dart';
-import 'package:igplus_ios/presentation/views/insight/stories/stories_card_list.dart';
+import 'package:igshark/presentation/blocs/insight/media_insight/cubit/media_list_cubit.dart';
+import 'package:igshark/presentation/views/global/info_card.dart';
+import 'package:igshark/presentation/views/global/section_title.dart';
+import 'package:igshark/presentation/views/insight/media/media_card_list.dart';
+import 'package:igshark/presentation/views/insight/stories/stories_card_list.dart';
 
 class InsightPage extends StatelessWidget {
   const InsightPage({Key? key}) : super(key: key);

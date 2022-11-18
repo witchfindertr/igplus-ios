@@ -1,9 +1,9 @@
 // import 'package:dartz/dartz.dart';
 // import 'package:flutter_test/flutter_test.dart';
-// import 'package:igplus_ios/domain/entities/account_info.dart';
-// import 'package:igplus_ios/domain/entities/friend.dart';
-// import 'package:igplus_ios/domain/entities/report.dart';
-// import 'package:igplus_ios/domain/usecases/update_report_use_case.dart';
+// import 'package:igshark/domain/entities/account_info.dart';
+// import 'package:igshark/domain/entities/friend.dart';
+// import 'package:igshark/domain/entities/report.dart';
+// import 'package:igshark/domain/usecases/update_report_use_case.dart';
 // import 'package:mockito/mockito.dart';
 
 // import '../../helpers/test_helper.mocks.dart';

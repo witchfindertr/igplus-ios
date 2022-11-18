@@ -2,10 +2,10 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
-import 'package:igplus_ios/domain/entities/story.dart';
-import 'package:igplus_ios/presentation/resources/colors_manager.dart';
-import 'package:igplus_ios/presentation/views/global/images_stack.dart';
-import 'package:igplus_ios/presentation/views/global/loading_indicator.dart';
+import 'package:igshark/domain/entities/story.dart';
+import 'package:igshark/presentation/resources/colors_manager.dart';
+import 'package:igshark/presentation/views/global/images_stack.dart';
+import 'package:igshark/presentation/views/global/loading_indicator.dart';
 import 'package:intl/intl.dart';
 
 /// List item representing a single Character with its photo and name.
@@ -47,7 +47,7 @@ class _StoriesInsightListItemState extends State<StoriesInsightListItem> {
               children: [
                 CachedNetworkImage(
                   imageUrl: widget.story.mediaThumbnailUrl,
-                  placeholder: (context, url) => const Center(
+                  placeholder: (context, url) => Center(
                     child: LoadingIndicator(),
                   ),
                   errorWidget: (context, url, error) => const Icon(

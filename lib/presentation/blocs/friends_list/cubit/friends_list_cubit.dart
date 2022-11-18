@@ -1,11 +1,11 @@
 import 'package:bloc/bloc.dart';
 import 'package:dartz/dartz.dart';
 import 'package:equatable/equatable.dart';
-import 'package:igplus_ios/domain/entities/friend.dart';
-import 'package:igplus_ios/domain/usecases/follow_user_use_case.dart';
-import 'package:igplus_ios/domain/usecases/get_friends_from_local_use_case.dart';
-import 'package:igplus_ios/domain/usecases/get_user_use_case.dart';
-import 'package:igplus_ios/domain/usecases/unfollow_user_use_case%20copy.dart';
+import 'package:igshark/domain/entities/friend.dart';
+import 'package:igshark/domain/usecases/follow_user_use_case.dart';
+import 'package:igshark/domain/usecases/get_friends_from_local_use_case.dart';
+import 'package:igshark/domain/usecases/get_user_use_case.dart';
+import 'package:igshark/domain/usecases/unfollow_user_use_case%20copy.dart';
 
 part 'friends_list_state.dart';
 

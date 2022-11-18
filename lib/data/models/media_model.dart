@@ -1,6 +1,6 @@
-import 'package:igplus_ios/data/models/friend_model.dart';
-import 'package:igplus_ios/domain/entities/friend.dart';
-import 'package:igplus_ios/domain/entities/media.dart';
+import 'package:igshark/data/models/friend_model.dart';
+import 'package:igshark/domain/entities/friend.dart';
+import 'package:igshark/domain/entities/media.dart';
 
 class MediaModel {
   final String id;

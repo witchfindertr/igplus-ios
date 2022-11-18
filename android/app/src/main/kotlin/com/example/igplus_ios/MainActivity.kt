@@ -1,4 +1,4 @@
-package com.aitoapps.igplus
+package com.aitoapps.igshark
 
 import io.flutter.embedding.android.FlutterActivity
 

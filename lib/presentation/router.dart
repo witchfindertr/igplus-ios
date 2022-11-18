@@ -1,23 +1,26 @@
 import 'package:go_router/go_router.dart';
-import 'package:igplus_ios/app/bloc/app_bloc.dart';
-import 'package:igplus_ios/domain/entities/stories_user.dart';
-import 'package:igplus_ios/presentation/views/engagement/media_commenters/media_commenters_list.dart';
-import 'package:igplus_ios/presentation/views/engagement/media_likers/media_likers_list.dart';
-import 'package:igplus_ios/presentation/views/home/friends_list/friends_list.dart';
-import 'package:igplus_ios/presentation/views/home/stories/stories_view.dart';
-import 'package:igplus_ios/presentation/views/home/who_admires_you/who_admires_you_list.dart';
-import 'package:igplus_ios/presentation/views/insight/stories/stories_list/stories_insight_list.dart';
-import 'package:igplus_ios/presentation/views/insight/stories/story_viewers_list/story_viewers_list.dart';
-import 'package:igplus_ios/presentation/views/insight/stories/stories_viewers_insight_list/stories_viewers_insight_list.dart';
-import 'package:igplus_ios/presentation/views/login/instagram_login_page.dart';
-import 'package:igplus_ios/presentation/views/login/login_page.dart';
-import 'package:igplus_ios/presentation/views/insight/media/media_list/media_list.dart';
-import 'package:igplus_ios/presentation/views/tab_page.dart';
+import 'package:igshark/app/bloc/app_bloc.dart';
+import 'package:igshark/domain/entities/stories_user.dart';
+import 'package:igshark/presentation/views/engagement/media_commenters/media_commenters_list.dart';
+import 'package:igshark/presentation/views/engagement/media_likers/media_likers_list.dart';
+import 'package:igshark/presentation/views/home/friends_list/friends_list.dart';
+import 'package:igshark/presentation/views/home/stories/stories_view.dart';
+import 'package:igshark/presentation/views/home/who_admires_you/who_admires_you_list.dart';
+import 'package:igshark/presentation/views/insight/stories/stories_list/stories_insight_list.dart';
+import 'package:igshark/presentation/views/insight/stories/story_viewers_list/story_viewers_list.dart';
+import 'package:igshark/presentation/views/insight/stories/stories_viewers_insight_list/stories_viewers_insight_list.dart';
+import 'package:igshark/presentation/views/login/instagram_login_page.dart';
+import 'package:igshark/presentation/views/login/login_page.dart';
+import 'package:igshark/presentation/views/insight/media/media_list/media_list.dart';
+import 'package:igshark/presentation/views/paywall/paywall.dart';
+import 'package:igshark/presentation/views/paywall/privacy_policy.dart';
+import 'package:igshark/presentation/views/paywall/terms_of_us.dart';
+import 'package:igshark/presentation/views/tab_page.dart';
 
 GoRouter routes(AppBloc appBloc) {
   final Stream stream = appBloc.stream;
   return GoRouter(
-    initialLocation: '/login',
+    initialLocation: '/home/paywall',
     debugLogDiagnostics: true,
     routes: [
       GoRoute(
@@ -87,6 +90,29 @@ GoRouter routes(AppBloc appBloc) {
                   }
                   return MediaLikersList(type: state.params['type'] ?? "");
                 }),
+            // paywall
+            GoRoute(
+                name: 'paywall',
+                path: 'paywall',
+                builder: (context, state) {
+                  return const Paywall();
+                },
+                routes: [
+                  GoRoute(
+                    name: 'privacy',
+                    path: 'privacy',
+                    builder: (context, state) {
+                      return const PrivacyPolicy();
+                    },
+                  ),
+                  GoRoute(
+                    name: 'terms',
+                    path: 'terms',
+                    builder: (context, state) {
+                      return const TermsOfUse();
+                    },
+                  ),
+                ]),
           ]),
     ],
     redirect: (state) {

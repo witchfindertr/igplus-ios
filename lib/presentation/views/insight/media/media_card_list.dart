@@ -2,10 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:go_router/go_router.dart';
-import 'package:igplus_ios/app/extensions/media_query_values.dart';
-import 'package:igplus_ios/presentation/blocs/insight/media_insight/cubit/media_list_cubit.dart';
-import 'package:igplus_ios/presentation/resources/colors_manager.dart';
-import 'package:igplus_ios/presentation/views/global/loading_indicator.dart';
+import 'package:igshark/app/extensions/media_query_values.dart';
+import 'package:igshark/presentation/blocs/insight/media_insight/cubit/media_list_cubit.dart';
+import 'package:igshark/presentation/resources/colors_manager.dart';
+import 'package:igshark/presentation/views/global/loading_indicator.dart';
 
 class MediaCardList extends StatelessWidget {
   final List<Map> cards;
@@ -116,8 +116,8 @@ class MediaCardList extends StatelessWidget {
                 ],
               ),
             ),
-            const Padding(
-              padding: EdgeInsets.symmetric(horizontal: 20),
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 20),
               child: LoadingIndicator(),
             ),
           ],

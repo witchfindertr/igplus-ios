@@ -1,4 +1,4 @@
-import 'package:igplus_ios/domain/entities/ig_headers.dart';
+import 'package:igshark/domain/entities/ig_headers.dart';
 
 class IgHeadersModel {
   String userAgent; // 'User-Agent'

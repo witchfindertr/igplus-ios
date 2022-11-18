@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:igplus_ios/presentation/resources/colors_manager.dart';
-import 'package:igplus_ios/presentation/views/global/loading_indicator.dart';
+import 'package:igshark/presentation/resources/colors_manager.dart';
+import 'package:igshark/presentation/views/global/loading_indicator.dart';
 
 class LoadingCard extends StatelessWidget {
   final String title;
@@ -20,7 +20,7 @@ class LoadingCard extends StatelessWidget {
                 constraints: BoxConstraints(
                     minWidth: MediaQuery.of(context).size.width - 23,
                     minHeight: MediaQuery.of(context).size.height / 7),
-                child: const LoadingIndicator()),
+                child: LoadingIndicator()),
           )
         : Card(
             color: ColorsManager.cardBack,
@@ -42,7 +42,7 @@ class LoadingCard extends StatelessWidget {
                               padding: const EdgeInsets.fromLTRB(0, 0, 15, 10),
                               child: Icon(icon, size: 24),
                             ),
-                            const LoadingIndicator(),
+                            LoadingIndicator(),
                           ],
                         ),
                       ),

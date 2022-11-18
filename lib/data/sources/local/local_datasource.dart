@@ -1,17 +1,15 @@
-import 'dart:ffi';
-
 import 'package:hive/hive.dart';
-import 'package:igplus_ios/domain/entities/account_info.dart';
-import 'package:igplus_ios/domain/entities/friend.dart';
+import 'package:igshark/domain/entities/account_info.dart';
+import 'package:igshark/domain/entities/friend.dart';
 import 'package:http/http.dart' as http;
-import 'package:igplus_ios/domain/entities/likes_and_comments.dart';
-import 'package:igplus_ios/domain/entities/media.dart';
-import 'package:igplus_ios/domain/entities/media_commenter.dart';
-import 'package:igplus_ios/domain/entities/media_liker.dart';
-import 'package:igplus_ios/domain/entities/report.dart';
-import 'package:igplus_ios/domain/entities/stories_user.dart';
-import 'package:igplus_ios/domain/entities/story.dart';
-import 'package:igplus_ios/domain/entities/story_viewer.dart';
+import 'package:igshark/domain/entities/likes_and_comments.dart';
+import 'package:igshark/domain/entities/media.dart';
+import 'package:igshark/domain/entities/media_commenter.dart';
+import 'package:igshark/domain/entities/media_liker.dart';
+import 'package:igshark/domain/entities/report.dart';
+import 'package:igshark/domain/entities/stories_user.dart';
+import 'package:igshark/domain/entities/story.dart';
+import 'package:igshark/domain/entities/story_viewer.dart';
 
 abstract class LocalDataSource {
   Report? getCachedReport();

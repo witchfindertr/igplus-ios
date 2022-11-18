@@ -1,5 +1,5 @@
-import 'package:igplus_ios/domain/entities/story_viewer.dart';
-import 'package:igplus_ios/domain/repositories/local/local_repository.dart';
+import 'package:igshark/domain/entities/story_viewer.dart';
+import 'package:igshark/domain/repositories/local/local_repository.dart';
 
 class CacheStoryViewersToLocalUseCase {
   final LocalRepository localRepository;

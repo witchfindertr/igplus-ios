@@ -2,9 +2,9 @@ import 'dart:async';
 
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
-import 'package:igplus_ios/domain/entities/auth_user.dart';
+import 'package:igshark/domain/entities/auth_user.dart';
 
-import 'package:igplus_ios/domain/repositories/auth/auth_repository.dart';
+import 'package:igshark/domain/repositories/auth/auth_repository.dart';
 
 part 'app_event.dart';
 part 'app_state.dart';

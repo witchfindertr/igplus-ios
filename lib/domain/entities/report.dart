@@ -1,6 +1,6 @@
 import 'package:equatable/equatable.dart';
 import 'package:hive_flutter/adapters.dart';
-import 'package:igplus_ios/domain/entities/likes_and_comments.dart';
+import 'package:igshark/domain/entities/likes_and_comments.dart';
 
 part 'report.g.dart';
 

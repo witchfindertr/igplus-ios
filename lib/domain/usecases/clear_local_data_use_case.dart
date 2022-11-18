@@ -1,4 +1,4 @@
-import 'package:igplus_ios/domain/repositories/local/local_repository.dart';
+import 'package:igshark/domain/repositories/local/local_repository.dart';
 
 class ClearAllBoxesUseCase {
   final LocalRepository localRepository;

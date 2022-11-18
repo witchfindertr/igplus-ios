@@ -1,5 +1,5 @@
-import 'package:igplus_ios/data/models/friend_model.dart';
-import 'package:igplus_ios/domain/entities/story_viewer.dart';
+import 'package:igshark/data/models/friend_model.dart';
+import 'package:igshark/domain/entities/story_viewer.dart';
 
 class StoryViewerModel {
   final String id;

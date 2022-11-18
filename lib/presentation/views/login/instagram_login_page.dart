@@ -6,9 +6,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import 'package:go_router/go_router.dart';
-import 'package:igplus_ios/data/constants.dart';
-import 'package:igplus_ios/domain/usecases/get_account_info_use_case.dart';
-import 'package:igplus_ios/presentation/blocs/login/cubit/instagram_auth_cubit.dart';
+import 'package:igshark/data/constants.dart';
+import 'package:igshark/domain/usecases/get_account_info_use_case.dart';
+import 'package:igshark/presentation/blocs/login/cubit/instagram_auth_cubit.dart';
 
 import 'package:webview_cookie_manager/webview_cookie_manager.dart';
 import 'package:webview_flutter/webview_flutter.dart';

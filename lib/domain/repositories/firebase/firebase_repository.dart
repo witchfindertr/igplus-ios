@@ -1,5 +1,5 @@
 import 'package:dartz/dartz.dart';
-import 'package:igplus_ios/domain/entities/user.dart';
+import 'package:igshark/domain/entities/user.dart';
 
 import '../../../data/failure.dart';
 

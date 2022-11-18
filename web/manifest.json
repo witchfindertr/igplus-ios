@@ -1,6 +1,6 @@
 {
-    "name": "igplus_ios",
-    "short_name": "igplus_ios",
+    "name": "igshark",
+    "short_name": "igshark",
     "start_url": ".",
     "display": "standalone",
     "background_color": "#0175C2",

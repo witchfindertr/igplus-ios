@@ -1,6 +1,6 @@
 // import 'package:dartz/dartz.dart';
-// import 'package:igplus_ios/data/failure.dart';
-// import 'package:igplus_ios/domain/entities/ig_headers.dart';
+// import 'package:igshark/data/failure.dart';
+// import 'package:igshark/domain/entities/ig_headers.dart';
 
 // class HeadersRepository {
 //   Future<Either<Failure, IgHeaders> getHeaders() async {
@@ -19,8 +19,8 @@
 // }
 
 import 'package:dartz/dartz.dart';
-import 'package:igplus_ios/data/failure.dart';
-import 'package:igplus_ios/domain/entities/ig_headers.dart';
+import 'package:igshark/data/failure.dart';
+import 'package:igshark/domain/entities/ig_headers.dart';
 
 import '../../entities/user.dart';
 

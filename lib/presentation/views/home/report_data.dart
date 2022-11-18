@@ -1,14 +1,14 @@
 import 'package:flutter/cupertino.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:igplus_ios/domain/entities/account_info.dart';
-import 'package:igplus_ios/domain/entities/report.dart';
-import 'package:igplus_ios/presentation/resources/colors_manager.dart';
-import 'package:igplus_ios/presentation/views/global/info_card.dart';
-import 'package:igplus_ios/presentation/views/global/loading_card.dart';
-import 'package:igplus_ios/presentation/views/global/section_title.dart';
-import 'package:igplus_ios/presentation/views/home/profile_card.dart';
-import 'package:igplus_ios/presentation/views/home/stats/line-chart.dart';
-import 'package:igplus_ios/presentation/views/home/stories/stories_list.dart';
+import 'package:igshark/domain/entities/account_info.dart';
+import 'package:igshark/domain/entities/report.dart';
+import 'package:igshark/presentation/resources/colors_manager.dart';
+import 'package:igshark/presentation/views/global/info_card.dart';
+import 'package:igshark/presentation/views/global/loading_card.dart';
+import 'package:igshark/presentation/views/global/section_title.dart';
+import 'package:igshark/presentation/views/home/profile_card.dart';
+import 'package:igshark/presentation/views/home/stats/line-chart.dart';
+import 'package:igshark/presentation/views/home/stories/stories_list.dart';
 
 class ReportData extends StatelessWidget {
   const ReportData({
@@ -76,7 +76,7 @@ class ReportData extends StatelessWidget {
                 ],
               ),
             ),
-            (report != null)
+            (report != null && report!.whoAdmiresYou.isNotEmpty)
                 ? Padding(
                     padding: const EdgeInsets.fromLTRB(8.0, 0.0, 8.0, 0.0),
                     child: InfoCard(

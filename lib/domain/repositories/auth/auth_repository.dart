@@ -1,7 +1,7 @@
 import 'package:dartz/dartz.dart';
 import 'package:firebase_auth/firebase_auth.dart' as firebase_auth;
 
-import 'package:igplus_ios/app/utils/cache_client.dart';
+import 'package:igshark/app/utils/cache_client.dart';
 
 import '../../../data/failure.dart';
 import '../../../data/sources/firebase/firebase_data_source.dart';

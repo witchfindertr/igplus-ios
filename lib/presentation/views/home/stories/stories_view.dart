@@ -3,15 +3,15 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:go_router/go_router.dart';
-import 'package:igplus_ios/app/constants/media_constants.dart';
-import 'package:igplus_ios/domain/entities/stories_user.dart';
-import 'package:igplus_ios/presentation/views/global/loading_indicator.dart';
+import 'package:igshark/app/constants/media_constants.dart';
+import 'package:igshark/domain/entities/stories_user.dart';
+import 'package:igshark/presentation/views/global/loading_indicator.dart';
 import 'package:story_view/story_view.dart';
 
 import 'package:timeago/timeago.dart' as timeago;
 
-import 'package:igplus_ios/domain/entities/story.dart';
-import 'package:igplus_ios/presentation/blocs/home/stories/cubit/stories_cubit.dart';
+import 'package:igshark/domain/entities/story.dart';
+import 'package:igshark/presentation/blocs/home/stories/cubit/stories_cubit.dart';
 
 class StoriesView extends StatefulWidget {
   const StoriesView({Key? key, required this.storyOwner}) : super(key: key);
@@ -138,7 +138,7 @@ class _StoriesViewState extends State<StoriesView> {
                   ],
                 ));
           } else {
-            return const Center(child: LoadingIndicator());
+            return Center(child: LoadingIndicator());
           }
         },
       ),

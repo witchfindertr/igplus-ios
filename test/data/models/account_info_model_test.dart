@@ -1,8 +1,8 @@
 import 'dart:convert';
 
 import 'package:flutter_test/flutter_test.dart';
-import 'package:igplus_ios/data/models/account_info_model.dart';
-import 'package:igplus_ios/domain/entities/account_info.dart';
+import 'package:igshark/data/models/account_info_model.dart';
+import 'package:igshark/domain/entities/account_info.dart';
 
 import '../../helpers/json_reader.dart';
 

@@ -1,5 +1,5 @@
 import 'package:equatable/equatable.dart';
-import 'package:igplus_ios/domain/entities/friend.dart';
+import 'package:igshark/domain/entities/friend.dart';
 import 'package:hive/hive.dart';
 
 part 'media.g.dart';

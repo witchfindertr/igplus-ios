@@ -1,5 +1,5 @@
-import 'package:igplus_ios/data/models/friend_model.dart';
-import 'package:igplus_ios/domain/entities/media_commenter.dart';
+import 'package:igshark/data/models/friend_model.dart';
+import 'package:igshark/domain/entities/media_commenter.dart';
 
 class MediaCommenterModel {
   final String id;

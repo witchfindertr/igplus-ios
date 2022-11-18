@@ -2,13 +2,13 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
-import 'package:igplus_ios/domain/entities/media_commenter.dart';
-import 'package:igplus_ios/domain/entities/media_commenters.dart';
-import 'package:igplus_ios/presentation/blocs/engagement/media_commeters/cubit/media_commenters_cubit.dart';
-import 'package:igplus_ios/presentation/resources/colors_manager.dart';
-import 'package:igplus_ios/presentation/resources/theme_manager.dart';
-import 'package:igplus_ios/presentation/views/engagement/media_commenters/media_commenters_list_item.dart';
-import 'package:igplus_ios/presentation/views/engagement/media_commenters/media_commenters_search.dart';
+import 'package:igshark/domain/entities/media_commenter.dart';
+import 'package:igshark/domain/entities/media_commenters.dart';
+import 'package:igshark/presentation/blocs/engagement/media_commeters/cubit/media_commenters_cubit.dart';
+import 'package:igshark/presentation/resources/colors_manager.dart';
+import 'package:igshark/presentation/resources/theme_manager.dart';
+import 'package:igshark/presentation/views/engagement/media_commenters/media_commenters_list_item.dart';
+import 'package:igshark/presentation/views/engagement/media_commenters/media_commenters_search.dart';
 import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
 
 class MediaCommentersList extends StatefulWidget {

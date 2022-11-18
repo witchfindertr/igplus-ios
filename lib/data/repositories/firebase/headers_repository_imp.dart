@@ -1,8 +1,8 @@
-import 'package:igplus_ios/data/sources/firebase/firebase_data_source.dart';
-import 'package:igplus_ios/domain/entities/ig_headers.dart';
-import 'package:igplus_ios/data/failure.dart';
+import 'package:igshark/data/sources/firebase/firebase_data_source.dart';
+import 'package:igshark/domain/entities/ig_headers.dart';
+import 'package:igshark/data/failure.dart';
 import 'package:dartz/dartz.dart';
-import 'package:igplus_ios/domain/repositories/firebase/headers_repository.dart';
+import 'package:igshark/domain/repositories/firebase/headers_repository.dart';
 
 import '../../../domain/entities/user.dart';
 import '../../models/ig_headers_model.dart';

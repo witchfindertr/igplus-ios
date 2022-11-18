@@ -1,10 +1,10 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:dartz/dartz.dart';
-import 'package:igplus_ios/data/failure.dart';
-import 'package:igplus_ios/domain/entities/account_info.dart';
-import 'package:igplus_ios/domain/entities/ig_headers.dart';
-import 'package:igplus_ios/domain/repositories/firebase/firebase_repository.dart';
-import 'package:igplus_ios/domain/repositories/instagram/instagram_repository.dart';
+import 'package:igshark/data/failure.dart';
+import 'package:igshark/domain/entities/account_info.dart';
+import 'package:igshark/domain/entities/ig_headers.dart';
+import 'package:igshark/domain/repositories/firebase/firebase_repository.dart';
+import 'package:igshark/domain/repositories/instagram/instagram_repository.dart';
 import 'package:firebase_auth/firebase_auth.dart' as auth;
 import '../entities/user.dart';
 

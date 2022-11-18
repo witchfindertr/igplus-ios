@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:igplus_ios/presentation/resources/colors_manager.dart';
+import 'package:igshark/presentation/resources/colors_manager.dart';
 
 class SectionTitle extends StatelessWidget {
   const SectionTitle({Key? key, required this.title, required this.icon}) : super(key: key);

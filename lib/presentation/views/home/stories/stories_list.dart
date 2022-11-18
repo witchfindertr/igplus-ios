@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:igplus_ios/presentation/blocs/home/user_stories/cubit/user_stories_cubit.dart';
-import 'package:igplus_ios/presentation/resources/colors_manager.dart';
-import 'package:igplus_ios/presentation/views/global/loading_indicator.dart';
-import 'package:igplus_ios/presentation/views/global/section_title.dart';
-import 'package:igplus_ios/presentation/views/home/stories/story_card.dart';
+import 'package:igshark/presentation/blocs/home/user_stories/cubit/user_stories_cubit.dart';
+import 'package:igshark/presentation/resources/colors_manager.dart';
+import 'package:igshark/presentation/views/global/loading_indicator.dart';
+import 'package:igshark/presentation/views/global/section_title.dart';
+import 'package:igshark/presentation/views/home/stories/story_card.dart';
 
 class StoriesList extends StatefulWidget {
   const StoriesList({Key? key}) : super(key: key);
@@ -33,7 +33,7 @@ class _StoriesListState extends State<StoriesList> {
                   child: SizedBox(
                 width: MediaQuery.of(context).size.width,
                 height: 82.00,
-                child: const Center(
+                child: Center(
                   child: LoadingIndicator(),
                 ),
               ));
@@ -42,7 +42,7 @@ class _StoriesListState extends State<StoriesList> {
                   child: SizedBox(
                 width: MediaQuery.of(context).size.width,
                 height: 82.00,
-                child: const Center(
+                child: Center(
                   child: LoadingIndicator(),
                 ),
               ));

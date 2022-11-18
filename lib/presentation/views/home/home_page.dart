@@ -1,18 +1,45 @@
+import 'dart:developer';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:go_router/go_router.dart';
-import 'package:igplus_ios/data/failure.dart';
+import 'package:igshark/data/failure.dart';
 
-import 'package:igplus_ios/presentation/blocs/home/report/cubit/report_cubit.dart';
-import 'package:igplus_ios/presentation/resources/colors_manager.dart';
-import 'package:igplus_ios/presentation/resources/theme_manager.dart';
-import 'package:igplus_ios/presentation/views/home/profile_manager.dart';
-import 'package:igplus_ios/presentation/views/home/report_data.dart';
+import 'package:igshark/presentation/blocs/home/report/cubit/report_cubit.dart';
+import 'package:igshark/presentation/resources/colors_manager.dart';
+import 'package:igshark/presentation/resources/theme_manager.dart';
+import 'package:igshark/presentation/views/home/profile_manager.dart';
+import 'package:igshark/presentation/views/home/report_data.dart';
+import 'package:purchases_flutter/purchases_flutter.dart';
 
-class HomePage extends StatelessWidget {
+class HomePage extends StatefulWidget {
   const HomePage({Key? key}) : super(key: key);
+
+  @override
+  State<HomePage> createState() => _HomePageState();
+}
+
+class _HomePageState extends State<HomePage> {
+  bool subscriptionIsLoading = false;
+  bool isSubscribed = false;
+
+  @override
+  void initState() {
+    super.initState();
+
+    Purchases.addCustomerInfoUpdateListener((_) => updateCustomerStatus());
+    updateCustomerStatus();
+  }
+
+  Future updateCustomerStatus() async {
+    final customerInfo = await Purchases.getCustomerInfo();
+
+    setState(() {
+      isSubscribed = customerInfo.entitlements.all['premium_access']?.isActive ?? false;
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -28,6 +55,46 @@ class HomePage extends StatelessWidget {
         body: CupertinoPageScaffold(
           navigationBar: CupertinoNavigationBar(
             backgroundColor: ColorsManager.appBack,
+            leading: (!isSubscribed)
+                ? (subscriptionIsLoading)
+                    ? const AnimatedSwitcher(
+                        duration: Duration(milliseconds: 500),
+                        child: SizedBox(
+                          width: 80.0,
+                          height: 4.0,
+                          child: LinearProgressIndicator(
+                            backgroundColor: ColorsManager.appBack,
+                            valueColor: AlwaysStoppedAnimation<Color>(ColorsManager.cardBack),
+                          ),
+                        ),
+                      )
+                    : GestureDetector(
+                        onTap: () async {
+                          // open paywall
+                          GoRouter.of(context).goNamed('paywall');
+                        },
+                        child: Row(
+                          children: const [
+                            SizedBox(
+                              width: 32.0,
+                              height: 35.0,
+                              child: Image(
+                                image: AssetImage('assets/images/IGShark-320.png'),
+                                fit: BoxFit.fitHeight,
+                              ),
+                            ),
+                            Padding(
+                              padding: EdgeInsets.only(top: 10.0),
+                              child: Text(
+                                "VIP Shark",
+                                style: TextStyle(
+                                    color: ColorsManager.primaryColor, fontWeight: FontWeight.bold, fontSize: 12.0),
+                              ),
+                            ),
+                          ],
+                        ),
+                      )
+                : const SizedBox(),
             middle: BlocBuilder<ReportCubit, ReportState>(
               builder: (context, state) {
                 if (state is ReportSuccess || state is ReportAccountInfoLoaded) {

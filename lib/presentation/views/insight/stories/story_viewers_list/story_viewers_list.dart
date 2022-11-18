@@ -2,12 +2,12 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
-import 'package:igplus_ios/domain/entities/story_viewer.dart';
-import 'package:igplus_ios/presentation/blocs/insight/stories_insight/story_viewers/cubit/story_viewers_cubit.dart';
-import 'package:igplus_ios/presentation/resources/colors_manager.dart';
-import 'package:igplus_ios/presentation/resources/theme_manager.dart';
-import 'package:igplus_ios/presentation/views/home/friends_list/friend_search.dart';
-import 'package:igplus_ios/presentation/views/insight/stories/story_viewers_list/story_viewers_list_item.dart';
+import 'package:igshark/domain/entities/story_viewer.dart';
+import 'package:igshark/presentation/blocs/insight/stories_insight/story_viewers/cubit/story_viewers_cubit.dart';
+import 'package:igshark/presentation/resources/colors_manager.dart';
+import 'package:igshark/presentation/resources/theme_manager.dart';
+import 'package:igshark/presentation/views/home/friends_list/friend_search.dart';
+import 'package:igshark/presentation/views/insight/stories/story_viewers_list/story_viewers_list_item.dart';
 import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
 
 class StoryViewersList extends StatefulWidget {

@@ -1,6 +1,6 @@
 // import 'package:dartz/dartz.dart';
 // import 'package:flutter_test/flutter_test.dart';
-// import 'package:igplus_ios/domain/repositories/auth/auth_repository.dart';
+// import 'package:igshark/domain/repositories/auth/auth_repository.dart';
 // import 'package:mockito/mockito.dart';
 
 // import '../../../helpers/test_helper.mocks.dart';

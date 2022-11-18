@@ -1,9 +1,9 @@
 import 'dart:io';
 
 import 'package:dartz/dartz.dart';
-import 'package:igplus_ios/data/models/user_model.dart';
+import 'package:igshark/data/models/user_model.dart';
 
-import 'package:igplus_ios/data/sources/firebase/firebase_data_source.dart';
+import 'package:igshark/data/sources/firebase/firebase_data_source.dart';
 
 import '../../../domain/entities/user.dart';
 import '../../../domain/repositories/firebase/firebase_repository.dart';
