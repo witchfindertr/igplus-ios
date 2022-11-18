@@ -20,7 +20,7 @@ class LoadingCard extends StatelessWidget {
                 constraints: BoxConstraints(
                     minWidth: MediaQuery.of(context).size.width - 23,
                     minHeight: MediaQuery.of(context).size.height / 7),
-                child: const LoadingIndicator()),
+                child: LoadingIndicator()),
           )
         : Card(
             color: ColorsManager.cardBack,
@@ -42,7 +42,7 @@ class LoadingCard extends StatelessWidget {
                               padding: const EdgeInsets.fromLTRB(0, 0, 15, 10),
                               child: Icon(icon, size: 24),
                             ),
-                            const LoadingIndicator(),
+                            LoadingIndicator(),
                           ],
                         ),
                       ),

@@ -3,17 +3,20 @@ import 'package:flutter/material.dart';
 import 'package:igshark/presentation/resources/colors_manager.dart';
 
 class LoadingIndicator extends StatelessWidget {
-  const LoadingIndicator({Key? key}) : super(key: key);
+  const LoadingIndicator({Key? key, this.width = 15, this.height = 15, this.radius = 7.5}) : super(key: key);
+  final double width;
+  final double height;
+  final double radius;
 
   @override
   Widget build(BuildContext context) {
     return Stack(
-      children: const [
+      children: [
         SizedBox(
-          width: 15,
-          height: 15,
+          width: width,
+          height: height,
           child: CupertinoActivityIndicator(
-            radius: 7.5,
+            radius: radius,
           ),
           // CircularProgressIndicator(
           //   valueColor: AlwaysStoppedAnimation<Color>(ColorsManager.appBack),

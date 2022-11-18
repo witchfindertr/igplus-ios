@@ -49,6 +49,8 @@ import 'package:igshark/presentation/blocs/home/stories/cubit/stories_cubit.dart
 import 'package:igshark/presentation/blocs/home/user_stories/cubit/user_stories_cubit.dart';
 import 'package:igshark/presentation/blocs/insight/stories_insight/cubit/stories_insight_cubit.dart';
 import 'package:igshark/presentation/blocs/insight/stories_insight/story_viewers/cubit/story_viewers_cubit.dart';
+import 'package:igshark/presentation/blocs/paywall/cubit/paywall_cubit.dart';
+import 'package:igshark/presentation/blocs/paywall/subscription/cubit/subscription_cubit.dart';
 import '../data/models/story_model.dart';
 import '../data/repositories/firebase/firebase_repository_imp.dart';
 import '../data/repositories/firebase/headers_repository_imp.dart';
@@ -149,6 +151,8 @@ Future<void> init() async {
         cacheMediaCommentersToLocalUseCase: sl(),
         getMediaCommentersFromLocalUseCase: sl(),
       ));
+  sl.registerFactory(() => SubscriptionCubit());
+  sl.registerFactory(() => PaywallCubit());
 
   // Use cases
   sl.registerLazySingleton(() => GetAccountInfoUseCase(instagramRepository: sl()));

@@ -47,7 +47,7 @@ class _StoriesInsightListItemState extends State<StoriesInsightListItem> {
               children: [
                 CachedNetworkImage(
                   imageUrl: widget.story.mediaThumbnailUrl,
-                  placeholder: (context, url) => const Center(
+                  placeholder: (context, url) => Center(
                     child: LoadingIndicator(),
                   ),
                   errorWidget: (context, url, error) => const Icon(

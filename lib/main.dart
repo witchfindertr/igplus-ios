@@ -26,6 +26,8 @@ import 'package:igshark/presentation/blocs/login/cubit/instagram_auth_cubit.dart
 import 'package:igshark/presentation/blocs/insight/media_insight/cubit/media_list_cubit.dart';
 import 'package:igshark/presentation/blocs/home/stories/cubit/stories_cubit.dart';
 import 'package:igshark/presentation/blocs/home/user_stories/cubit/user_stories_cubit.dart';
+import 'package:igshark/presentation/blocs/paywall/cubit/paywall_cubit.dart';
+import 'package:igshark/presentation/blocs/paywall/subscription/cubit/subscription_cubit.dart';
 import 'package:purchases_flutter/purchases_flutter.dart';
 import 'app/bloc_observer.dart';
 import 'app/injection_container.dart' as di;
@@ -103,6 +105,8 @@ void main() async {
         BlocProvider<StoryViewersCubit>(create: (_) => di.sl<StoryViewersCubit>()),
         BlocProvider<MediaLikersCubit>(create: (_) => di.sl<MediaLikersCubit>()),
         BlocProvider<MediaCommentersCubit>(create: (_) => di.sl<MediaCommentersCubit>()),
+        BlocProvider<SubscriptionCubit>(create: (_) => di.sl<SubscriptionCubit>()),
+        BlocProvider<PaywallCubit>(create: (_) => di.sl<PaywallCubit>()),
         BlocProvider<AppBloc>(create: (_) => di.sl<AppBloc>()),
       ],
       child: const App(),

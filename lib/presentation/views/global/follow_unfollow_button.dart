@@ -25,7 +25,7 @@ class _FollowUnfollowButtonState extends State<FollowUnfollowButton> {
     return (error != null)
         ? Text(error!, style: const TextStyle(color: Colors.red, fontSize: 8))
         : (isLoading)
-            ? const Padding(
+            ? Padding(
                 padding: EdgeInsets.only(right: 30.0, left: 30.0),
                 child: LoadingIndicator(),
               )

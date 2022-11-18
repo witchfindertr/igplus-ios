@@ -33,7 +33,7 @@ class _StoriesListState extends State<StoriesList> {
                   child: SizedBox(
                 width: MediaQuery.of(context).size.width,
                 height: 82.00,
-                child: const Center(
+                child: Center(
                   child: LoadingIndicator(),
                 ),
               ));
@@ -42,7 +42,7 @@ class _StoriesListState extends State<StoriesList> {
                   child: SizedBox(
                 width: MediaQuery.of(context).size.width,
                 height: 82.00,
-                child: const Center(
+                child: Center(
                   child: LoadingIndicator(),
                 ),
               ));

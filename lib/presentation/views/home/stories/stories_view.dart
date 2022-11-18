@@ -138,7 +138,7 @@ class _StoriesViewState extends State<StoriesView> {
                   ],
                 ));
           } else {
-            return const Center(child: LoadingIndicator());
+            return Center(child: LoadingIndicator());
           }
         },
       ),
