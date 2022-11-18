@@ -8,7 +8,7 @@ class ColorsManager {
 
   static const Color primaryColor = Color.fromARGB(255, 106, 245, 166);
   static Brightness brightness = Brightness.dark;
-  static const Color appBack = Color.fromARGB(255, 32, 32, 44);
+  static const Color appBack = Color.fromARGB(255, 26, 26, 39);
 
   // text color
   static const Color textColor = Color.fromARGB(255, 226, 226, 226);
@@ -21,7 +21,7 @@ class ColorsManager {
   static const Color buttonTextColor2 = Color.fromARGB(255, 226, 226, 226);
 
   // card
-  static const Color cardBack = Color.fromARGB(255, 37, 37, 50); // Color.fromARGB(255, 44, 46, 68);
+  static const Color cardBack = Color.fromARGB(255, 32, 32, 44); // Color.fromARGB(255, 44, 46, 68);
   static const Color cardText = Color.fromRGBO(255, 255, 255, 1);
   static const Color cardIconColor = Color.fromRGBO(255, 255, 255, 1);
 

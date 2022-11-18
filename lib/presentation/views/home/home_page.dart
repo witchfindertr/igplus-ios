@@ -13,6 +13,7 @@ import 'package:igshark/presentation/resources/theme_manager.dart';
 import 'package:igshark/presentation/views/home/profile_manager.dart';
 import 'package:igshark/presentation/views/home/report_data.dart';
 import 'package:purchases_flutter/purchases_flutter.dart';
+import 'package:shimmer/shimmer.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({Key? key}) : super(key: key);
@@ -73,25 +74,23 @@ class _HomePageState extends State<HomePage> {
                           // open paywall
                           GoRouter.of(context).goNamed('paywall');
                         },
-                        child: Row(
-                          children: const [
-                            SizedBox(
-                              width: 32.0,
-                              height: 35.0,
-                              child: Image(
-                                image: AssetImage('assets/images/IGShark-320.png'),
-                                fit: BoxFit.fitHeight,
+                        child: Shimmer.fromColors(
+                          baseColor: const Color.fromARGB(255, 212, 148, 10),
+                          highlightColor: const Color.fromARGB(255, 220, 255, 22),
+                          child: Row(
+                            children: const [
+                              Icon(
+                                FontAwesomeIcons.crown,
+                                color: Color.fromARGB(255, 212, 148, 10),
+                                size: 14.0,
                               ),
-                            ),
-                            Padding(
-                              padding: EdgeInsets.only(top: 10.0),
-                              child: Text(
-                                "VIP Shark",
-                                style: TextStyle(
-                                    color: ColorsManager.primaryColor, fontWeight: FontWeight.bold, fontSize: 12.0),
+                              SizedBox(width: 6.0),
+                              Text(
+                                "Premium",
+                                style: TextStyle(fontWeight: FontWeight.bold, fontSize: 14.0),
                               ),
-                            ),
-                          ],
+                            ],
+                          ),
                         ),
                       )
                 : const SizedBox(),

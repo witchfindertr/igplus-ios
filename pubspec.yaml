@@ -38,6 +38,7 @@ dependencies:
   url_launcher: ^6.1.6
   webview_cookie_manager: ^2.0.6
   webview_flutter: ^3.0.4
+  shimmer: ^2.0.0
 
 dev_dependencies:
   build_runner: ^2.2.0

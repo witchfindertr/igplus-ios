@@ -12,7 +12,7 @@ class SubscriptionInitial extends SubscriptionState {}
 class SubscriptionLoading extends SubscriptionState {}
 
 class SubscriptionLoaded extends SubscriptionState {
-  const SubscriptionLoaded(this.packages);
+  const SubscriptionLoaded({required this.packages});
 
   final List<Package> packages;
 
