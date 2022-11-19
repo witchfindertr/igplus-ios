@@ -1,15 +1,12 @@
 import 'package:flutter/cupertino.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:igshark/domain/entities/account_info.dart';
 import 'package:igshark/domain/entities/report.dart';
-import 'package:igshark/presentation/blocs/paywall/subscription/cubit/subscription_cubit.dart';
 import 'package:igshark/presentation/resources/colors_manager.dart';
 import 'package:igshark/presentation/views/global/info_card.dart';
 import 'package:igshark/presentation/views/global/loading_card.dart';
 import 'package:igshark/presentation/views/global/section_title.dart';
 import 'package:igshark/presentation/views/home/profile_card.dart';
-import 'package:igshark/presentation/views/home/stats/line-chart.dart';
 import 'package:igshark/presentation/views/home/stories/stories_list.dart';
 
 class ReportData extends StatelessWidget {
@@ -18,16 +15,18 @@ class ReportData extends StatelessWidget {
     required this.accountInfo,
     this.loadingMessage,
     this.report,
+    this.isSubscribed = false,
   }) : super(key: key);
 
   final Report? report;
   final AccountInfo accountInfo;
   final String? loadingMessage;
+  final bool isSubscribed;
 
   @override
   Widget build(BuildContext context) {
     // String loadingMessage = "we are loading your data";
-    bool isPremium = false;
+
     return CupertinoScrollbar(
       thickness: 0,
       child: Stack(alignment: Alignment.center, children: [
@@ -92,6 +91,7 @@ class ReportData extends StatelessWidget {
                       type: "whoAdmiresYou",
                       newFriends: 0,
                       imagesStack: report!.whoAdmiresYou.map((e) => e.user.picture).toList(),
+                      isSubscribed: isSubscribed,
                     ),
                   )
                 : Container(),

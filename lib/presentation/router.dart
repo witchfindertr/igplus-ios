@@ -15,6 +15,7 @@ import 'package:igshark/presentation/views/insight/media/media_list/media_list.d
 import 'package:igshark/presentation/views/paywall/paywall.dart';
 import 'package:igshark/presentation/views/paywall/privacy_policy.dart';
 import 'package:igshark/presentation/views/paywall/terms_of_us.dart';
+import 'package:igshark/presentation/views/paywall/thank_you_page.dart';
 import 'package:igshark/presentation/views/tab_page.dart';
 
 GoRouter routes(AppBloc appBloc) {
@@ -113,6 +114,13 @@ GoRouter routes(AppBloc appBloc) {
                     },
                   ),
                 ]),
+            GoRoute(
+              name: 'thankyoupage',
+              path: 'thankyoupage',
+              builder: (context, state) {
+                return const ThankYouPage();
+              },
+            ),
           ]),
     ],
     redirect: (state) {

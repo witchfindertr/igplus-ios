@@ -50,5 +50,7 @@
 		</array>
 		<key>UIViewControllerBasedStatusBarAppearance</key>
 		<false/>
+		<key>AdaptyPublicSdkKey</key>
+		<string>public_live_E8ixjTdL.RWaYvzu09uGlkKPOC61x</string>
 	</dict>
 </plist>

@@ -13,6 +13,8 @@ class PaywallLoading extends PaywallState {}
 
 class PaywallLoaded extends PaywallState {}
 
+class PaywallPaymentSuccess extends PaywallState {}
+
 class PaywallFailure extends PaywallState {
   const PaywallFailure({required this.message});
   final String message;

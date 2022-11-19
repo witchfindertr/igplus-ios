@@ -16,6 +16,7 @@ class InfoCard extends StatelessWidget {
   final String type;
   final int newFriends;
   final List<String>? imagesStack;
+  final bool isSubscribed;
   const InfoCard({
     Key? key,
     required this.title,
@@ -27,6 +28,7 @@ class InfoCard extends StatelessWidget {
     required this.type,
     required this.newFriends,
     this.imagesStack,
+    this.isSubscribed = false,
   }) : super(key: key);
 
   @override
@@ -35,70 +37,85 @@ class InfoCard extends StatelessWidget {
       return GestureDetector(
         onTap: () {
           if (type == "whoAdmiresYou") {
-            context.go('/home/whoAdmiresYou');
+            if (!isSubscribed) {
+              GoRouter.of(context).go('/home/paywall');
+            } else {
+              context.go('/home/whoAdmiresYou');
+            }
           } else {
             GoRouter.of(context).go('/home/friendsList/$type');
           }
         },
-        child: Card(
-          color: ColorsManager.cardBack,
-          elevation: 1,
-          margin: const EdgeInsets.all(8),
-          child: ConstrainedBox(
-            constraints: BoxConstraints(minWidth: context.width - 23, minHeight: context.height / 7),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Container(
-                  alignment: Alignment.centerLeft,
-                  width: context.width / 1.1,
-                  child: Padding(
-                    padding: const EdgeInsets.all(12.0),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Flexible(
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Row(
-                                children: [
-                                  Padding(
-                                    padding: const EdgeInsets.fromLTRB(4, 4, 12, 4),
-                                    child: Icon(icon, color: ColorsManager.secondarytextColor, size: 40),
-                                  ),
-                                  Column(
-                                    crossAxisAlignment: CrossAxisAlignment.start,
-                                    children: [
-                                      Text(title, style: const TextStyle(fontSize: 16, color: ColorsManager.textColor)),
-                                      Text(subTitle ?? "",
-                                          overflow: TextOverflow.ellipsis,
-                                          style:
-                                              const TextStyle(fontSize: 14, color: ColorsManager.secondarytextColor)),
-                                    ],
-                                  ),
-                                ],
-                              ),
-                              Row(
-                                mainAxisAlignment: MainAxisAlignment.end,
-                                children: [
-                                  Padding(
-                                    padding: const EdgeInsets.all(8.0),
-                                    child: imageStack(imageList: imagesStack!, totalCount: count),
-                                  ),
-                                ],
-                              ),
-                            ],
+        child: Stack(children: [
+          Card(
+            color: ColorsManager.cardBack,
+            elevation: 1,
+            margin: const EdgeInsets.all(8),
+            child: ConstrainedBox(
+              constraints: BoxConstraints(minWidth: context.width - 23, minHeight: context.height / 7),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Container(
+                    alignment: Alignment.centerLeft,
+                    width: context.width / 1.1,
+                    child: Padding(
+                      padding: const EdgeInsets.all(12.0),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Flexible(
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Row(
+                                  children: [
+                                    Padding(
+                                      padding: const EdgeInsets.fromLTRB(4, 4, 12, 4),
+                                      child: Icon(icon, color: ColorsManager.secondarytextColor, size: 40),
+                                    ),
+                                    Column(
+                                      crossAxisAlignment: CrossAxisAlignment.start,
+                                      children: [
+                                        Text(title,
+                                            style: const TextStyle(fontSize: 16, color: ColorsManager.textColor)),
+                                        Text(subTitle ?? "",
+                                            overflow: TextOverflow.ellipsis,
+                                            style:
+                                                const TextStyle(fontSize: 14, color: ColorsManager.secondarytextColor)),
+                                      ],
+                                    ),
+                                  ],
+                                ),
+                                Row(
+                                  mainAxisAlignment: MainAxisAlignment.end,
+                                  children: [
+                                    Padding(
+                                      padding: const EdgeInsets.all(8.0),
+                                      child: imageStack(imageList: imagesStack!, totalCount: count),
+                                    ),
+                                  ],
+                                ),
+                              ],
+                            ),
                           ),
-                        ),
-                      ],
+                        ],
+                      ),
                     ),
                   ),
-                ),
-              ],
+                ],
+              ),
             ),
           ),
-        ),
+          Positioned(
+              top: 20,
+              right: 20,
+              child: Icon(
+                FontAwesomeIcons.lock,
+                color: ColorsManager.cardIconColor.withOpacity(0.3),
+                size: 20,
+              )),
+        ]),
       );
     } else {
       return GestureDetector(

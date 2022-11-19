@@ -8,7 +8,7 @@ class GetAccountInfoFromLocalUseCase {
   final LocalRepository localRepository;
   GetAccountInfoFromLocalUseCase({required this.localRepository});
 
-  Future<Either<Failure, AccountInfo?>> execute() async {
+  Either<Failure, AccountInfo?> execute() {
     return localRepository.getCachedAccountInfo();
   }
 }

@@ -152,7 +152,7 @@ Future<void> init() async {
         getMediaCommentersFromLocalUseCase: sl(),
       ));
   sl.registerFactory(() => SubscriptionCubit());
-  sl.registerFactory(() => PaywallCubit());
+  sl.registerFactory(() => PaywallCubit(getAccountInfoFromLocalUseCase: sl()));
 
   // Use cases
   sl.registerLazySingleton(() => GetAccountInfoUseCase(instagramRepository: sl()));

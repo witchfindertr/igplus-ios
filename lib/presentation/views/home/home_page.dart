@@ -38,7 +38,7 @@ class _HomePageState extends State<HomePage> {
     final customerInfo = await Purchases.getCustomerInfo();
 
     setState(() {
-      isSubscribed = customerInfo.entitlements.all['premium_access']?.isActive ?? false;
+      isSubscribed = customerInfo.entitlements.all['premium']?.isActive ?? false;
     });
   }
 
@@ -168,10 +168,11 @@ class _HomePageState extends State<HomePage> {
                   ),
                 );
               } else if (state is ReportAccountInfoLoaded) {
-                return ReportData(accountInfo: state.accountInfo, loadingMessage: state.loadingMessage);
+                return ReportData(
+                    accountInfo: state.accountInfo, loadingMessage: state.loadingMessage, isSubscribed: isSubscribed);
               }
               if (state is ReportSuccess) {
-                return ReportData(report: state.report, accountInfo: state.accountInfo);
+                return ReportData(report: state.report, accountInfo: state.accountInfo, isSubscribed: isSubscribed);
               } else if (state is ReportFailure) {
                 return Center(
                   child: Column(
