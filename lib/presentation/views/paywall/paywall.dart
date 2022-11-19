@@ -21,8 +21,29 @@ class Paywall extends StatefulWidget {
 
 class _PaywallState extends State<Paywall> {
   String? selected;
+  bool isSubscribed = false;
+
+  @override
+  void initState() {
+    super.initState();
+
+    Purchases.addCustomerInfoUpdateListener((_) => updateCustomerStatus());
+    updateCustomerStatus();
+  }
+
+  Future updateCustomerStatus() async {
+    final customerInfo = await Purchases.getCustomerInfo();
+
+    setState(() {
+      isSubscribed = customerInfo.entitlements.all['premium']?.isActive ?? false;
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
+    if (isSubscribed) {
+      BlocProvider.of<PaywallCubit>(context).emit(PaywallPaymentSuccess());
+    }
     return MaterialApp(
       color: ColorsManager.appBack,
       theme: appMaterialTheme(),
@@ -136,8 +157,6 @@ class _PaywallState extends State<Paywall> {
                                     setState(() {
                                       selected = package.storeProduct.identifier;
                                     });
-                                    await BlocProvider.of<PaywallCubit>(context)
-                                        .purchaseProduct(package.storeProduct.identifier);
                                   },
                                   child: SubscriptionPack(
                                     title: '${capitalize(package.packageType.name)} - ${product.priceString}',
@@ -167,17 +186,44 @@ class _PaywallState extends State<Paywall> {
                         },
                       ),
                       const SizedBox(height: 20),
-                      const Padding(
-                        padding: EdgeInsets.fromLTRB(8.0, 0.0, 8.0, 20.0),
-                        child: Text(
-                          "Your subscription will automatically renew unless auto-renew is turned off at least 24-hours before the end of the current period. Your account will be charged for renewal within 24-hours prior to the end of the current period, and identify the cost of the renewal. Subscriptions may be managed by you and auto-renewal may be turned off by going to your Account Settings after purchase.",
-                          style: TextStyle(
-                            color: ColorsManager.secondarytextColor,
-                            fontSize: 14.0,
-                            fontFamily: 'Abel',
-                            fontStyle: FontStyle.normal,
+                      CupertinoButton.filled(
+                        borderRadius: const BorderRadius.all(Radius.circular(10.0)),
+                        onPressed: () async {
+                          await BlocProvider.of<PaywallCubit>(context).purchaseProduct(selected);
+                        },
+                        child: Row(
+                          mainAxisSize: MainAxisSize.min,
+                          children: const [
+                            Text('Continue',
+                                style: TextStyle(
+                                  color: ColorsManager.appBack,
+                                  fontSize: 20.0,
+                                  fontFamily: 'Abel',
+                                  fontWeight: FontWeight.bold,
+                                )),
+                            Icon(
+                              Icons.arrow_right,
+                              size: 26.0,
+                            ),
+                          ],
+                        ),
+                      ),
+                      Padding(
+                        padding: EdgeInsets.fromLTRB(8.0, 0.0, 8.0, 0.0),
+                        child: CupertinoButton(
+                          onPressed: () async {
+                            await BlocProvider.of<PaywallCubit>(context).restorePurchases();
+                          },
+                          child: const Text(
+                            "Restore purchases",
+                            style: TextStyle(
+                              color: ColorsManager.textColor,
+                              fontSize: 16.0,
+                              fontFamily: 'Abel',
+                              fontStyle: FontStyle.normal,
+                            ),
+                            textAlign: TextAlign.center,
                           ),
-                          textAlign: TextAlign.center,
                         ),
                       ),
                       Row(
@@ -188,11 +234,11 @@ class _PaywallState extends State<Paywall> {
                               GoRouter.of(context).goNamed('terms');
                             },
                             child: const Padding(
-                              padding: EdgeInsets.fromLTRB(0.0, 0.0, 0.0, 20.0),
+                              padding: EdgeInsets.fromLTRB(0.0, 0.0, 0.0, 10.0),
                               child: Text(
                                 "Terms of Service",
                                 style: TextStyle(
-                                  color: ColorsManager.textColor,
+                                  color: ColorsManager.secondarytextColor,
                                   fontSize: 14.0,
                                   fontFamily: 'Abel',
                                   fontStyle: FontStyle.normal,
@@ -202,7 +248,7 @@ class _PaywallState extends State<Paywall> {
                             ),
                           ),
                           const Divider(
-                            color: ColorsManager.textColor,
+                            color: ColorsManager.secondarytextColor,
                             thickness: 2,
                             indent: 10,
                             endIndent: 10,
@@ -212,11 +258,11 @@ class _PaywallState extends State<Paywall> {
                               GoRouter.of(context).goNamed('privacy');
                             },
                             child: const Padding(
-                              padding: EdgeInsets.fromLTRB(0.0, 0.0, 0.0, 20.0),
+                              padding: EdgeInsets.fromLTRB(0.0, 0.0, 0.0, 10.0),
                               child: Text(
                                 "Privacy Policy",
                                 style: TextStyle(
-                                  color: ColorsManager.textColor,
+                                  color: ColorsManager.secondarytextColor,
                                   fontSize: 14.0,
                                   fontFamily: 'Abel',
                                   fontStyle: FontStyle.normal,
@@ -243,6 +289,9 @@ class _PaywallState extends State<Paywall> {
                             ),
                           ),
                         );
+                    }
+                    if (state is PaywallPaymentSuccess) {
+                      GoRouter.of(context).goNamed('thankyoupage');
                     }
                   },
                   builder: (context, state) {

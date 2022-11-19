@@ -27,21 +27,9 @@ class SubscriptionCubit extends Cubit<SubscriptionState> {
   }
 
   // check if user is subscribed
-  Future<bool> checkSubscription() async {
+  Future<bool> isSubscribed() async {
     final purchaserInfo = await Purchases.getCustomerInfo();
     return purchaserInfo.entitlements.all['premium']!.isActive;
-  }
-
-  // restore purchase
-  Future<void> restorePurchase() async {
-    emit(SubscriptionLoading());
-    try {
-      final purchaserInfo = await Purchases.restorePurchases();
-      inspect(purchaserInfo);
-      // emit(SubscriptionLoaded(subscriptionPack));
-    } catch (e) {
-      emit(SubscriptionFailure(e.toString()));
-    }
   }
 
   // get purchaser info
